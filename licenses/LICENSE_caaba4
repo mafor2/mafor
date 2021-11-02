@@ -1,0 +1,28 @@
+If you want to use the CAABA/MECCA chemistry model, we ask that you
+contact us first at rolf.sander@mpic.de and let us know what your
+research plans are. You are welcome to use CAABA/MECCA under the terms
+described here. Since we want CAABA/MECCA to be useful for the whole
+scientific community, we decided to make the source code available under
+the GNU General Public License (GPL). Basically, the GPL allows you to
+use CAABA/MECCA at no charge. However, the GPL was not written with
+scientific programs in mind. Therefore, when you are going to publish
+results based on CAABA/MECCA in a scientific journal, we ask you to also
+obey these points:
+
+    * Please cite the GMD paper describing the CAABA/MECCA model (Sander
+      et al., 2018).
+
+    * Please discuss a potential co-authorship with us. Usually, we
+      request co-authorship only, if model results obtained with
+      CAABA/MECCA are the main topic of your manuscript and not, if they
+      are just a minor aspect of it.
+
+    * Please send a reprint of your paper to rolf.sander@mpic.de. We'd
+      also appreciate receiving a preprint before you submit your
+      manuscript.
+
+    * If you have written additional code which is based on CAABA/MECCA,
+      you should also make it available to the scientific community
+      using this license. Please email us a copy of your new code. This
+      will help us to coordinate developments of different research
+      groups.
