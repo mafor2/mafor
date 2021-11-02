@@ -1,0 +1,47 @@
+# MAKEFILE FOR FITAERO
+# debugging: gdb uect.exe, then 'run' and 'bt'
+
+F90 = gfortran-9
+#flags for debugging (use for the test examples)
+#pendantic flags
+F90FLAGS =  -ggdb -u -C -cpp -pedantic -ffpe-trap=invalid,underflow,zero -ftrapv -fbounds-check -finit-real=nan -fbacktrace -fimplicit-none -finit-integer=n -ffree-form
+
+#subdirs
+SRC    = ./src/
+
+RUNDIR = ./bin/
+TARGET = $(RUNDIR)fitaero.exe
+SRC_OBJ =	$(SRC)module_fitaero_io.o    \
+            $(SRC)module_fitaero_exe.o   \
+            $(SRC)get_user_input.o       \
+            $(SRC)read_csv_file.o        \
+            $(SRC)stopit_fitaero.o       \
+            $(SRC)findmodes.o            \
+            $(SRC)awater.o               \
+            $(SRC)initaero.o             \
+            $(SRC)output_fitaero.o       \
+            $(SRC)prog_fitaero.o
+
+$(TARGET) : $(SRC_OBJ)
+	$(F90) $(FFLAGS) $(SRC_OBJ) $(LIBS) -o $@
+
+.SUFFIXES: .for .o
+
+.for.o:
+	$(F90) $(F90FLAGS) $(INCLUDES) -c $< -o $@
+
+.SUFFIXES: .F90 .o
+
+.F90.o:
+	$(F90) -c $(F90FLAGS) $(INCLUDES) $*.F90
+
+# Explicit rules and targets
+
+clean:
+	rm -f $(TARGET) core a.out
+
+cleanall:
+	rm -f $(TARGET) core a.out
+	rm -f *.o *.mod *.mod0
+	rm -f $(SRC)*.o $(SRC)*.for~
+

@@ -1,0 +1,9 @@
+ './input/initdis1_test.csv'                         ! Filename of csv-file containing observed Dp dN data (full path)
+ './input/massfrac1_test.csv'                        ! Filename of csv-file containing mass fractions data (full path)
+ './output/'                                         ! Output files path name
+ './logs/user_log.txt'                                      ! Log file (in output path)
+ 54                 		                         ! Number of observed size bins
+ 1.00E-06                                            ! DPMAX [in m], in inaero.dat
+ 20                                                  ! IMAX, bins per mode in MAFOR, inaero.dat
+ F                                                   ! first column, inaero.dat ('T'/'F')  
+ 50.0                                                ! RH [%} in first simulation hour 
