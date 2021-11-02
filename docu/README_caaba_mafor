@@ -1,0 +1,210 @@
+
+##################################################
+How to add new chemical species and reactions 
+to the chemistry mechanism of MAFOR
+
+       (Coupling CAABA-MAFOR)
+
+Paths are given relative to src/CAABA/
+##################################################
+
+
+1 Adding a new gas-phase species
+--------------------------------
+
+Add the new species, its elemental composition,
+in mecca/gas_mafor.spc
+
+the name in LaTEX syntax, and a comment, e.g.:
+NC4H10 = 4C + 10H ; {@C_4H_<10>} {n-butane}
+The name of the new species can have up to
+15 characters (more may be okay but has not
+been tested). Note that curly braces needed by
+LaTEX must be entered as angle brackets.
+
+!messy_main_tracer_chemprop.tbl:
+!Add one line per new species. The order of
+!species in this file must be exactly the same as
+!in gas.spc.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+2 Adding a new aqueous-phase species
+------------------------------------
+
+Add the new species, the name in LaTEX syntax,
+and a comment, in mecca/aqueous_mafor.spc
+e.g.:
+SO4mm_a## = IGNORE; {@SO_4^<2->\aq} {sulfate}
+The name of the new species can have up to 15
+characters, including the mandatory suffix _a##
+(more may be okay but has not been tested).
+Note that curly braces needed by LaTEX must
+be entered as angle brackets.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+3 Adding a new gas-phase reaction
+---------------------------------
+
+Add new reaction or replace an exisiting reaction
+in mecca/rpl/maforchem.rpl
+
+The syntax of adding/replacing/deleting gas-phase
+reactions is explained in maforchem.rpl
+
+To add a new gas-phase reaction in maforchem.rpl,
+first, choose an appropriate equation tag. To avoid
+that several developers assign the same number to dif-
+ferent new reactions, it is strongly recommended that
+a preliminary equation tag is used initially. This can
+be done by adding the developer’s initials as a suffix,
+e.g., John Doe would use G0001JD, G0002JD, G0003JD,
+and so on. When the new code is merged with other
+development branches, the final equation tags will be
+assigned.
+
+mecca/latex/meccanism._mafor.tex
+If necessary, add a footnote about the new reac-
+tion here.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+4 Adding a new gas-phase photolysis reaction
+--------------------------------------------
+
+First add the reaction as explained in step 3.
+
+If the belonging phyotolysis rate coeffiecient
+is not provided in JVAL:
+
+JVAL-AERO/messy_cmn_photol_mem.f90
+- Add a new index of photolysis ip_XYZ at the
+end of the list.
+– Increase IP_MAX.
+– Add the name to jname.
+
+JVAL-AERO/messy_jval_jvpp.inc
+Calculate the definition with jvpp.
+
+
+5 Adding a new aqueous-phase reaction
+-------------------------------------
+
+First, choose an appropriate equation tag.
+
+In mecca/aqueous_mafor.eqn:
+– Add one line per new reaction.
+– Add Monte-Carlo uncertainty factor. If un-
+known, only add "{§}".
+
+mecca/latex/meccanism._mafor.tex
+If necessary, add a footnote about the new reac-
+tion here.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+6 Adding a new Henry's law equilibrium
+--------------------------------------
+
+First, choose an appropriate equation tag.
+
+In mecca/aqueous_mafor.eqn:
+– Add two lines per new equilibrium, one for
+the forward and one for the backward reac-
+tion.
+– Add Monte-Carlo uncertainty factors. If un-
+known, only add "{§}".
+
+Change to mecca/tracer/chemprop/
+
+Add the Henry equilibrium parameter in
+mecca/tracer/chemprop/messy_main_tracer_chemprop_mafor.tbl
+
+– Add molar mass:
+R_molarmass
+(same as the sum formula)
+
+– Add the Henry’s law coefficient:
+R_Henry_T0 and R_Henry_Tdep
+(and the citation for meccalit_mafor.bib)
+
+– Add the accommodation coefficient
+R_alpha_T0 and R_alpha_Tdep
+(leave empty if not known; a default of 0.1 is used then)
+
+
+Then run xchemprop:
+./xchemprop messy_main_tracer_chemprop_mafor.tbl
+gives messy_main_tracer_chemprop_mafor.inc
+
+copy messy_main_tracer_chemprop_mafor.inc to 
+folder JVAL-AERO
+
+mecca/latex/meccanism._mafor.tex
+If necessary, add a footnote about the new reac-
+tion here.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+7 Adding a new acid-base equilibrium
+------------------------------------
+
+First, choose an appropriate equation tag.
+
+In mecca/aqueous_mafor.eqn:
+– Add two lines per new equilibrium, one for
+the forward and one for the backward reac-
+tion.
+– Add Monte-Carlo uncertainty factors. If un-
+known, only add "{§}".
+
+mecca/latex/meccanism._mafor.tex
+If necessary, add a footnote about the new reac-
+tion here.
+
+After changes are completed:
+Run in folder mecca:
+./xmecca_mafor
+select 1 for mafor.bat
+
+
+8 Finalization of changes in MAFOR chemistry
+--------------------------------------------
+
+Change to mafor src directory
+
+Clean all exisiting files in src/INCS:
+
+make -f Makefile_ext clean
+
+Create the new library libmessy.a and the
+belonging module files
+
+make -f Makefile_ext
+
+libmessy.a and the modules are in directory src/INCS
+
+
+
+
