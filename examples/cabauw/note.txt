@@ -1,0 +1,30 @@
+For the ICONW1 run, water condensation is set to 1.
+For the ICONW2 run, water condensation is set to 2.
+
+The Kelvin effect option is set to 0.
+Nucleation is turned off in both simulations. 
+Condensation of sulphate, organics and ammonium is on. 
+The switch for chemistry integration is set to 1. 
+
+The results from the two runs have to be saved to different 
+sub-folders (named iconw1 and iconw2) of the output folder.
+
+Changes of the scenario compared to versin 1.9:
+
+sensitiv.dat
+============
+ICONW1 and ICONW2 both with Ke=0
+
+inchem.dat
+==========
+increased init KPP_NH3   from 2.0E10 to 1.0E11
+
+  reduced init KPP_HNO3  from 5.0E10 to 1.0E10
+
+reduced   emis KPP_NO2   from 5.0E12 to 5.0E10
+
+increased emis KPP_NH3   from 4.0E10 to 5.0E10
+
+organic.dat
+===========
+pre-existing OC is BLOV
