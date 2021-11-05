@@ -1,0 +1,36 @@
+! -*- f90 -*- Time-stamp: <2016-08-15 19:57:44 sander>
+
+&CTRL_KPP
+! icntrl(3) = solver-specific method:
+! values for rosenbrock:
+!icntrl(3) = 1 ! ros2: L-stable method, 2 stages, order 2
+ icntrl(3) = 2 ! ros3: L-stable method, 3 stages, order 3 (recommended)
+!icntrl(3) = 3 ! ros4: L-stable method, 4 stages, order 4
+!icntrl(3) = 4 ! rodas3: stiffly-stable method, 4 stages, order 3
+!icntrl(3) = 5 ! rodas4: stiffly-stable method, 6 stages, order 4
+!icntrl(4) = 5000, ! max. number of kpp-substeps
+
+! mz_dt_20160812+ only for rosenbrock_posdef_h211b_qssa integrator:
+!icntrl(5) = 0  ! -> no posdef
+!icntrl(5) = 1  ! -> posdef outside the time loop
+!icntrl(5) = 2  ! -> posdef every substeps
+!icntrl(6) = 0  ! -> no QSSA
+!icntrl(6) = 1  ! -> DAE QSSA
+!icntrl(6) = 2  ! -> Plain QSSA
+!icntrl(6) = 3  ! -> Iterated QSSA
+!icntrl(6) = 4  ! -> Extrapolated QSSA
+!icntrl(6) = 5  ! -> Symmetric QSSA
+!RCNTRL(8)  = 1.0   ! bb value for aggressive time stepping increase calculation (Soederling-2003,ACM)
+!RCNTRL(9)  = 3.0   ! kk value for aggressive time stepping increase calculation (Soederling-2003,ACM)
+!RCNTRL(10) = 1.E-3 ! thres_tau, threshold for QSSA species lifetime (default = 1.E-3)
+!RCNTRL(11) = 1.E-2 ! Iqssa max. (default = 1.E-2)
+!RCNTRL(12) = 1.E-2 ! RelTol (if RCNTRL(13) is not set then AbsTol = 1E3 * RelTol)
+!RCNTRL(13) = 1.E0  ! AbsTol
+! mz_dt_20160812-
+
+!### t_steps(:) = 0.0      => automatic time stepping (DEFAULT)
+!### SUM(t_steps(:)) = 1.0 => fixed time stepping
+!t_steps = 50*0.0,
+!t_steps = 0.0005,  0.0015,  0.005,  0.02,  0.06,  0.1,  0.15,  0.1875,  0.23775,  0.23775, 40*0.0,
+/
+
