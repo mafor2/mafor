@@ -1,0 +1,20 @@
+! -*- f90 -*-
+
+!*****************************************************************************
+! control namelist for JVAL
+!*****************************************************************************
+
+&CTRL
+!
+!# FOR SOLAR CYCLE:
+!r_sol = 0.5   ! 0: solar minimum, 1: solar maximum, default = 0.5
+!              ! r_sol is overwritten if jval_solar in &CPL is active
+!
+!# QUANTUM YIELD FOR CH3COCH3:
+!qy_ch3coch3 = 1 ! Gierzack & ECHAM5 (old IUPAC) (default)
+qy_ch3coch3 = 2 ! BLITZ 2004
+!qy_ch3coch3 = 3 ! IUPAC
+!
+/
+
+!*****************************************************************************

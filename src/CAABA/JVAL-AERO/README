@@ -1,0 +1,9 @@
+
+
+messy_cmn_photol_mem replaces gde_photol_mem 
+
+--> contains all photolysis rates ip_xxx
+--> no new photolysis are introduced in maforchem
+
+Henry coefficients are handled in the CAABA/JVAL-AERO folder
+by messy_mecca_aero.f90
