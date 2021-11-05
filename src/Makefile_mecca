@@ -1,0 +1,224 @@
+#......................................................................
+#
+#  MAKEFILE FOR EXTERNAL LIBRARIES
+#
+#  Makefile creates external libraries and modules for use with
+#  the Multicomponent Aerosol Dynamics Model MAFOR
+#  The external libraries and modules are licensed under different
+#  terms than MAFOR and are not owned by Dr. Matthias Karl.
+#  For details on the license terms of the external libraries and
+#  modules, see below.
+#......................................................................
+# COPYRIGHT
+#    (C) 2011-2021 Dr. Matthias Karl
+#
+#    Contact Information:
+#          Dr. Matthias Karl
+#          Sulzbrackring 13
+#          21037 Hamburg
+#          Germany
+#          email:  mattkar@googlemail.com
+#
+#    This computer software was prepared by Matthias Karl and is
+#    not intended for distribution.
+#    For details on the license terms of the external libraries and
+#    modules, see below.
+#
+#    THIS MAKEFILE IS PROVIDED WITHOUT WARRANTY OF ANY KIND, EITHER 
+#    EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT 
+#    THE LICENSED SOFTWARE IS FREE OF DEFECTS, MERCHANTABLE, FIT FOR A 
+#    PARTICULAR PURPOSE OR NON-INFRINGING. FURTHER THERE IS NO WARRANTY 
+#    MADE AND ALL IMPLIED WARRANTIES ARE DISCLAIMED THAT THE LICENSED 
+#    SOFTWARE MEETS OR COMPLIES WITH ANY DESCRIPTION OF PERFORMANCE OR 
+#    OPERATION, SAID COMPATIBILITY AND SUITABILITY BEING YOUR 
+#    RESPONSIBILITY. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE 
+#    OF THE LICENSED SOFTWARE IS WITH YOU. SHOULD LICENSED SOFTWARE 
+#    PROVE DEFECTIVE IN ANY RESPECT, YOU (AND NOT THE LICENSOR OR ANY 
+#    OTHER CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, 
+#    REPAIR OR CORRECTION. UNDER THE TERMS OF THIS LICENSOR WILL NOT 
+#    SUPPORT THIS SOFTWARE AND IS UNDER NO OBLIGATION TO ISSUE
+#    UPDATES TO THIS SOFTWARE.
+#......................................................................
+#......................................................................
+#  Directories
+#       BASEDIR  serves as a root directory for the external library
+#       KPPDIR   is where the KPP preprocessor generated sources
+#                from MECCA/MESSY using the xmecca script are
+#       MESSYDIR is where the MECCA/MESSY sources reside
+#       OBJDIR   is where the ".o" and "lib*.a" files will be built.
+#
+#......................................................................
+#  Special Make-targets
+#       all:        OBJDIR and libmessy.a
+#       clean:      remove .o's and libmessy.a from OBJDIR
+#......................................................................
+# LIBRARY LICENSES:
+#
+#       KPP and MESSY are bundled into one library libmessy.a
+#
+# libmessy.a
+# ==========
+#
+# Software:
+#   KPP v2.2.3
+#   The Kinetic PreProcessor
+#   Builds simulation code for chemical kinetic systems
+#
+# Author:
+#   (C) 1995-1997
+#   Valeriu Damian and Adrian Sandu, CGRER, Univ. Iowa
+#   (C) 1997-2005
+#   Adrian Sandu, Computer Science Department, 
+#   Virginia Polytechnic Institute and State University
+#   Blacksburg, VA 24060
+#   Email: sandu@cs.vt.edu
+#
+# Licencse:
+#   KPP is free software; you can redistribute it and/or modify it 
+#   under the terms of the GNU General Public License as published
+#   by the Free Software Foundation 
+#   (http://www.gnu.org/copyleft/gpl.html); either version 2 of the
+#   License, or (at your option) any later version.
+#   KPP is distributed in the hope that it will be useful, but 
+#   WITHOUT ANY WARRANTY; without even the implied warranty of 
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+#   See the GNU General Public License for more details.
+#
+#
+# Software:
+#   CAABA/MECCA v4.0
+#   The Community Atmospheric Chemistry Box Model/
+#   Module Efficiently Calculating the Chemistry of the Atmosphere
+#
+# Author:
+#   (C) 2003-2018
+#   Rolf Sander, Max Planck Instiute of Chemistry (MPICH), Mainz, DE
+#   Email: rolf.sander@mpic.de
+#
+# Licencse:
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, get it from:
+#   http://www.gnu.org/copyleft/gpl.html
+#
+#   Basically, the GPL allows you to use CAABA/MECCA at no charge.
+#   However, the GPL was not written with scientific programs in mind.
+#   Therefore, when you are going to publish results based on
+#   CAABA/MECCA in a scientific journal, we ask you to also obey
+#   these points:
+#   * Please cite the GMD paper describing the CAABA/MECCA model
+#   * Sander, R., A. Baumgaertner, D. Cabrera-Perez, F. Frank,
+#   S. Gromov, J.-U. Grooss, H. Harder, V. Huijnen, P. Joeckel,
+#   V.A. Karydis, K. E. Niemeyer, A. Pozzer, H. Riede, M.G. Schultz,
+#   D. Taraborelli, S. Tauer (2019), The community atmospheric
+#   chemistry box model CAABA/MECCA-4.0,
+#   Geosci. Model Dev., 12, 1365-1385, doi:10.5194/gmd-12-1365-2019.
+#   * For more terms: see LICENSE_caaba4
+#   
+#
+######################################################################
+
+.SUFFIXES: .f90 .mod
+
+BASEDIR  = /home/matthias/MAFOR_GIT/mafor/src
+
+KPPDIR   = ${BASEDIR}/CAABA/KPP/
+
+MESSYDIR = ${BASEDIR}/CAABA/JVAL-AERO/
+
+OBJDIR   = ${BASEDIR}/INCS/
+
+MCK      = messy_mecca_kpp_
+
+# SEARCH PATH FOR SOURCES #
+VPATH    = ${MESSYDIR}:${KPPDIR}
+
+# COMPILER #
+F90      = gfortran-9
+F90FLAGS = -O1 -g -u -C -cpp -m64
+LDFLAGS  = -m64
+
+
+# LIBRARY #
+AR       = ar
+ARFLAGS = rsv
+
+
+
+# SOURCES #
+
+MSRC =		messy_cmn_photol_mem.f90      \
+		messy_main_constants_mem.f90  \
+		messy_main_blather.f90        \
+		messy_main_tools.f90          \
+		messy_main_tracer.f90         \
+		messy_jval.f90
+
+
+KSRC =		$(MCK)precision.f90           \
+		$(MCK)parameters.f90          \
+		$(MCK)global.f90              \
+		$(MCK)initialize.f90          \
+		$(MCK)jacobiansp.f90          \
+		$(MCK)jacobian.f90            \
+		$(MCK)linearalgebra.f90       \
+		$(MCK)monitor.f90             \
+		$(MCK)function.f90            \
+		$(MCK)rates.f90               \
+		$(MCK)util.f90                \
+		$(MCK)integrator.f90          \
+		messy_mecca_kpp.f90
+
+
+##  Module sources:
+
+LIB1   = libmessy.a
+
+MODS   = $(MSRC:.f90=.mod) $(KSRC:.f90=.mod)
+
+MOBJ   = $(MSRC:.f90=.o)
+KOBJ   = $(KSRC:.f90=.o)
+
+OBJ    = ${MOBJ} ${KOBJ}
+
+######################################################################
+
+all: directories ${MODS} ${LIB1}
+
+clean:  ${OBJDIR}
+	cd ${OBJDIR}; rm $(MOBJ); rm $(KOBJ)
+	cd ${OBJDIR}; rm ${LIB1}; rm ${MODS};
+
+
+directories:
+	@mkdir -p $(OBJDIR)
+
+
+#  ---------------------------  RULES:  --------------------------
+
+%.o : %.mod        #  Disable "gmake"s obnoxious implicit Modula-2 rule !!
+
+
+.f90.o .f90.mod:
+	cd ${OBJDIR}; $(F90) -c $(F90FLAGS) $<
+
+
+#  ---------------------------  Dependencies:  --------------------------
+#  multiple lines to avoid "command line too long":
+
+${LIB1}: mlib klib
+
+mlib: ${MOBJ}
+	cd ${OBJDIR}; $(AR) $(ARFLAGS) ${LIB1} ${MOBJ}
+
+klib: ${KOBJ}
+	cd ${OBJDIR}; $(AR) $(ARFLAGS) ${LIB1} ${KOBJ}
+
+

@@ -1,0 +1,162 @@
+#
+#  MAKEFILE FOR:
+#  Multicomponent Aerosol FORmation model MAFOR
+#  Version 2.0 (Community Model)
+#.........................................................................
+# COPYRIGHT
+#    (C) 2011-2021 Dr. Matthias Karl
+#
+#    Contact Information:
+#          Dr. Matthias Karl
+#          Sulzbrackring 13
+#          21037 Hamburg
+#          Germany
+#          email:  mattkar@googlemail.com
+#
+#
+#    Distributed under the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This Makefile is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#......................................................................
+#  Requirements
+#     Before using this Makefile, it is mandatory to execute
+#     Makefile_mecca and Makefile_mesa to create the external 
+#     modules and libraries:
+#     $ make -f Makefile_mecca
+#     $ make -f Makefile_mesa
+#     The creation of external modules and libraries takes
+#     several minutes.
+#     This is only needed prior to the first installation of MAFOR
+#     and upon changes in any of the external sources.
+#......................................................................
+#  Directories
+#       BASEDIR  serves as a root directory for this built
+#       GDEDIR   is where the MAFOR aerosol dynamics sources reside
+#       CHEDIR   is where the MAFOR chemistry sources reside
+#       INCDIR   is where the MESA/MTEM (MOSAIC) objects and libraries reside
+#       OBJDIR   is where the ".o" and ".mod" files will be built.
+#
+#......................................................................
+#  Special Make-targets
+#       all:        OBJS objects
+#       clean:      remove .o's from OBJS
+#......................................................................
+#  Debugging and 32-bit executable
+#
+#     debugging: gdb maforvxx.exe, then 'run' and 'bt'
+#
+#     linux 32-bit:
+#     requires installation of the multilib compiler packages:
+#     $ sudo apt-get install gfortran-multilib
+#     before running make, type:
+#     $ export LDFLAGS='-m32 -L/usr/lib32'
+#     change in this Makefile LDFLAGS and F90FLAGS:
+#       LDFLAGS = -m32
+#       F90FLAGS =  -O1 -g -u -C -cpp -m32
+#
+######################################################################
+.SUFFIXES: .f90
+
+BASEDIR  = /home/matthias/MAFOR_GIT/mafor/src
+
+GDEDIR   = ${BASEDIR}/GDE/
+CHEDIR   = ${BASEDIR}/CHEM/
+DISDIR   = ${BASEDIR}/DISP/
+INCDIR   = ${BASEDIR}/INCS/
+
+OBJDIR    = ${BASEDIR}/OBJS
+TARGETDIR = ${BASEDIR}/../bin/
+
+
+# SEARCH PATH FOR SOURCES #
+VPATH    = ${GDEDIR}:${CHEDIR}:${DISDIR}
+
+
+# COMPILER #
+F90      = gfortran-9
+#flags for debugging (use for the test examples)
+### F90FLAGS =  -ggdb -u -C -cpp -pedantic -ffpe-trap=invalid,underflow,zero -ftrapv -fbounds-check -finit-real=nan -fbacktrace -fimplicit-none -finit-integer=n -m64
+#flags for optimum runtime (used for release version
+F90FLAGS =  -O1 -g -u -C -cpp -m64
+LDFLAGS  = -m64
+
+# INCLUDE #
+INFLAGS  = -I$(INCDIR)
+
+# LIBRARY #
+LIBS     = -L${INCDIR} -lmessy -lmtem
+
+
+TARGET   = maforv199.exe
+
+# SOURCES #
+
+ESRC = 	gde_sensitiv.f90         \
+		gde_constants.f90        \
+		gde_toolbox.f90          \
+		gde_input_data.f90       \
+		gde_init_gas.f90         \
+		gde_init_aqchem.f90      \
+		gde_init_aero.f90        \
+		gde_plume.f90            \
+		gde_photo.f90            \
+		gde_seaflux.f90          \
+		gde_chem_gas.f90         \
+		gde_aerosol_props.f90    \
+		gde_addwater.f90         \
+		gde_nucleation.f90       \
+		gde_coagulation.f90      \
+		gde_condensation.f90     \
+		gde_deposition.f90       \
+		gde_transfer.f90         \
+		gde_aerosol_solver.f90   \
+		mafor.f90           
+
+# excluding gde_koehler.f90 (after gde_transfer.f90)
+
+
+OBJS=$(join $(addsuffix ./OBJS/, $(dir $(ESRC))), $(notdir $(ESRC:.f90=.o)))
+
+
+#  ---------------------------  RULES:  --------------------------
+
+%.o : %.mod        #  Disable "gmake"s obnoxious implicit Modula-2 rule !!
+
+.PHONY: all clean
+
+all : directories clean $(TARGET)
+
+#Make the Directories
+directories:
+	@mkdir -p $(OBJDIR)
+	@echo $(OBJS)
+
+#Clean objects and binary
+clean :
+	rm -rf ${OBJDIR}
+	rm -f $(TARGET) core a.out
+
+
+#Link
+$(TARGET): $(OBJS)
+	@echo "============="
+	@echo "Linking the target $@"
+	@echo "============="
+	$(F90) $(F90FLAGS) $(LDFLAGS) -o $(TARGETDIR)/$(TARGET) $^ $(LIBS)
+	rm -f *.mod
+	@echo -- Link finished --
+
+#Compile
+./OBJS/%.o : %.f90
+	@mkdir -p $(dir $@)
+	@echo "============="
+	@echo "Compiling $<"
+	$(F90) $(F90FLAGS) $(INFLAGS) -c $< -o $@
