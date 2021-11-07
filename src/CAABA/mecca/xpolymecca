@@ -1,0 +1,604 @@
+#! /bin/tcsh -f
+# Time-stamp: <2018-12-28 14:09:48 sander>
+# Author: Rolf Sander, Max-Planck-Institute, Mainz, Germany, 2014-...
+# This script produces several MECCA mechanisms.
+
+##############################################################################
+# SELECT A SET OF THE BATCH FILES HERE
+##############################################################################
+
+# KP4 no LaTeX no graphviz:
+#set batchfiles = ("user_contributed/chem_eval2.3" "user_contributed/e4chem")
+
+# with LaTeX and graphviz:
+#set batchfiles = ("CCMI/CCMI-sens-01" "CCMI/CCMI-base-02" "simple_kp4")
+
+#set batchfiles = ("CCMI/CCMI-base-02" "CCMI/CCMI-base-02-polymeccatest")
+
+# for CAABA4 model runs:
+set batchfiles = ("full_organic_bat" "simple_organic_bat")
+
+##############################################################################
+# DO NOT CHANGE ANYTHING BELOW THIS LINE
+##############################################################################
+
+set filetimestamp = `date +"%y%m%d%H%M%S"`
+set tmpfile = "tmp_$filetimestamp"
+set dontedit  = "created automatically by xpolymecca, DO NOT EDIT\!"
+
+# with "anyerror", status remains <> 0 if any error occurs:
+set anyerror
+
+set tmpincfile = "messy_chemglue.inc_tmp"
+# prefix tmp_ cannot be used for tmpincfile because then xmecca would
+# delete it during cleanup
+set incfile    = "../../../smcl/messy_chemglue.inc"
+
+set mecnum = 1
+# for the first mechanism, mecnumstring is empty and the default MECCA
+# files are produced (without any 3-digit number):
+set mecnumstring = ""
+foreach batchfile ($batchfiles)
+  # if necessary, remove suffix ".bat" from $batchfile:
+  set batchfile = `echo $batchfile | sed 's/.bat$//'`
+  # start KPP and KP4 via xmecca:
+  ./xmecca $batchfile ${mecnumstring}
+  set exitstatus = "$status"
+  if ( "$exitstatus" != "0" ) exit $exitstatus
+  if ( $mecnum > 1 ) mv xmecca.log xmecca${mecnumstring}.log 
+  # remove directory name from batchfile name,
+  # change "-" and "." to "_",
+  # add "_bat" as suffix:
+  set batchfile = "`basename $batchfile | sed 's/[-.]/_/g'`_bat" 
+  # assign f90 variable to this mechanism:
+  echo "$batchfile = $mecnum." >> $tmpincfile
+  @ mecnum = $mecnum + 1
+  set mecnumstring = `printf "%3.3d" $mecnum`
+end
+
+# create include file:
+echo "! -*- f90 -*- $dontedit" > $incfile
+cat $tmpincfile >> $incfile
+@ NMAXMECCA = $mecnum - 1
+echo "NMAXMECCA = $NMAXMECCA" >> $incfile
+echo;echo "The include file $incfile has been produced:"
+# show file contents without comments:
+grep -vE "^ *\!" $incfile
+
+# merge all smil/messy_mecca*_idt_si.inc files:
+cat messy_mecca*_idt_si.inc | sort | uniq > $tmpfile
+# remove original *.inc files:
+rm messy_mecca*_idt_si.inc
+# remove links from SMIL directory, except for first mechanism:
+rm ../../../smil/messy_mecca???_idt_si.inc
+# use the merged file:
+mv  $tmpfile messy_mecca_idt_si.inc
+
+##############################################################################
+
+# create messy_mecca_poly_si.f90:
+set polysifile = messy_mecca_poly_si.f90
+
+# ----------------------------------------------------------------------------
+cat > $polysifile <<EOF
+! created automatically by xpolymecca, DO NOT EDIT!
+! If you want to change this file, edit xpolymecca and
+! template_messy_mecca_poly_si.f90, not smil/messy_mecca_poly_si.f90 !!!
+
+MODULE messy_mecca_poly_si
+
+  USE messy_main_constants_mem, ONLY: DP
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+  USE messy_mecca${mecnumstringorempty}_kpp, ONLY: &
+    REQ_HET_${mecnumstring} => REQ_HET, &
+    REQ_PHOTRAT_${mecnumstring} => REQ_PHOTRAT, &
+    NSPEC_${mecnumstring} => NSPEC
+
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  IMPLICIT NONE
+  PRIVATE
+  PUBLIC :: initialize_poly, initialize, mr2c, c2mr, &
+    kpp_integrate, mecca_new_tracer_gp, &
+    fill_temp, fill_cair, fill_press, fill_jx, fill_khet_Tr, fill_khet_St
+EOF
+# ----------------------------------------------------------------------------
+echo "  INTEGER, PUBLIC, PARAMETER :: NMAXMECCA = $NMAXMECCA" >> $polysifile
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  LOGICAL, PUBLIC, SAVE :: REQ_HET     = .FALSE.
+  LOGICAL, PUBLIC, SAVE :: REQ_PHOTRAT = .FALSE.
+  INTEGER, PUBLIC, SAVE, DIMENSION(NMAXMECCA) :: NSPEC
+  LOGICAL, PUBLIC, SAVE, DIMENSION(NMAXMECCA) :: l_fixed_step
+
+CONTAINS
+
+  !***************************************************************************
+
+  SUBROUTINE initialize_poly
+
+    USE messy_main_blather_bi, ONLY: error_bi
+    USE messy_main_mpi_bi,     ONLY: p_parallel_io, p_io, p_bcast
+    USE messy_main_tools,      ONLY: find_next_free_unit
+    USE messy_mecca,           ONLY: modstr
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    USE messy_mecca${mecnumstringorempty}_kpp, ONLY: &
+      initialize_kpp_ctrl_${mecnumstring} => initialize_kpp_ctrl, &
+      l_fixed_step_${mecnumstring}        => l_fixed_step,        &
+      nfsteps_${mecnumstring}             => nfsteps,             &
+      icntrl_${mecnumstring}              => icntrl,              &
+      rcntrl_${mecnumstring}              => rcntrl,              &
+      t_steps_${mecnumstring}             => t_steps
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    IMPLICIT NONE
+    CHARACTER(LEN=*), PARAMETER :: substr = 'initialize_poly'
+    INTEGER :: iou    ! I/O unit
+    INTEGER :: status ! error status
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+
+    IF (p_parallel_io) THEN
+      iou = find_next_free_unit(100,200)
+      CALL initialize_kpp_ctrl_${mecnumstring}(status, iou, modstr)
+      IF (status /= 0) CALL error_bi('error in intitalize_kpp_ctrl_${mecnumstring}',substr)
+    ENDIF
+    CALL p_bcast(l_fixed_step_${mecnumstring}, p_io)
+    CALL p_bcast(nfsteps_${mecnumstring},      p_io)
+    CALL p_bcast(icntrl_${mecnumstring},       p_io)
+    !  mz_rs_20151110+
+    ! To use different numerical integrators for different mechanisms, try
+    ! changing icntrl manually here after running xpolymecca, e.g.:
+    ! icntrl_${mecnumstring}(3) = 4
+    !  mz_rs_20151110-
+    CALL p_bcast(rcntrl_${mecnumstring},       p_io)
+    CALL p_bcast(t_steps_${mecnumstring},      p_io)
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+
+    ! REQ_HET is true if any of the mechanisms requires het. reactions:
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    IF (REQ_HET_${mecnumstring}) REQ_HET = .TRUE.
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+
+    ! REQ_PHOTRAT is true if any of the mechanisms requires photolysis:
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    IF (REQ_PHOTRAT_${mecnumstring}) REQ_PHOTRAT = .TRUE.
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    NSPEC($mecnum) = NSPEC_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    l_fixed_step($mecnum) = l_fixed_step_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+
+  END SUBROUTINE initialize_poly
+
+  !***************************************************************************
+
+  SUBROUTINE initialize
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    USE messy_mecca${mecnumstringorempty}_kpp, ONLY: &
+      initialize_${mecnumstring} => initialize
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    CALL initialize_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  END SUBROUTINE initialize
+
+  !***************************************************************************
+
+  SUBROUTINE mr2c(jpm, zmrbc, c_air, conc, pind_H2O)
+    USE messy_mecca_mem_si ! idt_*
+    ! convert mixing ratio [mol/mol] to concentration [mcl/cc]
+    INTEGER,  INTENT(IN)  :: jpm
+    REAL(DP), INTENT(IN)  :: zmrbc(:,:), c_air(:)
+    REAL(DP), INTENT(OUT) :: conc(:,:)
+    INTEGER,  INTENT(OUT) :: pind_H2O
+
+    SELECT CASE(jpm)
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    CASE ($mecnum)
+      CALL mr2c_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    END SELECT
+
+  CONTAINS
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    SUBROUTINE mr2c_${mecnumstring}
+      USE messy_mecca${mecnumstringorempty}_kpp ! without ONLY to get all ind_*
+      pind_H2O = ind_H2O
+      INCLUDE 'messy_mecca${mecnumstringorempty}_mr2c_si.inc'
+    END SUBROUTINE mr2c_${mecnumstring}
+
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  END SUBROUTINE mr2c
+
+  !***************************************************************************
+
+  SUBROUTINE c2mr(jpm, zmrac, conc, c_air)
+    USE messy_mecca_mem_si ! idt_*
+    ! convert concentration [mcl/cc] to mixing ratio [mol/mol]
+    INTEGER,  INTENT(IN)  :: jpm
+    REAL(DP), INTENT(OUT) :: zmrac(:,:)
+    REAL(DP), INTENT(IN)  :: conc(:,:), c_air(:)
+    REAL(DP), DIMENSION(SIZE(c_air)) :: riac ! 1/c(air)
+
+    riac(:) = 1._dp/c_air(:)
+    SELECT CASE(jpm)
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    CASE ($mecnum)
+      CALL c2mr_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    END SELECT
+
+  CONTAINS
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    SUBROUTINE c2mr_${mecnumstring}
+      USE messy_mecca${mecnumstringorempty}_kpp ! without ONLY to get all ind_*
+      INCLUDE 'messy_mecca${mecnumstringorempty}_c2mr_si.inc'
+    END SUBROUTINE c2mr_${mecnumstring}
+
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  END SUBROUTINE c2mr
+
+  !***************************************************************************
+
+  SUBROUTINE kpp_integrate(jpm, time_step_len, conc, IERRF, &
+    xNacc, xNrej, l_debug, PE)
+
+    IMPLICIT NONE
+    INTEGER, INTENT(IN)                             :: jpm
+    REAL(DP),INTENT(IN)                             :: time_step_len
+    REAL(DP),INTENT(INOUT), DIMENSION(:,:)          :: conc
+    INTEGER, INTENT(OUT),   DIMENSION(:),  OPTIONAL :: IERRF
+    INTEGER, INTENT(OUT),   DIMENSION(:),  OPTIONAL :: xNacc
+    INTEGER, INTENT(OUT),   DIMENSION(:),  OPTIONAL :: xNrej
+    LOGICAL, INTENT(IN),                   OPTIONAL :: l_debug
+    INTEGER, INTENT(IN),                   OPTIONAL :: PE
+
+    SELECT CASE(jpm)
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    CASE ($mecnum)
+      CALL kpp_integrate_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    END SELECT
+
+  CONTAINS
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    SUBROUTINE kpp_integrate_${mecnumstring}
+      USE messy_mecca${mecnumstringorempty}_kpp, ONLY: kpp_integrate_ori => kpp_integrate
+      CALL kpp_integrate_ori(time_step_len, conc, IERRF=IERRF, &
+        xNacc=xNacc, xNrej=xNrej, l_debug=l_debug, PE=PE)
+    END SUBROUTINE kpp_integrate_${mecnumstring}
+
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  END SUBROUTINE kpp_integrate
+
+EOF
+# ----------------------------------------------------------------------------
+foreach fillvar ("temp" "cair" "press" "jx" "khet_Tr" "khet_St")
+switch ($fillvar)
+case "temp":
+case "cair": 
+case "press":
+  set arraydim = ":"
+  breaksw
+case "jx":
+case "khet_Tr":
+case "khet_St":
+  set arraydim = ":,:"
+  breaksw
+default:
+  echo "Error: unknown array dimension for $fillvar"
+  exit 1
+  breaksw
+endsw
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  !***************************************************************************
+
+  SUBROUTINE fill_$fillvar(jpm, status, array)
+
+    IMPLICIT NONE
+    INTEGER, INTENT(IN)  :: jpm
+    INTEGER, INTENT(OUT) :: status
+    REAL(DP), INTENT(IN), DIMENSION($arraydim) :: array
+
+    SELECT CASE(jpm)
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    CASE ($mecnum)
+      CALL fill_${fillvar}_${mecnumstring}
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    END SELECT
+
+  CONTAINS
+
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    SUBROUTINE fill_${fillvar}_${mecnumstring}
+      USE messy_mecca${mecnumstringorempty}_kpp, ONLY: fill_${fillvar}_ori => fill_$fillvar
+      CALL fill_${fillvar}_ori(status,array)
+    END SUBROUTINE fill_${fillvar}_${mecnumstring}
+
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  END SUBROUTINE fill_$fillvar
+
+EOF
+# ----------------------------------------------------------------------------
+end # foreach fillvar
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+  !***************************************************************************
+
+  SUBROUTINE mecca_new_tracer_gp(c_pa_asm, i_pa_amode)
+
+    ! ECHAM5/MESSy
+    USE messy_main_blather_bi,    ONLY: start_message_bi, end_message_bi
+    USE messy_main_tracer_mem_bi, ONLY: GPTRSTR, LGTRSTR
+    ! MESSy
+    USE messy_mecca, ONLY: modstr
+    USE messy_mecca_mem_si ! idt_*
+    USE messy_main_tracer, ONLY: new_tracer, AIR, ON, OFF, &
+      set_tracer, AEROSOL, AMOUNTFRACTION, MODAL, BIN, &
+      I_ADVECT, I_CONVECT, I_VDIFF, I_WETDEP, I_DRYDEP, I_SEDI, &
+      I_SCAV, I_MIX, I_FORCE_COL, I_INTEGRATE, I_TIMEFILTER, I_FORCE_INIT, &
+      I_AEROSOL_METHOD, I_AEROSOL_MODE, I_AEROSOL_SOL, S_AEROSOL_MODEL, &
+      R_MOLARMASS, R_PSS  , R_DRYREAC_SF, R_VINI, R_AEROSOL_DENSITY
+    USE messy_main_constants_mem, ONLY: MH, MC, MN, MNa, MO, MS, MCl, MBr, &
+      MI, MF, MHg
+    ! When using a small (e.g. gas-phase only) chemistry mechanism,
+    ! forcheck will say that AEROSOL, AMOUNTFRACTION, LGTRSTR, ON, and
+    ! OFF are not used ("named constant not used"). Ignore this info and
+    ! leave these variables in the ONLY lists!
+
+    IMPLICIT NONE
+
+    CHARACTER(LEN=*), INTENT(IN) :: c_pa_asm
+    INTEGER,          INTENT(IN) :: i_pa_amode
+    INTEGER :: status
+    CHARACTER(LEN=*), PARAMETER :: substr = 'mecca_new_tracer_gp'
+    CHARACTER(LEN=*), PARAMETER :: setname = GPTRSTR
+
+    CALL start_message_bi(modstr, 'GRID POINT TRACER REQUEST', substr)
+    ! The following INCLUDE statement contains all "CALL new_tracer" commands
+    ! for all species that are used in the kpp chemistry scheme.
+    ! Note that MECCA will never create a tracer for H2O.
+EOF
+# ----------------------------------------------------------------------------
+set mecnum=1
+set mecnumstringorempty = ""
+while ( $mecnum <= $NMAXMECCA )
+set mecnumstring = `printf "%3.3d" $mecnum`
+cat >> $polysifile <<EOF
+    INCLUDE 'messy_mecca${mecnumstringorempty}_trac_si.inc'
+EOF
+@ mecnum=$mecnum + 1
+set mecnumstringorempty = `printf "%3.3d" $mecnum`
+end
+# ----------------------------------------------------------------------------
+cat >> $polysifile <<EOF
+    CALL end_message_bi(modstr, 'GRID POINT TRACER REQUEST', substr)
+
+  CONTAINS
+
+    SUBROUTINE tracer_halt(substr,status)
+      USE messy_main_tracer_bi,  ONLY: tracer_halt_ori => tracer_halt
+      USE messy_main_tracer,     ONLY: TR_EXIST
+      USE messy_main_blather_bi, ONLY: warning_bi, error_bi
+      CHARACTER(LEN=*), INTENT(IN)  :: substr
+      INTEGER,          INTENT(IN)  :: status
+      ! It is okay if the tracer exists because then it has already been
+      ! defined by a previous mechanism. For other errors, call the
+      ! original tracer_halt subroutine:
+      IF (status == TR_EXIST) THEN
+        CALL warning_bi('tracer exists from another MECCA mechanism', substr)
+      ELSE
+        CALL tracer_halt_ori(substr,status)
+      ENDIF
+    END SUBROUTINE tracer_halt
+
+  END SUBROUTINE mecca_new_tracer_gp
+
+  !***************************************************************************
+
+END MODULE messy_mecca_poly_si
+
+!*****************************************************************************
+EOF
+
+##############################################################################
+
+# CLEANUP
+
+rm $tmpincfile
+
+##############################################################################
+
+exit
+
+##############################################################################
