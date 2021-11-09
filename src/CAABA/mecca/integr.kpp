@@ -1,0 +1,13 @@
+#INTEGRATOR rosenbrock_posdef
+#INLINE F90_GLOBAL
+  ! KPP info from xmecca (via integr.kpp):
+  CHARACTER(LEN=*), PUBLIC, PARAMETER :: &
+    mecca_spc_file     = '-rw-rw-r-- 1 matthias matthias 108734 Nov  2 10:18 mecca.spc', &
+    mecca_eqn_file     = '-rw-rw-r-- 1 matthias matthias 404098 Nov  2 10:18 mecca.eqn', &
+    mecca_spc_file_sum = '37525   107', &
+    mecca_eqn_file_sum = '03207   395', &
+    kppoption          = 'k', &
+    KPP_HOME           = '/home/matthias/MAFOR_GIT/mafor/src/CAABA/mecca/kpp', &
+    KPP_version        = '2.2.3_rs3', &
+    integr             = 'rosenbrock_posdef'
+#ENDINLINE {above lines go to messy_mecca_kpp_global}

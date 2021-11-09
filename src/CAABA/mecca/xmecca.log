@@ -1,0 +1,93 @@
+created automatically by xmecca, DO NOT EDIT!
+xmecca was run on 2021-11-02 at 10:17:52 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI
+Batch file: mafor.bat
+Directory:  /home/matthias/MAFOR_GIT/mafor/src/CAABA/mecca/batch_mafor
+Submodel         = mecca
+
+From mafor.bat: apn = 1
+Selected number of aerosol phases = 1
+
+From mafor.bat: gaseqnfile = gas.eqn
+
+From mafor.bat: rplfile = maforchem
+You selected the replacement file: maforchem
+
+From mafor.bat: wanted = Tr && (G || Aa) && !Br && !Hg
+
+You selected the reactions:
+(Tr && (G || Aa) && !Br && !Hg)
+(later, you will find your selection in messy_mecca_kpp_global.f90)
+
+REQ_HET     = .FALSE.
+REQ_PHOTRAT = .TRUE.
+REQ_AEROSOL = .TRUE.
+
+From mafor.bat: enthalpy = n
+
+From mafor.bat: mcfct = n
+
+From mafor.bat: diagtracfile = 
+No diagtracfile selected
+
+From mafor.bat: rxnrates = n
+
+From mafor.bat: tag = n
+
+Fixed species are:
+#SETFIX CO2; O2; N2;
+
+From mafor.bat: kppoption = k
+
+From mafor.bat: integr = rosenbrock_posdef
+Making KPP-generated files available to MESSy
+cd /home/matthias/MAFOR_GIT/mafor/src/CAABA
+Making KPP-generated files available to CAABA
+Making KPP-generated files available to ECHAM5/MESSy
+
+Number of species in selected mechanism:
+gas phase:          781
+aqueous phase:      152
+all species:        933
+
+Number of reactions in selected mechanism:
+gas phase      G:   1869
+aqueous phase  A:   232
+Henry          H:   120
+photolysis     J:   351
+aq. photolysis PH:  13
+heterogeneous  HET: 0
+equilibria     EQ:  100
+isotope exch.  IEX: 0
+tagging        TAG: 0
+dummy          D:   1
+all equations:      2686
+
+From mafor.bat: latex = y
+
+From mafor.bat: graphviz = n
+
+From mafor.bat: deltmp = y
+Deleting the temporary xmecca files:
+Makefile_messy_mecca_kpp
+messy_mecca_kpp.map
+messy_mecca_kpp_Model.f90
+tmp_0_211102101752.eqn
+tmp_0_211102101752.rpl
+tmp_1_211102101752.awk
+tmp_1_211102101752.eqn
+tmp_1_211102101752.f90
+tmp_211102101752
+tmp_2_211102101752
+tmp_2_211102101752.eqn
+tmp_2_211102101752.f90
+tmp_2_211102101752.spc
+tmp_3_211102101752.eqn
+tmp_3x_211102101752.eqn
+tmp_5_211102101752.eqn
+tmp_7_211102101752.eqn
+tmp_9_211102101752.eqn
+tmp_aq_211102101752
+tmp_diagtrac_211102101752.tbl
+tmp_gas.eqn_free
+tmp_messy_mecca_kpp_Global_f90
+tmp_param

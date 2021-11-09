@@ -1,0 +1,99 @@
+// define chemical elements
+#INCLUDE atoms
+Min; {minus (negative charge as pseudo-atom for charge balance)}
+Pls; {plus  (positive charge as pseudo-atom for charge balance)}
+
+// define chemical species
+#INCLUDE mecca.spc
+
+#INLINE F90_RCONST
+  USE messy_main_constants_mem ! atm2Pa, N_A, R_gas
+  USE messy_cmn_photol_mem     ! IP_MAX, ip_*, jname
+  ! end of USE statements
+#ENDINLINE {above lines go into the SUBROUTINES UPDATE_RCONST and UPDATE_PHOTO}
+
+// define chemical equations
+#INCLUDE mecca.eqn
+
+#INLINE F90_GLOBAL
+  ! iht_ = index of troposheric heterogeneous reactions
+  INTEGER, PARAMETER, PUBLIC :: &
+    iht_N2O5      =  1, iht_HNO3      =  2, iht_Hg      =  3, iht_RGM       = 4
+  INTEGER, PARAMETER, PUBLIC :: IHT_MAX = 4
+  ! ihs_ = index of stratospheric heterogeneous reactions
+  ! (must be the same as in messy_msbm.f90!)
+  INTEGER, PARAMETER :: &
+    ihs_N2O5_H2O  =  1, ihs_HOCl_HCl  =  2, ihs_ClNO3_HCl =  3, &
+    ihs_ClNO3_H2O =  4, ihs_N2O5_HCl  =  5, ihs_ClNO3_HBr =  6, &
+    ihs_BrNO3_HCl =  7, ihs_HOCl_HBr  =  8, ihs_HOBr_HCl  =  9, &
+    ihs_HOBr_HBr  = 10, ihs_BrNO3_H2O = 11, ihs_Hg        = 12, &
+    ihs_RGM       = 13
+  INTEGER, PARAMETER, PUBLIC :: IHS_MAX = 13
+!KPPPP_DIRECTIVE vector variable definition start
+  ! IMPORTANT NOTES ABOUT TEMP, PRESS, AND CAIR:
+  ! - The KPP variable "temp" is already defined automatically by KPP in
+  !   messy_mecca_kpp_global.f90. The KPP variables "press" and "cair" are
+  !   defined here.
+  ! - The 3 variables temp, press, and cair are only used inside KPP.
+  !   They are different from the variables with the same names in the base
+  !   model (as used in the SMIL files *_si.f90 and *_box.f90)
+  ! - Data transfer between the SMIL and the KPP variables is done via the
+  !   fill subroutines in messy_mecca_kpp.f90:
+  !   - fill_temp transfers temperature
+  !   - fill_press transfers pressure
+  !   - fill_cair transfers cair (this is redundant because cair could be
+  !     calculated from temp and press; nevertheless, redundant transfer to
+  !     KPP is preferred to avoid potential numerical differences when
+  !     recalculating cair inside KPP)
+  REAL(dp) :: cair      ! c(air) (wet) [mcl/cm^3]
+  REAL(dp) :: press     ! pressure [Pa]
+  REAL(dp) :: temp_ion  ! ion temperature [K]
+  REAL(dp) :: temp_elec ! electron temperature [K]
+  REAL(dp) :: xaer(APN)
+  REAL(dp) :: cvfac(APN)    ! unit conversion factor
+  REAL(dp) :: lwc(APN)      ! liquid water content
+  REAL(dp) :: k_exf(APN,NSPEC) = 0.
+  REAL(dp) :: k_exb(APN,NSPEC) = 0.
+  REAL(dp) :: k_exf_N2O5(APN)  = 0.
+  REAL(dp) :: k_exf_ClNO3(APN) = 0.
+  REAL(dp) :: k_exf_BrNO3(APN) = 0.
+  REAL(dp) :: jx(IP_MAX) = 0.
+  REAL(dp) :: khet_Tr(IHT_MAX) = 0.
+  REAL(dp) :: khet_St(IHS_MAX) = 0.
+!KPPPP_DIRECTIVE vector variable definition end
+  INTEGER, PUBLIC  :: xnom7sulf = 1 ! = 1-xm7sulf
+#ENDINLINE {above lines go to messy_mecca_kpp_global}
+
+#INLINE F90_INIT
+  rtol(:) = 1E-2_dp ! relative tolerance
+  atol(:) = 1E1_dp  ! absolute tolerance
+  IF ((ind_OH  >0).AND.(ind_OH  <=NVAR)) atol(ind_OH)  = 1._dp
+  IF ((ind_NO3 >0).AND.(ind_NO3 <=NVAR)) atol(ind_NO3) = 1._dp
+  IF ((ind_Cl  >0).AND.(ind_Cl  <=NVAR)) atol(ind_Cl)  = 1._dp
+  IF ((ind_Br  >0).AND.(ind_Br  <=NVAR)) atol(ind_Br)  = 1._dp
+  IF ((ind_O1D >0).AND.(ind_O1D <=NVAR)) atol(ind_O1D) = 1._dp
+#ENDINLINE {above lines go to the end of subroutine Initialize}
+
+// select programming language
+#LANGUAGE Fortran90
+
+// choose an integrator
+#INCLUDE integr.kpp
+
+// set indices of unused species to ind_*=0
+#DUMMYINDEX ON
+
+// do not create Stoichiom files
+#STOICMAT OFF
+
+// do not create Hessian files
+#HESSIAN OFF
+
+// do not create Mex files
+#MEX OFF
+
+// equation tags
+#EQNTAGS ON
+
+// show kpp-options in output
+#WRITE_OPT

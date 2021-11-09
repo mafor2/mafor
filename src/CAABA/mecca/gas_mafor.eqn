@@ -1,0 +1,170 @@
+// ------------------------------- gas.eqn -----------------------------------
+// Time-stamp: <2019-02-20 19:20:32 sander>
+// ---------------------------------------------------------------------------
+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, get it from:
+// http://www.gnu.org/copyleft/gpl.html
+
+// ---------------------------------------------------------------------------
+
+// MAFOR v2.0
+//
+// this file is for additional parameters needed by MAFOR v2.0 chemistry
+//
+// reaction equations are in rpl/maforchem.rpl
+
+// ---------------------------------------------------------------------------
+
+#INLINE F90_GLOBAL
+  ! variable declarations from gas_mafor.eqn:
+  ! --------------------------------------------------------------------------
+  ! only for maforchem, see maforchem.rpl:
+
+  REAL(dp) :: k_DMSO_OH, k_CH3SO2_O3, k_CH3SO3_HO2, k_DMS_Cl
+  REAL(dp) :: k_DMSO2_OH, k_CH3SO3_dec, k_MSIA_OH
+  REAL(dp) :: k_B1, k_B2, k_DMSO_OH_B1, k_DMSO_OH_B2
+  REAL(dp) :: k_RO_O2, k_DEC
+  REAL(dp) :: k_MEA_OH, k_H2NCHO_OH, k_MMI_OH
+  REAL(dp) :: k_AAC_OH, k_OXA_OH, k_HAC_OH
+  REAL(dp) :: k_NITRAMA_OH
+  REAL(dp) :: k_MMA_OH, k_DMA_OH
+  REAL(dp) :: k_TMA_OH, k_DEA_OH, k_TEA_OH
+  REAL(dp) :: k_AMP_OH, k_AMP_NO3
+
+  !MSK: YIELD DEFINITIONS FOR KPP
+  !     lines go to messy_mecca_kpp_global.f90
+  !KPPPP_DIRECTIVE vector variable definition start
+      INTEGER   :: xnom7msap ! Inverse of xm7msap
+      INTEGER   :: xnom7so2 
+      INTEGER   :: xnom7dmso
+      INTEGER   :: xnom7hox 
+      INTEGER   :: xnom7ox
+      INTEGER   :: xnom7h2o2    
+      INTEGER   :: xnom7nox 
+      INTEGER   :: xnom7co2 
+      INTEGER   :: xnom7cl
+      INTEGER   :: xnom7amin
+      INTEGER   :: xnom7nno
+      INTEGER   :: xaqcamin
+      INTEGER   :: xaqcnno
+      INTEGER   :: xgcnno
+      INTEGER   :: xgcamin
+      INTEGER   :: wall     = 0 ! wall reaction
+      REAL( dp) :: ya_soan1 = 0.40
+      REAL( dp) :: ya_soan2 = 0.0 
+      REAL( dp) :: ya_soan5 = 0.0
+      REAL( dp) :: fkoh_mea = 1.0
+      REAL( dp) :: fch3so2  = 1.0
+      REAL( dp) :: xaeq(APN)     ! amine acid-base on/off
+  !KPPPP_DIRECTIVE vector variable definition end
+  
+  ! end of maforchem block
+//  ! --------------------------------------------------------------------------
+
+//  ! --------------------------------------------------------------------------
+//  ! Parameters included for acid-base equilibria calculation
+//  ! used to enable the double use of the aqueous.eqn for liquid
+//  ! and aerosol phase.
+  ! --------------------------------------------------------------------------
+  ! Parameters included for acid-base equilibria calculation
+  ! used to enable the double use of the aqueous.eqn for liquid
+  ! and aerosol phase.
+//  ! MSK: this is CAABA testfacs are not used in MAFOR, set them all to 1.0
+//  ! MSK: they are commented in gas.eqn
+//  ! MSK: new testfacs for organic aq. species
+  REAL(dp), PARAMETER :: &
+    testfac_HO2   = 1.0_dp, testfac_HONO   = 1.0_dp, &
+    testfac_HNO3  = 1.0_dp, testfac_HNO4   = 1.0_dp, &
+    testfac_HCOOH = 1.0_dp, testfac_SO2    = 1.0_dp, &
+    testfac_HSO3m = 1.0_dp, testfac_HSO4m  = 1.0_dp, &
+    testfac_NH3   = 1.0_dp, testfac_H2O    = 1.0_dp, &
+    testfac_CO2   = 1.0_dp, testfac_HCl    = 1.0_dp, &
+    testfac_HBr   = 1.0_dp,                           &
+    testfac_HOCl  = 1.0_dp, testfac_HOBr   = 1.0_dp, &
+    testfac_ICl   = 1.0_dp, testfac_IBr    = 1.0_dp, &
+    testfac_IClBr = 1.0_dp, testfac_H2SO4  = 1.0_dp, &
+    testfac_GLYOAC = 1.0_dp, testfac_MGLYOAC = 1.0_dp, &
+    testfac_OXALAC = 1.0_dp, testfac_HC2O4m = 1.0_dp,  &
+    testfac_SUCCAC = 1.0_dp, testfac_C2H5C2O4m = 1.0_dp
+#ENDINLINE {above lines go to messy_mecca_kpp_global}
+
+#INLINE F90_RCONST
+  ! start of executable statements
+  ! define some rate constants here if the expressions are too long
+  ! for kpp or if they are used more than once
+  ! --------------------------------------------------------------------------
+  ! only for maforchem, see maforchem.rpl:
+
+  !MSK: GENERIC RATE CONSTANTS
+  k_RO_O2      = 9.5E-15{§}                ! MCM, 2001
+  k_DEC        = 1.0E+06{§}                ! MCM, 1997
+  
+  !MSK: AMINE RELATED RATE CONSTANTS
+  k_MEA_OH     = 3.58E-11{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_H2NCHO_OH  = 4.0E-12{§}                ! Barnes et al., CPC 2010
+  k_MMI_OH     = 1.0E-12{§}                ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_AAC_OH     = 4.83E-11{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_OXA_OH     = 1.47E-11{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010 
+  k_HAC_OH     = 4.59E-12{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010   
+  k_NITRAMA_OH = 1.48E-11{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_MMA_OH     = 8.0E-12{§}*EXP(230./temp) ! k_T Atkinson 1978,Carl+Crowley 1998
+  k_DMA_OH     = 2.89E-11{§}*EXP(245./temp)! k_T Atkinson 1978
+  k_TMA_OH     = 1.6E-11{§}*EXP(250./temp) ! k_T Atkinson 1978,Carl+Crowley 1998
+  k_DEA_OH     = 9.27E-11{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_TEA_OH     = 1.11E-10{§}               ! EPI Suite 4.0, Heimsted+Harju,p.c. 2010
+  k_AMP_OH     = 2.8E-11{§}                ! Harris and Pitts 1983
+  k_AMP_NO3    = 5.9E-14{§}                ! Carter 2008
+
+  !MSK: DMS RELATED RATE CONSTANTS (EL CID) 
+  k_CH3SO2_O3  = 6.3E-13{§}
+  k_CH3SO3_HO2 = 5.E-11{§}
+  k_DMS_Cl     = 3.3E-10{§}
+  k_DMSO2_OH   = 1.5E-13{§}
+  ! k_CH3SO2_dec = 10.{§}
+  k_CH3SO3_dec = 1.2E-3{§}
+  k_MSIA_OH    = 9.0E-11{§}
+  k_DMSO_OH    = 6.15E-12{§}*EXP(800./temp)
+  k_B1         = 8.46E-13{§}*EXP(944./temp)
+  k_B2         = 1.60E-14{§}*EXP(1628./temp)
+  k_DMSO_OH_B1 = k_DMSO_OH*(k_B1/(k_B1+k_B2))
+  k_DMSO_OH_B2 = k_DMSO_OH*(k_B2/(k_B1+k_B2))
+
+  ! end of maforchem block
+  ! --------------------------------------------------------------------------
+// Adding MAFOR chemistry RO2 species
+
+   RO2 = 0.
+
+  ! AMINE RO2
+  IF (ind_MMAO2>0)                RO2 = RO2 + C(ind_MMAO2)
+  IF (ind_MEABO2>0)               RO2 = RO2 + C(ind_MEABO2)
+  IF (ind_DMAO2>0)                RO2 = RO2 + C(ind_DMAO2)
+  IF (ind_TMAO2>0)                RO2 = RO2 + C(ind_TMAO2)
+  IF (ind_DMCNH2CO3>0)            RO2 = RO2 + C(ind_DMCNH2CO3)
+  IF (ind_DMCOONH2>0)             RO2 = RO2 + C(ind_DMCOONH2)
+
+  IF (ind_CHEXO2>0)               RO2 = RO2 + C(ind_CHEXO2)
+  
+#ENDINLINE {above lines go into the SUBROUTINES UPDATE_RCONST and UPDATE_PHOTO}
+
+
+
+// don't forget to add the F90_RATES functions also to
+// KPP_SUBROUTINE_LIST in messy/tools/kp4/bin/kp4.sh
+//#INLINE F90_RATES
+//#ENDINLINE {above lines go into MODULE messy_mecca_kpp_Rates}
+//
+// ---------------------------------------------------------------------------
+
+
