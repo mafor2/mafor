@@ -1,0 +1,3125 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.10.22)  22 OCT 2020 12:52
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**meccanism.tex
+(./meccanism.tex
+LaTeX2e <2020-02-02> patch level 2
+L3 programming layer <2020-02-14>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
+\c@tracingmulticols=\count175
+\mult@box=\box45
+\multicol@leftmargin=\dimen135
+\c@unbalance=\count176
+\c@collectmore=\count177
+\doublecol@number=\count178
+\multicoltolerance=\count179
+\multicolpretolerance=\count180
+\full@width=\dimen136
+\page@free=\dimen137
+\premulticols=\dimen138
+\postmulticols=\dimen139
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box46
+\last@line=\box47
+\maxbalancingoverflow=\dimen140
+\mult@rightbox=\box48
+\mult@grightbox=\box49
+\mult@gfirstbox=\box50
+\mult@firstbox=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\@tempa=\box63
+\@tempa=\box64
+\@tempa=\box65
+\@tempa=\box66
+\@tempa=\box67
+\@tempa=\box68
+\@tempa=\box69
+\@tempa=\box70
+\@tempa=\box71
+\@tempa=\box72
+\@tempa=\box73
+\@tempa=\box74
+\@tempa=\box75
+\@tempa=\box76
+\@tempa=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\c@minrows=\count181
+\c@columnbadness=\count182
+\c@finalcolumnbadness=\count183
+\last@try=\dimen141
+\multicolovershoot=\dimen142
+\multicolundershoot=\dimen143
+\mult@nat@firstbox=\box89
+\colbreak@box=\box90
+\mc@col@check@num=\count184
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip51
+\LTright=\skip52
+\LTpre=\skip53
+\LTpost=\skip54
+\LTchunksize=\count185
+\LTcapwidth=\dimen144
+\LT@head=\box91
+\LT@firsthead=\box92
+\LT@foot=\box93
+\LT@lastfoot=\box94
+\LT@cols=\count186
+\LT@rows=\count187
+\c@LT@tables=\count188
+\c@LT@chunks=\count189
+\LT@p@ftn=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip55
+\bibsep=\skip56
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count190
+) (./chem.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/rotating.sty
+Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen145
+\Gin@req@width=\dimen146
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count191
+\rotFPtop=\skip57
+\rotFPbot=\skip58
+\rot@float@box=\box95
+\rot@mess@toks=\toks16
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2020/01/20 v2.17e AMS math features
+\@mathmargin=\skip59
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks17
+\ex@=\dimen147
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen148
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count192
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count193
+\leftroot@=\count194
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count195
+\DOTSCASE@=\count196
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box96
+\strutbox@=\box97
+\big@size=\dimen149
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count197
+\c@MaxMatrixCols=\count198
+\dotsspace@=\muskip17
+\c@parentequation=\count199
+\dspbrk@lvl=\count266
+\tag@help=\toks18
+\row@=\count267
+\column@=\count268
+\maxfields@=\count269
+\andhelp@=\toks19
+\eqnshift@=\dimen150
+\alignsep@=\dimen151
+\tagshift@=\dimen152
+\tagwidth@=\dimen153
+\totwidth@=\dimen154
+\lineht@=\dimen155
+\@envbody=\toks20
+\multlinegap=\skip60
+\multlinetaggap=\skip61
+\mathdisplay@stack=\toks21
+LaTeX Info: Redefining \[ on input line 2859.
+LaTeX Info: Redefining \] on input line 2860.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen156
+\ar@mcellbox=\box98
+\extrarowheight=\dimen157
+\NC@list=\toks22
+\extratabsurround=\skip62
+\backup@length=\skip63
+\ar@cellbox=\box99
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2019/11/23 v1.2a Standard LaTeX Color (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+)
+\everycr=\toks23
+\minrowclearance=\skip64
+)
+(./mecca_info.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count270
+\l__pdf_internal_box=\box100
+)
+(./meccanism.aux)
+\openout1 = `meccanism.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count271
+\scratchdimen=\dimen158
+\scratchbox=\box101
+\nofMPsegments=\count272
+\nofMParguments=\count273
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count274
+\MPscratchDim=\dimen159
+\MPnumerator=\count275
+\makeMPintoPDFobject=\count276
+\everyMPtoPDFconversion=\toks25
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./mecca_spc.tex)
+(./mecca_eqn_g.tex
+Underfull \hbox (badness 10000) in paragraph at lines 4--4
+[]|$\OT1/cmtt/m/n/10 6\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0E-[]34*((temp / 300\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 ) **(-[]2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 4
+ ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--6
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 4E-[]32 ,[] 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 3 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--14
+[]|$\OT1/cmtt/m/n/10 6\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 521E-[]26*temp*EXP(185
+1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 09 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--22
+[]|$\OT1/cmtt/m/n/10 k _ NO3 _ NO2 / (5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]
+27*EXP(10840\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--23
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 7\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 0E-[]31 ,[] 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6 ,[]
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 25
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--25
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 8E-[]30 ,[] 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+[]|$\OT1/cmtt/m/n/10 k _ NO2 _ HO2 / (2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1E-[]
+27*EXP(10900\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 34--34
+[]|$\OT1/cmtt/m/n/10 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]07*EXP(-[]628\OML
+/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+[]|$\OT1/cmtt/m/n/10 9\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 4E-[]09*EXP(-[]356\OML
+/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 85E-[]20*EXP(2\OML/cmm
+/m/it/10 :\OT1/cmtt/m/n/10 82*LOG(temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--51
+[]|$\OT1/cmtt/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]13*EXP(780\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) /(1\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 + 
+1\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--52
+[]|$\OT1/cmtt/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]13*EXP(780\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) /(1\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 3E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]
+beta _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]|\OT1/cmr/m/n/10 Atkinson et al. (2006),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+\OT1/cmr/m/n/10 Butkovskaya et al. (2012),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 3E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *beta _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+[]|\OT1/cmr/m/n/10 Atkinson et al. (2006),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+\OT1/cmr/m/n/10 Butkovskaya et al. (2012),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--57
+[]|$\OT1/cmtt/m/n/10 (k _ CH3O2-[]7\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 4E-[]13*E
+XP(-[]520\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--59
+[]|$\OT1/cmtt/m/n/10 9\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 52E-[]18*EXP(2\OML/cmm
+/m/it/10 :\OT1/cmtt/m/n/10 03*LOG(temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--62
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 94E-[]14*exp(786\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 64--64
+[]|$\OT1/cmtt/m/n/10 k _ NO2 _ CH3O2 / (9\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 5E-
+[]29*EXP(11234\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 68--68
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 8\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 1E-[]29 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 70--70
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 2\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 6E-[]29 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 70--70
+\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8 ,[] 3\OML/cmm/m/it/10 :\
+OT1/cmtt/m/n/10 3E-[]11 ,[] 0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6 ,[] REAL(EXP(
+-[]temp /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--80
+[]|$\OT1/cmtt/m/n/10 (k _ CH3O2*5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E-[]14*EXP
+(750\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp ))
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 99--99
+[]|$\OT1/cmtt/m/n/10 k _ NO2 _ CH3O2 / (9\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 5E-
+[]29*EXP(11234\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 101--101
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 7\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 0E-[]31 ,[]
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 109--109
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 28E-[]33 ,[] 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--109
+\OT1/cmtt/m/n/10 REAL(4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 25E-[]13*EXP(-[]1150\
+OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 110--110
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 08E-[]10*EXP(105\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 112--112
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 08E-[]10*EXP(105\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[
+](0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 68 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--117
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 49E-[]17*temp*temp*EXP
+(-[]499\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--119
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 8\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 6E-[]29 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--121
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 55E-[]12*EXP(380\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[
+]beta _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]|\OT1/cmr/m/n/10 Atkinson et al. (2006),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--122
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 55E-[]12*EXP(380\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *beta _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--123
+[]|\OT1/cmr/m/n/10 Atkinson et al. (2006),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--142
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 5e-[]30 ,[] 0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 143--143
+[]|$\OT1/cmtt/m/n/10 k _ 3rd(temp ,[] cair ,[] 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n
+/10 5e-[]30 ,[] 0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0 ,[]
+ []
+
+[5]
+Underfull \hbox (badness 1189) in paragraph at lines 163--164
+\OT1/cmr/m/n/10 and Tyn-dall (2001), Lock-hart
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 165--165
+[]|$\OT1/cmtt/m/n/10 7\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 E11*EXP(-[]3160\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 3343) in paragraph at lines 165--166
+[]|\OT1/cmr/m/n/10 Orlando and Tyn-dall (2001),
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 166--166
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 E-[]12*c(ind _ O2 ) *3
+\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 2*exp(-[]550\OML/cmm/m/it/10 : \OT1/cmtt/m/n
+/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--167
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 E-[]12*c(ind _ O2 )
+ []
+
+
+Underfull \hbox (badness 3343) in paragraph at lines 173--174
+[]|\OT1/cmr/m/n/10 Orlando and Tyn-dall (2001),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--177
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *(7\OML/cmm/m/it/10 :\
+OT1/cmtt/m/n/10 8E-[]14*EXP(1000\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 178--178
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+3 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 179--179
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(3 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 180--180
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 53E-[]13*EXP(1300\OML/
+cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 181--181
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 53E-[]13*EXP(1300\OML/
+cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 182--182
+[]|$\OT1/cmtt/m/n/10 k _ s*(f _ soh*f _ ch2ono2 + f _ ono2*f _
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 186--186
+[]|$\OT1/cmtt/m/n/10 6\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 00E-[]14*EXP(-[]550\OM
+L/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--192
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+3 ,[] 1 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 193--193
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(3 ,[] 1 ,[] 1 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 213--213
+[]|$\OT1/cmtt/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 46E12*EXP(-[]12500\OML
+/cmm/m/it/10 : \OT1/cmtt/m/n/10 / (1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 98*temp 
+))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 213--213
+\OT1/cmtt/m/n/10 /(6\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 34E26*EXP(-[]14700\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 3078) in paragraph at lines 214--214
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .5 $[]$ + .
+3
+ []
+
+
+Underfull \hbox (badness 1087) in paragraph at lines 218--219
+[]|\OT1/cmr/m/n/10 Paulot et al. (2009a), Sander
+ []
+
+
+Underfull \hbox (badness 1087) in paragraph at lines 219--220
+[]|\OT1/cmr/m/n/10 Paulot et al. (2009a), Sander
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 225--225
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 1\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 3E-[]29 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 226--226
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 226--226
+\OT1/cmtt/m/n/10 REAL(4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]4*EXP(-[]9285\OM
+L/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 226--226
+\OT1/cmtt/m/n/10 ,[]SP ) ,[]0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0 ,[] REAL(8\OM
+L/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E15*EXP(-[]10440\OML/cmm/m/it/10 : \OT1/cmtt/m
+/n/10 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--228
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1E-[]12*(1\OML/cmm/m/i
+t/10 : \OT1/cmtt/m/n/10 -[] 1\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / (1\OML/cmm/m
+/it/10 : \OT1/cmtt/m/n/10 +
+ []
+
+
+Underfull \hbox (badness 1496) in paragraph at lines 230--230
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .95 $[]$ + 
+.95 $[]$ + .05
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--233
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 54E-[]10*EXP(-[]24\OML
+/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--235
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 54E-[]10*EXP(-[]24\OML
+/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 
+-[](0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 16 +
+ []
+
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 246--246
+[]|$\OT1/cmtt/m/n/10 k _ 3rd _ iupac(temp ,[] cair ,[] 8\OML/cmm/m/it/10 :\OT1/
+cmtt/m/n/10 6E-[]27 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 249--249
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]
+alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 250--250
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *(1\OML/cmm/m/it/10 :\
+OT1/cmtt/m/n/10 6E-[]12*EXP(-[]2200\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--252
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 255--255
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]
+alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--256
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E-[]12*EXP(360\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--258
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--258
+[]|$\OT1/cmtt/m/n/10 (8\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 8E-[]12*EXP(-[]1320\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 259--259
+[]|$\OT1/cmtt/m/n/10 8\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6E-[]13*EXP(700\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 260--260
+[]|$\OT1/cmtt/m/n/10 8\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6E-[]13*EXP(700\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 261--261
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 9E-[]12*EXP(300\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]
+alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 262--262
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 9E-[]12*EXP(300\OML/cm
+m/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *alpha _
+ []
+
+[10]
+Underfull \hbox (badness 5878) in paragraph at lines 267--268
+[]|\OT1/cmr/m/n/10 Baeza-Romero et al. (2007),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 273--273
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+4 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 274--274
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(4 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 277--277
+[]|$\OT1/cmtt/m/n/10 (k _ s*f _ soh*f _ pch2oh + k _ t*f _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--285
+[]|$\OT1/cmtt/m/n/10 (1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 9E-[]12*EXP(575\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) +k _ s*f _
+ []
+
+[11]
+Underfull \hbox (badness 3601) in paragraph at lines 288--288
+[]|$[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .6 $[]$ + .6 $[]$ + .2
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 304--305
+[]|\OT1/cmr/m/n/10 Hatakeyama et al. (1985),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 305--305
+[]|$\OT1/cmtt/m/n/10 k _ t*f _ ono2*f _ pch2oh + k _ s*f _ soh*f _
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 335--335
+[]|$\OT1/cmtt/m/n/10 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6E-[]12*EXP(70\OML/cmm
+/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *(k _ s*f _ soh /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 336--336
+[]|$\OT1/cmtt/m/n/10 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6E-[]12*EXP(70\OML/cmm
+/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *((k _ p + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 336--336
+\OT1/cmtt/m/n/10 s*f _ pch2oh ) /(k _ p + k _ s*f _ pch2oh + k _
+ []
+
+[13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 383--383
+[]|$\OT1/cmtt/m/n/10 (k1 _ RO2pRO2*0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1273 + k
+1 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 384--384
+[]|$\OT1/cmtt/m/n/10 (k1 _ RO2pRO2*0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1273 + k
+1 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 384--385
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--386
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](0\OML/cmm/
+m/it/10 :\OT1/cmtt/m/n/10 1273*alpha _ AN(4 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--386
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] 0 ,[] temp ,[] cair ) +0\OML/cmm/m/it/10 :\OT1/cmt
+t/m/n/10 8727*alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 387--387
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](0\OML/cmm/
+m/it/10 :\OT1/cmtt/m/n/10 1273*alpha _ AN(4 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 387--387
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] 0 ,[] temp ,[] cair ) +0\OML/cmm/m/it/10 :\OT1/cmt
+t/m/n/10 8727*alpha _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 387--388
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 388--388
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1273*alpha _ A
+N(4 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 388--388
+\OT1/cmtt/m/n/10 0 ,[] temp ,[] cair ) +0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 872
+7*alpha _ AN(4 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 389--390
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 390--391
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 394--394
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 17E-[]17*temp*temp*EXP
+(213\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 17E-[]17*temp*temp*EXP
+(213\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 396--397
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--398
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+4 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--399
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 399--399
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(4 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 403--404
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 405--405
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+4 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 405--406
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[15]
+Underfull \hbox (badness 10000) in paragraph at lines 406--406
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(4 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](\OML/cmm/m
+/it/10 :\OT1/cmtt/m/n/10 62*alpha _ AN(4 ,[] 2 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/1
+0 38*alpha _ AN(4 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 415--415
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 62*alpha _ AN(4
+ ,[] 2 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 415--415
+\OT1/cmtt/m/n/10 temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 38*alpha _
+ AN(4 ,[] 1 ,[] 0 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 417--417
+[]|$\OT1/cmtt/m/n/10 (\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 62*k _ t*f _ tooh*f _ 
+co + \OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 38*k _ s*f _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 418--418
+[]|$\OT1/cmtt/m/n/10 (k _ t*f _ ono2*f _ alk + k _ p*f _ alk + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 419--419
+[]|$\OT1/cmtt/m/n/10 (k _ p + k _ s*(1 + f _ ch2ono2 + f _ ono2 )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 422--422
+[]|$[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .538 $[]$ + .538 $[]$ + .459
+ []
+
+
+Underfull \hbox (badness 1688) in paragraph at lines 422--422
+[]$ \OT1/cmr/m/n/10 + .079 $[]$ + .462 $[]$ +
+ []
+
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 437--437
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 3 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 438--438
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 3 ,[] 1 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[17]
+Underfull \hbox (badness 10000) in paragraph at lines 451--451
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](\OML/cmm/m
+/it/10 :\OT1/cmtt/m/n/10 12*alpha _ AN(6 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 451--451
+\OT1/cmtt/m/n/10 1 ,[] 0 ,[] temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/1
+0 88*alpha _ AN(6 ,[] 2 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--452
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 12*alpha _ AN(6
+ ,[] 1 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--452
+\OT1/cmtt/m/n/10 temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 88*alpha _
+ AN(6 ,[] 2 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 2818) in paragraph at lines 455--455
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .12 $[]$ + 
+.88
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 455--455
+[]|$\OT1/cmtt/m/n/10 (\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 12*k _ s*f _ sooh*f _ 
+pch2oh + \OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 88*k _
+ []
+
+[18] [19]
+Underfull \hbox (badness 10000) in paragraph at lines 498--499
+[]|\OT1/cmr/m/n/10 Hatakeyama et al. (1985),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 499--500
+[]|\OT1/cmr/m/n/10 Hatakeyama et al. (1985),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 500--500
+[]|$\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 62*(k _ p*(f _ co + f _ ch2ono2 ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 508--508
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+5 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 509--509
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(5 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 521--521
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+5 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 522--522
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(5 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 532--532
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 78E-[]12*EXP(-[]530\OM
+L/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 536--536
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+5 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 537--537
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(5 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 547--548
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 548--549
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[22] [23]
+Underfull \hbox (badness 10000) in paragraph at lines 597--598
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 598--599
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 599--600
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[24]
+Underfull \hbox (badness 10000) in paragraph at lines 609--610
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 610--611
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 2644) in paragraph at lines 629--629
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .3125 $[]$ 
++ .1875
+ []
+
+
+Underfull \hbox (badness 8113) in paragraph at lines 644--644
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .83 $[]$ + 
+.17
+ []
+
+[25]
+Underfull \hbox (badness 10000) in paragraph at lines 648--648
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(1-[]rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 648--649
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 649--649
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(rcoch2o2 _ oh +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 649--650
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 655--656
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 656--657
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--664
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--665
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 671--671
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(1-[]rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 671--672
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 672--672
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(rcoch2o2 _ oh +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 672--673
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 677--677
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(1-[]rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 678--678
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(4 ) *(rcoch2o2 _ oh +
+ []
+
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 692--692
+[]|$\OT1/cmtt/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1E12*exp(-[]7900\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp ) *\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 6 +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 693--693
+[]|$\OT1/cmtt/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 7E14*exp(-[]9570\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 694--694
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 65E12*exp(-[]8410\OML/
+cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 695--695
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0E14*exp(-[]10120\OML/
+cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 700--701
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 702--702
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 702--703
+\OT1/cmr/m/n/10 et al. (2009a), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 703--703
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 703--704
+\OT1/cmr/m/n/10 et al. (2009a), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 705--706
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 707--707
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 707--708
+\OT1/cmr/m/n/10 et al. (2009a), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 708--708
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 708--709
+\OT1/cmr/m/n/10 et al. (2009a), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 714--714
+[]|$\OT1/cmtt/m/n/10 (k _ adt + k _ ads ) *a _ ch2oh*a _ ch2oh + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 719--719
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 720--720
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[28]
+Underfull \hbox (badness 10000) in paragraph at lines 726--726
+[]|$\OT1/cmtt/m/n/10 k _ s*f _ alk*f _ soh + (k _ adp + k _ ads )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 731--731
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 732--732
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 739--739
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *k _ rohro + (k _ t*f 
+_ toh*f _ allyl + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 739--739
+\OT1/cmtt/m/n/10 s*f _ soh ) *f _ pch2oh + (k _ adt + k _ adp )
+ []
+
+[29]
+Underfull \hbox (badness 10000) in paragraph at lines 753--753
+[]|$\OT1/cmtt/m/n/10 (k _ adtertprim + k _ ads ) *a _ cho*a _
+ []
+
+
+Underfull \hbox (badness 1845) in paragraph at lines 756--756
+\OT1/cmr/m/n/10 .0171875 $[]$ + .075625 $[]$ + .0171875
+ []
+
+
+Underfull \hbox (badness 1092) in paragraph at lines 756--756
+[]$ \OT1/cmr/m/n/10 + .2775 $[]$ + .6675 $[]$ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 765--765
+[]|$\OT1/cmtt/m/n/10 k _ t*f _ o*f _ tch2oh*f _ alk + k _ t*f _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 765--765
+\OT1/cmtt/m/n/10 toh*f _ pch2oh*f _ pch2oh + k _ s*f _
+ []
+
+[30]
+Underfull \hbox (badness 1292) in paragraph at lines 774--774
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + .5 $
+[]$ + .5
+ []
+
+[31]
+Underfull \hbox (badness 10000) in paragraph at lines 786--786
+[]|$\OT1/cmtt/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 78E-[]11*EXP(-[]400\OM
+L/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+Underfull \hbox (badness 3148) in paragraph at lines 793--793
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .4672 $[]$ 
++ .2336
+ []
+
+
+Underfull \hbox (badness 1253) in paragraph at lines 793--793
+\OT1/cmr/m/n/10 + .2628 $[]$ + .0972 $[]$ + .00972
+ []
+
+
+Underfull \hbox (badness 7379) in paragraph at lines 794--794
+[]|$[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .78 $[]$ + .78
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 803--803
+[]|$\OT1/cmtt/m/n/10 k _ t*f _ o*f _ tch2oh + k _ t*f _ toh*f _
+ []
+
+[32]
+Underfull \hbox (badness 3769) in paragraph at lines 813--813
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ +
+ []
+
+
+Underfull \hbox (badness 3769) in paragraph at lines 815--815
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 817--817
+[]|$\OT1/cmtt/m/n/10 (2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *k _ t*f _ o*f _ tch2
+oh*f _ alk + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 818--818
+[]|$\OT1/cmtt/m/n/10 (2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *k _ t*f _ o*f _ tch2
+oh*f _ alk + k _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 820--820
+[]|$\OT1/cmtt/m/n/10 k1 _ RO2tORO2 + KRO2HO2(5 ) *c(ind _
+ []
+
+
+Underfull \hbox (badness 2961) in paragraph at lines 821--821
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .6 $[]$ + .
+6
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 822--822
+[]|$\OT1/cmtt/m/n/10 k1 _ RO2sORO2 + KRO2HO2(5 ) *c(ind _
+ []
+
+[33]
+Underfull \hbox (badness 10000) in paragraph at lines 827--827
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+7 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 828--828
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(7 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 841--841
+[]|$\OT1/cmtt/m/n/10 4\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 67E-[]26*temp**3\OML/c
+mm/m/it/10 :\OT1/cmtt/m/n/10 286*EXP(4509\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+ []
+
+
+Underfull \hbox (badness 1584) in paragraph at lines 844--844
+[]$ \OT1/cmr/m/n/10 + .3704 $[]$ + .00405 $[]$ + .0405
+ []
+
+
+Underfull \hbox (badness 1248) in paragraph at lines 844--844
+\OT1/cmr/m/n/10 .3866 $[]$ + .135 $[]$ + .0675
+ []
+
+[34] [35]
+Underfull \hbox (badness 10000) in paragraph at lines 848--848
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 849--849
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(6 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 1983) in paragraph at lines 850--850
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .7143 $[]$ 
++ .2857
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 855--856
+\OT1/cmr/m/n/10 (2009a), Francisco-Marquez
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 856--857
+\OT1/cmr/m/n/10 (2009a), Francisco-Marquez
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 857--858
+\OT1/cmr/m/n/10 (2009a), Francisco-Marquez
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 858--859
+\OT1/cmr/m/n/10 (2009a), Francisco-Marquez
+ []
+
+
+Underfull \hbox (badness 1231) in paragraph at lines 864--864
+[]|$[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .62 $[]$ + .38
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--875
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 875--876
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[36] [37]
+Underfull \hbox (badness 10000) in paragraph at lines 892--893
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 893--894
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 903--903
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+7 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 903--904
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 904--904
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(7 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 904--905
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 912--913
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 913--914
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 914--915
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--916
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 916--917
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 917--917
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 67*alpha _ AN(7
+ ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 917--917
+\OT1/cmtt/m/n/10 temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 33*alpha _
+ AN(7 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 917--918
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--918
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](\OML/cmm/m
+/it/10 :\OT1/cmtt/m/n/10 67*alpha _ AN(7 ,[] 2 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--918
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/1
+0 33*alpha _ AN(7 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--919
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 919--919
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](\OML/cmm/m
+/it/10 :\OT1/cmtt/m/n/10 67*alpha _ AN(7 ,[] 2 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 919--919
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/1
+0 33*alpha _ AN(7 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 919--920
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 920--921
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 921--922
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 922--923
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 923--924
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 924--925
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[38]
+Underfull \hbox (badness 10000) in paragraph at lines 927--928
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 3872) in paragraph at lines 928--928
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .65 $[]$ + 
+.65
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 928--929
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 2698) in paragraph at lines 929--929
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .65 $[]$ + 
+.65
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 929--930
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 930--931
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 931--932
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 932--933
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 934--935
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 935--936
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 943--944
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[39]
+Underfull \hbox (badness 10000) in paragraph at lines 957--958
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 963--963
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(5 ) *(1-[]rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 963--964
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 964--964
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(5 ) *(rcoch2o2 _ oh +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 964--965
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[40] [41]
+Underfull \hbox (badness 10000) in paragraph at lines 1001--1001
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(5 ) *(1-[]rcoch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1002--1002
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(5 ) *(rcoch2o2 _ oh +
+ []
+
+[42]
+Underfull \hbox (badness 10000) in paragraph at lines 1019--1020
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1020--1021
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1025--1025
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+9 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1026
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(9 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1027--1028
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1028--1029
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 1337) in paragraph at lines 1035--1035
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + $[]$ + $[]$ +
+ []
+
+[43] [44]
+Underfull \hbox (badness 3128) in paragraph at lines 1068--1068
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .31 $[]$ + 
+.69
+ []
+
+
+Underfull \hbox (badness 8038) in paragraph at lines 1080--1080
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .352 $[]$ +
+ .118
+ []
+
+[45]
+Underfull \hbox (badness 10000) in paragraph at lines 1123--1123
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(6 ) *(1-[]rchohch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1124--1124
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(6 ) *(rchohch2o2 _ oh +
+ []
+
+[46]
+Underfull \hbox (badness 10000) in paragraph at lines 1137--1137
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(10 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1138--1138
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+10 ,[] 2 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+[47] [48]
+Underfull \hbox (badness 10000) in paragraph at lines 1175--1175
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(9 ,[] 2 ,[] 0 ,[] 0 ,[] 1 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1176--1176
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+9 ,[] 2 ,[] 0 ,[] 0 ,[] 1 ,[]
+ []
+
+[49]
+Underfull \hbox (badness 10000) in paragraph at lines 1189--1190
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1190--1191
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1210--1210
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(7 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1211--1211
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+7 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1213--1213
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 *(k _ CH3O2*2\OML/cmm/
+m/it/10 :\OT1/cmtt/m/n/10 4E-[]14*EXP(1620\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 /
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1218--1218
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+11 ,[] 2 ,[] 0 ,[] 0 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1219--1219
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(11 ,[] 2 ,[] 0 ,[] 0 ,[] 1 ,[]
+ []
+
+
+Underfull \hbox (badness 2980) in paragraph at lines 1224--1224
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .31 $[]$ + 
+.69
+ []
+
+[50] [51]
+Underfull \hbox (badness 10000) in paragraph at lines 1254--1254
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(7 ) *(1-[]rchohch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1255--1255
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(7 ) *(rchohch2o2 _ oh +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1256--1256
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(11 ,[] 2 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1257--1257
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+11 ,[] 2 ,[] 1 ,[] 0 ,[] 0 ,[]
+ []
+
+[52] [53]
+Underfull \hbox (badness 10000) in paragraph at lines 1306--1306
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(7 ) *(1-[]rchohch2o2 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1307--1307
+[]|$\OT1/cmtt/m/n/10 KRO2HO2(7 ) *(rchohch2o2 _ oh +
+ []
+
+[54]
+Underfull \hbox (badness 3861) in paragraph at lines 1345--1345
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + $[]$ +
+ []
+
+[55] [56]
+Underfull \hbox (badness 10000) in paragraph at lines 1392--1392
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+8 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1393--1393
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(8 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1399--1399
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+7 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1400--1400
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(7 ,[] 2 ,[] 0 ,[] 0 ,[] 0 ,[] temp ,[]
+ []
+
+[57]
+Underfull \hbox (badness 10000) in paragraph at lines 1406--1406
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+10 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1407--1407
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(10 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 1107) in paragraph at lines 1424--1424
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + $[]$ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1435--1435
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+10 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1436--1436
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(10 ,[] 1 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1442--1443
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1443--1444
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[58]
+Underfull \hbox (badness 10000) in paragraph at lines 1446--1446
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1447--1447
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+[59]
+Underfull \hbox (badness 10000) in paragraph at lines 1480--1481
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1481--1482
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[60]
+Underfull \hbox (badness 10000) in paragraph at lines 1501--1501
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .75 $[]$ + 
+.15
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1502--1502
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[](\OML/cmm/m
+/it/10 :\OT1/cmtt/m/n/10 65*alpha _ AN(11 ,[] 3 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1502--1502
+\OT1/cmtt/m/n/10 0 ,[] 0 ,[] temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/1
+0 35*alpha _ AN(11 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1502--1503
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1503--1503
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 65*alpha _ AN(1
+1 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1503--1503
+\OT1/cmtt/m/n/10 temp ,[] cair ) +\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35*alpha _
+ AN(11 ,[] 2 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1503--1504
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1504--1505
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1505--1506
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1506--1506
+[]|$\OT1/cmtt/m/n/10 RO2*(0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 65*k1 _ RO2tORO2 
++ \OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35*k1 _
+ []
+
+[61]
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1529
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+12 ,[] 3 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1529--1530
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1530--1530
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(12 ,[] 3 ,[] 0 ,[] 1 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1530--1531
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1535--1535
+[]|$\OT1/cmtt/m/n/10 KRO2NO*0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 875*(1\OML/cmm/
+m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(13 ,[] 3 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1535--1536
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1536--1536
+[]|$\OT1/cmtt/m/n/10 KRO2NO*0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 875*alpha _ AN(
+13 ,[] 3 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1536--1537
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 1552--1553
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1553--1554
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1557--1557
+[]|$\OT1/cmtt/m/n/10 (0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 65*k1 _ RO2tRO2  +  0
+\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35*k1 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1562--1562
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1563--1563
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1564--1565
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1565--1566
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+[63]
+Underfull \hbox (badness 10000) in paragraph at lines 1566--1566
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+11 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1566--1567
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1567--1567
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(11 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1567--1568
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe (2009),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1571--1571
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+13 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1572--1572
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(13 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1575--1575
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1576--1576
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1579--1579
+[]|$\OT1/cmtt/m/n/10 KRO2NO*(1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 -[]alpha _ AN(
+12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1580--1580
+[]|$\OT1/cmtt/m/n/10 KRO2NO*alpha _ AN(12 ,[] 3 ,[] 0 ,[] 0 ,[] 0 ,[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1583--1583
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1584--1584
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1585--1585
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1586--1586
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 1033) in paragraph at lines 1594--1595
+[]|\OT1/cmr/m/n/10 Vereecken and Peeters (2012),
+ []
+
+
+Underfull \hbox (badness 1033) in paragraph at lines 1595--1596
+[]|\OT1/cmr/m/n/10 Vereecken and Peeters (2012),
+ []
+
+[64]
+Underfull \hbox (badness 10000) in paragraph at lines 1608--1608
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1609--1609
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 1033) in paragraph at lines 1609--1610
+[]|\OT1/cmr/m/n/10 Vereecken and Peeters (2012),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1610--1610
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1611--1611
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1612--1612
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1613--1613
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1615--1615
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1616--1616
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 47E-[]11*EXP(467\OML/c
+mm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 1033) in paragraph at lines 1616--1617
+[]|\OT1/cmr/m/n/10 Vereecken and Peeters (2012),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1617--1617
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1618--1618
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1619--1619
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1620--1620
+[]|$\OT1/cmtt/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 35E-[]15*EXP(-[]1270\O
+ML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / TEMP )
+ []
+
+
+Underfull \hbox (badness 3019) in paragraph at lines 1623--1623
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + 4
+ []
+
+) [65] [66] [67]
+Overfull \hbox (8.25183pt too wide) in paragraph at lines 192--214
+[][] 
+ []
+
+(./mecca_eqn_g_notes.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+\OT1/cmtt/m/n/10 (3\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 0E-[]13*EXP(460\OML/cmm/m
+/it/10 : \OT1/cmtt/m/n/10 / temp ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 1E-[]33
+*EXP(920\OML/cmm/m/it/10 : \OT1/cmtt/m/n/10 / temp )
+ []
+
+
+! Package inputenc Error: Unicode character   (U+2009)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.5 ...is 82.05736 [cm3 atm K−1 mol−1].}
+                                                  
+? 
+
+! Package inputenc Error: Unicode character   (U+2009)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.5 ...is 82.05736 [cm3 atm K−1 mol−1].}
+                                                  
+? 
+
+! Package inputenc Error: Unicode character − (U+2212)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.5 ...is 82.05736 [cm3 atm K−1 mol−1].}
+                                                  
+? 
+
+! Package inputenc Error: Unicode character   (U+2009)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.5 ...is 82.05736 [cm3 atm K−1 mol−1].}
+                                                  
+? 
+
+! Package inputenc Error: Unicode character − (U+2212)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.5 ...is 82.05736 [cm3 atm K−1 mol−1].}
+                                                  
+? 
+[68]
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]$\OT1/cmtt/m/n/10 G4109$\OT1/cmr/m/n/10 : Same tem-per-a-ture de-pen-dence as
+ for
+ []
+
+[69]
+Overfull \hbox (4.97913pt too wide) in paragraph at lines 191--192
+[]$\OT1/cmtt/m/n/10 G44000$\OT1/cmr/m/n/10 : The $[]$ com-po-si-tion ($[]$:$[]$
+
+ []
+
+[70] [71] [72] [73] [74] [75]
+Underfull \hbox (badness 5908) in paragraph at lines 795--796
+[]$\OT1/cmtt/m/n/10 G49246$\OT1/cmr/m/n/10 : Only this chan-nel con-sid-ered as
+ the
+ []
+
+
+Underfull \hbox (badness 5741) in paragraph at lines 795--796
+\OT1/cmr/m/n/10 in-ter-me-di-ate rad-i-cal is likely more sta-ble than
+ []
+
+[76]
+Underfull \hbox (badness 7326) in paragraph at lines 819--820
+[]$\OT1/cmtt/m/n/10 G40206$\OT1/cmr/m/n/10 : SAR-estimated rate con-stant, $\OT
+1/cmtt/m/n/10 (kads +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 819--820
+\OT1/cmtt/m/n/10 kadt ) *acoch3  =  6\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 46E-[]1
+1$ \OT1/cmr/m/n/10 where $\OT1/cmtt/m/n/10 kads  =  3\OML/cmm/m/it/10 :\OT1/cmt
+t/m/n/10 0E-[]11$\OT1/cmr/m/n/10 ,
+ []
+
+) [77]
+Overfull \hbox (3.90865pt too wide) in alignment at lines 241--246
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 246--251
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 251--253
+ [] [] [] [] [] 
+ []
+
+(./mecca_eqn_j.tex
+Overfull \hbox (3.90865pt too wide) in alignment at lines 253--26
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 26--46
+ [] [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+[]|$\OT1/cmtt/m/n/10 (jx(ip _ C2H5NO3 ) +jx(ip _ CH3CHO ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+\OT1/cmtt/m/n/10 *(jx(ip _ NOA ) +1E-[]10 ) /(0\OML/cmm/m/it/10 :\OT1/cmtt/m/n/
+10 59*j _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+[]|\OT1/cmr/m/n/10 von Kuhlmann et al.
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 46--66
+ [] [] [] [] [] 
+ []
+
+[78
+
+]
+Underfull \hbox (badness 3407) in paragraph at lines 77--78
+[]|\OT1/cmr/m/n/10 Andrews et al. (2012),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 83--84
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 66--86
+ [] [] [] [] [] 
+ []
+
+[79]
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
+[]|\OT1/cmr/m/n/10 von Kuhlmann et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--98
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 77*j
+x(ip _
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 86--106
+ [] [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
+[]|\OT1/cmr/m/n/10 Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
+\OT1/cmr/m/n/10 (2018),Rickard and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 114--114
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +jx(ip _ HOCH2CHO )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--119
+[]|\OT1/cmr/m/n/10 Barnes et al. (1993),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]|\OT1/cmr/m/n/10 Barnes et al. (1993),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+[]|$\OT1/cmtt/m/n/10 (2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 84*j _ IC3H7NO3 + jx(
+ip _ CH3CHO ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+\OT1/cmtt/m/n/10 *(jx(ip _ MEKNO3 ) +1E-[]10 ) /(j _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]|\OT1/cmr/m/n/10 M^^?uller et al. (2014),
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 106--126
+ [] [] [] [] [] 
+ []
+
+[80]
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 1226) in paragraph at lines 137--138
+\OT1/cmr/m/n/10 Nakan-ishi et al. (1977),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--139
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 1226) in paragraph at lines 138--139
+\OT1/cmr/m/n/10 Nakan-ishi et al. (1977),
+ []
+
+
+Underfull \hbox (badness 3407) in paragraph at lines 140--141
+[]|\OT1/cmr/m/n/10 Andrews et al. (2012),
+ []
+
+
+Underfull \hbox (badness 3407) in paragraph at lines 142--143
+[]|\OT1/cmr/m/n/10 Andrews et al. (2012),
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 126--146
+ [] [] [] [] [] 
+ []
+
+[81]
+Underfull \hbox (badness 10000) in paragraph at lines 146--147
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 147--148
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 2042) in paragraph at lines 149--149
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .5 $[]$ + .
+5 $[]$ + .5
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 149--150
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 151--152
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--155
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--155
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 77*j
+x(ip _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 160--161
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 146--166
+ [] [] [] [] [] 
+ []
+
+[82]
+Underfull \hbox (badness 10000) in paragraph at lines 168--168
+[]|$\OT1/cmtt/m/n/10 (\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 59*j _ IC3H7NO3 + jx(i
+p _ MACR ))
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--168
+\OT1/cmtt/m/n/10 *(jx(ip _ MEKNO3 ) +1E-[]10 ) /(j _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--169
+[]|\OT1/cmr/m/n/10 M^^?uller et al. (2014),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 171--171
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) + 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 77*
+jx(ip _
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 166--186
+ [] [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+\OT1/cmr/m/n/10 Jenkin et al. (2015),
+ []
+
+
+Underfull \hbox (badness 1043) in paragraph at lines 187--187
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + $[]$ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 187--188
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 187--188
+\OT1/cmr/m/n/10 Jenkin et al. (2015),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 188--189
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 188--189
+\OT1/cmr/m/n/10 Jenkin et al. (2015),
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 189--189
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + $[]$ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 189--190
+[]|\OT1/cmr/m/n/10 Sander et al. (2018),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 189--190
+\OT1/cmr/m/n/10 Jenkin et al. (2015),
+ []
+
+
+Underfull \hbox (badness 3333) in paragraph at lines 192--192
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ \OT1/cmr/m/n/10 .5 $[]$ + .
+5
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 199--199
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +jx(ip _ HOCH2CHO )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 200--201
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 200--201
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 204--205
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 204--205
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 205--206
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 205--206
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 186--206
+ [] [] [] [] [] 
+ []
+
+[83]
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
+[]|$\OT1/cmtt/m/n/10 jx(ip _ MGLYOX ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 15*j
+x(ip _ MGLYOX )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 208--208
+[]|$\OT1/cmtt/m/n/10 jx(ip _ HOCH2CHO ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 15
+*jx(ip _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--210
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 214--215
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 215--215
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +jx(ip _ HOCH2CHO )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 215--216
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 216--217
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 217--218
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--219
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 225--226
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 206--226
+ [] [] [] [] [] 
+ []
+
+[84]
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 229--230
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 237--238
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 240--241
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--242
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--244
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 244--245
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 226--246
+ [] [] [] [] [] 
+ []
+
+[85]
+Underfull \hbox (badness 10000) in paragraph at lines 247--248
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 250--251
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 260--261
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 261--262
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 263--264
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 264--265
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 246--266
+ [] [] [] [] [] 
+ []
+
+[86]
+Underfull \hbox (badness 10000) in paragraph at lines 266--267
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 267--268
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 268--269
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+[]|$\OT1/cmtt/m/n/10 jx(ip _ CH3OOH ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 77*j
+x(ip _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 272--273
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 274--274
+[]|$\OT1/cmtt/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 77*jx(ip _ HOCH2CHO ) 
++2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 15*jx(ip _
+ []
+
+
+Underfull \hbox (badness 4303) in paragraph at lines 280--280
+[]|$[]$ \OT1/cmr/m/n/10 + $[]$ $\OMS/cmsy/m/n/10 !$ $[]$ \OT1/cmr/m/n/10 + $[]$
+ + 2 $[]$ +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 282--283
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--284
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 266--286
+ [] [] [] [] [] 
+ []
+
+[87]
+Underfull \hbox (badness 10000) in paragraph at lines 286--287
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 288--289
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 289--290
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 303--304
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 286--306
+ [] [] [] [] [] 
+ []
+
+[88]
+Underfull \hbox (badness 10000) in paragraph at lines 306--306
+[]|$\OT1/cmtt/m/n/10 (jx(ip _ CH3OOH ) +2\OML/cmm/m/it/10 :\OT1/cmtt/m/n/10 15*
+jx(ip _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--308
+[]|\OT1/cmr/m/n/10 Rickard and Pas-coe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--308
+\OT1/cmr/m/n/10 (2009), Sander et al.
+ []
+
+
+Overfull \hbox (3.90865pt too wide) in alignment at lines 306--326
+ [] [] [] [] [] 
+ []
+
+[89]) (./mecca_eqn_ph.tex)
+Overfull \hbox (3.90865pt too wide) in alignment at lines 326--259
+ [] [] [] [] [] 
+ []
+
+[90] (./mecca_eqn_j_notes.tex
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+[]$\OT1/cmtt/m/n/10 J43024$\OT1/cmr/m/n/10 : As-sum-ing J($[]$) = 0.59 $\OMS/cm
+sy/m/n/10 ^^B$
+ []
+
+[91] [92]) (./mecca_eqn_ph_notes.tex) [93] (./mecca_eqn_h.tex)
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+\OT1/cmr/m/n/10 The for-ward ([][]\OT1/cmtt/m/n/10 k_exf[]\OT1/cmr/m/n/10 ) and
+ back-ward ([][]\OT1/cmtt/m/n/10 k_exb[]\OT1/cmr/m/n/10 )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+\OT1/cmr/m/n/10 rate co-ef-fi-cients are cal-cu-lated in sub-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+\OT1/cmr/m/n/10 rou-tine [][]\OT1/cmtt/m/n/10 mecca_aero_calc_k_ex []\OT1/cmr/m
+/n/10 in the file
+ []
+
+(./mecca_eqn_h_notes.tex) [94
+
+] (./mecca_eqn_het.tex)
+Underfull \vbox (badness 10000) detected at line 352
+ []
+
+(./mecca_eqn_het_notes.tex) [95
+
+] (./mecca_eqn_eq.tex) (./mecca_eqn_eq_notes.tex) [96
+
+] (./mecca_eqn_a.tex) (./mecca_eqn_a_notes.tex) [97
+
+] (./meccanism.bbl
+[98
+
+] [99]
+Underfull \hbox (badness 10000) in paragraph at lines 303--306
+\OT1/cmr/m/n/10 doi:$10 . 1002 / (SICI ) 1097-[]4601(1999 ) 31 : 2\OMS/cmsy/m/n
+/10 h\OT1/cmr/m/n/10 127 ::
+ []
+
+[100] [101]
+Underfull \hbox (badness 7064) in paragraph at lines 566--569
+\OT1/cmr/m/n/10 ac-tions of $[]$ with $[]$ and $[]$ at
+ []
+
+
+Underfull \hbox (badness 6493) in paragraph at lines 566--569
+\OT1/cmr/m/n/10 298 K, Int. J. Chem. Ki-net-ics, 31, 65--72,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 566--569
+\OT1/cmr/m/n/10 doi:$10 . 1002 / (SICI ) 1097-[]4601(1999 ) 31 : 1\OMS/cmsy/m/n
+/10 h\OT1/cmr/m/n/10 65 ::
+ []
+
+[102]) [103] (./meccanism.aux) ) 
+Here is how much of TeX's memory you used:
+ 6099 strings out of 483183
+ 64319 string characters out of 5966291
+ 379870 words of memory out of 5000000
+ 21043 multiletter control sequences out of 15000+600000
+ 539232 words of font info for 50 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 38i,12n,29p,811b,572s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cmextra/cmex7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
+2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+t12.pfb>
+Output written on meccanism.pdf (103 pages, 476037 bytes).
+PDF statistics:
+ 401 PDF objects out of 1000 (max. 8388607)
+ 277 compressed objects within 3 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

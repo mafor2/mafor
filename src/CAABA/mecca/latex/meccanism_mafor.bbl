@@ -1,0 +1,1449 @@
+\begin{thebibliography}{242}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{{\tt #1}}
+\providecommand{\urlprefix}{}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{Albaladejo et~al.(2002)Albaladejo, Jim\'enez, Notario, Caba{\~n}as,
+  and Mart\'inez}]{3056}
+Albaladejo, J., Jim\'enez, E., Notario, A., Caba{\~n}as, B., and Mart\'inez,
+  E.: \chem{CH_3O} yield in the \chem{CH_3} + \chem{O_3} reaction using the
+  LP/LIF technique at room temperature, J. Phys. Chem. A, 106, 2512--2519,
+  \doi{10.1021/jp012249o}, 2002.
+
+\bibitem[{Anastasio and Chu(2009)}]{2585}
+Anastasio, C. and Chu, L.: Photochemistry of nitrous acid (\chem{HONO}) and
+  nitrous acidium ion (\chem{H_2ONO^+} in aqueous solution and ice, Environ.
+  Sci. Technol., 43, 1108--1114, 2009.
+
+\bibitem[{Anderson and Fahey(1990)}]{1059}
+Anderson, L.~C. and Fahey, D.~W.: Studies with \chem{ClONO_2}: Thermal
+  dissociation rate and catalytic conversion to \chem{NO} using an
+  \chem{NO}/\chem{O_3} chemiluminescence detector, J. Phys. Chem., 94,
+  644--652, \doi{10.1021/J100365A027}, 1990.
+
+\bibitem[{Andrews et~al.(2012)Andrews, Heazlewood, Maccarone, Conroy, Payne,
+  Jordan, and Kable}]{3161}
+Andrews, D.~U., Heazlewood, B.~R., Maccarone, A.~T., Conroy, T., Payne, R.~J.,
+  Jordan, M. J.~T., and Kable, S.~H.: Photo-tautomerization of acetaldehyde to
+  vinyl alcohol: a potential route to tropospheric acids, Science, 337,
+  1203--1206, \doi{10.1126/science.1220712}, 2012.
+
+\bibitem[{Aschmann et~al.(2014)Aschmann, Nishino, Arey, and Atkinson}]{3213}
+Aschmann, S.~M., Nishino, N., Arey, J., and Atkinson, R.: Products of the
+  \chem{OH} radical-initiated reactions of furan, 2- and 3-methylfuran, and
+  2,3- and 2,5-dimethylfuran in the presence of \chem{NO}, J. Phys. Chem. A,
+  118, 457--466, \doi{10.1021/jp410345k}, 2014.
+
+\bibitem[{Atkinson(1997)}]{964}
+Atkinson, R.: Gas-phase tropospheric chemistry of volatile organic compounds:
+  1. Alkanes and alkenes, J. Phys. Chem. Ref. Data, 26, 215--290,
+  \doi{10.1063/1.556012}, 1997.
+
+\bibitem[{Atkinson(2003)}]{1627}
+Atkinson, R.: Kinetics of the gas-phase reactions of \chem{OH} radicals with
+  alkanes and cycloalkanes, Atmos. Chem. Phys., 3, 2233--2307,
+  \doi{10.5194/ACP-3-2233-2003}, 2003.
+
+\bibitem[{Atkinson and Arey(2003)}]{3386}
+Atkinson, R. and Arey, J.: Atmospheric degradation of volatile organic
+  compounds, Chem. Rev., 103, 4605--4638, \doi{10.1021/cr0206420}, 2003.
+
+\bibitem[{Atkinson et~al.(2004)Atkinson, Baulch, Cox, Crowley, Hampson, Hynes,
+  Jenkin, Rossi, and Troe}]{1610}
+Atkinson, R., Baulch, D.~L., Cox, R.~A., Crowley, J.~N., Hampson, R.~F., Hynes,
+  R.~G., Jenkin, M.~E., Rossi, M.~J., and Troe, J.: Evaluated kinetic and
+  photochemical data for atmospheric chemistry: Volume I -- gas phase reactions
+  of \chem{O_x}, \chem{HO_x}, \chem{NO_x} and \chem{SO_x} species, Atmos. Chem.
+  Phys., 4, 1461--1738, \doi{10.5194/ACP-4-1461-2004}, 2004.
+
+\bibitem[{Atkinson et~al.(2006)Atkinson, Baulch, Cox, Crowley, Hampson, Hynes,
+  Jenkin, Rossi, Troe, and {IUPAC Subcommittee}}]{1759}
+Atkinson, R., Baulch, D.~L., Cox, R.~A., Crowley, J.~N., Hampson, R.~F., Hynes,
+  R.~G., Jenkin, M.~E., Rossi, M.~J., Troe, J., and {IUPAC Subcommittee}:
+  Evaluated kinetic and photochemical data for atmospheric chemistry: Volume II
+  -- gas phase reactions of organic species, Atmos. Chem. Phys., 6, 3625--4055,
+  \doi{10.5194/ACP-6-3625-2006}, 2006.
+
+\bibitem[{Atkinson et~al.(2007)Atkinson, Baulch, Cox, Crowley, Hampson, Hynes,
+  Jenkin, Rossi, and Troe}]{1845}
+Atkinson, R., Baulch, D.~L., Cox, R.~A., Crowley, J.~N., Hampson, R.~F., Hynes,
+  R.~G., Jenkin, M.~E., Rossi, M.~J., and Troe, J.: Evaluated kinetic and
+  photochemical data for atmospheric chemistry: Volume III -- gas phase
+  reactions of inorganic halogens, Atmos. Chem. Phys., 7, 981--1191,
+  \doi{10.5194/ACP-7-981-2007}, 2007.
+
+\bibitem[{Baeza-Romero et~al.(2007)Baeza-Romero, Glowacki, Blitz, Heard,
+  Pilling, Rickard, and Seakins}]{3149}
+Baeza-Romero, M.~T., Glowacki, D.~R., Blitz, M.~A., Heard, D., Pilling, M.~J.,
+  Rickard, A.~R., and Seakins, P.~W.: A combined experimental and theoretical
+  study of the reaction between methylglyoxal and \chem{OH}/\chem{OD} radical:
+  \chem{OH} regeneration, Phys. Chem. Chem. Phys., 9, 4114--4128,
+  \doi{10.1039/b702916k}, 2007.
+
+\bibitem[{Bale et~al.(2005)Bale, Canosa-Mas, Shallcross, and Wayne}]{2089}
+Bale, C. S.~E., Canosa-Mas, C.~E., Shallcross, D.~E., and Wayne, R.~P.: A
+  discharge-flow study of the kinetics of the reactions of \chem{IO} with
+  \chem{CH_3O_2} and \chem{CF_3O_2}, Phys. Chem. Chem. Phys., 7, 2164--2172,
+  \doi{10.1039/B501903F}, 2005.
+
+\bibitem[{Banic et~al.(2003)Banic, Beauchamp, Tordon, Schroeder, Steffen,
+  Anlauf, and Wong}]{2130}
+Banic, C.~M., Beauchamp, S.~T., Tordon, R.~J., Schroeder, W.~H., Steffen, A.,
+  Anlauf, K.~A., and Wong, H. K.~T.: Vertical distribution of gaseous elemental
+  mercury in Canada, J. Geophys. Res., 108D, 4264, \doi{10.1029/2002JD002116},
+  2003.
+
+\bibitem[{Barker et~al.(1970)Barker, Fowles, and Stringer}]{1249}
+Barker, G.~C., Fowles, P., and Stringer, B.: Pulse radiolytic induced transient
+  electrical conductance in liquid solutions, Trans. Faraday Soc., 66,
+  1509--1519, \doi{10.1039/TF9706601509}, 1970.
+
+\bibitem[{Barnes et~al.(1985)Barnes, Becker, Fink, Reimer, Zabel, and
+  Niki}]{3055}
+Barnes, I., Becker, K.~H., Fink, E.~H., Reimer, A., Zabel, F., and Niki, H.:
+  FTIR spectroscopic study of the gas-phase reaction of \chem{HO_2} with
+  \chem{H_2CO}, Chem. Phys. Lett., 115, 1--8,
+  \doi{10.1016/0009-2614(85)80091-9}, 1985.
+
+\bibitem[{Barnes et~al.(1993)Barnes, Becker, and Zhu}]{3146}
+Barnes, I., Becker, K.~H., and Zhu, T.: Near UV absorption-spectra and
+  photolysis products of difunctional organic nitrates - possible importance as
+  \chem{NO_x} reservoirs, J. Atmos. Chem., 17, 353--373,
+  \doi{10.1007/BF00696854}, 1993.
+
+\bibitem[{Barth(1992)}]{2620}
+Barth, C.~A.: Nitric oxide in the lower thermosphere, Planet. Space Sci., 40,
+  315--336, \doi{10.1016/0032-0633(92)90067-X}, 1992.
+
+\bibitem[{Bates et~al.(2014)Bates, Crounse, {St. Clair}, Bennett, Nguyen,
+  Seinfeld, Stoltz, and Wennberg}]{3178}
+Bates, K.~H., Crounse, J.~D., {St. Clair}, J.~M., Bennett, N.~B., Nguyen,
+  T.~B., Seinfeld, J.~H., Stoltz, B.~M., and Wennberg, P.~O.: Gas phase
+  production and loss of isoprene epoxydiols, J. Phys. Chem. A, 118,
+  1237--1246, \doi{10.1021/jp4107958}, 2014.
+
+\bibitem[{Baulch et~al.(2005)Baulch, Bowman, Cobos, Cox, Just, Kerr, Pilling,
+  Stocker, Troe, Tsang, Walker, and Warnatz}]{3037}
+Baulch, D.~L., Bowman, C.~T., Cobos, C.~J., Cox, R.~A., Just, T., Kerr, J.~A.,
+  Pilling, M.~J., Stocker, D., Troe, J., Tsang, W., Walker, R.~W., and Warnatz,
+  J.: Evaluated kinetic data for combustion modeling: Supplement II, J. Phys.
+  Chem. Ref. Data, 34, 757--1397, \doi{10.1063/1.1748524}, 2005.
+
+\bibitem[{Becker et~al.(2000)Becker, Kurtenbach, Schmidt, and Wiesen}]{3198}
+Becker, K.~H., Kurtenbach, R., Schmidt, F., and Wiesen, P.: Kinetics of the
+  \chem{NCO} radical reacting with atoms and selected molecules, Combust.
+  Flame, 120, 570--577, \doi{10.1016/S0010-2180(99)00108-X}, 2000.
+
+\bibitem[{Behnke et~al.(1994)Behnke, Scheer, and Zetzsch}]{358}
+Behnke, W., Scheer, V., and Zetzsch, C.: Production of \chem{BrNO_2},
+  \chem{Br_2} and \chem{ClNO_2} from the reaction between sea spray aerosol and
+  \chem{N_2O_5}, J. Aerosol Sci., 25, S277--S278,
+  \doi{10.1016/0021-8502(94)90369-7}, 1994.
+
+\bibitem[{Behnke et~al.(1997)Behnke, George, Scheer, and Zetzsch}]{536}
+Behnke, W., George, C., Scheer, V., and Zetzsch, C.: Production and decay of
+  \chem{ClNO_2} from the reaction of gaseous \chem{N_2O_5} with \chem{NaCl}
+  solution: Bulk and aerosol experiments, J. Geophys. Res., 102D, 3795--3804,
+  \doi{10.1029/96JD03057}, 1997.
+
+\bibitem[{Betterton and Hoffmann(1988)}]{85}
+Betterton, E.~A. and Hoffmann, M.~R.: Oxidation of aqueous \chem{SO_2} by
+  peroxymonosulfate, J. Phys. Chem., 92, 5962--5965, \doi{10.1021/J100332A025},
+  1988.
+
+\bibitem[{Beyersdorf et~al.(2010)Beyersdorf, Blake, Swanson, Meinardi, Rowland,
+  and Davis}]{3163}
+Beyersdorf, A.~J., Blake, D.~R., Swanson, A., Meinardi, S., Rowland, F.~S., and
+  Davis, D.: Abundances and variability of tropospheric volatile organic
+  compounds at the South Pole and other Antarctic locations, Atmos. Environ.,
+  44, 4565--4574, \doi{10.1016/j.atmosenv.2010.08.025}, 2010.
+
+\bibitem[{Birdsall et~al.(2010)Birdsall, Andreoni, and Elrod}]{3188}
+Birdsall, A.~W., Andreoni, J.~F., and Elrod, M.~J.: Investigation of the role
+  of bicyclic peroxy radicals in the oxidation mechanism of toluene, J. Phys.
+  Chem. A, 114, 10\,655--10\,663, \doi{10.1021/jp105467e}, 2010.
+
+\bibitem[{Bjergbakke et~al.(1981)Bjergbakke, Navartnam, Parsons, and
+  Swallow}]{1035}
+Bjergbakke, E., Navartnam, S., Parsons, B.~J., and Swallow, A.~J.: Reaction
+  between \chem{HO_2\cdot} and chlorine in aqueous solution, J. Am. Chem. Soc.,
+  103, 5926--5928, \doi{10.1021/JA00409A059}, 1981.
+
+\bibitem[{Bossolasco et~al.(2014)Bossolasco, Farag\'o, Schoemaecker, and
+  Fittschen}]{3042}
+Bossolasco, A., Farag\'o, E.~P., Schoemaecker, C., and Fittschen, C.: Rate
+  constant of the reaction between \chem{CH_3O_2} and \chem{OH} radicals, Chem.
+  Phys. Lett., 593, 7--13, \doi{10.1016/j.cplett.2013.12.052}, 2014.
+
+\bibitem[{Boyce and Hoffmann(1984)}]{534}
+Boyce, S.~D. and Hoffmann, M.~R.: Kinetics and mechanism of the formation of
+  hydroxymethanesulfonic acid at low {pH}, J. Phys. Chem., 88, 4740--4746,
+  \doi{10.1021/j150664a059}, 1984.
+
+\bibitem[{Brand and {van Eldik}(1995)}]{3346}
+Brand, C. and {van Eldik}, R.: Transition metal-catalyzed oxidation of
+  sulfur(IV)oxides. Atmospheric relevant processes and mechanisms, Chem. Rev.,
+  95, 119--190, \doi{10.1021/cr00033a006}, 1995.
+
+\bibitem[{Buras et~al.(2014)Buras, Elsamra, and Green}]{3054}
+Buras, Z.~J., Elsamra, R. M.~I., and Green, W.~H.: Direct determination of the
+  simplest Criegee intermediate (\chem{CH_2OO}) self reaction rate, J. Phys.
+  Chem. Lett., 5, 2224--2228, \doi{10.1021/jz5008406}, 2014.
+
+\bibitem[{Burkholder et~al.(2015)Burkholder, Sander, Abbatt, Barker, Huie,
+  Kolb, Kurylo, Orkin, Wilmouth, and Wine}]{3245}
+Burkholder, J.~B., Sander, S.~P., Abbatt, J., Barker, J.~R., Huie, R.~E., Kolb,
+  C.~E., Kurylo, M.~J., Orkin, V.~L., Wilmouth, D.~M., and Wine, P.~H.:
+  Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies,
+  Evaluation No. 18, JPL Publication 15-10, Jet Propulsion Laboratory,
+  Pasadena, \urlprefix\url{http://jpldataeval.jpl.nasa.gov}, 2015.
+
+\bibitem[{Butkovskaya et~al.(2010)Butkovskaya, Kukui, and {Le Bras}}]{3170}
+Butkovskaya, N., Kukui, A., and {Le Bras}, G.: Pressure and temperature
+  dependence of ethyl nitrate formation in the \chem{C_2H_5O_2} + \chem{NO}
+  reaction, J. Phys. Chem. A, 114, 956--964, \doi{10.1021/jp910003a}, 2010.
+
+\bibitem[{Butkovskaya et~al.(2012)Butkovskaya, Kukui, and {Le Bras}}]{3177}
+Butkovskaya, N., Kukui, A., and {Le Bras}, G.: Pressure and temperature
+  dependence of methyl nitrate formation in the \chem{CH_3O_2} + \chem{NO}
+  reaction, J. Phys. Chem. A, 116, 5972--5980, \doi{10.1021/jp210710d}, 2012.
+
+\bibitem[{Buxton et~al.(1986)Buxton, Kilner, and Sellers}]{579}
+Buxton, G.~V., Kilner, C., and Sellers, R.~M.: Pulse radiolysis of \chem{HOI}
+  and \chem{IO^-} in aqueous solution. Formation and characterization of
+  \chem{I(II)}, Proc. Tihany Symp. Radiat. Chem., 6, 155--159, 1986.
+
+\bibitem[{Buxton et~al.(1988)Buxton, Greenstock, Helman, and Ross}]{144}
+Buxton, G.~V., Greenstock, C.~L., Helman, W.~P., and Ross, A.~B.: Critical
+  review of rate constants for reactions of hydrated electrons, hydrogen atoms
+  and hydroxyl radicals (\chem{\cdot OH}/\chem{\cdot O^-}) in aqueous solution,
+  J. Phys. Chem. Ref. Data, 17, 513--886, \doi{10.1063/1.555805}, 1988.
+
+\bibitem[{Buxton et~al.(1996)Buxton, McGowan, Salmon, Williams, and Wood}]{955}
+Buxton, G.~V., McGowan, S., Salmon, G.~A., Williams, J.~E., and Wood, N.~D.: A
+  study of the spectra and reactivity of oxysulphur-radical anions involved in
+  the chain oxidation of \chem{S(IV)}: A pulse and $\gamma$-radiolysis study,
+  Atmos. Environ., 30, 2483--2493, \doi{10.1016/1352-2310(95)00473-4}, 1996.
+
+\bibitem[{Buxton et~al.(1999{\natexlab{a}})Buxton, Bydder, and Salmon}]{1238}
+Buxton, G.~V., Bydder, M., and Salmon, G.~A.: The reactivity of chlorine atoms
+  in aqueous solution: Part II. The equilibrium \chem{SO_4^{.-}} + \chem{Cl^-}
+  {\EQ} \chem{Cl^.} + \chem{SO_4^{2-}}, Phys. Chem. Chem. Phys., 1, 269--273,
+  \doi{10.1039/A807808D}, 1999{\natexlab{a}}.
+
+\bibitem[{Buxton et~al.(1999{\natexlab{b}})Buxton, Salmon, and Wang}]{1239}
+Buxton, G.~V., Salmon, G.~A., and Wang, J.~Q.: The equilibrium \chem{NO_3^.} +
+  \chem{Cl^-} {\EQ} \chem{NO_3^-} + \chem{Cl^.}: A laser flash photolysis and
+  pulse radiolysis study of the reactivity of \chem{NO_3^.} with chloride ion
+  in aqueous solution, Phys. Chem. Chem. Phys., 1, 3589--3593,
+  \doi{10.1039/A903286J}, 1999{\natexlab{b}}.
+
+\bibitem[{Canosa-Mas et~al.(1996)Canosa-Mas, King, Lopez, Percival, Wayne,
+  Shallcross, Pyle, and Daele}]{1617}
+Canosa-Mas, C.~E., King, M.~D., Lopez, R., Percival, C.~J., Wayne, R.~P.,
+  Shallcross, D.~E., Pyle, J.~A., and Daele, V.: Is the reaction between
+  \chem{CH_3(O)O_2} and \chem{NO_3} important in the night-time troposphere?,
+  J. Chem. Soc. Faraday Trans., 92, 2211--2222, \doi{10.1039/FT9969202211},
+  1996.
+
+\bibitem[{Capouet et~al.(2008)Capouet, M{\"u}ller, Ceulemans, Compernolle,
+  Vereecken, and Peeters}]{3028}
+Capouet, M., M{\"u}ller, J.-F., Ceulemans, K., Compernolle, S., Vereecken, L.,
+  and Peeters, J.: Modeling aerosol formation in alpha-pinene photo-oxidation
+  experiments, J. Geophys. Res., 113D, \doi{10.1029/2007JD008995}, 2008.
+
+\bibitem[{Carl and Crowley(2001)}]{1503}
+Carl, S.~A. and Crowley, J.~N.: 298~\unit{K} rate coefficients for the reaction
+  of \chem{OH} with \chem{i-C_3H_7I}, \chem{n-C_3H_7I} and \chem{C_3H_8},
+  Atmos. Chem. Phys., 1, 1--7, \doi{10.5194/acp-1-1-2001}, 2001.
+
+\bibitem[{Carlton et~al.(2010)Carlton, Bhave, Napelenok, Edney, Sarwar, Pinder,
+  Pouliot, and Houyoux}]{2639}
+Carlton, A.~G., Bhave, P.~V., Napelenok, S.~L., Edney, E.~O., Sarwar, G.,
+  Pinder, R.~W., Pouliot, G.~A., and Houyoux, M.: Model representation of
+  secondary organic aerosol in CMAQv4.7, Environ. Sci. Technol., 44,
+  8553--8560, 2010.
+
+\bibitem[{Carter(2008)}]{2625}
+Carter, W. P.~L.: Reactivity estimates for selected consumer product compounds,
+  Final report to the California Air Resources Board, Tech. Rep. Contract No.
+  06-408, Center for Environmental Research and Technology, University of
+  California, Riverside, CA, U.S.A., 2008.
+
+\bibitem[{Chai et~al.(2014)Chai, Hu, Dibble, Tyndall, and Orlando}]{3043}
+Chai, J., Hu, H., Dibble, T.~S., Tyndall, G.~S., and Orlando, J.~J.: Rate
+  constants and kinetic isotope effects for methoxy radical reacting with
+  \chem{NO_2} and \chem{O_2}, J. Phys. Chem. A, 118, 3552--3563,
+  \doi{10.1021/jp501205d}, 2014.
+
+\bibitem[{Challis and Kyrtopoulos(1979)}]{2601}
+Challis, B.~C. and Kyrtopoulos, S.~A.: Chemistry of Nitroso-Compounds. 11.
+  Nitrosation of Amines by the 2-Phase Interaction of Amines in Solution with
+  Gaseous Oxides of Nitrogen., Journal of the Chemical Society- Perkin
+  Transactions 1, 2, 299--304, 1979.
+
+\bibitem[{Chameides(1984)}]{87}
+Chameides, W.~L.: The photochemistry of a remote marine stratiform cloud, J.
+  Geophys. Res., 89D, 4739--4755, \doi{10.1029/JD089ID03P04739}, 1984.
+
+\bibitem[{Chao et~al.(2015)Chao, Hsieh, Chang, and Lin}]{3173}
+Chao, W., Hsieh, J.-T., Chang, C.-H., and Lin, J. J.-M.: Direct kinetic
+  measurement of the reaction of the simplest Criegee intermediate with water
+  vapor, Science, 347, 751--754, \doi{10.1126/science.1261549}, 2015.
+
+\bibitem[{Chen et~al.(2011)Chen, Wenger, and Venables}]{3203}
+Chen, J., Wenger, J.~C., and Venables, D.~S.: Near-ultraviolet absorption cross
+  sections of nitrophenols and their potential influence on tropospheric
+  oxidation capacity, J. Phys. Chem. A, 115, 12\,235--12\,242,
+  \doi{10.1021/jp206929r}, 2011.
+
+\bibitem[{Chin and Wine(1994)}]{231}
+Chin, M. and Wine, P.~H.: A temperature-dependent competitive kinetics study of
+  the aqueous-phase reactions of \chem{OH} radicals with formate, formic acid,
+  acetate, acetic acid, and hydrated formaldehyde, in: Aquatic and Surface
+  Photochemistry, edited by Helz, G.~R., Zepp, R.~G., and Crosby, D.~G., pp.
+  85--96, A. F. Lewis, NY, 1994.
+
+\bibitem[{Chinake and Simoyi(1996)}]{885}
+Chinake, C.~R. and Simoyi, R.~H.: Kinetics and mechanism of the complex
+  bromate-iodine reaction, J. Phys. Chem., 100, 1643--1656,
+  \doi{10.1021/JP951956C}, 1996.
+
+\bibitem[{Christensen and Sehested(1981)}]{3350}
+Christensen, H. and Sehested, K.: Pulse radiolysis at high temperatures and
+  high pressures, Radiat. Phys. Chem., 18, 723--231,
+  \doi{10.1016/0146-5724(81)90195-3}, 1981.
+
+\bibitem[{Christensen and Sehested(1988)}]{210}
+Christensen, H. and Sehested, K.: \chem{HO_2} and \chem{O_2^-} radicals at
+  elevated temperatures, J. Phys. Chem., 92, 3007--3011,
+  \doi{10.1021/J100321A060}, 1988.
+
+\bibitem[{Christensen et~al.(1982)Christensen, Sehested, and Corfitzen}]{217}
+Christensen, H., Sehested, K., and Corfitzen, H.: Reactions of hydroxyl
+  radicals with hydrogen peroxide at ambient and elevated temperatures, J.
+  Phys. Chem., 86, 1588--1590, \doi{10.1021/J100206A023}, 1982.
+
+\bibitem[{Citri and Epstein(1988)}]{874}
+Citri, O. and Epstein, I.~R.: Mechanistic study of a coupled chemical
+  oscillator: the bromate-chlorite-iodide reaction, J. Phys. Chem., 92,
+  1865--1871, \doi{10.1021/J100318A034}, 1988.
+
+\bibitem[{Clubb et~al.(2012)Clubb, Jordan, Kable, and Osborn}]{3160}
+Clubb, A.~E., Jordan, M. J.~T., Kable, S.~H., and Osborn, D.~L.:
+  Phototautomerization of acetaldehyde to vinyl alcohol: a primary process in
+  UV-irradiated acetaldehyde from 295 to 335 nm, J. Phys. Chem. Lett., 3,
+  3522--3526, \doi{10.1021/jz301701x}, 2012.
+
+\bibitem[{Conn et~al.(1942)Conn, Kistiakowsky, Roberts, and Smith}]{3045}
+Conn, J.~B., Kistiakowsky, G.~B., Roberts, R.~M., and Smith, E.~A.: Heats of
+  organic reactions. XIII. Heats of hydrolysis of some acid anhydrides, Journal
+  of the American Chemical Society, 64, 1747--1752, \doi{10.1021/ja01260a001},
+  1942.
+
+\bibitem[{{da Silva}(2010)}]{3162}
+{da Silva}, G.: Carboxylic acid catalyzed keto-enol tautomerizations in the gas
+  phase, Angew. Chem., 122, 7685--7687, \doi{10.1002/ange.201003530}, 2010.
+
+\bibitem[{Damschen and Martin(1983)}]{45}
+Damschen, D.~E. and Martin, L.~R.: Aqueous aerosol oxidation of nitrous acid by
+  \chem{O_2}, \chem{O_3} and \chem{H_2O_2}, Atmos. Environ., 17, 2005--2011,
+  \doi{10.1016/0004-6981(83)90357-8}, 1983.
+
+\bibitem[{Das and von Sonntag(1986)}]{2600}
+Das, S. and von Sonntag, C.: The oxidation of trimethylamine by OH radicals in
+  aqueous solution, as studied by pulse radiolysis, ESR, and product analysis.
+  The reactions of the alkylamine radical cation, the aminoalkyl radical, and
+  the protonated aminoalkyl radical, Z. Naturforschung, 41B, 505--513, 1986.
+
+\bibitem[{Davis et~al.(1998)Davis, Chen, Kasibhatla, Jefferson, Tanner, Eisele,
+  Lenschow, Neff, and Berresheim}]{2001}
+Davis, D., Chen, G., Kasibhatla, P., Jefferson, A., Tanner, D., Eisele, F.,
+  Lenschow, D., Neff, W., and Berresheim, H.: DMS oxidation in the Antarctic
+  marine boundary layer: Comparison of model simulations and field observations
+  of DMS, DMSO, \chem{DMSO_2}, \chem{H_2SO_4(g)}, \chem{MSA(g)}, and
+  \chem{MSA(p)}, J. Geophys. Res., 103D, 1657--1678, \doi{10.1029/97JD03452},
+  1998.
+
+\bibitem[{Davis and {de Bruin}(1964)}]{450}
+Davis, Jr., W. and {de Bruin}, H.~J.: New activity coefficients of 0-100 per
+  cent aqueous nitric acid, J. Inorg. Nucl. Chem., 26, 1069--1083,
+  \doi{10.1016/0022-1902(64)80268-2}, 1964.
+
+\bibitem[{Dawson et~al.(2012)Dawson, Varner, Perraud, Ezell, Gerber, and
+  Finlayson-Pitts}]{2633}
+Dawson, M.~L., Varner, M.~E., Perraud, V., Ezell, M.~J., Gerber, R.~B., and
+  Finlayson-Pitts, B.~J.: Simplified mechanism for new particle formation from
+  methanesulfonic acid, amines, and water via experiments and ab initio
+  calculations, Proc. Natl. Acad. Sci. USA, 109(46), 18\,719--18\,724, 2012.
+
+\bibitem[{{de Laat} and Le(2006)}]{3266}
+{de Laat}, J. and Le, T.~G.: Effects of chloride ions on the
+  iron(III)-catalyzed decomposition of hydrogen peroxide and on the efficiency
+  of the Fenton-like oxidation process, Appl. Catal. B: Environ., 66, 137--146,
+  \doi{10.1016/j.apcatb.2006.03.008}, 2006.
+
+\bibitem[{Deister and Warneck(1990)}]{111}
+Deister, U. and Warneck, P.: Photooxidation of \chem{SO_3^{2-}} in aqueous
+  solution, J. Phys. Chem., 94, 2191--2198, \doi{10.1021/J100368A084}, 1990.
+
+\bibitem[{Dickson and Millero(1987)}]{1777}
+Dickson, A.~G. and Millero, F.~J.: A comparison of the equilibrium constants
+  for the dissociation of carbonic acid in seawater media, Deep-Sea Res. A, 34,
+  1733--1743, 1987.
+
+\bibitem[{Dillon et~al.(2006{\natexlab{a}})Dillon, Karunanandan, and
+  Crowley}]{2080}
+Dillon, T.~J., Karunanandan, R., and Crowley, J.~N.: The reaction of \chem{IO}
+  with \chem{CH_3SCH_3}: Products and temperature dependent rate coefficients
+  by laser induced fluorescence, Phys. Chem. Chem. Phys., 8, 847--855,
+  \doi{10.1039/B514718B}, 2006{\natexlab{a}}.
+
+\bibitem[{Dillon et~al.(2006{\natexlab{b}})Dillon, Tucceri, and Crowley}]{2079}
+Dillon, T.~J., Tucceri, M.~E., and Crowley, J.~N.: Laser induced fluorescence
+  studies of iodine oxide chemistry. Part II. The reactions of \chem{IO} with
+  \chem{CH_3O_2}, \chem{CF_3O_2} and \chem{O_3}, Phys. Chem. Chem. Phys., 8,
+  5185--5198, \doi{10.1039/B611116E}, 2006{\natexlab{b}}.
+
+\bibitem[{Dillon et~al.(2008)Dillon, Tucceri, Sander, and Crowley}]{2244}
+Dillon, T.~J., Tucceri, M.~E., Sander, R., and Crowley, J.~N.: LIF studies of
+  iodine oxide chemistry, part 3. Reactions \chem{IO} + \chem{NO_3} $\TO$
+  \chem{OIO} + \chem{NO_2}, \chem{I} + \chem{NO_3} $\TO$ \chem{IO} +
+  \chem{NO_2}, and \chem{CH_2I} + \chem{O_2} $\TO$ (products): Implications for
+  the chemistry of the marine atmosphere at night., Phys. Chem. Chem. Phys.,
+  10, 1540--1554, \doi{10.1039/B717386E}, 2008.
+
+\bibitem[{Duff et~al.(2003)Duff, Dothe, and Sharma}]{2618}
+Duff, J.~W., Dothe, H., and Sharma, R.~D.: On the rate coefficient of the
+  \chem{N(^2D)}+\chem{O_2} $\rightarrow$ \chem{NO}+\chem{O} reaction in the
+  terrestrial thermosphere, Geophys. Res. Lett., 30, 1259--1263, 2003.
+
+\bibitem[{Dulitz et~al.(2018)Dulitz, Amedro, Dillon, Pozzer, and
+  Crowley}]{3325}
+Dulitz, K., Amedro, D., Dillon, T.~J., Pozzer, A., and Crowley, J.~N.:
+  Temperature (208--318~\unit{K}) and pressure (18--696~\unit{Torr}) dependent
+  rate coefficients for the reaction between \chem{OH} and \chem{HNO_3}, Atmos.
+  Chem. Phys., 18, 2381--2394, \doi{10.5194/acp-18-2381-2018}, 2018.
+
+\bibitem[{Edblom et~al.(1987)Edblom, Gy\"orgyi, Orb\'an, and Epstein}]{2161}
+Edblom, E.~C., Gy\"orgyi, L., Orb\'an, M., and Epstein, I.~R.: A mechanism for
+  dynamical behavior in the Landolt reaction with ferrocyanide, J. Am. Chem.
+  Soc., 109, 4876--4880, \doi{10.1021/JA00250A020}, 1987.
+
+\bibitem[{Ehn et~al.(2014)Ehn, Thornton, Kleist, Sipila, Junninen, Pullinen,
+  Springer, Rubach, Tillmann, Lee, Lopez-Hilfiker, Andres, Acir, Rissanen,
+  Jokinen, Schobesberger, Kangasluoma, Kontkanen, Nieminen, Kurten, Nielsen,
+  Jorgensen, Kjaergaard, Canagaratna, Maso, Berndt, Petaja, Wahner, Kerminen,
+  Kulmala, Worsnop, Wildt, and Mentel}]{2638}
+Ehn, M., Thornton, J.~A., Kleist, E., Sipila, M., Junninen, H., Pullinen, I.,
+  Springer, M., Rubach, F., Tillmann, R., Lee, B., Lopez-Hilfiker, F., Andres,
+  S., Acir, I.-H., Rissanen, M., Jokinen, T., Schobesberger, S., Kangasluoma,
+  J., Kontkanen, J., Nieminen, T., Kurten, T., Nielsen, L.~B., Jorgensen, S.,
+  Kjaergaard, H.~G., Canagaratna, M., Maso, M.~D., Berndt, T., Petaja, T.,
+  Wahner, A., Kerminen, V.-M., Kulmala, M., Worsnop, D.~R., Wildt, J., and
+  Mentel, T.~F.: A large source of low-volatility secondary organic aerosol,
+  Nature, 506, 476--486, \doi{doi:10.1038/nature13032}, 2014.
+
+\bibitem[{Eigen and Kustin(1962)}]{170}
+Eigen, M. and Kustin, K.: The kinetics of halogen hydrolysis, J. Am. Chem.
+  Soc., 84, 1355--1361, \doi{10.1021/JA00867A005}, 1962.
+
+\bibitem[{Ervens et~al.(2003)Ervens, George, Williams, Buxton, Salmon, Bydder,
+  Wilkinson, Dentener, Mirabel, Wolke, and Herrmann}]{2578}
+Ervens, B., George, C., Williams, J.~E., Buxton, G.~V., Salmon, G.~A., Bydder,
+  M., Wilkinson, F., Dentener, F., Mirabel, P., Wolke, R., and Herrmann, H.:
+  CAPRAM2.4 (MODAC mechanism):An extended and condensed tropospheric aqueous
+  phase mechanism and its application, J. Geophys. Res., 108D, 4426,
+  \doi{10.1029/2002JD002202}, 2003.
+
+\bibitem[{Ervens et~al.(2004)Ervens, Feingold, Frost, and Kreidenweis}]{2575}
+Ervens, B., Feingold, G., Frost, G.~J., and Kreidenweis, S.~M.: A modeling
+  study of aqueous production of dicarboxylic acids: 1. Chemical pathways and
+  speciated organic mass production, J. Geophys. Res., 109D, 15205,
+  \doi{10.1029/2003JD004387}, 2004.
+
+\bibitem[{Exner et~al.(1992)Exner, Herrmann, and Zellner}]{69}
+Exner, M., Herrmann, H., and Zellner, R.: Laser-based studies of reactions of
+  the nitrate radical in aqueous solution, Ber. Bunsenges. Phys. Chem., 96,
+  470--477, \doi{10.1002/BBPC.19920960347}, 1992.
+
+\bibitem[{Feierabend et~al.(2008)Feierabend, Zhu, Talukdar, and
+  Burkholder}]{3157}
+Feierabend, K.~J., Zhu, L., Talukdar, R.~K., and Burkholder, J.~B.: Rate
+  coefficients for the \chem{OH} + \chem{HC(O)C(O)H} (glyoxal) raction between
+  210 and 390 K, J. Phys. Chem. A, 112, 73--82, \doi{10.1021/JP0768571}, 2008.
+
+\bibitem[{Fell et~al.(1990)Fell, Steinfeld, and Miller}]{2619}
+Fell, C., Steinfeld, J.~I., and Miller, S.: Quenching of N($^2$D) by O($^3$P),
+  J. Chem. Phys., 92, 4768--4777, \doi{10.1063/1.457694}, 1990.
+
+\bibitem[{Finkbeiner et~al.(1995)Finkbeiner, Crowley, Horie, M\"uller,
+  Moortgat, and Crutzen}]{1626}
+Finkbeiner, M., Crowley, J.~N., Horie, O., M\"uller, R., Moortgat, G.~K., and
+  Crutzen, P.~J.: Reaction between \chem{HO_2} and \chem{ClO}: Product
+  formation between 210 and 300~\unit{K}, J. Phys. Chem., 99, 16\,264--16\,275,
+  \doi{10.1021/J100044A011}, 1995.
+
+\bibitem[{Flocke et~al.(1998)Flocke, Atlas, Madronich, Schauffler, Aikin,
+  Margitan, and Bui}]{3164}
+Flocke, F., Atlas, E., Madronich, S., Schauffler, S.~M., Aikin, K., Margitan,
+  J.~J., and Bui, T.~P.: Observations of methyl nitrate in the lower
+  stratosphere during STRAT: implications for its gas phase production
+  mechanisms, Geophys. Res. Lett., 25, 1891--1894, \doi{10.1029/98GL01417},
+  1998.
+
+\bibitem[{Fogelman et~al.(1989)Fogelman, Walker, and Margerum}]{700}
+Fogelman, K.~D., Walker, D.~M., and Margerum, D.~W.: Non-metal redox kinetics:
+  Hypochlorite and hypochlorous acid reactions with sulfite, Inorg. Chem., 28,
+  986--993, \doi{10.1021/IC00305A002}, 1989.
+
+\bibitem[{Fortnum et~al.(1960)Fortnum, Battaglia, Cohen, and Edwards}]{475}
+Fortnum, D.~H., Battaglia, C.~J., Cohen, S.~R., and Edwards, J.~O.: The
+  kinetics of the oxidation of halide ions by monosubstituted peroxides, J. Am.
+  Chem. Soc., 82, 778--782, \doi{10.1021/JA01489A004}, 1960.
+
+\bibitem[{Francisco-Marquez et~al.(2003)Francisco-Marquez, Alvarez-Idaboy,
+  Galano, and Vivier-Bunge}]{3187}
+Francisco-Marquez, M., Alvarez-Idaboy, J.~R., Galano, A., and Vivier-Bunge, A.:
+  Theoretical study of the initial reaction between OH and isoprene in
+  tropospheric conditions, Phys. Chem. Chem. Phys., 5, 1392--1399,
+  \doi{10.1039/B211185C}, 2003.
+
+\bibitem[{Fuller-Rowell(1993)}]{2616}
+Fuller-Rowell, T.~J.: Modeling the solar cycle change in nitric oxide in the
+  thermosphere and upper mesosphere, J. Geophys. Res., 98A, 1559--1570,
+  \doi{10.1029/92JA02201}, 1993.
+
+\bibitem[{Furrow(1987)}]{556}
+Furrow, S.: Reactions of iodine intermediates in iodate-hydrogen peroxide
+  oscillators, J. Phys. Chem., 91, 2129--2135, \doi{10.1021/J100292A031}, 1987.
+
+\bibitem[{Ganzeveld et~al.(2006)Ganzeveld, Klemm, Rappengl\"uck, and
+  Valverde-Canossa}]{2140}
+Ganzeveld, L., Klemm, O., Rappengl\"uck, B., and Valverde-Canossa, J.:
+  Evaluation of meteorological parameters over a coniferous forest in a
+  single-column chemistry-climate model, Atmos. Environ., 40, S21--S27,
+  \doi{10.1016/J.ATMOSENV.2006.01.061}, 2006.
+
+\bibitem[{Ge et~al.(2011)Ge, Wexler, and Clegg}]{2597}
+Ge, X., Wexler, A.~S., and Clegg, S.~L.: Atmospheric amines - Part II.
+  Thermodynamic properties and gas/particle partitioning, Atmos. Environ., 45,
+  561--577, 2011.
+
+\bibitem[{Gilbert and Stell(1990)}]{3352}
+Gilbert, B.~C. and Stell, J.~K.: Mechanisms of peroxide decomposition. An ESR
+  study of the reactions of the peroxomonosulphate anion (\chem{HOOSO3^-}) with
+  TiIII, FeII, and $\alpha$-oxygen-substituted radicals, J. Chem. Soc. Perkin
+  Trans. 2, pp. 1281--1288, \doi{10.1039/P29900001281}, 1990.
+
+\bibitem[{Gill and Hites(2002)}]{3029}
+Gill, K.~J. and Hites, R.~A.: Rate constants for the gas-phase reactions of the
+  hydroxyl radical with isoprene, $\alpha$- and $\beta$-pinene, and limonene as
+  a function of temperature, J. Phys. Chem. A, 106, 2538--2544,
+  \doi{10.1021/jp013532q}, 2002.
+
+\bibitem[{Glowacki et~al.(2012)Glowacki, Lockhart, Blitz, Klippenstein,
+  Pilling, Robertson, and Seakins}]{3176}
+Glowacki, D.~R., Lockhart, J., Blitz, M.~A., Klippenstein, S.~J., Pilling,
+  M.~J., Robertson, S.~H., and Seakins, P.~W.: Interception of excited
+  vibrational quantum states by \chem{O_2} in atmospheric association
+  reactions, Science, 337, 1066--1069, \doi{10.1126/science.1224106}, 2012.
+
+\bibitem[{Grenfell et~al.(2006)Grenfell, Lehmann, Mieth, Langematz, and
+  Steil}]{2040}
+Grenfell, J.~L., Lehmann, R., Mieth, P., Langematz, U., and Steil, B.: Chemical
+  reaction pathways affecting stratospheric and mesospheric ozone, J. Geophys.
+  Res., 111D, \doi{10.1029/2004JD005713}, 2006.
+
+\bibitem[{Gro{\ss} et~al.(2014)Gro{\ss}, Dillon, Schuster, Lelieveld, and
+  Crowley}]{3156}
+Gro{\ss}, C. B.~M., Dillon, T.~J., Schuster, G., Lelieveld, J., and Crowley,
+  J.~N.: Direct kinetic study of \chem{OH} and \chem{O_3} formation in the
+  reaction of \chem{CH_3C(O)O_2} with \chem{HO_2}, J. Phys. Chem. A, 1,
+  974--985, \doi{10.1021/jp412380z}, 2014.
+
+\bibitem[{Gruzdev et~al.(1993)Gruzdev, Elokhov, Makarov, and Mokhov}]{2071}
+Gruzdev, A.~N., Elokhov, A.~S., Makarov, O.~V., and Mokhov, I.~I.: Some recent
+  results of Russian measurements of surface ozone in Antarctica. A
+  meteorological interpretation, Tellus, 45B, 99--105,
+  \doi{10.3402/TELLUSB.V45I2.15584}, 1993.
+
+\bibitem[{Harris and J.~N.~Pitts(1983)}]{2623}
+Harris, G.~W. and J.~N.~Pitts, J.: Rates of reaction of hydroxyl radicals with
+  2-(Dimethylamino)ethanol and 2-Amino-2-methyl-1-propanol in the gas phase at
+  300+-2K, Environ. Sci. Technol., 17, 50--51, 1983.
+
+\bibitem[{Hatakeyama et~al.(1985)Hatakeyama, Honda, and Akimoto}]{3155}
+Hatakeyama, S., Honda, S., and Akimoto, H.: Rate constants and mechanism for
+  reactions of ketenes with \chem{OH} radicals in air at 299$\pm$2 K, Bull.
+  Chem. Soc. Jpn., 58, 2157--2162, \doi{10.1246/BCSJ.58.2157}, 1985.
+
+\bibitem[{Hermans et~al.(2005)Hermans, M\"uller, Nguyen, Jacobs, and
+  Peeters}]{3153}
+Hermans, I., M\"uller, J.-F., Nguyen, T.~L., Jacobs, P.~A., and Peeters, J.:
+  Kinetics of $\alpha$-hydroxy-alkylperoxyl radicals in oxidation processes.
+  \chem{HO_2\cdot}-initiated oxidation of ketones/aldehydes near the
+  tropopause, J. Phys. Chem. A, 109, 4303--4311, \doi{10.1021/jp044080v}, 2005.
+
+\bibitem[{Herrmann et~al.(1995)Herrmann, Reese, and Zellner}]{1244}
+Herrmann, H., Reese, A., and Zellner, R.: Time resolved UV/VIS diode array
+  absorption spectroscopy of \chem{SO_x^-} (x=3, 4, 5) radical anions in
+  aqueous solution, J. Mol. Struct., 348, 183--186,
+  \doi{10.1016/0022-2860(95)08619-7}, 1995.
+
+\bibitem[{Herrmann et~al.(2000)Herrmann, Ervens, Jacobi, Wolke, Nowacki, and
+  Zellner}]{1007}
+Herrmann, H., Ervens, B., Jacobi, H.-W., Wolke, R., Nowacki, P., and Zellner,
+  R.: CAPRAM2.3: A chemical aqueous phase radical mechanism for tropospheric
+  chemistry, J. Atmos. Chem., 36, 231--284, \doi{10.1023/A:1006318622743},
+  2000.
+
+\bibitem[{Hoffmann(1986)}]{744}
+Hoffmann, M.~R.: On the kinetics and mechanism of oxidation of aquated sulfur
+  dioxide by ozone, Atmos. Environ., 20, 1145--1154,
+  \doi{10.1016/0004-6981(86)90147-2}, 1986.
+
+\bibitem[{Hoign\'e et~al.(1985)Hoign\'e, Bader, Haag, and Staehelin}]{648}
+Hoign\'e, J., Bader, H., Haag, W.~R., and Staehelin, J.: Rate constants of
+  reactions of ozone with organic and inorganic compounds in water -- III
+  Inorganic compounds and radicals, Wat. Res., 19, 993--1004,
+  \doi{10.1016/0043-1354(85)90368-9}, 1985.
+
+\bibitem[{Huie and Neta(1987)}]{75}
+Huie, R.~E. and Neta, P.: Rate constants for some oxidations of \chem{S(IV)} by
+  radicals in aqueous solutions, Atmos. Environ., 21, 1743--1747,
+  \doi{10.1016/0004-6981(87)90113-2}, 1987.
+
+\bibitem[{Hynes and Wine(1996)}]{746}
+Hynes, A.~J. and Wine, P.~H.: The atmospheric chemistry of dimethylsulfoxide
+  (DMSO) kinetics and mechanism of the \chem{OH} + DMSO reaction, J. Atmos.
+  Chem., 24, 23--37, \doi{10.1007/BF00053821}, 1996.
+
+\bibitem[{Jacob(1986)}]{46}
+Jacob, D.~J.: Chemistry of \chem{OH} in remote clouds and its role in the
+  production of formic acid and peroxymonosulfate, J. Geophys. Res., 91D,
+  9807--9826, \doi{10.1029/JD091ID09P09807}, 1986.
+
+\bibitem[{Jacobi(1996)}]{1008}
+Jacobi, H.-W.: Kinetische Untersuchungen und Modellrechnungen zur
+  troposph\"arischen Chemie von Radikalanionen und Ozon in w\"a{\ss}riger
+  Phase, Ph.D. thesis, Universit\"at GH Essen, Germany, 1996.
+
+\bibitem[{Jacobi et~al.(1996)Jacobi, Herrmann, and Zellner}]{1009}
+Jacobi, H.-W., Herrmann, H., and Zellner, R.: Kinetic investigation of the
+  \chem{Cl_2^-} radical in the aqueous phase, in: Air Pollution Research Report
+  57: Homogeneous and heterogeneous chemical Processes in the Troposphere,
+  edited by Mirabel, P., pp. 172--176, Office for official Publications of the
+  European Communities, Luxembourg, 1996.
+
+\bibitem[{Jacobsen et~al.(1997)Jacobsen, Holcman, and Sehested}]{3344}
+Jacobsen, F., Holcman, J., and Sehested, K.: Activation parameters of ferryl
+  ion reactions in aqueous acid solutions, Int. J. Chem. Kinetics, 29, 17--24,
+  \doi{10.1002/(SICI)1097-4601(1997)29:1<17::AID-KIN3>3.0.CO;2-O}, 1997.
+
+\bibitem[{Jacobsen et~al.(1998)Jacobsen, Holcman, and Sehested}]{3343}
+Jacobsen, F., Holcman, J., and Sehested, K.: Reactions of the ferryl ion with
+  some compounds found in cloud water, Int. J. Chem. Kinetics, 30, 215--221,
+  \doi{10.1002/(SICI)1097-4601(1998)30:3<215::AID-KIN7>3.0.CO;2-V}, 1998.
+
+\bibitem[{Jagiella and Zabel(2007)}]{3167}
+Jagiella, S. and Zabel, F.: Reaction of phenylperoxy radicals with \chem{NO_2}
+  at 298 K, Phys. Chem. Chem. Phys., 9, 5036--5051, \doi{10.1039/B705193J},
+  2007.
+
+\bibitem[{Jayson et~al.(1973)Jayson, Parsons, and Swallow}]{125}
+Jayson, G.~G., Parsons, B.~J., and Swallow, A.~J.: Some simple, highly
+  reactive, inorganic chlorine derivatives in aqueous solution, J. Chem. Soc.
+  Faraday Trans. 1, 69, 1597--1607, \doi{10.1039/F19736901597}, 1973.
+
+\bibitem[{Jenkin et~al.(1997)Jenkin, Saunders, and Pilling}]{1618}
+Jenkin, M., Saunders, S.~M., and Pilling, M.~J.: The tropospheric degradation
+  of volatile organic compounds: A protocol for mechanism development, Atmos.
+  Environ., 31, 81--104, \doi{10.1016/S1352-2310(96)00105-7}, 1997.
+
+\bibitem[{Jenkin et~al.(2015)Jenkin, Young, and Rickard}]{3182}
+Jenkin, M.~E., Young, J.~C., and Rickard, A.~R.: The MCM v3.3.1 degradation
+  scheme for isoprene, Atmos. Chem. Phys., 15, 11\,433--11\,459,
+  \doi{10.5194/acp-15-11433-2015}, 2015.
+
+\bibitem[{Jiang et~al.(1992)Jiang, Katsumura, Nagaishi, Domae, Ishikawa,
+  Ishigure, and Yoshida}]{1243}
+Jiang, P.-Y., Katsumura, Y., Nagaishi, R., Domae, M., Ishikawa, K., Ishigure,
+  K., and Yoshida, Y.: Pulse radiolysis study of concentrated sulfuric acid
+  solutions. Formation mechanism, yield and reactivity of sulfate radicals, J.
+  Chem. Soc. Faraday Trans., 88, 1653--1658, \doi{10.1039/FT9928801653}, 1992.
+
+\bibitem[{Kaltsoyannis and Plane(2008)}]{2314}
+Kaltsoyannis, N. and Plane, J. M.~C.: Quantum chemical calculations on a
+  selection of iodine-containing species (\chem{IO}, \chem{OIO}, \chem{INO_3},
+  \chem{(IO)_2}, \chem{I_2O_3}, \chem{I_2O_4} and \chem{I_2O_5}) of importance
+  in the atmosphere, Phys. Chem. Chem. Phys., 10, 1723--1733,
+  \doi{10.1039/B715687C}, 2008.
+
+\bibitem[{Karl(2012)}]{26220}
+Karl, M.: Unpublished data, 2012.
+
+\bibitem[{Karl et~al.(2007)Karl, Gross, Leck, and Pirjola}]{2591}
+Karl, M., Gross, A., Leck, C., and Pirjola, L.: Intercomparison of
+  dimethylsulfide oxidation mechanisms for the marine boundary layer: Gaseous
+  and particulate sulfur constituents, J. Geophys. Res., 112,
+  \doi{10.1029/2006JD007914}, 2007.
+
+\bibitem[{Karl et~al.(2012{\natexlab{a}})Karl, Dye, Schmidbauer, Wisthaler,
+  Mikoviny, and coauthors}]{2594}
+Karl, M., Dye, C., Schmidbauer, N., Wisthaler, A., Mikoviny, T., and coauthors:
+  Study of OH-initiated degradation of 2-aminoethanol, Atmos. Chem. Phys., 12,
+  1181--1901, 2012{\natexlab{a}}.
+
+\bibitem[{Karl et~al.(2012{\natexlab{b}})Karl, Herckes, Mitch, and
+  da~Silva}]{2635}
+Karl, M., Herckes, P., Mitch, W., and da~Silva, E.~F.: Atmospheric Chemistry -
+  Aqueous Phase Chemistry, Project 257430193, Final Report.,
+  2012{\natexlab{b}}.
+
+\bibitem[{Kirchner et~al.(1999)Kirchner, Mayer-Figge, Zabel, and Becker}]{3165}
+Kirchner, F., Mayer-Figge, A., Zabel, F., and Becker, K.~H.: Thermal stability
+  of peroxynitrates, Int. J. Chem. Kinetics, 31, 127--144,
+  \doi{10.1002/(SICI)1097-4601(1999)31:2<127::AID-KIN6>3.0.CO;2-L}, 1999.
+
+\bibitem[{Kishore et~al.(2004)Kishore, Dey, and Mukherjee}]{2604}
+Kishore, K., Dey, G.~R., and Mukherjee, T.: OH radical reactions with
+  ethanolamines: Formation of reducing as well as oxidizing radicals, Res.
+  Chem. Intermed., 30, 837--845, 2004.
+
+\bibitem[{Kleinb\"ohl et~al.(2006)Kleinb\"ohl, Toon, Sen, Blavier, Weisenstein,
+  Strekowski, Nicovich, Wine, and Wennberg}]{3191}
+Kleinb\"ohl, A., Toon, G.~C., Sen, B., Blavier, J.-F.~L., Weisenstein, D.~K.,
+  Strekowski, R.~S., Nicovich, J.~M., Wine, P.~H., and Wennberg, P.~O.: On the
+  stratospheric chemistry of hydrogen cyanide, Geophys. Res. Lett., 33,
+  \doi{10.1029/2006GL026015}, 2006.
+
+\bibitem[{Kohlmann and Poppe(1999)}]{2415}
+Kohlmann, J.-P. and Poppe, D.: The tropospheric gas-phase degradation of
+  $\rm{NH_3}$ and its impact on the formation of $\rm{N_2O}$ and $\rm{NO_x}$,
+  J. Atmos. Chem., 32, 397--415, \doi{10.1023/A:1006162910279}, 1999.
+
+\bibitem[{Lambe et~al.(2009)Lambe, Miracolo, Hennigan, Robinson, and
+  Donahue}]{2636}
+Lambe, A.~T., Miracolo, M.~A., Hennigan, C.~J., Robinson, A.~L., and Donahue,
+  N.~M.: Effective rate constants and uptake coefficients for the reactions of
+  organic molecular markers (n-alkanes, hopanes, and steranes) in motor oil and
+  diesel primary organic aerosols with hydroxyl radicals, Environ. Sci.
+  Technol., 43(23), 8794--8800, \doi{10.1021/es9014745h}, 2009.
+
+\bibitem[{Lax(1969)}]{194}
+Lax, E.: Taschenbuch f\"ur Chemiker und Physiker, Springer Verlag, Berlin,
+  1969.
+
+\bibitem[{Lazarou et~al.(1994)Lazarou, Kambanis, and Papagiannakopoulos}]{2595}
+Lazarou, Y.~G., Kambanis, K.~G., and Papagiannakopoulos, P.: Gas-phase
+  reactions of \chem{(CH_3)_2N} radicals with \chem{NO} and \chem{NO_2}., J.
+  Phys. Chem., 98, 2110--2115, 1994.
+
+\bibitem[{Lee et~al.(2007{\natexlab{a}})Lee, Schmidt, Yoon, and von
+  Gunten}]{2602}
+Lee, C., Schmidt, C., Yoon, J., and von Gunten, U.: Oxidation of
+  N-nitrosodimethylamine (NDMA) precursors with ozone and chlorine dioxide:
+  Kinetics and effect on NDMA formation potential, Environ. Sci. Technol., 41,
+  2056--2063, 2007{\natexlab{a}}.
+
+\bibitem[{Lee et~al.(2007{\natexlab{b}})Lee, Yoon, and Gunten}]{2617}
+Lee, C., Yoon, J., and Gunten, U.~V.: Oxidative degradation of
+  N-nitrosodimethylamine by conventional ozonation and the advanced oxidation
+  process ozone/hydrogen peroxide, Wat. Res., 41, 581--590, 2007{\natexlab{b}}.
+
+\bibitem[{Lee and Schwartz(1981)}]{59}
+Lee, Y.-N. and Schwartz, S.~E.: Reaction kinetics of nitrogen dioxide with
+  liquid water at low partial pressure, J. Phys. Chem., 85, 840--848,
+  \doi{10.1021/J150607A022}, 1981.
+
+\bibitem[{Lengyel et~al.(1996)Lengyel, Li, Kustin, and Epstein}]{884}
+Lengyel, I., Li, J., Kustin, K., and Epstein, I.~R.: Rate constants for
+  reactions between iodine- and chlorine-containing species: A detailed
+  mechanism of the chlorine dioxine/chlorite reaction, J. Am. Chem. Soc., 118,
+  3708--3719, \doi{10.1021/JA953938E}, 1996.
+
+\bibitem[{Lewis et~al.(2015)Lewis, Blitz, Heard, and Seakins}]{3174}
+Lewis, T.~R., Blitz, M.~A., Heard, D.~E., and Seakins, P.~W.: Direct evidence
+  for a substantive reaction between the Criegee intermediate, \chem{CH_2OO},
+  and the water vapour dimer, Phys. Chem. Chem. Phys., 17, 4859--4863,
+  \doi{10.1039/C4CP04750H}, 2015.
+
+\bibitem[{Licht et~al.(1988)Licht, Tannenbaum, and Deen}]{2583}
+Licht, W.~R., Tannenbaum, S.~R., and Deen, W.~M.: Use of ascorbic acid to
+  inhibit nitrosation: kinetic and mass transfer considerations for an in vitro
+  system, Carcinogenesis, 9, 365--372, 1988.
+
+\bibitem[{Liljegren and Stevens(2013)}]{3206}
+Liljegren, J.~A. and Stevens, P.~S.: Measurements of the kinetics of the
+  reaction of OH radicals with 3-methylfuran at low pressure, Int. J. Chem.
+  Kinetics, 45, 787--794, \doi{10.1002/KIN.20814}, 2013.
+
+\bibitem[{Lim and Ziemann(2009)}]{2640}
+Lim, Y.~B. and Ziemann, P.~J.: Effects of molecular structure on aerosol yields
+  from OH radical-initiated reactions of linear, branched, and cyclic alkanes
+  in the presence of NOx, Environ. Sci. Technol., 43, 2328--2334,
+  \doi{10.1021/es100636q}, 2009.
+
+\bibitem[{Lind et~al.(1987)Lind, Lazrus, and Kok}]{175}
+Lind, J.~A., Lazrus, A.~L., and Kok, G.~L.: Aqueous phase oxidation of
+  sulfur(IV) by hydrogen peroxide, methylhydroperoxide, and peroxyacetic acid,
+  J. Geophys. Res., 92D, 4171--4177, \doi{10.1029/JD092ID04P04171}, 1987.
+
+\bibitem[{Lockhart et~al.(2013)Lockhart, Blitz, Heard, Seakins, and
+  Shannon}]{3169}
+Lockhart, J., Blitz, M., Heard, D., Seakins, P., and Shannon, R.: Kinetic study
+  of the \chem{OH} + glyoxal reaction: experimental evidence and quantification
+  of direct \chem{OH} recycling, J. Phys. Chem. A, 117, 11\,027--11\,037,
+  \doi{10.1021/jp4076806}, 2013.
+
+\bibitem[{Lockwood et~al.(2010)Lockwood, Shepson, Fiddler, and
+  Alaghmand}]{3158}
+Lockwood, A.~L., Shepson, P.~B., Fiddler, M.~N., and Alaghmand, M.: Isoprene
+  nitrates: preparation, separation, identification, yields, and atmospheric
+  chemistry, Atmos. Chem. Phys., 10, 6169--6178,
+  \doi{10.5194/acp-10-6169-2010}, 2010.
+
+\bibitem[{L{\o}gager et~al.(1992)L{\o}gager, Holcman, Sehested, and
+  Pedersen}]{3342}
+L{\o}gager, T., Holcman, J., Sehested, K., and Pedersen, T.: Oxidation of
+  ferrous ions by ozone in acidic solutions, Inorg. Chem., 31, 3523--3529,
+  \doi{10.1021/ic00043a009}, 1992.
+
+\bibitem[{L{\o}gager et~al.(1993)L{\o}gager, Sehested, and Holcman}]{1633}
+L{\o}gager, T., Sehested, K., and Holcman, J.: Rate constants of the
+  equilibrium reactions \chem{SO_4} + \chem{HNO_3} $\rightleftharpoons$
+  \chem{HSO_4^-} + \chem{NO_3} and \chem{SO_4} + \chem{NO_3}
+  $\rightleftharpoons$ \chem{SO_4^{2-}} + \chem{NO_3}, Radiat. Phys. Chem., 41,
+  539--543, \doi{10.1016/0969-806X(93)90017-O}, 1993.
+
+\bibitem[{Long and Bielski(1980)}]{1034}
+Long, C.~A. and Bielski, B. H.~J.: Rate of reaction of superoxide radical with
+  chloride-containing species, J. Phys. Chem., 84, 555--557,
+  \doi{10.1021/J100442A023}, 1980.
+
+\bibitem[{Mack and Bolton(1999)}]{2579}
+Mack, J. and Bolton, J.~R.: Photochemistry of nitrite and nitrate in aqueous
+  solution: A review, J. Photochem. Photobiol. A: Chem., 128, 1--13, 1999.
+
+\bibitem[{Magi et~al.(1997)Magi, Schweitzer, Pallares, Cherif, Mirabel, and
+  George}]{844}
+Magi, L., Schweitzer, F., Pallares, C., Cherif, S., Mirabel, P., and George,
+  C.: Investigation of the uptake rate of ozone and methyl hydroperoxide by
+  water surfaces, J. Phys. Chem. A, 101, 4943--4949, \doi{10.1021/JP970646M},
+  1997.
+
+\bibitem[{Margerum et~al.(1986)Margerum, Dickson, Nagy, Kumar, Bowers, and
+  Fogelman}]{2160}
+Margerum, D.~W., Dickson, P.~N., Nagy, J.~C., Kumar, K., Bowers, C.~P., and
+  Fogelman, K.~D.: Kinetics of the iodine monochloride reaction with iodide
+  measured by the pulsed-accelerated-flow method, Inorg. Chem., 25, 4900--4904,
+  \doi{10.1021/IC00247A025}, 1986.
+
+\bibitem[{Marsh and McElroy(1985)}]{167}
+Marsh, A. R.~W. and McElroy, W.~J.: The dissociation constant and Henry's law
+  constant of \chem{HCl} in aqueous solution, Atmos. Environ., 19, 1075--1080,
+  \doi{10.1016/0004-6981(85)90192-1}, 1985.
+
+\bibitem[{Martin and Damschen(1981)}]{43}
+Martin, L.~R. and Damschen, D.~E.: Aqueous oxidation of sulfur dioxide by
+  hydrogen peroxide at low {pH}, Atmos. Environ., 15, 1615--1621,
+  \doi{10.1016/0004-6981(81)90146-3}, 1981.
+
+\bibitem[{McCabe et~al.(2001)McCabe, Gierczak, Talukdar, and
+  Ravishankara}]{1628}
+McCabe, D.~C., Gierczak, T., Talukdar, R.~K., and Ravishankara, A.~R.: Kinetics
+  of the reaction \chem{OH} + \chem{CO} under atmospheric conditions, Geophys.
+  Res. Lett., 28, 3135--3138, \doi{10.1029/2000GL012719}, 2001.
+
+\bibitem[{McElroy and Waygood(1990)}]{110}
+McElroy, W.~J. and Waygood, S.~J.: Kinetics of the reactions of the
+  \chem{SO_4^-} radical with \chem{SO_4^-}, \chem{S_2O_8^{2-}}, \chem{H_2O} and
+  \chem{Fe^{2+}}, J. Chem. Soc. Faraday Trans., 86, 2557--2564,
+  \doi{10.1039/FT9908602557}, 1990.
+
+\bibitem[{Mellouki and Mu(2003)}]{3154}
+Mellouki, A. and Mu, Y.: On the atmospheric degradation of pyruvic acid in the
+  gas phase, J. Photochem. Photobiol. A: Chem., 157,
+  \doi{10.1016/S1010-6030(03)00070-4}, 2003.
+
+\bibitem[{Messaadia et~al.(2015)Messaadia, Dib, Ferhati, and Chakir}]{3185}
+Messaadia, L., Dib, G.~E., Ferhati, A., and Chakir, A.: UV-visible spectra and
+  gas-phase rate coefficients for the reaction of 2,3-pentanedione and
+  2,4-pentanedione with \chem{OH} radicals, Chem. Phys. Lett., 626, 73--79,
+  \doi{10.1016/j.cplett.2015.02.032}, 2015.
+
+\bibitem[{Mirvish(1975)}]{2599}
+Mirvish, S.~S.: Formation of N-Nitroso Compounds: Chemistry, kinetics, and in
+  vivo occurrence, Toxicology and Applied Pharmacology, 31, 325--351, 1975.
+
+\bibitem[{Mitch and Herckes(2012)}]{2598}
+Mitch, W. and Herckes, P.: Literature Review and Experiments on Nitrosamine and
+  Nitramine Formation Chemistry Relevant to Carbon Capture., Tech. rep.,
+  SINTEF, Norway, 2012.
+
+\bibitem[{M\"uller et~al.(2014)M\"uller, Peeters, and Stavrakou}]{3168}
+M\"uller, J.-F., Peeters, J., and Stavrakou, T.: Fast photolysis of carbonyl
+  nitrates from isoprene, Atmos. Chem. Phys., 14, 2497--2508,
+  \doi{10.5194/acp-14-2497-2014}, 2014.
+
+\bibitem[{Munger et~al.(1999)Munger, Jacob, Fan, Colman, and Dibb}]{2048}
+Munger, J.~W., Jacob, D.~J., Fan, S.-M., Colman, A.~S., and Dibb, J.~E.:
+  Concentrations and snow-atmosphere fluxes of reactive nitrogen at Summit,
+  Greenland, J. Geophys. Res., 104D, 13\,721--13\,734,
+  \doi{10.1029/1999JD900192}, 1999.
+
+\bibitem[{Munoz et~al.(2000)Munoz, Schuchmann, Olbrich, and von Sonntag}]{2614}
+Munoz, F., Schuchmann, M.~N., Olbrich, G., and von Sonntag, C.: Common
+  intermediates in the OH-radical-induced oxidation of cyanide and formamide,
+  J. Chem. Soc. Faraday Trans. 2, pp. 655--659, 2000.
+
+\bibitem[{Nagy et~al.(1988)Nagy, Kumar, and Margerum}]{555}
+Nagy, J.~C., Kumar, K., and Margerum, D.~W.: Non-metal redox kinetics:
+  Oxidation of iodide by hypochlorous acid and by nitrogen trichloride measured
+  by the pulsed-accelerated-flow method, Inorg. Chem., 27, 2773--2780,
+  \doi{10.1021/IC00289A007}, 1988.
+
+\bibitem[{Nakanishi et~al.(1977)Nakanishi, Morita, and Nagakura}]{3184}
+Nakanishi, H., Morita, H., and Nagakura, S.: Electronic structures and spectra
+  of the keto and enol forms of acetylacetone, Bull. Chem. Soc. Jpn., 50,
+  2255--2261, \doi{10.1246/bcsj.50.2255}, 1977.
+
+\bibitem[{Nakano et~al.(2005)Nakano, Ishiwata, and Kawasaki}]{2087}
+Nakano, Y., Ishiwata, T., and Kawasaki, M.: Rate constants of the reaction of
+  \chem{NO_3} with \chem{CH_3I} measured with use of cavity ring-down
+  spectroscopy, J. Phys. Chem. A, 109, 6527--6531, \doi{10.1021/JP051817N},
+  2005.
+
+\bibitem[{Nguyen et~al.(2009)Nguyen, Peeters, and Vereecken}]{3018}
+Nguyen, T.~L., Peeters, J., and Vereecken, L.: Theoretical study of the
+  gas-phase ozonolysis of $\beta$-pinene (\chem{C_{10}H_{16}}), Phys. Chem.
+  Chem. Phys., 11, 5643--5656, \doi{10.1039/b822984h}, 2009.
+
+\bibitem[{Nielsen and Schade(2012)}]{2624}
+Nielsen, C.~J. and Schade, G.: Atmospheric Chemistry of AMP. A theoretical
+  study of the OH initiated atmospheric photo-oxidation of AMP, Tech. Rep. for
+  TCM, confidential, University of Oslo, Oslo, Norway, 2012.
+
+\bibitem[{Nielsen et~al.(2011)Nielsen, D'Anna, Karl, Aursnes, Boreave, and
+  coauthors}]{2596}
+Nielsen, C.~J., D'Anna, B., Karl, M., Aursnes, M., Boreave, A., and coauthors:
+  Atmospheric Degradation of Amines. Summary Report: Photo-oxidation of
+  methylamine, dimethylamine and trimethylamine, CLIMIT project no. 201604,
+  NILU Report OR 2/2011, Norwegian Institute for Air Research, Kjeller, Norway,
+  \url{http://www.nilu.no}, 2011.
+
+\bibitem[{Nielsen et~al.(1991)Nielsen, Sidebottom, Donlon, and Treacy}]{3044}
+Nielsen, O.~J., Sidebottom, H.~W., Donlon, M., and Treacy, J.: Rate constants
+  for the gas-phase reactions of OH radicals and Cl atoms with $n$-alkyl
+  nitrites at atmospheric pressure and 298 K, Int. J. Chem. Kinetics, 23,
+  1095--1109, \doi{10.1002/kin.550231204}, 1991.
+
+\bibitem[{O'Dowd and Hoffmann(2005)}]{3369}
+O'Dowd, C.~D. and Hoffmann, T.: Coastal new particle formation: a review of the
+  current state-of-the-art, Environ. Chem., 2, 245--255, \doi{10.1071/EN05077},
+  2005.
+
+\bibitem[{Ogryzlo et~al.(1981)Ogryzlo, Paltenghi, and Bayes}]{3057}
+Ogryzlo, E.~A., Paltenghi, R., and Bayes, K.~D.: The rate of reaction of methyl
+  radicals with ozone, Int. J. Chem. Kinetics, 13, 667--675,
+  \doi{10.1002/kin.550130707}, 1981.
+
+\bibitem[{Olzmann et~al.(1997)Olzmann, Kraka, Cremer, Gutbrod, and
+  Andersson}]{3047}
+Olzmann, M., Kraka, E., Cremer, D., Gutbrod, R., and Andersson, S.: Energetics,
+  kinetics, and product distributions of the reactions of ozone with ethene and
+  2,3-dimethyl-2-butene, J. Phys. Chem. A, 101, 9421--9429,
+  \doi{10.1021/JP971663E}, 1997.
+
+\bibitem[{Orlando and Tyndall(2001)}]{3150}
+Orlando, J.~J. and Tyndall, G.~S.: The atmospheric chemistry of the
+  \chem{HC(O)CO} radical, Int. J. Chem. Kinetics, 33, 149--156,
+  \doi{10.1002/1097-4601(200103)33:3<149::AID-KIN1008>3.0.CO;2-1}, 2001.
+
+\bibitem[{Orlando and Tyndall(2012)}]{3175}
+Orlando, J.~J. and Tyndall, G.~S.: Laboratory studies of organic peroxy radical
+  chemistry: an overview with emphasis on recent issues of atmospheric
+  significance, Chem. Soc. Rev., 41, 6294--6317, \doi{10.1039/C2CS35166H},
+  2012.
+
+\bibitem[{Orlando et~al.(1998)Orlando, Tyndall, Bilde, Ferronato, Wallington,
+  Vereecken, and Peeters}]{2425}
+Orlando, J.~J., Tyndall, G.~S., Bilde, M., Ferronato, C., Wallington, T.~J.,
+  Vereecken, L., and Peeters, J.: Laboratory and theoretical study of the oxy
+  radicals in the OH- and Cl-initiated oxidation of ethene, J. Phys. Chem. A,
+  102, 8116--8123, \doi{10.1021/JP981937D}, 1998.
+
+\bibitem[{Orlando et~al.(1999{\natexlab{a}})Orlando, Tyndall, Fracheboud,
+  Estupinan, Haberkorn, and Zimmer}]{2510}
+Orlando, J.~J., Tyndall, G.~S., Fracheboud, J.~M., Estupinan, E.~G., Haberkorn,
+  S., and Zimmer, A.: The rate and mechanism of the gas-phase oxidation of
+  hydroxyacetone, Atmos. Environ., 33, 1621--1629,
+  \doi{10.1016/S1352-2310(98)00386-0}, 1999{\natexlab{a}}.
+
+\bibitem[{Orlando et~al.(1999{\natexlab{b}})Orlando, Tyndall, and
+  Paulson}]{3147}
+Orlando, J.~J., Tyndall, G.~S., and Paulson, S.~E.: Mechanism of the
+  \chem{OH}-initiated oxidation of methacrolein, Geophys. Res. Lett., 26,
+  2191--2194, \doi{10.1029/1999GL900453}, 1999{\natexlab{b}}.
+
+\bibitem[{Orlando et~al.(2002)Orlando, Tyndall, Bertman, Chen, and
+  Burkholder}]{1629}
+Orlando, J.~J., Tyndall, G.~S., Bertman, S.~B., Chen, W., and Burkholder,
+  J.~B.: Rate coefficient for the reaction of \chem{OH} with
+  \chem{CH_2=C(CH_3)C(O)OONO_2} (MPAN), Atmos. Environ., 36, 1895--1900,
+  \doi{10.1016/S1352-2310(02)00090-0}, 2002.
+
+\bibitem[{Ouyang et~al.(2013)Ouyang, McLeod, Jones, and Bloss}]{3048}
+Ouyang, B., McLeod, M.~W., Jones, R.~L., and Bloss, W.~J.: \chem{NO_3} radical
+  production from the reaction between the Criegee intermediate \chem{CH_2OO}
+  and \chem{NO_2}, Phys. Chem. Chem. Phys., 15, 17\,070--17\,075,
+  \doi{10.1039/c3cp53024h}, 2013.
+
+\bibitem[{Paulot et~al.(2009{\natexlab{a}})Paulot, Crounse, Kjaergaard, Kroll,
+  Seinfeld, and Wennberg}]{3159}
+Paulot, F., Crounse, J.~D., Kjaergaard, H.~G., Kroll, J.~H., Seinfeld, J.~H.,
+  and Wennberg, P.~O.: Isoprene photooxidation: new insights into the
+  production of acids and organic nitrates, Atmos. Chem. Phys., 9, 1479--1501,
+  \doi{10.5194/ACP-9-1479-2009}, 2009{\natexlab{a}}.
+
+\bibitem[{Paulot et~al.(2009{\natexlab{b}})Paulot, Crounse, Kjaergaard,
+  K{\"u}rten, {St.~Clair}, Seinfeld, and Wennberg}]{3151}
+Paulot, F., Crounse, J.~D., Kjaergaard, H.~G., K{\"u}rten, A., {St.~Clair},
+  J.~M., Seinfeld, J.~H., and Wennberg, P.~O.: Unexpected epoxide formation in
+  the gas-phase photooxidation of isoprene, Science, 325,
+  \doi{10.1126/science.1172910}, 2009{\natexlab{b}}.
+
+\bibitem[{Paulot et~al.(2011)Paulot, Wunch, Crounse, Toon, Millet, DeCarlo,
+  Vigouroux, Deutscher, Gonz\'alez~Abad, Notholt, Warneke, Hannigan, Warneke,
+  {de Gouw}, Dunlea, De~Mazi\`ere, Griffith, Bernath, Jimenez, and
+  Wennberg}]{3038}
+Paulot, F., Wunch, D., Crounse, J.~D., Toon, G.~C., Millet, D.~B., DeCarlo,
+  P.~F., Vigouroux, C., Deutscher, N.~M., Gonz\'alez~Abad, G., Notholt, J.,
+  Warneke, T., Hannigan, J.~W., Warneke, C., {de Gouw}, J.~A., Dunlea, E.~J.,
+  De~Mazi\`ere, M., Griffith, D. W.~T., Bernath, P., Jimenez, J.~L., and
+  Wennberg, P.~O.: Importance of secondary sources in the atmospheric budgets
+  of formic and acetic acids, Atmos. Chem. Phys., 11, 1989--2013,
+  \doi{10.5194/acp-11-1989-2011}, 2011.
+
+\bibitem[{Peeters and Nguyen(2012)}]{3181}
+Peeters, J. and Nguyen, T.~L.: Unusually fast 1,6-H shifts of enolic hydrogens
+  in peroxy radicals: formation of the first-generation \chem{C_2} and
+  \chem{C_3} carbonyls in the oxidation of isoprene, J. Phys. Chem. A, 116,
+  6134--6141, \doi{10.1021/jp211447q}, 2012.
+
+\bibitem[{Peeters et~al.(2014)Peeters, M\"uller, Stavrakou, and Nguyen}]{3183}
+Peeters, J., M\"uller, J.-F., Stavrakou, T., and Nguyen, V.~S.: Hydroxyl
+  radical recycling in isoprene oxidation driven by hydrogen bonding and
+  hydrogen tunneling: the upgraded LIM1 mechanism, J. Phys. Chem. A, 118,
+  8625--8643, \doi{10.1021/jp5033146}, 2014.
+
+\bibitem[{Pires et~al.(1994)Pires, Rossi, and Ross}]{2581}
+Pires, M., Rossi, M.~J., and Ross, D.~S.: Kinetic and mechanistic aspects of
+  the \chem{NO} oxidation by \chem{O_2} in aqueous phase, Int. J. Chem.
+  Kinetics, 26, 1207--1227, 1994.
+
+\bibitem[{Plane et~al.(2006)Plane, Joseph, Allan, Ashworth, and
+  Francisco}]{1788}
+Plane, J. M.~C., Joseph, D.~M., Allan, B.~J., Ashworth, S.~H., and Francisco,
+  J.~S.: An experimental and theoretical study of the reactions \chem{OIO} +
+  \chem{NO} and \chem{OIO} + \chem{OH}, J. Phys. Chem. A, 110, 93--100,
+  \doi{10.1021/JP055364Y}, 2006.
+
+\bibitem[{Platz et~al.(1998)Platz, Nielsen, Wallington, Ball, Hurley, Straccia,
+  Schneider, and Sehested}]{3172}
+Platz, J., Nielsen, O.~J., Wallington, T.~J., Ball, J.~C., Hurley, M.~D.,
+  Straccia, A.~M., Schneider, W.~F., and Sehested, J.: Atmospheric chemistry of
+  the phenoxy radical, \chem{C_6H_5O(\cdot)}: UV spectrum and kinetics of its
+  reaction with \chem{NO}, \chem{NO_2}, and \chem{O_2}, J. Phys. Chem. A, 102,
+  7964--7974, \doi{10.1021/jp982221l}, 1998.
+
+\bibitem[{Reiner and Arnold(1993)}]{2634}
+Reiner, T. and Arnold, F.: Laboratory flow reactor measurements of the reaction
+  \chem{SO_3} + \chem{H_2O} + \chem{M} $\rightarrow$ \chem{H_2SO_4} + M:
+  Implications for gaseous \chem{H_2SO_4} and aerosol formation in the plumes
+  of jet aircraft, Geophys. Res. Lett., 20(23), 2659--2662, 1993.
+
+\bibitem[{Rickard and Pascoe(2009)}]{2419}
+Rickard, A. and Pascoe, S.: The Master Chemical Mechanism (MCM),
+  \urlprefix\url{http://mcm.leeds.ac.uk}, 2009.
+
+\bibitem[{Rickard et~al.(1999)Rickard, Johnson, McGill, and Marston}]{3200}
+Rickard, A.~R., Johnson, D., McGill, C.~D., and Marston, G.: \chem{OH} yields
+  in the gas-phase reactions of ozone with alkenes, J. Phys. Chem. A, 103,
+  7656--7664, \doi{10.1021/JP9916992}, 1999.
+
+\bibitem[{Riffault et~al.(2005)Riffault, Bedjanian, and Poulet}]{3370}
+Riffault, V., Bedjanian, Y., and Poulet, G.: Kinetic and mechanistic study of
+  the reactions of \chem{OH} with \chem{IBr} and \chem{HOI}, J. Photochem.
+  Photobiol. A: Chem., 176, 155--161, \doi{10.1016/j.jphotochem.2005.09.002},
+  2005.
+
+\bibitem[{Roberts et~al.(2011)Roberts, Veres, Cochran, Warneke, Burling,
+  Yokelson, Lerner, Gilman, Kuster, Fall, and de~Gouw}]{2613}
+Roberts, J.~M., Veres, P.~R., Cochran, A.~K., Warneke, C., Burling, I.~R.,
+  Yokelson, R.~J., Lerner, B., Gilman, J.~B., Kuster, W.~C., Fall, R., and
+  de~Gouw, J.: Isocyanic acid in the atmosphere and its possible link to
+  smoke-related health effects, Proc. Natl. Acad. Sci. USA, 108, 8966--8971,
+  2011.
+
+\bibitem[{Roble(1995)}]{2615}
+Roble, R.~G.: Energetics of the mesosphere and thermosphere, in: The upper
+  Mesosphere and Lower Thermosphere: A Review of Experiment and Theory,
+  Geophysical Monograph 87, edited by Johnson, R.~M. and Killeen, T.~L., pp.
+  1--23, American Geophysical Union, Washington, DC, USA, 1995.
+
+\bibitem[{Ross et~al.(1992)Ross, Mallard, Helman, Bielski, Buxton, Cabelli,
+  Greenstock, Huie, and Neta}]{222}
+Ross, A.~B., Mallard, W.~G., Helman, W.~P., Bielski, B. H.~J., Buxton, G.~V.,
+  Cabelli, D.~E., Greenstock, C.~L., Huie, R.~E., and Neta, P.: NDRL-NIST
+  Solution Kinetics Database: - Ver.~1, National Institute of Standards and
+  Technology, Gaithersburg, MD, 1992.
+
+\bibitem[{Roth et~al.(2010)Roth, Chakir, and Ferhati}]{3201}
+Roth, E., Chakir, A., and Ferhati, A.: Study of a benzoylperoxy radical in the
+  gas phase: ultraviolet spectrum and \chem{C_6H_5C(O)O_2} + \chem{HO_2}
+  reaction between 295 and 357 K, J. Phys. Chem. A, 114, 10\,367--10\,379,
+  \doi{10.1021/jp1021467}, 2010.
+
+\bibitem[{Rush and Bielski(1985)}]{3348}
+Rush, J.~D. and Bielski, B. H.~J.: Pulse radiolytic studies of the reaction of
+  \chem{HO_2}/\chem{O_2^-} with \chem{Fe(II)}/\chem{Fe(III)} ions. The
+  reactivity of \chem{HO_2}/\chem{O_2^-} with ferric ions and its implication
+  on the occurrence of the Haber-Weiss reaction, J. Phys. Chem., 89,
+  5062--5066, \doi{10.1021/j100269a035}, 1985.
+
+\bibitem[{Sander et~al.(2014)Sander, J\"ockel, Kirner, Kunert, Landgraf, and
+  Pozzer}]{2342}
+Sander, R., J\"ockel, P., Kirner, O., Kunert, A.~T., Landgraf, J., and Pozzer,
+  A.: The photolysis module JVAL-14, compatible with the MESSy standard, and
+  the JVal PreProcessor (JVPP), Geosci. Model Dev., 7, 2653--2662,
+  \doi{10.5194/GMD-7-2653-2014}, 2014.
+
+\bibitem[{Sander et~al.(2018)Sander, Baumgaertner, Cabrera-Perez, Frank,
+  Groo\ss, Gromov, Harder, Huijnen, J\"ockel, Karydis, Niemeyer, Pozzer, Riede,
+  Schultz, Taraborrelli, and Tauer}]{3264}
+Sander, R., Baumgaertner, A., Cabrera-Perez, D., Frank, F., Groo\ss, J.-U.,
+  Gromov, S., Harder, H., Huijnen, V., J\"ockel, P., Karydis, V.~A., Niemeyer,
+  K., Pozzer, A., Riede, H., Schultz, M., Taraborrelli, D., and Tauer, S.: The
+  atmospheric chemistry box model CAABA/MECCA-4.0gmdd, Geosci. Model Dev.
+  Discuss., \doi{10.5194/gmd-2018-201}, 2018.
+
+\bibitem[{Sander et~al.(2006)Sander, Friedl, Golden, Kurylo, Moortgat,
+  Keller-Rudek, Wine, Ravishankara, Kolb, Molina, Finlayson-Pitts, Huie, and
+  Orkin}]{1945}
+Sander, S.~P., Friedl, R.~R., Golden, D.~M., Kurylo, M.~J., Moortgat, G.~K.,
+  Keller-Rudek, H., Wine, P.~H., Ravishankara, A.~R., Kolb, C.~E., Molina,
+  M.~J., Finlayson-Pitts, B.~J., Huie, R.~E., and Orkin, V.~L.: Chemical
+  Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation
+  Number 15, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, CA,
+  \urlprefix\url{http://jpldataeval.jpl.nasa.gov}, 2006.
+
+\bibitem[{Schwartz(1983)}]{2582}
+Schwartz, S.~E.: Advances in Environmental Science and Technology, John Wiley
+  \& Sons, New York, 1983.
+
+\bibitem[{Schwartz and White(1981)}]{449}
+Schwartz, S.~E. and White, W.~H.: Solubility equilibria of the nitrogen oxides
+  and oxyacids in dilute aqueous solution, in: Advances in Environmental
+  Science and Engineering, edited by Pfafflin, J.~R. and Ziegler, E.~N.,
+  vol.~4, pp. 1--45, Gordon and Breach Science Publishers, NY, 1981.
+
+\bibitem[{Scribano et~al.(2006)Scribano, Goldman, Saykally, and
+  Leforestier}]{3052}
+Scribano, Y., Goldman, N., Saykally, R.~J., and Leforestier, C.: Water dimers
+  in the atmosphere III: Equilibrium constant from a flexible potential, J.
+  Phys. Chem. A, 110, 5411--5419, \doi{10.1021/jp056759k}, 2006.
+
+\bibitem[{Sehested et~al.(1998)Sehested, Christensen, Nielsen, Bilde,
+  Wallington, Schneider, Orlando, and Tyndall}]{3166}
+Sehested, J., Christensen, L.~K., Nielsen, O.~J., Bilde, M., Wallington, T.~J.,
+  Schneider, W.~F., Orlando, J.~J., and Tyndall, G.~S.: Atmospheric chemistry
+  of acetone: Kinetic study of the \chem{CH_3C(O)CH_2O_2+NO/NO_2} reactions and
+  decomposition of \chem{CH_3C(O)CH_2O_2NO_2}, Int. J. Chem. Kinetics, 30,
+  475--489, \doi{10.1002/(SICI)1097-4601(1998)30:7<475::AID-KIN4>3.0.CO;2-P},
+  1998.
+
+\bibitem[{Sehested et~al.(1968)Sehested, Rasmussen, and Fricke}]{213}
+Sehested, K., Rasmussen, O.~L., and Fricke, H.: Rate constants of \chem{OH}
+  with \chem{HO_2}, \chem{O_2^-}, and \chem{H_2O_2^+} from hydrogen peroxide
+  formation in pulse-irradiated oxygenated water, J. Phys. Chem., 72, 626--631,
+  \doi{10.1021/J100848A040}, 1968.
+
+\bibitem[{Sehested et~al.(1983)Sehested, Holcman, and Hart}]{211}
+Sehested, K., Holcman, J., and Hart, E.~J.: Rate constants and products of the
+  reactions of \chem{e_{aq}^-}, \chem{O_2^-} and \chem{H} with ozone in aqueous
+  solutions, J. Phys. Chem., 87, 1951--1954, \doi{10.1021/J100234A024}, 1983.
+
+\bibitem[{Seinfeld and Pandis(1998)}]{935}
+Seinfeld, J.~H. and Pandis, S.~N.: Atmospheric Chemistry and Physics, John
+  Wiley \& Sons, Inc., 1998.
+
+\bibitem[{Shoute et~al.(1991)Shoute, Alfassi, Neta, and Huie}]{277}
+Shoute, L. C.~T., Alfassi, Z.~B., Neta, P., and Huie, R.~E.: Temperature
+  dependence of the rate constants for reaction of dihalide and azide radicals
+  with inorganic reductants, J. Phys. Chem., 95, 3238--3242,
+  \doi{10.1021/J100161A050}, 1991.
+
+\bibitem[{Simi\'c et~al.(1971)Simi\'c, Neta, and Hayon}]{2603}
+Simi\'c, M., Neta, P., and Hayon, E.: Pulse radiolytic investigation of
+  aliphatic amines in aqueous solution, Int. J. Radiat. Phys. Chem., 3,
+  309--320, 1971.
+
+\bibitem[{Sivakumaran et~al.(2003)Sivakumaran, H\"olscher, Dillon, and
+  Crowley}]{1634}
+Sivakumaran, V., H\"olscher, D., Dillon, T.~J., and Crowley, J.~N.: Reaction
+  between \chem{OH} and \chem{HCHO}: temperature dependent rate coefficients
+  (202-399~\unit{K}) and product pathways (298~\unit{K}), Phys. Chem. Chem.
+  Phys., 5, 4821--4827, \doi{10.1039/B306859E}, 2003.
+
+\bibitem[{So et~al.(2014)So, Wille, and {da Silva}}]{3179}
+So, S., Wille, U., and {da Silva}, G.: Atmospheric chemistry of enols: a
+  theoretical study of the vinyl alcohol + \chem{OH} + \chem{O_2} reaction
+  mechanism, Environ. Sci. Technol., 48, 6694--6701, \doi{10.1021/es500319q},
+  2014.
+
+\bibitem[{Sokolov et~al.(1999)Sokolov, Hurley, Ball, Wallington, Nelsen,
+  Barnes, and Becker}]{3063}
+Sokolov, O., Hurley, M.~D., Ball, J.~C., Wallington, T.~J., Nelsen, W., Barnes,
+  I., and Becker, K.~H.: Kinetics of the reactions of chlorine atoms with
+  \chem{CH_3ONO} and \chem{CH_3ONO_2}, Int. J. Chem. Kinetics, 31, 357--359,
+  \doi{10.1002/(SICI)1097-4601(1999)31:5<357::AID-KIN5>3.0.CO;2-6}, 1999.
+
+\bibitem[{Solberg et~al.(1997)Solberg, Stordal, and Hov}]{2093}
+Solberg, S., Stordal, F., and Hov, {\O}.: Tropospheric ozone at high latitudes
+  in clean and polluted air masses, a climatological study, J. Atmos. Chem.,
+  28, 111--123, \doi{10.1023/A:1005766612853}, 1997.
+
+\bibitem[{Stone et~al.(2014)Stone, Blitz, Daubney, Howes, and Seakins}]{3049}
+Stone, D., Blitz, M., Daubney, L., Howes, N. U.~M., and Seakins, P.: Kinetics
+  of \chem{CH_2OO} reactions with \chem{SO_2}, \chem{NO_2}, \chem{NO},
+  \chem{H_2O} and \chem{CH_3CHO} as a function of pressure, Phys. Chem. Chem.
+  Phys., 16, 1139--1149, \doi{10.1039/c3cp54391a}, 2014.
+
+\bibitem[{Strekowski et~al.(2010)Strekowski, Nicovich, and Wine}]{3197}
+Strekowski, R.~S., Nicovich, J.~M., and Wine, P.~H.: Kinetic and mechanistic
+  study of the Reactions of \chem{O(^1D_2)} with \chem{HCN} and \chem{CH_3CN},
+  Chem. Phys. Chem., 11, 3942--3955, \doi{10.1002/cphc.201000550}, 2010.
+
+\bibitem[{Tao and Li(1999)}]{3171}
+Tao, Z. and Li, Z.: A kinetics study on reactions of \chem{C_6H_5O} with
+  \chem{C_6H_5O} and \chem{O_3} at 298 K, Int. J. Chem. Kinetics, 31, 65--72,
+  \doi{10.1002/(SICI)1097-4601(1999)31:1<65::AID-KIN8>3.0.CO;2-J}, 1999.
+
+\bibitem[{Taraborrelli(2010)}]{3030}
+Taraborrelli, D.: Isoprene oxidation and its impacts on the atmospheric
+  composition, Ph.D. thesis, Johannes Gutenberg-Universit\"at, Mainz, Germany,
+  \urlprefix\url{http://d-nb.info/1003538770/34}, 2010.
+
+\bibitem[{Taraborrelli et~al.(2009)Taraborrelli, Lawrence, Butler, Sander, and
+  Lelieveld}]{2272}
+Taraborrelli, D., Lawrence, M.~G., Butler, T.~M., Sander, R., and Lelieveld,
+  J.: Mainz Isoprene Mechanism 2 (MIM2): an isoprene oxidation mechanism for
+  regional and global atmospheric modelling, Atmos. Chem. Phys., 9, 2751--2777,
+  \doi{10.5194/ACP-9-2751-2009}, 2009.
+
+\bibitem[{Thornton and Laurence(1973)}]{3267}
+Thornton, A.~T. and Laurence, G.~S.: Kinetics of oxidation of transition-metal
+  ions by halogen radical anions. Part I. The oxidation of iron(II) by
+  dibromide and dichloride ions generated by flash photolysis, J. Chem. Soc.
+  Dalton Trans., pp. 804--813, \doi{10.1039/DT9730000804}, 1973.
+
+\bibitem[{Tsimpidi et~al.(2010)Tsimpidi, Karydis, Zavala, Lei, Molina, Ulbrich,
+  Jimenez, and Pandis}]{2637}
+Tsimpidi, A.~P., Karydis, V.~A., Zavala, M., Lei, W., Molina, L., Ulbrich,
+  I.~M., Jimenez, J.~L., and Pandis, S.~N.: Evaluation of the volatility
+  basis-set approach for the simulation of organic aerosol formation in the
+  Mexico City metropolian area, Atmos. Chem. Phys., 10, 525--546, 2010.
+
+\bibitem[{Tyndall et~al.(1995)Tyndall, Staffelbach, Orlando, and
+  Calvert}]{1616}
+Tyndall, G.~S., Staffelbach, T.~A., Orlando, J.~J., and Calvert, J.~G.: Rate
+  coefficients for the reactions of \chem{OH} radicals with methylglyoxal and
+  acetaldehyde, Int. J. Chem. Kinetics, 27, 1009--1020,
+  \doi{10.1002/KIN.550271006}, 1995.
+
+\bibitem[{Tyndall et~al.(1996)Tyndall, Orlando, Wallington, Sehested, and
+  Nielsen}]{3211}
+Tyndall, G.~S., Orlando, J.~J., Wallington, T.~J., Sehested, J., and Nielsen,
+  O.~J.: Kinetics of the reactions of acetonitrile with chlorine and fluorine
+  atoms, J. Phys. Chem., 100, 660--668, \doi{10.1021/jp9521417}, 1996.
+
+\bibitem[{Tyndall et~al.(2001{\natexlab{a}})Tyndall, Cox, Granier, Lesclaux,
+  Moortgat, Pilling, Ravishankara, and Wallington}]{1613}
+Tyndall, G.~S., Cox, R.~A., Granier, C., Lesclaux, R., Moortgat, G.~K.,
+  Pilling, M.~J., Ravishankara, A.~R., and Wallington, T.~J.: The atmospheric
+  chemistry of small organic peroxy radicals, J. Geophys. Res., 106D,
+  12\,157--12\,182, \doi{10.1029/2000JD900746}, 2001{\natexlab{a}}.
+
+\bibitem[{Tyndall et~al.(2001{\natexlab{b}})Tyndall, Orlando, Wallington, and
+  Hurley}]{3212}
+Tyndall, G.~S., Orlando, J.~J., Wallington, T.~J., and Hurley, M.~D.: Products
+  of the chlorine-atom- and hydroxyl-radical-initiated oxidation of
+  \chem{CH_3CN}, J. Phys. Chem. A, 105, 5380--5384, \doi{10.1021/jp004318p},
+  2001{\natexlab{b}}.
+
+\bibitem[{{van den Bergh} and Troe(1976)}]{1644}
+{van den Bergh}, H. and Troe, J.: Kinetic and thermodynamic properties of
+  \chem{INO} and \chem{INO_2} intermediate complexes in iodine recombination,
+  J. Chem. Phys., 64, 736--742, \doi{10.1063/1.432220}, 1976.
+
+\bibitem[{Vereecken and Francisco(2012)}]{3040}
+Vereecken, L. and Francisco, J.~S.: Theoretical studies of atmospheric reaction
+  mechanisms in the troposphere, Chem. Soc. Rev., 41, 6259--6293,
+  \doi{10.1039/c2cs35070j}, 2012.
+
+\bibitem[{Vereecken and Peeters(2012)}]{3019}
+Vereecken, L. and Peeters, J.: A theoretical study of the OH-initiated
+  gas-phase oxidation mechanism of $\beta$-pinene (\chem{C_{10}H_{16}}): first
+  generation products, Phys. Chem. Chem. Phys., 14, 3802--3815,
+  \doi{10.1039/c2cp23711c}, 2012.
+
+\bibitem[{Vereecken et~al.(2007)Vereecken, M\"{u}ller, and Peeters}]{3017}
+Vereecken, L., M\"{u}ller, J.-F., and Peeters, J.: Low-volatility
+  poly-oxygenates in the OH-initiated atmospheric oxidation of $\alpha$-pinene:
+  impact of non-traditional peroxyl radical chemistry, Phys. Chem. Chem. Phys.,
+  9, 5241--5248, \doi{10.1039/b708023a}, 2007.
+
+\bibitem[{Vereecken et~al.(2012)Vereecken, Harder, and Novelli}]{3039}
+Vereecken, L., Harder, H., and Novelli, A.: The reaction of Criegee
+  intermediates with NO, \chem{RO_2}, and \chem{SO_2}, and their fate in the
+  atmosphere, Phys. Chem. Chem. Phys., 14, 14\,682--14\,695,
+  \doi{10.1039/c2cp42300f}, 2012.
+
+\bibitem[{Vereecken et~al.(2014)Vereecken, Harder, and Novelli}]{3053}
+Vereecken, L., Harder, H., and Novelli, A.: The reactions of Criegee
+  intermediates with alkenes, ozone, and carbonyl oxides, Phys. Chem. Chem.
+  Phys., 16, 4039--4049, \doi{10.1039/c3cp54514h}, 2014.
+
+\bibitem[{{von Glasow} et~al.(2002){von Glasow}, Sander, Bott, and
+  Crutzen}]{1456}
+{von Glasow}, R., Sander, R., Bott, A., and Crutzen, P.~J.: Modeling halogen
+  chemistry in the marine boundary layer, 1. Cloud-free MBL, J. Geophys. Res.,
+  107D, 4341, \doi{10.1029/2001JD000942}, 2002.
+
+\bibitem[{von Kuhlmann(2001)}]{1612}
+von Kuhlmann, R.: Tropospheric photochemistry of ozone, its precursors and the
+  hydroxyl radical: A 3D-modeling study considering non-methane hydrocarbons,
+  Ph.D. thesis, Johannes Gutenberg-Universit\"at, Mainz, Germany, 2001.
+
+\bibitem[{von Kuhlmann et~al.(2003)von Kuhlmann, Lawrence, Crutzen, and
+  Rasch}]{1584}
+von Kuhlmann, R., Lawrence, M.~G., Crutzen, P.~J., and Rasch, P.~J.: A model
+  for studies of tropospheric ozone and nonmethane hydrocarbons: Model
+  description and ozone results, J. Geophys. Res., 108D, 4294,
+  \doi{10.1029/2002JD002893}, 2003.
+
+\bibitem[{Wallington et~al.(2018)Wallington, Ammann, Cox, Crowley, Herrmann,
+  Jenkin, McNeill, Mellouki, Rossi, and Troe}]{1745}
+Wallington, T.~J., Ammann, M., Cox, R.~A., Crowley, J.~N., Herrmann, H.,
+  Jenkin, M.~E., McNeill, V., Mellouki, A., Rossi, M.~J., and Troe, J.: IUPAC
+  Task group on atmospheric chemical kinetic data evaluation: Evaluated kinetic
+  data, \urlprefix\url{http://iupac.pole-ether.fr}, 2018.
+
+\bibitem[{Wang and Margerum(1994)}]{317}
+Wang, T.~X. and Margerum, D.~W.: Kinetics of reversible chlorine hydrolysis:
+  Temperature dependence and general-acid/base-assisted mechanisms, Inorg.
+  Chem., 33, 1050--1055, \doi{10.1021/IC00084A014}, 1994.
+
+\bibitem[{Wang et~al.(1989)Wang, Nagy, and Margerum}]{553}
+Wang, Y.~L., Nagy, J.~C., and Margerum, D.~W.: Kinetics of hydrolysis of iodine
+  monochloride measured by the pulsed-accelerated-flow method, J. Am. Chem.
+  Soc., 111, 7838--7844, \doi{10.1021/JA00202A026}, 1989.
+
+\bibitem[{Warneck(1991)}]{1}
+Warneck, P.: Chemical reactions in clouds, Fresenius J. Anal. Chem., 340,
+  585--590, \doi{10.1007/BF00322434}, 1991.
+
+\bibitem[{Warneck(1999)}]{1257}
+Warneck, P.: The relative importance of various pathways for the oxidation of
+  sulfur dioxide and nitrogen dioxide in sunlit continental fair weather
+  clouds, Phys. Chem. Chem. Phys., 1, 5471--5483, \doi{10.1039/A906558J}, 1999.
+
+\bibitem[{Warneck(2018)}]{3337}
+Warneck, P.: The oxidation of sulfur(IV) by reaction with iron(III): a critical
+  review and data analysis, Phys. Chem. Chem. Phys., 20, 4020--4037,
+  \doi{10.1039/c7cp07584g}, 2018.
+
+\bibitem[{Wayne et~al.(1991)Wayne, Barnes, Biggs, Burrows, Canosa-Mas, Hjorth,
+  {Le Bras}, Moortgat, Perner, Poulet, Restelli, and Sidebottom}]{94}
+Wayne, R.~P., Barnes, I., Biggs, P., Burrows, J.~P., Canosa-Mas, C.~E., Hjorth,
+  J., {Le Bras}, G., Moortgat, G.~K., Perner, D., Poulet, G., Restelli, G., and
+  Sidebottom, H.: The nitrate radical: Physics, chemistry, and the atmosphere,
+  Atmos. Environ., 25A, 1--203, \doi{10.1016/0960-1686(91)90192-A}, 1991.
+
+\bibitem[{Weast(1980)}]{153}
+Weast, R.~C., ed.: CRC Handbook of Chemistry and Physics, 61st Edition, CRC
+  Press, Inc., Boca Raton, FL, 1980.
+
+\bibitem[{Weinstein-Lloyd and Schwartz(1991)}]{205}
+Weinstein-Lloyd, J. and Schwartz, S.~E.: Low-intensity radiolysis study of
+  free-radical reactions in cloudwater: \chem{H_2O_2} production and
+  destruction, Environ. Sci. Technol., 25, 791--800, \doi{10.1021/ES00016A027},
+  1991.
+
+\bibitem[{Welz et~al.(2012)Welz, Savee, Osborn, Vasu, Percival, Shallcross, and
+  Taatjes}]{3041}
+Welz, O., Savee, J.~D., Osborn, D.~L., Vasu, S.~S., Percival, C.~J.,
+  Shallcross, D.~E., and Taatjes, C.~A.: Direct kinetic measurements of Criegee
+  intermediate (\chem{CH_2OO}) formed by reaction of \chem{CH_2I} with
+  \chem{O_2}, Science, 335, 204--207, \doi{10.1126/science.1213229}, 2012.
+
+\bibitem[{Welz et~al.(2014)Welz, Eskola, Sheps, Rotavera, Savee, Scheer,
+  Osborn, Lowe, Booth, Xiao, Khan, Percival, Shallcross, and Taatjes}]{3051}
+Welz, O., Eskola, A.~J., Sheps, L., Rotavera, B., Savee, J.~D., Scheer, A.~M.,
+  Osborn, D.~L., Lowe, D., Booth, A.~M., Xiao, P., Khan, M. A.~H., Percival,
+  C.~J., Shallcross, D.~E., and Taatjes, C.~A.: Rate coefficients of C1 and C2
+  Criegee intermediate reactions with formic and acetic acid near the collision
+  limit: Direct kinetics measurements and atmospheric implications, Angew.
+  Chem., 126, 4635--4638, \doi{10.1002/ange.201400964}, 2014.
+
+\bibitem[{Wine et~al.(1989)Wine, Tang, Thorn, Wells, and Davis}]{86}
+Wine, P.~H., Tang, Y., Thorn, R.~P., Wells, J.~R., and Davis, D.~D.: Kinetics
+  of aqueous phase reactions of the \chem{SO_4^-} radical with potential
+  importance in cloud chemistry, J. Geophys. Res., 94D, 1085--1094,
+  \doi{10.1029/JD094ID01P01085}, 1989.
+
+\bibitem[{Wingenter et~al.(1999)Wingenter, Sive, Blake, and Rowland}]{1245}
+Wingenter, O.~W., Sive, B.~C., Blake, N.~J., and Rowland, F.~S.: Atomic
+  chlorine concentrations determined from ethane and hydroxyl measurements made
+  over the Central Pacific Ocean, Eos, Trans. AGU (Abstract Supplement), 80,
+  F149--F150, 1999.
+
+\bibitem[{Wu et~al.(1980)Wu, Wong, and {Di Bartolo}}]{987}
+Wu, D., Wong, D., and {Di Bartolo}, B.: Evolution of \chem{Cl_2^-} in aqueous
+  \chem{NaCl} solutions, J. Photochem., 14, 303--310,
+  \doi{10.1016/0047-2670(80)85102-1}, 1980.
+
+\bibitem[{Yiin and Margerum(1990)}]{2164}
+Yiin, B.~S. and Margerum, D.~W.: Nonmetal redox kinetics: reactions of iodine
+  and triiodide with sulfite and hydrogen sulfite and the hydrolysis of
+  iodosulfate, Inorg. Chem., 29, 1559--1564, \doi{10.1021/IC00333A023}, 1990.
+
+\bibitem[{Yoon et~al.(1999)Yoon, Choi, and Kim}]{3186}
+Yoon, M.-C., Choi, Y.~S., and Kim, S.~K.: The \chem{OH} production from the
+  $\pi-\pi^*$ transition of acetylacetone, Chem. Phys. Lett., 300, 207--212,
+  \doi{10.1016/S0009-2614(98)01373-6}, 1999.
+
+\bibitem[{Yu(2004)}]{1761}
+Yu, X.-Y.: Critical evaluation of rate constants and equilibrium constants of
+  hydrogen peroxide photolysis in acidic aqueous solutions containing chloride
+  ions, J. Phys. Chem. Ref. Data, 33, 747--763, \doi{10.1063/1.1695414}, 2004.
+
+\bibitem[{Zellner et~al.(1988)Zellner, Hartmann, Karth\"auser, Rh\"asa, and
+  Weibring}]{3061}
+Zellner, R., Hartmann, D., Karth\"auser, J., Rh\"asa, D., and Weibring, G.: A
+  laser photolysis/LIF study of the reactions of \chem{O(^3P)} atoms with
+  \chem{CH_3} and \chem{CH_3O_2} radicals, J. Chem. Soc. Faraday Trans. 2, 84,
+  549--568, \doi{10.1039/f29888400549}, 1988.
+
+\bibitem[{Ziajka et~al.(1994)Ziajka, Beer, and Warneck}]{3351}
+Ziajka, J., Beer, F., and Warneck, P.: Iron-catalysed oxidation of bisulphit
+  aqueous solution: evidence for free radical chain mechanism, Atmos. Environ.,
+  28, 2549--2552, \doi{10.1016/1352-2310(94)90405-7}, 1994.
+
+\end{thebibliography}

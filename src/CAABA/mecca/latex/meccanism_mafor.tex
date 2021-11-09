@@ -1,0 +1,425 @@
+\documentclass[landscape]{article}
+
+\makeatletter
+% \def\shownote#1{\expandafter\gdef\csname note#1\endcsname{}}%
+% \def\note#1#2{\@ifundefined{note#1}{\message{WARNING, NOTE NOT USED: #1}}{#1: #2}}%
+\def\note#1#2{\code{#1}: #2}%
+\makeatother
+
+\def\myhline{\ifvmode\hline\fi}
+\newcommand\tophline{\hline\noalign{\vspace{1mm}}}
+\newcommand\middlehline{\noalign{\vspace{1mm}}\hline\noalign{\vspace{1mm}}}
+\newcommand\bottomhline{\noalign{\vspace{1mm}}\hline}
+
+\usepackage{multicol}
+\usepackage{longtable}
+\usepackage{natbib}
+\usepackage{chem}
+\usepackage{rotating} % loads graphics
+\usepackage{amsmath} % \text etc.
+%\usepackage{color}
+\usepackage{colortbl}
+% http://tex.stackexchange.com/questions/43006/why-is-input-not-expandable
+\makeatletter\def\expandableinput#1{\@@input #1}\makeatother%
+
+\newif\ifdraft
+%\drafttrue
+\ifdraft
+  \usepackage{mypdfdraftcopy}
+  \draftstring{DRAFT}\draftfontsize{150}\draftangle{330}
+\fi 
+
+\textwidth26cm
+\textheight16cm
+\topmargin-10mm
+\oddsidemargin-15mm
+\parindent0mm
+\parskip1.0ex plus0.5ex minus0.5ex
+
+\setlength{\LTcapwidth}{\textwidth}
+
+\expandableinput{mecca_info.tex}
+% show aerosol phase number:
+\def\ONE{1}\ifx\apn\ONE
+  \def\FormatAq#1#2{#1(aq)} % add suffix "(aq)" to aqueous-phase species
+\else
+  \def\FormatAq#1#2{#1(a#2)} % add suffix "(a01)", "(a02)", etc. to aqueous-phase species
+\fi
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{rotate}{-90}
+\begin{minipage}{15cm}
+\vspace{-30cm}
+\begin{center}
+  \ifdraft{\Huge\bf\color{red} PRELIMINARY}\\[3mm]\fi
+  \LARGE {\bf The Chemical Mechanism of MAFOR v1.9.9}\\[3mm]
+ % \LARGE {\bf The Chemical Mechanism of MECCA}\\[3mm]
+  \Large KPP version: {\kppversion}\\[2mm]
+  \Large MECCA version: {\meccaversion}\\[2mm]
+  \Large Date: \today\\[2mm]
+  \Large Batch file: \batchfile\\[2mm]
+  \Large Integrator: \integr\\[2mm]
+  \Large Gas equation file: \gaseqnfile\\[2mm]
+  \Large Replacement file: \rplfile\\[2mm]
+  \Large Selected reactions:\\
+  ``\wanted''\\[2mm]
+  Number of aerosol phases: \apn\\[2mm]
+  Number of species in selected mechanism:\\
+  \begin{tabular}{lr}
+  Gas phase:     & \gasspc\\
+  Aqueous phase: & \aqspc\\
+  All species:   & \allspc\\
+  \end{tabular}\\[2mm]
+  Number of reactions in selected mechanism:\\
+  \begin{tabular}{lr}
+    Gas phase (Gnnn):                 & \Geqns\\
+    Aqueous phase (Annn):             & \Aeqns\\
+    Henry (Hnnn):                     & \Heqns\\
+    Photolysis (Jnnn):                & \Jeqns\\
+    Aqueous phase photolysis (PHnnn): & \PHeqns\\
+    Heterogeneous (HETnnn):           & \HETeqns\\
+    Equilibria (EQnn):                & \EQeqns\\
+    Isotope exchange (IEXnnn):        & \IEXeqns\\
+    Tagging equations (TAGnnn):       & \TAGeqns\\
+    Dummy (Dnn):                      & \Deqns\\
+    All equations:                    & \alleqns
+  \end{tabular}\\[30mm]
+  % see also IfFileExists in caaba_mecca_manual.tex:
+  \IfFileExists{/home/sander/papers/sander-caaba4-refxxxx/README}
+  {This document was created with xmecca provided as
+   part of the electronic supplement to the article\\
+  ``The atmospheric chemistry box model CAABA/MECCA-4.0''\\
+  in Geosci.\ Model Dev.\ (2018), available at:\\
+  \url{http://www.geosci-model-dev.net}} % if branch
+  {} % else branch  
+\end{center}
+\end{minipage}
+\end{rotate}
+\newpage
+
+% define latex names of kpp species
+\expandableinput{mecca_spc.tex}
+
+\begin{longtable}{llp{9cm}p{6cm}p{5cm}}
+\caption{Gas phase reactions}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endfirsthead
+\caption{Gas phase reactions (... continued)}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endhead
+\hline
+\endfoot
+\expandableinput{mecca_eqn_g.tex}
+\end{longtable}
+
+\newpage\begin{multicols}{3}
+\section*{General notes}
+
+\subsection*{Three-body reactions}
+
+Rate coefficients for three-body reactions are defined via the function
+\code{k_3rd}($T$, $M$, $k_0^{300}$, $n$, $k_{\rm inf}^{300}$, $m$,
+$f_{\rm c}$). In the code, the temperature $T$ is called \code{temp} and
+the concentration of ``air molecules'' $M$ is called \code{cair}. Using
+the auxiliary variables $k_0(T)$, $k_{\rm inf}(T)$, and $k_{\rm ratio}$,
+\code{k_3rd} is defined as:
+\begin{eqnarray}
+  k_0(T)              & = & k_0^{300} \times \left( \frac{300
+                            \unit{K}}{T} \right)^n\\
+  k_{\rm inf}(T)      & = & k_{\rm inf}^{300} \times \left( \frac{300
+                            \unit{K}}{T} \right)^m\\
+  k_{\rm ratio}       & = & \frac{k_0(T) M}{k_{\rm inf}(T)}\\
+  \mbox{\code{k_3rd}} & = & \frac{k_0(T) M}{1+k_{\rm ratio}} \times f_{\rm
+                            c}^{\left( \frac{1}{1+(\log_{10}(k_{\rm
+                            ratio}))^2} \right)}
+\end{eqnarray}
+
+A similar function, called \code{k_3rd_iupac} here, is used by
+\citet{1745} for three-body reactions. It has the same function
+parameters as \code{k_3rd} and it is defined as:
+\begin{eqnarray}
+  k_0(T)                    & = & k_0^{300} \times \left( \frac{300
+                                  \unit{K}}{T} \right)^n\\
+  k_{\rm inf}(T)            & = & k_{\rm inf}^{300} \times \left( \frac{300
+                                  \unit{K}}{T} \right)^m\\
+  k_{\rm ratio}             & = & \frac{k_0(T) M}{k_{\rm inf}(T)}\\
+  N                         & = & 0.75 - 1.27 \times \log_{10}(f_{\rm c})\\
+  \mbox{\code{k_3rd_iupac}} & = & \frac{k_0(T) M}{1+k_{\rm ratio}} \times f_{\rm
+                                  c}^{\left( \frac{1}{1+(\log_{10}(k_{\rm
+                                  ratio})/N)^2} \right)}
+\end{eqnarray}
+
+\subsection*{Structure-Activity Relationships (SAR)}
+
+Some unmeasured rate coefficients are estimated with structure-activity
+relationships, using the following parameters and substituent factors:
+
+{\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{ll}
+  \tophline
+  \multicolumn{2}{c}{$k$ for H-abstraction by \chem{OH} in \unit{cm^{-3} s^{-1}}}\\
+  \middlehline
+  \verb|k_p|          & $4.49\E{-18} \times (T/{\rm K})^2 \exp(-320\,{\rm K}/T)$\\
+  \verb|k_s|          & $4.50\E{-18} \times (T/{\rm K})^2 \exp(253\,{\rm K}/T)$\\
+  \verb|k_t|          & $2.12\E{-18} \times (T/{\rm K})^2 \exp(696\,{\rm K}/T)$\\
+  \verb|k_rohro|      & $2.1\E{-18}  \times (T/{\rm K})^2 \exp(-85\,{\rm K}/T)$\\
+  \verb|k_co2h|       & $0.7 \times k_{\chem{CH_3CO_2H+OH}}$\\
+  \verb|k_roohro|     & $0.6 \times k_{\chem{CH_3OOH+OH}}$\\
+  \middlehline
+  \verb|f_alk|        & 1.23\\
+  \verb|f_soh|        & 3.44\\
+  \verb|f_toh|        & 2.68\\
+  \verb|f_sooh|       & 8.\\
+  \verb|f_tooh|       & 8.\\
+  \verb|f_ono2|       & 0.04\\
+  \verb|f_ch2ono2|    & 0.20\\
+  \verb|f_cpan|       & 0.25\\
+  \verb|f_allyl|      & 3.6\\
+  \verb|f_cho|        & 0.55\\
+  \verb|f_co2h|       & 1.67\\
+  \verb|f_co|         & 0.73\\
+  \verb|f_o|          & 8.15\\
+  \verb|f_pch2oh|     & 1.29\\
+  \verb|f_tch2oh|     & 0.53\\
+  \bottomhline
+\end{tabular}}
+
+{\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{ll}
+  \tophline
+  \multicolumn{2}{c}{$k$ for OH-addition to double bonds in \unit{cm^{-3} s^{-1}}}\\
+  \middlehline
+  \verb|k_adp|        & $4.5\E{-12} \times (T/300\,{\rm K})^{-0.85}$\\
+  \verb|k_ads|        & $1/4 \times (1.1\E{-11} \times \exp(485\,{\rm K}/T)+$\\
+                      & $1.0\E{-11} \times \exp(553\,{\rm K}/T))$\\
+  \verb|k_adt|        & $1.922\E{-11} \times \exp(450\,{\rm K}/T) - k_{\text{ads}}$\\
+  \verb|k_adsecprim|  & $3.0\E{-11}$\\
+  \verb|k_adtertprim| & $5.7\E{-11}$\\
+  \middlehline
+  \verb|a_pan|        & 0.56\\
+  \verb|a_cho|        & 0.31\\
+  \verb|a_coch3|      & 0.76\\
+  \verb|a_ch2oh|      & 1.7\\
+  \verb|a_ch2ooh|     & 1.7\\
+  \verb|a_coh|        & 2.2\\
+  \verb|a_cooh|       & 2.2\\
+  \verb|a_co2h|       & 0.25\\
+  \verb|a_ch2ono2|    & 0.64\\
+  \bottomhline
+\end{tabular}}
+
+\subsection*{\chem{RO_2} self and cross reactions}
+
+The self and cross reactions of organic peroxy radicals are treated
+according to the permutation reaction formalism as implemented in the
+MCM \citep{2419}, as decribed by \citet{1618}. Every organic peroxy
+radical reacts in a pseudo-first-order reaction with a rate constant
+that is expressed as $k^{\rm 1st} = 2 \times \sqrt{k_{\rm self} \times
+  {\tt k\_CH3O2}} \times [\chem{RO_2}]$ where $k_{\rm self}$ =
+second-order rate coefficient of the self reaction of the organic peroxy
+radical, \code{k_CH3O2} = second-order rate coefficient of the self
+reaction of \chem{CH_3O_2}, and $[\chem{RO_2}]$ = sum of the
+concentrations of all organic peroxy radicals.
+
+\section*{Specific notes}
+
+\def\onlythischannel{Only this channel considered as the intermediate
+  radical is likely more stable than \chem{CHCH(OH)_2}.}
+
+\def\alkylnitrateneglected{Alkyl nitrate formation neglected.}
+
+\expandableinput{mecca_eqn_g_notes.tex}
+
+\end{multicols}
+
+\clearpage
+
+\begin{longtable}{llp{10cm}p{6cm}p{4cm}}
+\caption{Photolysis reactions}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endfirsthead
+\caption{Photolysis reactions (... continued)}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endhead
+\hline
+\endfoot
+J (gas) & & & & \\
+\expandableinput{mecca_eqn_j.tex}
+PH (aqueous) & & & & \\
+\myhline
+\expandableinput{mecca_eqn_ph.tex}
+\end{longtable}
+
+\begin{multicols}{3}
+\section*{General notes}
+
+$j$-values are calculated with an external module (e.g., JVAL) and then
+supplied to the MECCA chemistry.
+
+Values that originate from the Master Chemical Mechanism (MCM) by
+\citet{2419} are translated according in the following way:\\
+j(11)             $\rightarrow$ \code{jx(ip_COH2)}     \\
+j(12)             $\rightarrow$ \code{jx(ip_CHOH)}     \\
+j(15)             $\rightarrow$ \code{jx(ip_HOCH2CHO)} \\
+j(18)             $\rightarrow$ \code{jx(ip_MACR)}     \\
+j(22)             $\rightarrow$ \code{jx(ip_ACETOL)}   \\
+j(23)+j(24)       $\rightarrow$ \code{jx(ip_MVK)}      \\
+j(31)+j(32)+j(33) $\rightarrow$ \code{jx(ip_GLYOX)}    \\
+j(34)             $\rightarrow$ \code{jx(ip_MGLYOX)}   \\
+j(41)             $\rightarrow$ \code{jx(ip_CH3OOH)}   \\
+j(53)             $\rightarrow$ j(isopropyl nitrate)   \\
+j(54)             $\rightarrow$ j(isopropyl nitrate)   \\
+j(55)             $\rightarrow$ j(isopropyl nitrate)   \\
+j(56)+j(57)       $\rightarrow$ \code{jx(ip_NOA)}
+
+\section*{Specific notes}
+
+\expandableinput{mecca_eqn_j_notes.tex}
+\expandableinput{mecca_eqn_ph_notes.tex}
+
+\end{multicols}
+
+\clearpage
+
+\begin{longtable}{llp{7cm}p{6cm}p{55mm}}
+\caption{Reversible (Henry's law) equilibria and irreversible
+  (``heterogenous'') uptake}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endhead
+\hline
+\endfoot
+\expandableinput{mecca_eqn_h.tex}
+\end{longtable}
+
+\begin{multicols}{3}
+\section*{General notes}
+
+The forward (\verb|k_exf|) and backward (\verb|k_exb|) rate coefficients
+are calculated in subroutine \verb|mecca_aero_calc_k_ex| in the file
+\verb|messy_mecca_aero.f90| using accommodation coefficients and Henry's
+law constants from chemprop (see \verb|chemprop.pdf|).
+
+For uptake of X (X = \chem{N_2O_5}, \chem{ClNO_3}, or \chem{BrNO_3}) and
+subsequent reaction with \chem{H_2O}, \chem{Cl^-}, and \chem{Br^-} in
+H3201, H6300, H6301, H6302, H7300, H7301, H7302, H7601, and H7602, we
+define:
+$$k_{\rm exf}(\chem{X}) = \frac{k_{\rm mt}(\chem{X})\times {\rm LWC}}
+{[\chem{H_2O}] + 5\E2 [\chem{Cl^-}] + 3\E5 [\chem{Br^-}]}$$
+Here, $k_{\rm mt}$ = mass transfer coefficient, and $\rm LWC$ = liquid
+water content of the aerosol. The total uptake rate of X is only
+determined by $k_{\rm mt}$. The factors only affect the branching
+between hydrolysis and the halide reactions. The factor 5\E2 was chosen
+such that the chloride reaction dominates over hydrolysis at about
+[\chem{Cl^-}] $>$~0.1~\unit{M} (see Fig.~3 in \citet{536}), i.e.\ when
+the ratio [\chem{H_2O}]/[\chem{Cl^-}] is less than 5\E2. The ratio
+5\E2/3\E5 was chosen such that the reactions with chloride and bromide
+are roughly equal for sea water composition \citep{358}. These ratios
+were measured for uptake of \chem{N_2O_5}. Here, they are also used for
+\chem{ClNO_3} and \chem{BrNO_3}.
+
+% \section*{Specific notes}
+
+\expandableinput{mecca_eqn_h_notes.tex}
+
+\end{multicols}
+
+\clearpage
+
+\begin{longtable}{llp{9cm}p{7cm}p{5cm}}
+\caption{Heterogeneous reactions}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endfirsthead
+\caption{Heterogeneous reactions (... continued)}\\
+\hline
+\# & labels & reaction & rate coefficient & reference\\
+\hline
+\endhead
+\hline
+\endfoot
+\expandableinput{mecca_eqn_het.tex}
+\end{longtable}
+
+\section*{General notes}
+
+Heterogeneous reaction rates are calculated with an external module
+(e.g., MECCA\_KHET) and then supplied to the MECCA chemistry (see
+\url{www.messy-interface.org} for details)
+
+% \section*{Specific notes}
+
+\expandableinput{mecca_eqn_het_notes.tex}
+
+\clearpage
+
+% from here on, do not show aerosol phase number anymore:
+\def\FormatAq#1#2{#1}
+
+\begin{longtable}{llp{7cm}p{3cm}p{25mm}p{6cm}}
+\caption{Acid-base and other equilibria}\\
+\hline
+\# & labels & reaction & $K_0[M^{m-n}]$ & -$\Delta H / R [K]$ & reference\\
+\hline
+\endhead
+\hline
+\endfoot
+\expandableinput{mecca_eqn_eq.tex}
+\end{longtable}
+
+\begin{multicols}{2}
+% \section*{General notes}
+
+\section*{Specific notes}
+
+\expandableinput{mecca_eqn_eq_notes.tex}
+
+\end{multicols}
+
+\clearpage
+
+\begin{longtable}{llp{8cm}p{3cm}p{25mm}p{5cm}}
+\caption{Aqueous phase reactions}\\
+\hline
+\# & labels & reaction & $k_0~[M^{1-n}s^{-1}]$ & $-E_a / R [K] $& reference\\
+\hline
+\endfirsthead
+\caption{Aqueous phase reactions (...continued)}\\
+\hline
+\# & labels & reaction & $k_0~[M^{1-n}s^{-1}]$ & $-E_a / R [K] $& reference\\
+\hline
+\endhead
+\hline
+\endfoot
+\expandableinput{mecca_eqn_a.tex}
+\end{longtable}
+
+\begin{multicols}{3}
+% \section*{General notes}
+
+\section*{Specific notes}
+
+\expandableinput{mecca_eqn_a_notes.tex}
+
+\end{multicols}
+
+\clearpage
+
+\begin{multicols}{3}
+\bibliographystyle{egu} % bst file
+\bibliography{meccalit_mafor} % bib files
+\end{multicols}
+
+\end{document}

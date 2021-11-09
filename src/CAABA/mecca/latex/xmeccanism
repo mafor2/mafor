@@ -1,0 +1,44 @@
+#! /bin/tcsh -f
+# Time-stamp: <2015-08-18 15:05:59 sander>
+
+if ( "$1" == "" ) then
+  set filename = "meccanism"
+else
+  set filename = `basename $1`
+endif
+
+set tmpfile = tmp_`date +"%y%m%d%H%M%S"`
+
+pdflatex $filename.tex
+
+# create bib file:
+if ("$user" == "sander") then
+  # extract references from $filename.aux:
+  gawk -f citetags.awk $filename.aux | sort       > citetags.log
+  # add references from gas.eqn:
+  gawk -f findrefs.awk ../gas.eqn                >> citetags.log
+  # add references from all *.rpl files:
+  set rplfiles = (`find ../rpl -name '*.rpl' -type f -print | sort`)
+  foreach rplfile ($rplfiles)
+    gawk -f findrefs.awk $rplfile                >> citetags.log
+  end
+  # add references from aqueous.eqn:
+  gawk -f findrefs.awk ../aqueous.eqn            >> citetags.log
+  # create *.bib file:
+  gawk -f citefind.awk citetags.log ~/tex/bib/literat.bib > meccalit.bib
+endif
+
+# create *.bbl file:
+bibtex $filename
+pdflatex $filename.tex
+pdflatex $filename.tex
+pdflatex $filename.tex
+
+grep "Warning--I didn't find a database entry" $filename.blg > $tmpfile
+if ( -s $tmpfile != 0 ) then
+  cat $tmpfile
+  exit 1
+endif
+rm $tmpfile
+
+exit

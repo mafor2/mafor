@@ -1,0 +1,56 @@
+% chem.sty
+\def\filedate{2005/11/07}
+
+\IfFileExists{textcomp.sty}%
+  {\RequirePackage{textcomp}\let\permil\textperthousand}%
+  {\newcommand{\permil}{\ensuremath{\kern-.05em%
+        \raise.5ex\hbox{\the\scriptfont0 0}%
+        \kern-.15em/\kern-.15em\lower.25ex\hbox{\the\scriptfont0 00}}}%
+   \def\textmu{\ensuremath{\mu}}
+  }
+
+% define \chem{} to print chemical formula:
+\DeclareRobustCommand*{\chem}[1]{\ensuremath{%
+\mathcode`-="0200\mathcode`\=="003D% no space around "-" and "="
+\ifx\testbx\f@series\mathbf{#1}\else\mathrm{#1}\fi}}
+
+% define \unit{} to print a physical unit:
+\DeclareRobustCommand*{\unit}[1]{\ensuremath{%
+\def\mu{\mbox{\textmu}}\def~{\,}%
+\ifx\testbx\f@series\mathbf{#1}\else\mathrm{#1}\fi}}
+
+% define \E{} for power of ten:
+\newcommand{\E}[1]{\mbox{}\ensuremath{\times 10^{#1}}}
+
+\def\dd{{\mathrm{d}}}
+\def\DS{\displaystyle}
+\def\degree{\mbox{}\ensuremath{^{\circ}}}
+
+% some fill commands for theindex (with keyword.ist)
+\def\efill{\hfill\nopagebreak}
+\def\dotfill{\leaders\hbox to.6em{\hss .\hss}\hskip\z@ plus  1fill}
+\def\dotfil{\leaders\hbox to.6em{\hss .\hss}\hfil}
+\def\pfill{\unskip~\dotfill\penalty500\strut\nobreak\dotfil~\ignorespaces}
+
+\def\TO{\mbox{}\ensuremath{\rightarrow}}
+\def\TOHap{\mbox{}\ensuremath{\stackrel{\chem{H^+}}{\rightarrow}}}
+\def\TOHV{\mbox{}\ensuremath{\stackrel{h\nu}{\rightarrow}}}
+\def\TOMOLEC{\mbox{}\ensuremath{\stackrel{\chem{M}}{\TO}}}
+\def\TOMOLOX{\mbox{}\ensuremath{\stackrel{\chem{M},\chem{O_2}}{\TO}}}
+\def\TOOXYG{\mbox{}\ensuremath{\stackrel{\chem{O_2}}{\rightarrow}}}
+\def\TOWATER{\mbox{}\ensuremath{\stackrel{\chem{H_2O}}{\rightarrow}}}
+\def\TOOXYWA{\mbox{}\ensuremath{\stackrel{\chem{H_2O},\chem{O_2}}{\TO}}}
+\def\EQ{\mbox{}\ensuremath{\rightleftharpoons}}
+\def\TOClam{\mbox{}\ensuremath{\stackrel{\chem{Cl^-}}{\rightarrow}}}
+\def\TOBram{\mbox{}\ensuremath{\stackrel{\chem{Br^-}}{\rightarrow}}}
+
+\RequirePackage[obeyspaces]{url}
+
+% small pieces of computer code can be typeset with \code{...}
+\newcommand\code{\begingroup%
+% "." and ")" not included, i.e. do not break after them
+\def\UrlBreaks{\do\@\do\\\do\/\do\!\do\_\do\|\do\%\do\;\do\>\do\]%
+ \do\,\do\?\do\'\do\+\do\=}%
+% add ")" to UrlBigBreaks, i.e. do not break between two "))"
+\def\UrlBigBreaks{\do\)\do\:}%
+\Url}

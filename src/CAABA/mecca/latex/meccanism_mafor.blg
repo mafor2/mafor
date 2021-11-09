@@ -1,0 +1,73 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: meccanism_mafor.aux
+The style file: egu.bst
+Reallocated field_info (elt_size=4) to 11292 items from 5000.
+Database file #1: meccalit_mafor.bib
+Warning--string name "d15304" is undefined
+--line 4257 of file meccalit_mafor.bib
+Warning--string name "ccm" is undefined
+--line 4312 of file meccalit_mafor.bib
+Repeated entry---line 4425 of file meccalit_mafor.bib
+ : @article{2615
+ :              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 4437 of file meccalit_mafor.bib
+ : @article{2616
+ :              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 4463 of file meccalit_mafor.bib
+ : @article{2618
+ :              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 4478 of file meccalit_mafor.bib
+ : @article{2619
+ :              ,
+I'm skipping whatever remains of this entry
+Warning--string name "ccm" is undefined
+--line 4587 of file meccalit_mafor.bib
+Warning--empty journal in 26220
+Warning--empty journal in 2635
+Warning--can't use both author and editor fields in 2582
+You've used 242 entries,
+            2811 wiz_defined-function locations,
+            2860 strings with 63000 characters,
+and the built_in function-call counts, 259709 in all, are:
+= -- 29827
+> -- 9546
+< -- 92
++ -- 4721
+- -- 2954
+* -- 16145
+:= -- 25167
+add.period$ -- 242
+call.type$ -- 242
+change.case$ -- 1468
+chr.to.int$ -- 235
+cite$ -- 729
+duplicate$ -- 26420
+empty$ -- 13078
+format.name$ -- 3749
+if$ -- 51798
+int.to.chr$ -- 8
+int.to.str$ -- 1
+missing$ -- 2658
+newline$ -- 735
+num.names$ -- 973
+pop$ -- 11574
+preamble$ -- 1
+purify$ -- 1466
+quote$ -- 0
+skip$ -- 14899
+stack$ -- 0
+substring$ -- 11361
+swap$ -- 23412
+text.length$ -- 13
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 2163
+warning$ -- 3
+while$ -- 1161
+width$ -- 0
+write$ -- 2868
+(There were 4 error messages)
