@@ -1,0 +1,31 @@
+\def\myfiledate{2017-02-14}
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{longtable}
+\usepackage{natbib}
+\usepackage{chem}
+\oddsidemargin-10mm
+\evensidemargin-5mm
+\topmargin-20mm
+\textheight240mm
+\textwidth180mm
+\raggedbottom
+\parindent0mm
+\parskip1.0ex plus0.5ex minus0.5ex
+
+\newcommand{\kpp}[1]{#1}%qqq
+\newwrite\henrynotefile \immediate\openout\henrynotefile = chemprop_henrynote.tex
+\newwrite\alphanotefile \immediate\openout\alphanotefile = chemprop_alphanote.tex
+\newwrite\acidnotefile  \immediate\openout\acidnotefile  = chemprop_acidnote.tex
+\newcommand{\henrynote}[2]{\protect\write\henrynotefile{\protect\item{\bf #1:} #2}}
+\newcommand{\alphanote}[2]{\protect\write\alphanotefile{\protect\item{\bf #1:} #2}}
+\newcommand{\acidnote}[2]{\protect\write\acidnotefile{\protect\item{\bf #1:} #2}}
+\makeatletter
+\def\donotedit{\@percentchar\space This file was produced automatically, 
+  edit footnotes in messy_main_tracer_chemprop.tbl, not here!}
+\makeatother
+\immediate\write\henrynotefile{\donotedit}
+\immediate\write\alphanotefile{\donotedit}
+\immediate\write\acidnotefile{\donotedit}
+
+\begin{document}

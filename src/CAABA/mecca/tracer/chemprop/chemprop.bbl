@@ -1,0 +1,336 @@
+\begin{thebibliography}{56}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{{\tt #1}}
+\providecommand{\urlprefix}{}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{Abbatt and Waschewsky(1998)}]{930}
+Abbatt, J. P.~D. and Waschewsky, G. C.~G.: Heterogeneous interactions of
+  \chem{HOBr}, \chem{HNO_3}, \chem{O_3}, and \chem{NO_2} with deliquescent
+  \chem{NaCl} aerosols at room temperature, J. Phys. Chem. A, 102, 3719--3725,
+  \doi{10.1021/JP980932D}, 1998.
+
+\bibitem[{Abraham(1984)}]{1497}
+Abraham, M.~H.: Thermodynamics of solution of homologous series of solutes in
+  water, J. Chem. Soc. Faraday Trans. 1, 80, 153--181,
+  \doi{10.1039/F19848000153}, 1984.
+
+\bibitem[{Andersson et~al.(2008)Andersson, G{\aa}rdfeldt, W\"angberg, and
+  Str\"omberg}]{2820}
+Andersson, M.~E., G{\aa}rdfeldt, K., W\"angberg, I., and Str\"omberg, D.:
+  Determination of Henry's law constant for elemental mercury, Chemosphere, 73,
+  587--592, \doi{10.1016/J.CHEMOSPHERE.2008.05.067}, 2008.
+
+\bibitem[{Bartlett and Margerum(1999)}]{1038}
+Bartlett, W.~P. and Margerum, D.~W.: Temperature dependencies of the Henry's
+  law constant and the aqueous phase dissociation constant of bromine chloride,
+  Environ. Sci. Technol., 33, 3410--3414, \doi{10.1021/ES990300K}, 1999.
+
+\bibitem[{Berdnikov and Bazhin(1970)}]{763}
+Berdnikov, V.~M. and Bazhin, N.~M.: Oxidation-reduction potentials of certain
+  inorganic radicals in aqueous solutions, Russ. J. Phys. Chem., Engl. Transl.,
+  44, 395--398, 1970.
+
+\bibitem[{Betterton and Hoffmann(1988)}]{484}
+Betterton, E.~A. and Hoffmann, M.~R.: Henry's law constants of some
+  environmentally important aldehydes, Environ. Sci. Technol., 22, 1415--1418,
+  \doi{10.1021/ES00177A004}, 1988.
+
+\bibitem[{Blatchley et~al.(1992)Blatchley, Johnson, Alleman, and McCoy}]{288}
+Blatchley, III, E.~R., Johnson, R.~W., Alleman, J.~E., and McCoy, W.~F.:
+  Effective Henry's law constants for free chlorine and free bromine, Wat.
+  Res., 26, 99--106, \doi{10.1016/0043-1354(92)90117-M}, 1992.
+
+\bibitem[{Braban et~al.(2007)Braban, Adams, Rodriguez, Cox, Crowley, and
+  Schuster}]{2159}
+Braban, C.~F., Adams, J.~W., Rodriguez, D., Cox, R.~A., Crowley, J.~N., and
+  Schuster, G.: Heterogeneous reactions of \chem{HOI}, \chem{ICl} and
+  \chem{IBr} on sea salt and sea salt proxies, Phys. Chem. Chem. Phys., 9,
+  3136--3148, \doi{10.1039/B700829E}, 2007.
+
+\bibitem[{Brimblecombe and Clegg(1989)}]{530}
+Brimblecombe, P. and Clegg, S.~L.: Erratum, J. Atmos. Chem., 8, 95,
+  \doi{10.1007/BF00053818}, 1989.
+
+\bibitem[{Brimblecombe et~al.(1992)Brimblecombe, Clegg, and Khan}]{2231}
+Brimblecombe, P., Clegg, S.~L., and Khan, I.: Thermodynamic properties of
+  carboxylic acids relevant to their solubility in aqueous solutions, J.
+  Aerosol Sci., 23, S901--S904, \doi{10.1016/0021-8502(92)90557-C}, 1992.
+
+\bibitem[{Burkholder et~al.(2015)Burkholder, Sander, Abbatt, Barker, Huie,
+  Kolb, Kurylo, Orkin, Wilmouth, and Wine}]{3245}
+Burkholder, J.~B., Sander, S.~P., Abbatt, J., Barker, J.~R., Huie, R.~E., Kolb,
+  C.~E., Kurylo, M.~J., Orkin, V.~L., Wilmouth, D.~M., and Wine, P.~H.:
+  Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies,
+  Evaluation No. 18, JPL Publication 15-10, Jet Propulsion Laboratory,
+  Pasadena, \urlprefix\url{http://jpldataeval.jpl.nasa.gov}, 2015.
+
+\bibitem[{Chatfield and Crutzen(1990)}]{162}
+Chatfield, R.~B. and Crutzen, P.~J.: Are there interactions of iodine and
+  sulfur species in marine air photochemistry?, J. Geophys. Res., 95D,
+  22\,319--22\,341, \doi{10.1029/JD095ID13P22319}, 1990.
+
+\bibitem[{da~Silva(2012)}]{2621}
+da~Silva, E.~F.: Computational Chemistry calculation of the Henry's laws
+  constant of amines, amides, nitrosamines, and nitroamines, Tech. rep.,
+  SINTEF, Norway, 2012.
+
+\bibitem[{Davidovits et~al.(1995)Davidovits, Hu, Worsnop, Zahniser, and
+  Kolb}]{2574}
+Davidovits, P., Hu, J.~H., Worsnop, D.~R., Zahniser, M.~S., and Kolb, C.~E.:
+  Entry of gas molecules into liquids, Faraday Discuss., 100, 65--81,
+  \doi{10.1039/FD9950000065}, 1995.
+
+\bibitem[{Davis and {de Bruin}(1964)}]{450}
+Davis, Jr., W. and {de Bruin}, H.~J.: New activity coefficients of 0-100 per
+  cent aqueous nitric acid, J. Inorg. Nucl. Chem., 26, 1069--1083,
+  \doi{10.1016/0022-1902(64)80268-2}, 1964.
+
+\bibitem[{{De Bruyn} et~al.(1994){De Bruyn}, Shorter, Davidovits, Worsnop,
+  Zahniser, and Kolb}]{389}
+{De Bruyn}, W.~J., Shorter, J.~A., Davidovits, P., Worsnop, D.~R., Zahniser,
+  M.~S., and Kolb, C.~E.: Uptake of gas-phase sulfur species methanesulfonic
+  acid, dimethylsulfoxide, and dimethyl sulfone by aqueous surfaces, J.
+  Geophys. Res., 99D, 16\,927--16\,932, \doi{10.1029/94JD00684}, 1994.
+
+\bibitem[{Deiber et~al.(2004)Deiber, George, {Le Calv\'e}, Schweitzer, and
+  Mirabel}]{1647}
+Deiber, G., George, C., {Le Calv\'e}, S., Schweitzer, F., and Mirabel, P.:
+  Uptake study of \chem{ClONO_2} and \chem{BrONO_2} by halide containing
+  droplets, Atmos. Chem. Phys., 4, 1291--1299, \doi{10.5194/ACP-4-1291-2004},
+  2004.
+
+\bibitem[{DeMore et~al.(1997)DeMore, Sander, Golden, Hampson, Kurylo, Howard,
+  Ravishankara, Kolb, and Molina}]{826}
+DeMore, W.~B., Sander, S.~P., Golden, D.~M., Hampson, R.~F., Kurylo, M.~J.,
+  Howard, C.~J., Ravishankara, A.~R., Kolb, C.~E., and Molina, M.~J.: Chemical
+  kinetics and photochemical data for use in stratospheric modeling. Evaluation
+  number 12, JPL Publication 97-4, Jet Propulsion Laboratory, Pasadena, CA,
+  1997.
+
+\bibitem[{Dong et~al.(2008)Dong, Du, and Qian}]{3254}
+Dong, H., Du, H., and Qian, X.: Theoretical prediction of pKa values for
+  methacrylic acid oligomers using combined quantum mechanical and continuum
+  solvation methods, J. Phys. Chem. A, 112, 12\,687--12\,694,
+  \doi{10.1021/jp807315p}, 2008.
+
+\bibitem[{Ervens et~al.(2003)Ervens, George, Williams, Buxton, Salmon, Bydder,
+  Wilkinson, Dentener, Mirabel, Wolke, and Herrmann}]{2573}
+Ervens, B., George, C., Williams, J.~E., Buxton, G.~V., Salmon, G.~A., Bydder,
+  M., Wilkinson, F., Dentener, F., Mirabel, P., Wolke, R., and Herrmann, H.:
+  CAPRAM 2.4 (MODAC mechanism): An extended and condensed tropospheric aqueous
+  phase mechanism and its application, J. Geophys. Res., 108D, 4426,
+  \doi{10.1029/2002JD002202}, 2003.
+
+\bibitem[{Ge et~al.(2011)Ge, Wexler, and Clegg}]{2597}
+Ge, X., Wexler, A.~S., and Clegg, S.~L.: Atmospheric amines - Part II.
+  Thermodynamic properties and gas/particle partitioning, Atmos. Environ., 45,
+  561--577, 2011.
+
+\bibitem[{Goldstein(1982)}]{2908}
+Goldstein, D.~J.: Air and steam stripping of toxic pollutants, Tech. Rep.
+  EPA-68-03-002, Industrial Environmental Research Laboratory, Cincinnati, OH,
+  USA, 1982.
+
+\bibitem[{Hanson et~al.(1992)Hanson, Burkholder, Howard, and
+  Ravishankara}]{515}
+Hanson, D.~R., Burkholder, J.~B., Howard, C.~J., and Ravishankara, A.~R.:
+  Measurement of \chem{OH} and \chem{HO_2} radical uptake coefficients on water
+  and sulfuric acid surfaces, J. Phys. Chem., 96, 4979--4985,
+  \doi{10.1021/J100191A046}, 1992.
+
+\bibitem[{Haynes(2014)}]{3034}
+Haynes, W.~M., ed.: CRC Handbook of Chemistry and Physics, 95th Edition
+  (Internet Version 2015), Taylor and Francis Group, 2014.
+
+\bibitem[{Holmes et~al.(2001)Holmes, Adams, and Crowley}]{1572}
+Holmes, N.~S., Adams, J.~W., and Crowley, J.~N.: Uptake and reaction of
+  \chem{HOI} and \chem{IONO_2} on frozen and dry \chem{NaCl}/\chem{NaBr}
+  surfaces and \chem{H_2SO_4}, Phys. Chem. Chem. Phys., 3, 1679--1687,
+  \doi{10.1039/B100247N}, 2001.
+
+\bibitem[{Hu et~al.(1995)Hu, Shi, Davidovits, Worsnop, Zahniser, and
+  Kolb}]{380}
+Hu, J.~H., Shi, Q., Davidovits, P., Worsnop, D.~R., Zahniser, M.~S., and Kolb,
+  C.~E.: Reactive uptake of \chem{Cl_2(g)} and \chem{Br_2(g)} by aqueous
+  surfaces as a function of \chem{Br^-} and \chem{I^-} ion concentration: The
+  effect of chemical reaction at the interface, J. Phys. Chem., 99, 8768--8776,
+  \doi{10.1021/J100021A050}, 1995.
+
+\bibitem[{Jacob(1986)}]{46}
+Jacob, D.~J.: Chemistry of \chem{OH} in remote clouds and its role in the
+  production of formic acid and peroxymonosulfate, J. Geophys. Res., 91D,
+  9807--9826, \doi{10.1029/JD091ID09P09807}, 1986.
+
+\bibitem[{Jayne et~al.(1991)Jayne, Duan, Davidovits, Worsnop, Zahniser, and
+  Kolb}]{155}
+Jayne, J.~T., Duan, S.~X., Davidovits, P., Worsnop, D.~R., Zahniser, M.~S., and
+  Kolb, C.~E.: Uptake of gas-phase alcohol and organic acid molecules by water
+  surfaces, J. Phys. Chem., 95, 6329--6336, \doi{10.1021/J100169A047}, 1991.
+
+\bibitem[{Khan et~al.(1992)Khan, Brimblecombe, and Clegg}]{1063}
+Khan, I., Brimblecombe, P., and Clegg, S.~L.: The Henry's law constants of
+  pyruvic and methacrylic acids, Environ. Technol., 13, 587--593,
+  \doi{10.1080/09593339209385187}, 1992.
+
+\bibitem[{Khan et~al.(1995)Khan, Brimblecombe, and Clegg}]{493}
+Khan, I., Brimblecombe, P., and Clegg, S.~L.: Solubilities of pyruvic acid and
+  the lower (\chem{C_1}-\chem{C_6}) carboxylic acids. Experimental
+  determination of equilibrium vapour pressures above pure aqueous and salt
+  solutions, J. Atmos. Chem., 22, 285--302, \doi{10.1007/BF00696639}, 1995.
+
+\bibitem[{Lax(1969)}]{194}
+Lax, E.: Taschenbuch f\"ur Chemiker und Physiker, Springer Verlag, Berlin,
+  1969.
+
+\bibitem[{Lide(2008)}]{2323}
+Lide, D.~R., ed.: CRC Handbook of Chemistry and Physics, 88th Edition (Internet
+  Version 2008), CRC Press/Taylor and Francis, Boca Raton, FL, 2008.
+
+\bibitem[{Lind and Kok(1994)}]{311}
+Lind, J.~A. and Kok, G.~L.: Correction to ``Henry's law determinations for
+  aqueous solutions of hydrogen peroxide, methylhydroperoxide, and peroxyacetic
+  acid'' by John A.\ Lind and Gregory L.\ Kok, J. Geophys. Res., 99D, 21\,119,
+  1994.
+
+\bibitem[{Magi et~al.(1997)Magi, Schweitzer, Pallares, Cherif, Mirabel, and
+  George}]{844}
+Magi, L., Schweitzer, F., Pallares, C., Cherif, S., Mirabel, P., and George,
+  C.: Investigation of the uptake rate of ozone and methyl hydroperoxide by
+  water surfaces, J. Phys. Chem. A, 101, 4943--4949, \doi{10.1021/JP970646M},
+  1997.
+
+\bibitem[{Mitch and Herckes(2012)}]{2598}
+Mitch, W. and Herckes, P.: Literature Review and Experiments on Nitrosamine and
+  Nitramine Formation Chemistry Relevant to Carbon Capture., Tech. rep.,
+  SINTEF, Norway, 2012.
+
+\bibitem[{M\"ossinger and Cox(2001)}]{1565}
+M\"ossinger, J.~C. and Cox, R.~A.: Heterogeneous reaction of \chem{HOI} with
+  sodium halide salts, J. Phys. Chem. A, 105, 5165--5177,
+  \doi{10.1021/JP0044678}, 2001.
+
+\bibitem[{Palmer et~al.(1985)Palmer, Ramette, and Mesmer}]{582}
+Palmer, D.~A., Ramette, R.~W., and Mesmer, R.~E.: The hydrolysis of iodine:
+  Equilibria at high temperatures, J. Nucl. Mater., 130, 280--286,
+  \doi{10.1016/0022-3115(85)90317-4}, 1985.
+
+\bibitem[{Pandis and Seinfeld(1989)}]{34}
+Pandis, S.~N. and Seinfeld, J.~H.: Sensitivity analysis of a chemical mechanism
+  for aqueous-phase atmospheric chemistry, J. Geophys. Res., 94D, 1105--1126,
+  \doi{10.1029/JD094ID01P01105}, 1989.
+
+\bibitem[{Ponche et~al.(1993)Ponche, George, and Mirabel}]{176}
+Ponche, J.~L., George, C., and Mirabel, P.: Mass transfer at the air/water
+  interface: Mass accommodation coefficients of \chem{SO_2}, \chem{HNO_3},
+  \chem{NO_2} and \chem{NH_3}, J. Atmos. Chem., 16, 1--21,
+  \doi{10.1007/BF00696620}, 1993.
+
+\bibitem[{P\"oschl et~al.(1998)P\"oschl, Canagaratna, Jayne, Molina, Worsnop,
+  Kolb, and Molina}]{1205}
+P\"oschl, U., Canagaratna, M., Jayne, J.~T., Molina, L.~T., Worsnop, D.~R.,
+  Kolb, C.~E., and Molina, M.~J.: Mass accommodation coefficient of
+  \chem{H_2SO_4} vapor on aqueous sulfuric acid surfaces and gaseous diffusion
+  coefficient of \chem{H_2SO_4} in \chem{N_2}/\chem{H_2O}, J. Phys. Chem. A,
+  102, 10\,082--10\,089, \doi{10.1021/JP982809S}, 1998.
+
+\bibitem[{R\'egimbal and Mozurkewich(1997)}]{797}
+R\'egimbal, J.-M. and Mozurkewich, M.: Peroxynitric acid decay mechanisms and
+  kinetics at low {pH}, J. Phys. Chem. A, 101, 8822--8829,
+  \doi{10.1021/JP971908N}, 1997.
+
+\bibitem[{Roberts et~al.(2011)Roberts, Veres, Cochran, Warneke, Burling,
+  Yokelson, Lerner, Gilman, Kuster, Fall, and de~Gouw}]{2613}
+Roberts, J.~M., Veres, P.~R., Cochran, A.~K., Warneke, C., Burling, I.~R.,
+  Yokelson, R.~J., Lerner, B., Gilman, J.~B., Kuster, W.~C., Fall, R., and
+  de~Gouw, J.: Isocyanic acid in the atmosphere and its possible link to
+  smoke-related health effects, Proc. Natl. Acad. Sci. USA, 108, 8966--8971,
+  2011.
+
+\bibitem[{Rudich et~al.(1996)Rudich, Talukdar, Imamura, Fox, and
+  Ravishankara}]{1048}
+Rudich, Y., Talukdar, R.~K., Imamura, T., Fox, R.~W., and Ravishankara, A.~R.:
+  Uptake of \chem{NO_3} on \chem{KI} solutions: Rate coefficient for the
+  \chem{NO_3} + \chem{I^-} reaction and gas-phase diffusion coefficients for
+  \chem{NO_3}, Chem. Phys. Lett., 261, 467--473,
+  \doi{10.1016/0009-2614(96)00980-3}, 1996.
+
+\bibitem[{Saastad et~al.(1993)Saastad, Ellermann, and Nielsen}]{448}
+Saastad, O.~W., Ellermann, T., and Nielsen, C.~J.: On the adsorption of
+  \chem{NO} and \chem{NO_2} on cold \chem{H_2O}/\chem{H_2SO_4} surfaces,
+  Geophys. Res. Lett., 20, 1191--1193, \doi{10.1029/93GL01621}, 1993.
+
+\bibitem[{Sander et~al.(2011)Sander, Abbatt, Barker, Burkholder, Friedl,
+  Golden, Huie, Kolb, Kurylo, Moortgat, Orkin, and Wine}]{2626}
+Sander, S.~P., Abbatt, J., Barker, J.~R., Burkholder, J.~B., Friedl, R.~R.,
+  Golden, D.~M., Huie, R.~E., Kolb, C.~E., Kurylo, M.~J., Moortgat, G.~K.,
+  Orkin, V.~L., and Wine, P.~H.: Chemical Kinetics and Photochemical Data for
+  Use in Atmospheric Studies, Evaluation No. 17, JPL Publication 10-6, Jet
+  Propulsion Laboratory, Pasadena,
+  \urlprefix\url{http://jpldataeval.jpl.nasa.gov}, 2011.
+
+\bibitem[{Saxena and Hildemann(1996)}]{2576}
+Saxena, P. and Hildemann, L.~M.: Water-soluble organics in atmospheric
+  particles: A critical review of the literature and application of
+  thermodynamics to identify candidate compounds, J. Atmos. Chem., 24, 57--109,
+  1996.
+
+\bibitem[{Schwartz and White(1981)}]{449}
+Schwartz, S.~E. and White, W.~H.: Solubility equilibria of the nitrogen oxides
+  and oxyacids in dilute aqueous solution, in: Advances in Environmental
+  Science and Engineering, edited by Pfafflin, J.~R. and Ziegler, E.~N.,
+  vol.~4, pp. 1--45, Gordon and Breach Science Publishers, NY, 1981.
+
+\bibitem[{Schweitzer et~al.(2000)Schweitzer, Mirabel, and George}]{1161}
+Schweitzer, F., Mirabel, P., and George, C.: Uptake of hydrogen halides by
+  water droplets, J. Phys. Chem. A, 104, 72--76, \doi{10.1021/JP992621O}, 2000.
+
+\bibitem[{Shon et~al.(2005)Shon, Kim, Kim, and Lee}]{2285}
+Shon, Z.-H., Kim, K.-H., Kim, M.-Y., and Lee, M.: Modeling study of reactive
+  gaseous mercury in the urban air, Atmos. Environ., 39, 749--761,
+  \doi{10.1016/J.ATMOSENV.2004.09.071}, 2005.
+
+\bibitem[{Snider and Dawson(1985)}]{483}
+Snider, J.~R. and Dawson, G.~A.: Tropospheric light alcohols, carbonyls, and
+  acetonitrile: Concentrations in the southwestern United States and Henry's
+  law data, J. Geophys. Res., 90D, 3797--3805, \doi{10.1029/JD090ID02P03797},
+  1985.
+
+\bibitem[{Takami et~al.(1998)Takami, Kato, Shimono, and Koda}]{1047}
+Takami, A., Kato, S., Shimono, A., and Koda, S.: Uptake coefficient of
+  \chem{OH} radical on aqueous surface, Chem. Phys., 231, 215--227,
+  \doi{10.1016/S0301-0104(98)00004-4}, 1998.
+
+\bibitem[{Thornton and Abbatt(2005)}]{1864}
+Thornton, J. and Abbatt, J. P.~D.: Measurements of \chem{HO_2} uptake to
+  aqueous aerosol: Mass accommodation coefficients and net reactive loss, J.
+  Geophys. Res., 110D, \doi{10.1029/2004JD005402}, 2005.
+
+\bibitem[{Wagman et~al.(1982)Wagman, Evans, Parker, Schumm, Halow, Bailey,
+  Churney, and Nuttall}]{489}
+Wagman, D.~D., Evans, W.~H., Parker, V.~B., Schumm, R.~H., Halow, I., Bailey,
+  S.~M., Churney, K.~L., and Nuttall, R.~L.: The NBS tables of chemical
+  thermodynamic properties; Selected values for inorganic and \chem{C_1} and
+  \chem{C_2} organic substances in SI units, J. Phys. Chem. Ref. Data, 11,
+  suppl. 2, 1982.
+
+\bibitem[{Watts and Brimblecombe(1987)}]{824}
+Watts, S.~F. and Brimblecombe, P.: The Henry's law constant of dimethyl
+  sulphoxide, Environ. Technol. Lett., 8, 483--486,
+  \doi{10.1080/09593338709384509}, 1987.
+
+\bibitem[{Wilhelm et~al.(1977)Wilhelm, Battino, and Wilcock}]{190}
+Wilhelm, E., Battino, R., and Wilcock, R.~J.: Low-pressure solubility of gases
+  in liquid water, Chem. Rev., 77, 219--262, \doi{10.1021/CR60306A003}, 1977.
+
+\bibitem[{Worsnop et~al.(1989)Worsnop, Zahniser, Kolb, Gardner, Watson, {van
+  Doren}, Jayne, and Davidovits}]{32}
+Worsnop, D.~R., Zahniser, M.~S., Kolb, C.~E., Gardner, J.~A., Watson, L.~R.,
+  {van Doren}, J.~M., Jayne, J.~T., and Davidovits, P.: The temperature
+  dependence of mass accommodation of \chem{SO_2} and \chem{H_2O_2} on aqueous
+  surfaces, J. Phys. Chem., 93, 1159--1172, \doi{10.1021/J100340A027}, 1989.
+
+\end{thebibliography}

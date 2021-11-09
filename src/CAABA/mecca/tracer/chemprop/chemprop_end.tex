@@ -1,0 +1,60 @@
+\immediate\closeout\henrynotefile
+\immediate\closeout\alphanotefile
+\immediate\closeout\acidnotefile
+
+\section*{Notes}
+
+\subsection*{Henry's law constants}
+
+\begin{itemize}
+\item BIG\_DP is a large number that represents infinite solubility in
+  the code.
+\item The temperature dependence of the Henry constants is:
+  $$K_{\rm H} = K_{\rm H}^{\ominus} \times \exp \DS\left(
+    \frac{-\Delta_{\rm soln}H}{R} \left( \frac{1}{T} -
+      \frac{1}{T^{\ominus}} \right) \right)$$
+  where $\Delta_{\rm soln}H$~= molar enthalpy of dissolution
+  [\unit{J/mol}] and $R$~= 8.314 \unit{J/(mol~K)}.
+\input{chemprop_henrynote.tex}
+\end{itemize}
+
+\subsection*{Accommodation coefficients}
+
+\begin{itemize}
+\item If the accommodation coefficient is not known, a value of
+  $\alpha$~= 0.1 is assumed.
+\item The temperature dependence of the accommodation coefficients is
+  given by \citep{155}:
+  \begin{eqnarray*}
+    \frac{\alpha}{1-\alpha} & = & \exp \left( \frac{-\Delta_{\rm obs}G}{RT}
+    \right)\\
+    & = & \exp \left( \frac{-\Delta_{\rm obs}H}{RT} + \frac{\Delta_{\rm
+    obs}S}{R} \right)
+  \end{eqnarray*}
+  where $\Delta_{\rm obs}G$ is the Gibbs free energy barrier of the
+  transition state toward solution \citep{155}, and $\Delta_{\rm obs}H$
+  and $\Delta_{\rm obs}S$ are the corresponding enthalpy and entropy,
+  respectively. The equation can be rearranged to:
+  \begin{eqnarray*}
+    \ln\left( \frac{\alpha}{1-\alpha} \right) & = & 
+    \frac{-\Delta_{\rm obs}H}{R} \times \frac{1}{T} + \frac{-\Delta_{\rm
+    obs}S}{R}\\
+  \end{eqnarray*}
+  and further:
+  \begin{eqnarray*}
+    \dd\ln\left( \frac{\alpha}{1-\alpha} \right) \left/ \dd\left(
+    \frac{1}{T} \right)\right. & = & \frac{-\Delta_{\rm obs}H}{R}
+  \end{eqnarray*}
+\input{chemprop_alphanote.tex}
+\end{itemize}
+
+\subsection*{Acid/base constants}
+\begin{itemize}
+\input{chemprop_acidnote.tex}
+\end{itemize}
+
+\clearpage
+\bibliographystyle{egu}    % bst file
+\bibliography{chemprop}     % bib files
+
+\end{document}
