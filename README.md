@@ -6,11 +6,13 @@ The MAFOR (Multicomponent Aerosol FORmation) model is a Lagrangian type sectiona
 The software program is a console application with no GUI at the moment. The main intention of distributing the MAFOR model is the usage for educational and research purposes. We are looking for interested developers who want to contribute to the further development of MAFOR. All code is written in Fortran.
 
 Model users preparing publications resulting from the usage of MAFOR are requested to cite:
+
     1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S.,
         Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
         Jiang, S., Kangas, L., and J. Kukkonen, Description and evaluation 
         of the community aerosol dynamics model MAFOR v2.0, Geosci. Model 
         Dev. Discuss. [preprint], doi:10.5194/gmd-2021-397, 2021.
+
     2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
         Pirjola, L., Hussein, T., Modelling and measurements of urban
         aerosol processes on the neighborhood scale in Rotterdam,

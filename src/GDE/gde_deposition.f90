@@ -42,6 +42,7 @@
 !*    except:
 !*    routine DEPOSITPAR written by Liisa Pirjola
 !*    routine DIFFPAR written by Liisa Pirjola
+!*    routine DEPOZHANG01 written by Mona Kurppa
 !*    routine DEPOFROUGH written by Tareq Hussein, and belonging
 !*    functions MIUAIR and LAMBDA written by Tareq Hussein
 !*
@@ -68,6 +69,7 @@ module gde_deposition
     public :: depositwall
     public :: depositpar
     public :: depocanopy
+    public :: depozhang01
     public :: settling
     public :: depofrough
     public :: wetscav
@@ -218,6 +220,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
     !           temp     [K]
     !           mbh      [m]
     !           denspar  [kg/m3]
+    !           DPA      [m]
     !         output:
     !           depo     [1/s]
     !
@@ -254,13 +257,13 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
 
     REAL( dp)                              :: DENS,pres
     REAL( dp)                              :: Sc,MYY,DIFFCO,X,VS,VG,CC
-    !real( dp)                              :: DENSPA
+    real( dp)                              :: DENSPA
 
     INTEGER                                :: M,I
 
       pres=press/101325._dp
       DENS= 1.2929*273.15/temp*pres/1.      !air density in kg/m^3, P in atm
-      !DENSPA= 1400.  !kg/m^3  for all particles (1.assumption)
+      DENSPA= 1400.  !kg/m^3  for all particles (1.assumption)
       !  water (Sehmel and Sutter, 1974)
       !USTAR=1.17    !m/s
       !ZNOT = 0.001   !m
@@ -275,6 +278,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
          MYY=MYY/DENS     !m^2/s
          Sc = MYY/DIFFCO  !laaduton
          X = 2._dp*RP(M,I)*(ustar/znot/MYY)**(0.5_dp)*Sc**(1/3._dp)
+         !VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPA*g*DIFFCO/k_B/temp     !m/s
          VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPAR(M,I)*g*DIFFCO/k_B/temp     !m/s
          VG = DIFFCO/(2*RP(M,I))*(ADEP*X + BDEP*X**3) + VS     !m/s
          !write(6,*) DPA(M,I),VG     
@@ -285,6 +289,176 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
       !stop
 
   end subroutine depositpar  
+
+subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Mona Kurppa
+    !      Atmospheric Composition Research
+    !      Finnish Meteorological Institute
+    !      Helsinki, Finland
+    !
+    !      purpose
+    !      -------
+    !      calculates particle dry deposition rate to vegetation surface
+    !      uses particle wet diameter (m)
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           temp     [K]
+    !           mbh      [m]
+    !           DPA      [m]
+    !        !   denspar [kg/m3]
+    !
+    !        !   ustar   [m/s]  - friction velocity
+    !        !   znot    [m]    - surface roughness length
+    !        output:
+    !           depo  [1/s]
+    !    
+    !      method
+    !      ------
+    !      Parameterization for dry deposition velicity for smooth and 
+    !      rough surfaces.
+    !
+    !      external
+    !      --------
+    !      none
+    !
+    !      reference
+    !      ---------
+    !      Zhang L., Gong, S., Padro, J., Barrie, L., 2001.
+    !        A size-seggregated particle dry deposition scheme
+    !        for an atmospheric aerosol module,
+    !        Atmos. Environ., 35, 549-560.
+    !
+    !------------------------------------------------------------------
+
+    implicit none
+
+    INTEGER, intent(in)                               :: IMAX
+    REAL( dp), intent(in)                             :: temp
+    REAL( dp), intent(in)                             :: mbh
+
+    REAL( dp), DIMENSION(MMAX,IMAX), intent(in)       :: DENSPAR
+    REAL( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
+
+    REAL( dp), DIMENSION(MMAX,IMAX), intent(out)      :: depo
+
+    real( dp), parameter :: adn = 1.3                ! air density
+    real( dp), parameter :: alpha_d = 1.5            !
+    real( dp), parameter :: am_airmol = 4.8096E-26   ! Average mass of an air molecule
+    real( dp), parameter :: dcol = 0.002             ! collector size (m)
+    real( dp), parameter :: gamma_d = 0.56           ! 
+
+    ! SALSA configuration in street canyon case
+    ! real( dp), parameter :: pdn = 1500.0         ! particle density (kg/m^3)
+    ! real( dp), parameter :: ustar = 0.52        ! friction velocity (m/s)
+    ! real( dp), parameter :: znot = 0.4          ! roughness length (m)  
+    ! real( dp), parameter :: zC = 10.0           ! canopy height (m)
+
+    real( dp)                              :: avis   ! molecular viscocity
+    real( dp)                              :: kvis   ! kinematic viscocity
+    real( dp)                              :: lambda !
+    real( dp)                              :: mdiff  !
+    real( dp)                              :: ra     ! aerodynamic resistance
+    real( dp)                              :: rs     ! quasi-laminar resistance
+    real( dp)                              :: Sc     ! Schmidt number
+    real( dp)                              :: St     ! Stokes number
+    real( dp)                              :: va     !
+    real( dp)                              :: CC     ! slip correction
+    real( dp)                              :: Kn     ! Knudsen number
+    real( dp)                              :: vc     ! settling velocity
+    real( dp)                              :: DENSPA ! particle density
+    real( dp)                              :: zC     ! reference height
+      
+    INTEGER                                :: M,I
+
+      DENSPA= 1400.  !kg/m^3  for all particles (1.assumption)
+      
+      ! Molecular viscosity of air (Eq. 4.54)
+      avis = 1.8325E-5_dp * ( 416.16_dp / ( temp + 120.0_dp ) ) *  &
+             ( temp / 296.16_dp )**1.5
+
+      ! Kinematic viscocity
+      kvis = avis / adn
+
+      ! Thermal velocity of an air molecule (Eq. 15.32)
+      va = SQRT( 8.0 * k_B * temp / ( pi * am_airmol ) )
+
+      ! Mean free path (m) (Eq. 15.24)
+      lambda = 2.0 * avis / ( adn * va )
+
+      ! Aerodynamic resistance
+      ! evaluated at canopy top = zC (here 10 m)
+      zC = 10.0_dp
+      if (mbh <= znot) then
+         zC=znot
+      else if (mbh <= zC) then
+         zC=mbh
+      else
+        zC = 10.0_dp
+      endif
+      ra = LOG(zC / znot) / (0.4_dp * ustar)  !znot = z0
+
+      do M=1,MMAX
+       do I=1,IMAX
+
+         ! Knudsen number (Eq. 15.23)
+         Kn = MAX( 1.0E-2, lambda / ( DPA(M,I) * 0.5_dp ) ) ! To avoid underflow
+
+         ! Cunningham slip-flow correction
+         CC = 1.0 + Kn * ( 1.257_dp + 0.4_dp * EXP( -1.1_dp / Kn ) )
+
+         ! Critical fall speed i.e. settling velocity  (Eq. 20.4)
+         !vc = MIN(1.0_dp, (DPA(M,I))**2 * (DENSPA - adn) * g * CC / (18.0_dp * avis))
+         vc = MIN(1.0_dp, (DPA(M,I))**2 * (DENSPAR(M,I) - adn) * g * CC / (18.0_dp * avis))
+
+         ! Stokes number
+         !!! St = vc * ustar**2 / kvis  ! for surfaces with bluff roughness elements
+         ! for vegetated surfaces
+         St =  vc * ustar / (g * dcol)
+
+         ! Particle diffusivity coefficient (Eq. 15.29)
+         mdiff = (k_B * temp * CC) / (3.0_dp * pi * avis * DPA(M,I) )
+
+         ! Schmidt number
+         Sc = kvis / mdiff
+
+         ! The overall quasi-laminar resistance for particles (Zhang et al., Eq. 5)
+         ! EPSILON(1.0) is the smallest epsilon for which 1.0 + epsilon > 1.0
+         ! Rs  = 1 / 3.0 * ustar * R1 * (EB + EIM + EIN)
+         ! R1  = EXP(-St**0.5)
+         ! EB  = Sc**(-gamma_d)
+         ! EIM = St / (alpha_d + St))**2
+         ! EIN = 0.5*(DPA/dcol)**2
+         rs = MAX(EPSILON(1.0), (3.0 * ustar * EXP(-St**0.5) *                &
+                                  ( Sc**(-gamma_d)                         +  &  ! EB
+                                    (St / (alpha_d + St))**2               +  &  ! EIM
+                                    0.5 * (DPA(M,I) / dcol)**2                &  ! EIN
+                                  )                                           &
+                                 )  )
+
+         rs = 1.0 / rs
+
+         ! Total deposition velocity (m/s)
+         depo(M,I) = vc + 1.0 / (ra + rs)
+
+         !write(6,*) DPA(M,I), depo(M,I)
+
+         depo(M,I) = depo(M,I)/mbh    !1/s
+         
+       end do
+      end do
+
+     ! stop
+
+  end subroutine depozhang01
 
 subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
     !----------------------------------------------------------------------
@@ -895,7 +1069,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
         end do
       end do !  end of M,I loop
       
-    !  stop
+     ! stop
 
     end subroutine depofrough
 

@@ -42,7 +42,7 @@
 !
 !          Multicomponent Aerosol FORmation model
 !
-!  VERSION: 1.9.9
+!  VERSION: 2.0.0
 !
 !  PURPOSE:    Lagrangian type sectional aerosol box model
 !              which includes gas phase and aqueous phase 
@@ -283,7 +283,7 @@
 !         Author: Matthias Steffen Karl (MSK)
 !
 !
-!  CHANGES COMPARED TO VERSION 1.9.7
+!  CHANGES COMPARED TO VERSION 2.0.0
 !
 !         dd.mm.yyyy  name   routine and one-line description of modification
 !         -------------------------------------------------------------------

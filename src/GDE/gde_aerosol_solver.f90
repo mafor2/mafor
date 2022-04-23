@@ -87,6 +87,7 @@ module gde_aerosol_solver
 
   use gde_deposition,     only  : depositpar
   use gde_deposition,     only  : depocanopy
+  use gde_deposition,     only  : depozhang01  
   use gde_deposition,     only  : depofrough
   use gde_deposition,     only  : depositwall
   use gde_deposition,     only  : wetscav
@@ -382,6 +383,10 @@ contains
 
        if ( (IDEPO.EQ.3).AND.(mbl.ge.2.0*hsta_st) ) then
          CALL depofrough(press,temp,DENSPAR,DPAW,mbl,depo,IMAX)
+       endif
+
+       if ( (IDEPO.EQ.4).AND.(mbl.ge.2.0*hsta_st) ) then
+         CALL depozhang01(temp,DENSPAR,DPAW,mbl,depo,IMAX)
        endif
 
 

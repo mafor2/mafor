@@ -276,16 +276,18 @@ contains
                ! Typical CS value in atmosphere in 1/h 
                cs = 10
                ! Target size (in geometric diameter = mobility diameter -0.3nm)
-               dx=0.7       ! to get 1 nm nucleated particles
+               dx= 0.7       ! to get 1 nm nucleated particles
                !!! Neutral case
                ! diameter of critical cluster
-               d1=2.*rc_n*1.E9_dp
+               ! MSK 25.02.2022: rc_n is already in nm
+               d1=2.*rc_n
                ! gamma-factor in Lehtinen et al.
                gammax=max(0.0_dp,1.0_dp/(m+1)*( (dx/(d1))**(m+1)-1))
                ! final scaling factor in Lehtinen et al.
                LKK_n=exp(-gammax*d1*cs/gr)
                !!! Charged case
-               d1=2.*rc_i*1.E9_dp
+               ! MSK 25.02.2022: rc_i is already in nm
+               d1=2.*rc_i
                gammax=max(0.0_dp,1.0_dp/(m+1)*( (dx/(d1))**(m+1)-1)) 
                LKK_i=exp(-gammax*d1*cs/gr)
 
@@ -293,7 +295,9 @@ contains
             ! according to pers. commun. Maattanen (2020)
             ! and multiplied by 10^6 to get nucleation rate J in m^-3s^-1
                JNUC=jnuc_n*LKK_n + jnuc_i*LKK_i
-               natot=na_n+na_i
+               ! MSK 25.02.2022: na_n only added if jnuc_n>0
+               natot=na_i
+               if (jnuc_n > 0) natot=natot+na_n
                JNUC=JNUC*1.e6
 
              !  write(6,*) ' JNUC        natot'
@@ -2729,13 +2733,13 @@ contains
         endif
 
 
-   ! write(6,*) 'Output, neutral nucleation:'
-   ! write(6,*) ' J_n (cm-3s-1)  Ntot_n     x         Na_n   rc_n(nm)       Kinetic  rhoatres(cm-3)'
-   ! write(6,'(ES12.4,3F10.2,ES13.4,L6,ES18.4)') jnuc_n,ntot_n,x_n,na_n,rc_n*1.E9,kinetic_n,rhoatres
-   ! write(6,*)
-   ! write(6,*) 'Output, ion-induced nucleation:'
-   ! write(6,*) ' J_i (cm-3s-1)  Ntot_i     x         Na_i   rc_i(nm)       Kinetic  Ions(cm-3) '
-   ! write(6,'(ES12.4,3F10.2,ES13.4,L6,ES18.4)') jnuc_i,ntot_i,x_i,na_i,rc_i*1.E9,kinetic_i, n_i
+  !  write(6,*) 'Output, neutral nucleation:'
+  !  write(6,*) ' J_n (cm-3s-1)  Ntot_n     x         Na_n   rc_n(nm)       Kinetic  rhoatres(cm-3)'
+  !  write(6,'(ES12.4,3F10.2,ES13.4,L6,ES18.4)') jnuc_n,ntot_n,x_n,na_n,rc_n*1.E9,kinetic_n,rhoatres
+  !  write(6,*)
+  !  write(6,*) 'Output, ion-induced nucleation:'
+  !  write(6,*) ' J_i (cm-3s-1)  Ntot_i     x         Na_i   rc_i(nm)       Kinetic  Ions(cm-3) '
+  !  write(6,'(ES12.4,3F10.2,ES13.4,L6,ES18.4)') jnuc_i,ntot_i,x_i,na_i,rc_i*1.E9,kinetic_i, n_i
 
 
    end subroutine newbinapara
