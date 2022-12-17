@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -213,7 +210,9 @@ contains
        emi(ind_HNO4)    = emisg(15)
        emi(ind_NO3)     = emisg(16)
        emi(ind_HCl)     = emisg(18)
+       emi(ind_I2)      = emisg(31)
        emi(ind_CH3I)    = emisg(34)
+       emi(ind_DMSO)    = emisg(38)
        emi(ind_CH3SO3H) = emisg(41)
        emi(ind_CO)      = emisg(42)
        emi(ind_C2H6)    = emisg(44)
@@ -277,7 +276,9 @@ contains
        vdr(ind_NO3)     = vdryg(16)
        vdr(ind_DMS)     = vdryg(17) 
        vdr(ind_HCl)     = vdryg(18)
+       vdr(ind_I2)      = vdryg(31)
        vdr(ind_CH3I)    = vdryg(34)
+       vdr(ind_DMSO)    = vdryg(38)
        vdr(ind_CH3SO3H) = vdryg(41)
        vdr(ind_CO)      = vdryg(42)
        vdr(ind_C2H6)    = vdryg(44)
@@ -344,7 +345,9 @@ contains
        cg(ind_NO3)      = cgasg(16)
        cg(ind_DMS)      = cgasg(17)
        cg(ind_HCl)      = cgasg(18)
+       cg(ind_I2)       = cgasg(31)
        cg(ind_CH3I)     = cgasg(34)
+       cg(ind_DMSO)     = cgasg(38)
        cg(ind_CH3SO3H)  = cgasg(41)
        cg(ind_CO)       = cgasg(42)
        ! C2-C6 NMHC
@@ -776,7 +779,7 @@ contains
         sum_gamma_oc(M)=gamma_oc1(M)+gamma_oc2(M)+gamma_oc3(M)     &
                        +gamma_oc4(M)+gamma_oc5(M)+gamma_oc6(M)     &
                        +gamma_oc7(M)+gamma_oc8(M)+gamma_oc9(M)
-         IF (sum_gamma_oc(M).GT.1.0) THEN
+         IF (sum_gamma_oc(M).GT.1.00000001_dp) THEN
            write(6,*) 'sum of OC molar fractions >1.0 in organic.dat'
            stop
          ENDIF       

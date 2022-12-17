@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -270,7 +267,7 @@ contains
   end subroutine chemistry_solver
 
 
-  subroutine emis_drydep(time_step_len,emis,vdry,rain,zmbl,cgas)
+  subroutine emis_drydep(time_step_len,emis,vdry,rain,zmbl,owf,daytime,cgas)
     !----------------------------------------------------------------------
     !     
     ! Emission and deposition are currently calculated with Euler forward.
@@ -295,6 +292,8 @@ contains
     !          time_step_len    time step length              [s]
     !          zmbl         mixing layer height               [m]    
     !          rain         rainfall rate                     [mm/h]
+    !          owf          open water fraction               [-]
+    !          daytime      hour of day                       [h]
     !
     !      method
     !      ------
@@ -313,14 +312,16 @@ contains
     implicit none
 
     ! input
-    REAL( dp), intent(in)   :: emis(nspec),vdry(nspec)
-    REAL( dp), intent(in)   :: time_step_len      ! in seconds
-    REAL( dp), intent(in)   :: zmbl               ! in meter
-    REAL( dp), intent(in)   :: rain               ! in mm/h
+    real( dp), intent(in)   :: emis(nspec),vdry(nspec)
+    real( dp), intent(in)   :: time_step_len      ! in seconds
+    real( dp), intent(in)   :: zmbl               ! in meter
+    real( dp), intent(in)   :: rain               ! in mm/h
+    real( dp), intent(in)   :: owf                ! in fraction
+    real( dp), intent(in)   :: daytime            ! in hours
     !
-    REAL( dp),dimension(nspec), intent(in out) :: cgas
+    real( dp),dimension(nspec), intent(in out) :: cgas
 
-    REAL( dp) :: fct
+    real( dp) :: fct
 
     !zmbl    = 1000._dp           ! height of boundary layer [m]
     ! emissions rates [molec(g)/(cm2*s)] conv. to [molec(g)/cm3]
@@ -345,13 +346,27 @@ contains
     cgas(ind_HNO4)     = cgas(ind_HNO4)    +emis(ind_HNO4   )* fct
     cgas(ind_NO3)      = cgas(ind_NO3)     +emis(ind_NO3    )* fct
     cgas(ind_HCl)      = cgas(ind_HCl)     +emis(ind_HCl    )* fct
+    ! Marine/ice iodine emission activated if owf<=20% (arctic)
+    if (owf.le.0.20) then
+      cgas(ind_I2)     = cgas(ind_I2)      +emis(ind_I2     )* fct
+    endif
     cgas(ind_CH3I)     = cgas(ind_CH3I)    +emis(ind_CH3I   )* fct
+    cgas(ind_DMSO)     = cgas(ind_DMSO)    +emis(ind_DMSO   )* fct
     cgas(ind_CH3SO3H)  = cgas(ind_CH3SO3H) +emis(ind_CH3SO3H)* fct
     cgas(ind_SO3)      = cgas(ind_SO3)     +emis(ind_SO3    )* fct
     
     ! VOC
     cgas(ind_C2H6)     = cgas(ind_C2H6)    +emis(ind_C2H6   )* fct
     cgas(ind_C3H8)     = cgas(ind_C3H8)    +emis(ind_C3H8   )* fct
+    ! Marine isoprene emission
+    ! added when local time 8-20
+    ! Bruggemann et al., 2017, Table 1, [molec(g)/(cm2*s)] 
+    ! Faraday Discuss., 2017, 200, 59-74. doi:10.1039/c7fd00022g
+    if ( (daytime.ge.8).and.(daytime.le.20) ) then
+      cgas(ind_C5H8)     = cgas(ind_C5H8)    + 4.4e8_dp  *owf* fct
+     ! cgas(ind_BSOV)     = cgas(ind_BSOV)    + 1.8e8_dp  *owf* fct  
+      cgas(ind_BLOV)     = cgas(ind_BLOV)    + 2.6e7_dp  *owf* fct
+    endif
     cgas(ind_C5H8)     = cgas(ind_C5H8)    +emis(ind_C5H8   )* fct
     cgas(ind_TOLUENE)  = cgas(ind_TOLUENE) +emis(ind_TOLUENE)* fct
     cgas(ind_C2H4)     = cgas(ind_C2H4)    +emis(ind_C2H4   )* fct
@@ -406,12 +421,13 @@ contains
     cgas(ind_HCOOH)   = (1._dp-fct*vdry(ind_HCOOH))   *cgas(ind_HCOOH)
     cgas(ind_HONO)    = (1._dp-fct*vdry(ind_HONO))    *cgas(ind_HONO)
     cgas(ind_HCl)     = (1._dp-fct*vdry(ind_HCl))     *cgas(ind_HCl)
+    cgas(ind_I2)      = (1._dp-fct*vdry(ind_I2))      *cgas(ind_I2)
     cgas(ind_CH3I)    = (1._dp-fct*vdry(ind_CH3I))    *cgas(ind_CH3I)
     cgas(ind_SO2)     = (1._dp-fct*vdry(ind_SO2))     *cgas(ind_SO2)
     cgas(ind_H2SO4)   = (1._dp-fct*vdry(ind_H2SO4))   *cgas(ind_H2SO4)
     cgas(ind_CH3SO3H) = (1._dp-fct*vdry(ind_CH3SO3H)) *cgas(ind_CH3SO3H)
-    !cgas(ind_DMSO)    = (1._dp-fct*vdry(ind_DMSO)) * cgas(ind_DMSO)
     cgas(ind_DMS)     = (1._dp-fct*vdry(ind_DMS))     *cgas(ind_DMS)
+    cgas(ind_DMSO)    = (1._dp-fct*vdry(ind_DMSO))    *cgas(ind_DMSO)
     cgas(ind_SO3)     = (1._dp-fct*vdry(ind_SO3))     *cgas(ind_SO3)
     cgas(ind_PAN)     = (1._dp-fct*vdry(ind_PAN))     *cgas(ind_PAN)
     cgas(ind_HNO4)    = (1._dp-fct*vdry(ind_HNO4))    *cgas(ind_HNO4)
