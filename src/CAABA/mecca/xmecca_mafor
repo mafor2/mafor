@@ -950,23 +950,23 @@ if ( "$tag" == "" ) set tag = "n"
 
 setenv xmecca_wanted4imtag "${wanted}"     # passing "wanted" string
 setenv xmecca_gastblfile   "${gastblfile}" # passing current gas-phase tracdef filename
-cd tag
-if ( ( "$tag" == "y" ) ) then
-  if (${?batch}) then
-    ./xtag norm $batchpath
-    set exitstatus = "$status"
-  else
-    ./xtag norm
-    set exitstatus = "$status"
-  endif
-else
-  # calling to setup zero configuration
-  ./xtag zero
-  set exitstatus = "$status"
-endif
-echo "exit status from xtag is: $exitstatus"
-if ( "$exitstatus" != "0" ) exit $exitstatus
-cd -
+#cd tag
+#if ( ( "$tag" == "y" ) ) then
+#  if (${?batch}) then
+#    ./xtag norm $batchpath
+#    set exitstatus = "$status"
+#  else
+#    ./xtag norm
+#    set exitstatus = "$status"
+#  endif
+#else
+#  # calling to setup zero configuration
+#  ./xtag zero
+#  set exitstatus = "$status"
+#endif
+#echo "exit status from xtag is: $exitstatus"
+#if ( "$exitstatus" != "0" ) exit $exitstatus
+#cd -
 unsetenv xmecca_wanted4imtag
 unsetenv xmecca_gastblfile
 

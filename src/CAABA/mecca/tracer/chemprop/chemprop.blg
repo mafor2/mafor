@@ -3,49 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: chemprop.aux
 The style file: egu.bst
 Database file #1: chemprop.bib
-Warning--string name "ccm" is undefined
---line 1261 of file chemprop.bib
-Warning--string name "ccm" is undefined
---line 1305 of file chemprop.bib
-You've used 56 entries,
+You've used 51 entries,
             2811 wiz_defined-function locations,
-            1872 strings with 25257 characters,
-and the built_in function-call counts, 56030 in all, are:
-= -- 6264
-> -- 2098
-< -- 30
-+ -- 1005
-- -- 647
-* -- 3537
-:= -- 5564
-add.period$ -- 56
-call.type$ -- 56
-change.case$ -- 329
-chr.to.int$ -- 56
-cite$ -- 168
-duplicate$ -- 5649
-empty$ -- 2924
-format.name$ -- 836
-if$ -- 11155
+            1848 strings with 24368 characters,
+and the built_in function-call counts, 51787 in all, are:
+= -- 5825
+> -- 1914
+< -- 27
++ -- 924
+- -- 590
+* -- 3266
+:= -- 5108
+add.period$ -- 51
+call.type$ -- 51
+change.case$ -- 298
+chr.to.int$ -- 51
+cite$ -- 153
+duplicate$ -- 5238
+empty$ -- 2697
+format.name$ -- 762
+if$ -- 10317
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 606
-newline$ -- 177
-num.names$ -- 227
-pop$ -- 2570
+missing$ -- 552
+newline$ -- 162
+num.names$ -- 207
+pop$ -- 2346
 preamble$ -- 1
-purify$ -- 327
+purify$ -- 298
 quote$ -- 0
-skip$ -- 3046
+skip$ -- 2852
 stack$ -- 0
-substring$ -- 2361
-swap$ -- 4907
+substring$ -- 2214
+swap$ -- 4572
 text.length$ -- 6
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 495
+type$ -- 450
 warning$ -- 0
-while$ -- 260
+while$ -- 239
 width$ -- 0
-write$ -- 671
-(There were 2 warnings)
+write$ -- 614

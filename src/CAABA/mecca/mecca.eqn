@@ -5,22 +5,22 @@
 #INLINE F90_GLOBAL
   ! MECCA info from xmecca:
   CHARACTER(LEN=*), PUBLIC, PARAMETER :: &
-    timestamp            = 'xmecca was run on 2021-11-02 at 10:17:52 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI', &
+    timestamp            = 'xmecca was run on 2022-11-14 at 13:30:58 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI', &
     batchfile            = 'mafor.bat', &
     gas_spc_file         = '-rw------- 1 matthias matthias 75751 Jan  9  2019 gas.spc', &
     gas_2_spc_file       = '-rw-r--r-- 1 matthias matthias 11490 Nov 16  2020 gas_mafor.spc', &
     aqueous_spc_file     = '-rw------- 1 matthias matthias 10517 Jun 27  2018 aqueous.spc', &
-    aqueous_2_spc_file   = '-rw-r--r-- 1 matthias matthias 7641 Oct 31  2020 aqueous_mafor.spc', &
+    aqueous_2_spc_file   = '-rwxrwxrwx 1 matthias matthias 7725 Aug 17 14:26 aqueous_mafor.spc', &
     gas_eqn_file         = '-rw------- 1 matthias matthias 317000 Nov  1  2020 gas.eqn', &
     aqueous_eqn_file     = '-rw------- 1 matthias matthias 61446 Oct 30  2020 aqueous.eqn', &
-    aqueous_2_eqn_file   = '-rw-r--r-- 1 matthias matthias 35972 Nov 16  2020 aqueous_mafor.eqn', &
+    aqueous_2_eqn_file   = '-rwxrwxrwx 1 matthias matthias 36975 Aug 17 14:38 aqueous_mafor.eqn', &
     gas_spc_file_sum     = '07795    74', &
     gas_2_spc_file_sum   = '00428    12', &
     aqueous_spc_file_sum = '51484    11', &
-    aqueous_2_spc_file_sum = '11820     8', &
+    aqueous_2_spc_file_sum = '28430     8', &
     gas_eqn_file_sum     = '53578   310', &
     aqueous_eqn_file_sum = '35567    61', &
-    aqueous_2_eqn_file_sum = '54382    36', &
+    aqueous_2_eqn_file_sum = '45970    37', &
     rplfile              = 'maforchem', &
     wanted               = 'Tr && (G || Aa) && !Br && !Hg', &
     diagtracfile         = '', &
@@ -161,6 +161,7 @@
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HNCO_a      = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_H2NCHO_a    = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_MMNNO2_a    = 0
+  INTEGER, PUBLIC, DIMENSION(APN) :: ind_MSIA_a      = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_OXALAC_a    = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HCOCO2H_a   = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HOCH2CHO_a  = 0
@@ -363,6 +364,7 @@ SUBROUTINE initialize_indexarrays
   ind_HNCO_a(01)      = ind_HNCO_a01
   ind_H2NCHO_a(01)    = ind_H2NCHO_a01
   ind_MMNNO2_a(01)    = ind_MMNNO2_a01
+  ind_MSIA_a(01)      = ind_MSIA_a01
   ind_OXALAC_a(01)    = ind_OXALAC_a01
   ind_HCOCO2H_a(01)   = ind_HCOCO2H_a01
   ind_HOCH2CHO_a(01)  = ind_HOCH2CHO_a01
@@ -2564,7 +2566,7 @@ END SUBROUTINE initialize_indexarrays
 <G40229>  C106O2                = C716O2 + CH3COCH3                : {%TrGTerC} k1_RO2tRO2; {&2419}
 <G40230>  C106OOH + OH          = C106O2                           : {%TrGTerC} 8.01E-11; {&2419}
 <G40231>  C106NO3 + OH          = CO235C6CHO + CH3COCH3 + NO2      : {%TrGTerCN} 7.03E-11; {&2419}
-<G40232>  APINENE + O3          = .09 APINBOO + .08 PINONIC + .77 OH + .33 NORPINAL + .33 CO + .33 HO2 + .06 APINAOO + .44 C109O2 + 0.07 BELV + 0.23 BLOV : {%TrGTerC} 8.05E-16*EXP(-640./TEMP); {&1745, 2638} // Products from \citet{3028}. BELV from \citet{2638}
+<G40232>  APINENE + O3          = .09 APINBOO + .08 PINONIC + .77 OH + .33 NORPINAL + .33 CO + .33 HO2 + .06 APINAOO + .44 C109O2 + 0.07 BELV + 0.13 BLOV : {%TrGTerC} 8.05E-16*EXP(-640./TEMP); {&1745, 2638} // Products from \citet{3028}. BELV from \citet{2638}. BLOV guess
 <G40233>  APINAOO               = PINAL + H2O2                     : {%TrGTerC} 1.00E-17*c(ind_H2O); {&2419}
 <G40234>  APINAOO + CO          = PINAL + CO2                      : {%TrGTerC} 1.20E-15; {&2419}
 <G40235>  APINAOO + NO          = PINAL + NO2 + 0.052 BLOV + 0.184 BSOV                : {%TrGTerCN} 1.00E-14; {&2419}
@@ -2606,7 +2608,7 @@ END SUBROUTINE initialize_indexarrays
 <G40264b> RO6R3O2 + NO          = 10 LCARBON + LNITROGEN           : {%TrGTerCN} KRO2NO*alpha_AN(12,3,0,0,0,temp,cair); {&3019}
 <G40265>  RO6R3O2 + HO2         = 10 LCARBON                       : {%TrGTerC} KRO2HO2(10); {&3019}
 <G40266>  RO6R3O2               = 9 LCARBON + HCHO + HO2           : {%TrGTerC} k1_RO2sRO2; {&3019} // Rate constant modified according to MCM protocol.
-<G40267a> BPINENE + O3          = NOPINONE + .63 CO + .37 CH2OO + .16 OH + .16 HO2  + 0.07 BELV + 0.23 BLOV  : {%TrGTerC} 1.35E-15*EXP(-1270./TEMP)*.051/(1-.027); {&1745} // Products from \citet{3018}.
+<G40267a> BPINENE + O3          = NOPINONE + .63 CO + .37 CH2OO + .16 OH + .16 HO2  + 0.07 BELV + 0.13 BLOV  : {%TrGTerC} 1.35E-15*EXP(-1270./TEMP)*.051/(1-.027); {&1745} // Products from \citet{3018}. BELV from \citet{2638}. BLOV guess
 <G40267b> BPINENE + O3          = NOPINOO + CO2                    : {%TrGTerC} 1.35E-15*EXP(-1270./TEMP)*.368/(1-.027); {&3018, 1745}
 <G40267c> BPINENE + O3          = NOPINDO2 + CO2 + OH              : {%TrGTerC} 1.35E-15*EXP(-1270./TEMP)*.283/(1-.027); {&3018, 1745}
 <G40267d> BPINENE + O3          = C8BC + 2 CO2                     : {%TrGTerC} 1.35E-15*EXP(-1270./TEMP)*(.104+.167)/(1-.027); {&3018, 1745}
@@ -3655,11 +3657,16 @@ END SUBROUTINE initialize_indexarrays
 {<A7nnn_a01> ------------------------ Br ------------------------}{@\myhline}
 {<A8nnn_a01> ------------------------ I -------------------------}{@\myhline}
 {<A9nnn_a01> ------------------------ S -------------------------}{@\myhline}
-<A9405_a01MK>  HSO3m_a01 + CH2O2H2_a01     = CH2OHSO3m_a01                   : {%TrAa01MblScS}  xaer(01)*k_arr(0.436,-2990.,temp) *cvfac(01); {@0.436}{$-2990}{&2575}
+<A9405_a01MK>  HSO3m_a01 + CH2O2H2_a01    = CH2OHSO3m_a01                    : {%TrAa01MblScS}  xaer(01)*k_arr(0.436,-2990.,temp) *cvfac(01); {@0.436}{$-2990}{&2575}
 <A9406a_a01MK> CH2OHSO3m_a01              = CH2O2H2_a01 + HSO3m_a01          : {%TrAa01MblScS}  xaer(01)*1.22E-7 *cvfac(01); {@1.22E-7}{&2575}
 <A9406b_a01MK> CH2OHSO3m_a01              = CH2O2H2_a01 + SO3mm_a01 + Hp_a01 : {%TrAa01MblScS}  xaer(01)*k_arr(3.8E-6,-5530.,temp) *cvfac(01); {@3.8E-6}{$-5530}{&2575}
 <A9407_a01MK>  SO3mm_a01 + CH2O2H2_a01    = CH2OHSO3m_a01 + O2m_a01          : {%TrAa01MblScS}  xaer(01)*k_arr(1.36E5,-2450.,temp) *cvfac(01); {@1.36E5}{$-2450}{&2575}
-<A9408_a01MK>  CH2OHSO3m_a01  + OH_a01     = HCOOH_a01 + HO2_a01 + HSO3m_a01 : {%TrAa01MblScS}  xaer(01)*3.0E8 *cvfac(01); {@3.0E8}{&2575}
+<A9408_a01MK>  CH2OHSO3m_a01  + OH_a01    = HCOOH_a01 + HO2_a01 + HSO3m_a01  : {%TrAa01MblScS}  xaer(01)*3.0E8 *cvfac(01); {@3.0E8}{&2575}
+<A9409_a01MK>  DMS_a01 + O3_a01           = DMSO_a01                         : {%TrAa01MblScCS}  xaer(01)*k_arr(8.61E8,-2600.,temp) *cvfac(01); {@8.61E8}{$-2600}{&2641}
+<A9410_a01MK>  DMS_a01 + OH_a01           = DMSO_a01 + HO2_a01               : {%TrAa01MblScCS}  xaer(01)*1.9E10 *cvfac(01); {@1.9E10}{&2641}
+<A9411_a01MK>  DMSO_a01 + OH_a01          = MSIA_a01 + HO2_a01 + CO2_a01     : {%TrAa01MblScCS}  xaer(01)*k_arr(6.65E9,-1270.,temp) *cvfac(01); {@6.65E9}{$-1270}{&2641}
+<A9412_a01MK>  MSIA_a01 + O3_a01          = CH3SO3m_a01 + Hp_a01             : {%TrAa01MblScS}  xaer(01)*3.5E7 *cvfac(01); {@3.5E7}{&2641}
+<A9413_a01MK>  MSIA_a01 + OH_a01          = CH3SO3m_a01 + Hp_a01 + HO2_a01   : {%TrAa01MblScS}  xaer(01)*6.0E9 *cvfac(01); {@6.0E9}{&2641}
 {<A10nnn_a01> ----------------------- Hg ------------------------}{@\myhline}
 {<H1nnn_a01> ------------------------ O -------------------------}{@\myhline}
 {<H2nnn_a01> ------------------------ H -------------------------}{@\myhline}
@@ -3726,6 +3733,8 @@ END SUBROUTINE initialize_indexarrays
 {<H7nnn_a01> ------------------------ Br ------------------------}{@\myhline}
 {<H8nnn_a01> ------------------------ I -------------------------}{@\myhline}
 {<H9nnn_a01> ------------------------ S -------------------------}{@\myhline}
+<H9403f_a01MK> CH3SOOH         = MSIA_a01            : {%TrAa01S}         xnom7dmso*k_exf(01,ind_CH3SOOH); {&SGN}
+<H9403b_a01MK> MSIA_a01        = CH3SOOH             : {%TrAa01S}         xnom7dmso*k_exb(01,ind_CH3SOOH); {&SGN}
 {<H10nnn_a01> ----------------------- Hg ------------------------}{@\myhline}
 {<EQ1nnn_a01> ------------------------ O -------------------------}{@\myhline}
 {<EQ2nnn_a01> ------------------------ H -------------------------}{@\myhline}

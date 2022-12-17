@@ -1142,6 +1142,7 @@ LET/D NH2CH2_($ax)    = 0 ; DEF SYMBOL NH2CH2_($ax)    = CH_2NH_2
 LET/D HNCO_($ax)      = 0 ; DEF SYMBOL HNCO_($ax)      = HNCO
 LET/D H2NCHO_($ax)    = 0 ; DEF SYMBOL H2NCHO_($ax)    = H2NCHO
 LET/D MMNNO2_($ax)    = 0 ; DEF SYMBOL MMNNO2_($ax)    = MMNNO2
+LET/D MSIA_($ax)      = 0 ; DEF SYMBOL MSIA_($ax)      = MSIA
 LET/D OXALAC_($ax)    = 0 ; DEF SYMBOL OXALAC_($ax)    = OXALAC
 LET/D HCOCO2H_($ax)   = 0 ; DEF SYMBOL HCOCO2H_($ax)   = HCOCO_2H
 LET/D HOCH2CHO_($ax)  = 0 ; DEF SYMBOL HOCH2CHO_($ax)  = HOCH_2CHO

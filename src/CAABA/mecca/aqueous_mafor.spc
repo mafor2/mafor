@@ -21,6 +21,7 @@ NH2CH2_a##     =   C +  4H        +  N  ; {@CH_2NH_2}        {methylamine radica
 HNCO_a##       =   C +   H +   O  +  N  ; {@HNCO}            {ioscyanic acid} 
 H2NCHO_a##     =   C +  3H +   O  +  N  ; {@H2NCHO}          {formamide}
 MMNNO2_a##     =   C +  2H +  2O  + 2N  ; {@MMNNO2}          {methylnitramine}
+MSIA_a##       =   C +  4H +  S + 2O    ; {@MSIA}            {methyl sulfinic acid}
 
 {2C}
 OXALAC_a##     =  IGNORE                ; {@OXALAC}          {oxalic acid, 2C +  2H  +  4O}

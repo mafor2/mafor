@@ -1,4 +1,4 @@
-\begin{thebibliography}{242}
+\begin{thebibliography}{243}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{{\tt #1}}
 \providecommand{\urlprefix}{}
@@ -601,6 +601,13 @@ Herrmann, H., Ervens, B., Jacobi, H.-W., Wolke, R., Nowacki, P., and Zellner,
   R.: CAPRAM2.3: A chemical aqueous phase radical mechanism for tropospheric
   chemistry, J. Atmos. Chem., 36, 231--284, \doi{10.1023/A:1006318622743},
   2000.
+
+\bibitem[{Hoffmann et~al.(2016)Hoffmann, Tilgner, Schrodner, Brauer, Wolke, and
+  Herrmann}]{2641}
+Hoffmann, E.~H., Tilgner, A., Schrodner, R., Brauer, P., Wolke, R., and
+  Herrmann, H.: An advanced modeling study on the impacts and atmospheric
+  implications of multiphase dimethyl sulfide chemistry, Proc. Natl. Acad. Sci.
+  USA, 113, 11\,776--11\,781, \doi{10.1073/pnas.1606320113}, 2016.
 
 \bibitem[{Hoffmann(1986)}]{744}
 Hoffmann, M.~R.: On the kinetics and mechanism of oxidation of aquated sulfur

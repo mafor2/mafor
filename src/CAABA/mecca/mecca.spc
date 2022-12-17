@@ -1,5 +1,5 @@
 {created automatically by xmecca, DO NOT EDIT!}
-{xmecca was run on 2021-11-02 at 10:17:52 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI}
+{xmecca was run on 2022-11-14 at 13:30:58 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI}
 {***** START: gas-phase species from gas.spc *****}
 {Time-stamp: <2019-01-09 16:19:59 sander>}
 
@@ -1417,6 +1417,7 @@ NH2CH2_a01     =   C +  4H        +  N  ; {@\FormatAq<CH_2NH_2><01>}        {met
 HNCO_a01       =   C +   H +   O  +  N  ; {@\FormatAq<HNCO><01>}            {ioscyanic acid} 
 H2NCHO_a01     =   C +  3H +   O  +  N  ; {@\FormatAq<H2NCHO><01>}          {formamide}
 MMNNO2_a01     =   C +  2H +  2O  + 2N  ; {@\FormatAq<MMNNO2><01>}          {methylnitramine}
+MSIA_a01       =   C +  4H +  S + 2O    ; {@\FormatAq<MSIA><01>}            {methyl sulfinic acid}
 
 {2C}
 OXALAC_a01     =  IGNORE                ; {@\FormatAq<OXALAC><01>}          {oxalic acid, 2C +  2H  +  4O}

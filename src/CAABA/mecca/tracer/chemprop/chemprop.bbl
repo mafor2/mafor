@@ -1,4 +1,4 @@
-\begin{thebibliography}{56}
+\begin{thebibliography}{51}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{{\tt #1}}
 \providecommand{\urlprefix}{}
@@ -73,11 +73,6 @@ Chatfield, R.~B. and Crutzen, P.~J.: Are there interactions of iodine and
   sulfur species in marine air photochemistry?, J. Geophys. Res., 95D,
   22\,319--22\,341, \doi{10.1029/JD095ID13P22319}, 1990.
 
-\bibitem[{da~Silva(2012)}]{2621}
-da~Silva, E.~F.: Computational Chemistry calculation of the Henry's laws
-  constant of amines, amides, nitrosamines, and nitroamines, Tech. rep.,
-  SINTEF, Norway, 2012.
-
 \bibitem[{Davidovits et~al.(1995)Davidovits, Hu, Worsnop, Zahniser, and
   Kolb}]{2574}
 Davidovits, P., Hu, J.~H., Worsnop, D.~R., Zahniser, M.~S., and Kolb, C.~E.:
@@ -124,11 +119,6 @@ Ervens, B., George, C., Williams, J.~E., Buxton, G.~V., Salmon, G.~A., Bydder,
   CAPRAM 2.4 (MODAC mechanism): An extended and condensed tropospheric aqueous
   phase mechanism and its application, J. Geophys. Res., 108D, 4426,
   \doi{10.1029/2002JD002202}, 2003.
-
-\bibitem[{Ge et~al.(2011)Ge, Wexler, and Clegg}]{2597}
-Ge, X., Wexler, A.~S., and Clegg, S.~L.: Atmospheric amines - Part II.
-  Thermodynamic properties and gas/particle partitioning, Atmos. Environ., 45,
-  561--577, 2011.
 
 \bibitem[{Goldstein(1982)}]{2908}
 Goldstein, D.~J.: Air and steam stripping of toxic pollutants, Tech. Rep.
@@ -203,11 +193,6 @@ Magi, L., Schweitzer, F., Pallares, C., Cherif, S., Mirabel, P., and George,
   water surfaces, J. Phys. Chem. A, 101, 4943--4949, \doi{10.1021/JP970646M},
   1997.
 
-\bibitem[{Mitch and Herckes(2012)}]{2598}
-Mitch, W. and Herckes, P.: Literature Review and Experiments on Nitrosamine and
-  Nitramine Formation Chemistry Relevant to Carbon Capture., Tech. rep.,
-  SINTEF, Norway, 2012.
-
 \bibitem[{M\"ossinger and Cox(2001)}]{1565}
 M\"ossinger, J.~C. and Cox, R.~A.: Heterogeneous reaction of \chem{HOI} with
   sodium halide salts, J. Phys. Chem. A, 105, 5165--5177,
@@ -242,14 +227,6 @@ R\'egimbal, J.-M. and Mozurkewich, M.: Peroxynitric acid decay mechanisms and
   kinetics at low {pH}, J. Phys. Chem. A, 101, 8822--8829,
   \doi{10.1021/JP971908N}, 1997.
 
-\bibitem[{Roberts et~al.(2011)Roberts, Veres, Cochran, Warneke, Burling,
-  Yokelson, Lerner, Gilman, Kuster, Fall, and de~Gouw}]{2613}
-Roberts, J.~M., Veres, P.~R., Cochran, A.~K., Warneke, C., Burling, I.~R.,
-  Yokelson, R.~J., Lerner, B., Gilman, J.~B., Kuster, W.~C., Fall, R., and
-  de~Gouw, J.: Isocyanic acid in the atmosphere and its possible link to
-  smoke-related health effects, Proc. Natl. Acad. Sci. USA, 108, 8966--8971,
-  2011.
-
 \bibitem[{Rudich et~al.(1996)Rudich, Talukdar, Imamura, Fox, and
   Ravishankara}]{1048}
 Rudich, Y., Talukdar, R.~K., Imamura, T., Fox, R.~W., and Ravishankara, A.~R.:
@@ -271,12 +248,6 @@ Sander, S.~P., Abbatt, J., Barker, J.~R., Burkholder, J.~B., Friedl, R.~R.,
   Use in Atmospheric Studies, Evaluation No. 17, JPL Publication 10-6, Jet
   Propulsion Laboratory, Pasadena,
   \urlprefix\url{http://jpldataeval.jpl.nasa.gov}, 2011.
-
-\bibitem[{Saxena and Hildemann(1996)}]{2576}
-Saxena, P. and Hildemann, L.~M.: Water-soluble organics in atmospheric
-  particles: A critical review of the literature and application of
-  thermodynamics to identify candidate compounds, J. Atmos. Chem., 24, 57--109,
-  1996.
 
 \bibitem[{Schwartz and White(1981)}]{449}
 Schwartz, S.~E. and White, W.~H.: Solubility equilibria of the nitrogen oxides

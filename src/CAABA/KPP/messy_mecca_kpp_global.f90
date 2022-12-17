@@ -13,8 +13,8 @@
 !        R. Sander, Max-Planck Institute for Chemistry, Mainz, Germany
 ! 
 ! File                 : messy_mecca_kpp_Global.f90
-! Time                 : Tue Nov  2 10:18:18 2021
-! Working directory    : /home/matthias/MAFOR_GIT/mafor/src/CAABA/mecca
+! Time                 : Mon Nov 14 13:31:14 2022
+! Working directory    : /home/matthias/MAFOR_GIT/mafor_v210/src/CAABA/mecca
 ! Equation file        : messy_mecca_kpp.kpp
 ! Output root filename : messy_mecca_kpp
 ! 
@@ -40,7 +40,7 @@ MODULE messy_mecca_kpp_Global
   REAL(kind=dp) :: FIX(NFIX)
 ! VAR, FIX are chunks of array C
       EQUIVALENCE( C(1),VAR(1) )
-      EQUIVALENCE( C(933),FIX(1) )
+      EQUIVALENCE( C(934),FIX(1) )
 ! RCONST - Rate constants (global)
   REAL(kind=dp) :: RCONST(NREACT)
 ! TIME - Current integration time
@@ -70,22 +70,22 @@ MODULE messy_mecca_kpp_Global
 
   ! MECCA info from xmecca:
   CHARACTER(LEN=*), PUBLIC, PARAMETER :: &
-    timestamp            = 'xmecca was run on 2021-11-02 at 10:17:52 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI', &
+    timestamp            = 'xmecca was run on 2022-11-14 at 13:30:58 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI', &
     batchfile            = 'mafor.bat', &
     gas_spc_file         = '-rw------- 1 matthias matthias 75751 Jan  9  2019 gas.spc', &
     gas_2_spc_file       = '-rw-r--r-- 1 matthias matthias 11490 Nov 16  2020 gas_mafor.spc', &
     aqueous_spc_file     = '-rw------- 1 matthias matthias 10517 Jun 27  2018 aqueous.spc', &
-    aqueous_2_spc_file   = '-rw-r--r-- 1 matthias matthias 7641 Oct 31  2020 aqueous_mafor.spc', &
+    aqueous_2_spc_file   = '-rwxrwxrwx 1 matthias matthias 7725 Aug 17 14:26 aqueous_mafor.spc', &
     gas_eqn_file         = '-rw------- 1 matthias matthias 317000 Nov  1  2020 gas.eqn', &
     aqueous_eqn_file     = '-rw------- 1 matthias matthias 61446 Oct 30  2020 aqueous.eqn', &
-    aqueous_2_eqn_file   = '-rw-r--r-- 1 matthias matthias 35972 Nov 16  2020 aqueous_mafor.eqn', &
+    aqueous_2_eqn_file   = '-rwxrwxrwx 1 matthias matthias 36975 Aug 17 14:38 aqueous_mafor.eqn', &
     gas_spc_file_sum     = '07795    74', &
     gas_2_spc_file_sum   = '00428    12', &
     aqueous_spc_file_sum = '51484    11', &
-    aqueous_2_spc_file_sum = '11820     8', &
+    aqueous_2_spc_file_sum = '28430     8', &
     gas_eqn_file_sum     = '53578   310', &
     aqueous_eqn_file_sum = '35567    61', &
-    aqueous_2_eqn_file_sum = '54382    36', &
+    aqueous_2_eqn_file_sum = '45970    37', &
     rplfile              = 'maforchem', &
     wanted               = 'Tr && (G || Aa) && !Br && !Hg', &
     diagtracfile         = '', &
@@ -225,6 +225,7 @@ MODULE messy_mecca_kpp_Global
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HNCO_a      = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_H2NCHO_a    = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_MMNNO2_a    = 0
+  INTEGER, PUBLIC, DIMENSION(APN) :: ind_MSIA_a      = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_OXALAC_a    = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HCOCO2H_a   = 0
   INTEGER, PUBLIC, DIMENSION(APN) :: ind_HOCH2CHO_a  = 0
@@ -486,12 +487,12 @@ MODULE messy_mecca_kpp_Global
 
   ! KPP info from xmecca (via integr.kpp):
   CHARACTER(LEN=*), PUBLIC, PARAMETER :: &
-    mecca_spc_file     = '-rw-rw-r-- 1 matthias matthias 108734 Nov  2 10:18 mecca.spc', &
-    mecca_eqn_file     = '-rw-rw-r-- 1 matthias matthias 404098 Nov  2 10:18 mecca.eqn', &
-    mecca_spc_file_sum = '37525   107', &
-    mecca_eqn_file_sum = '03207   395', &
+    mecca_spc_file     = '-rw-rw-r-- 1 matthias matthias 108833 Nov 14 13:31 mecca.spc', &
+    mecca_eqn_file     = '-rw-rw-r-- 1 matthias matthias 405225 Nov 14 13:31 mecca.eqn', &
+    mecca_spc_file_sum = '59493   107', &
+    mecca_eqn_file_sum = '23446   396', &
     kppoption          = 'k', &
-    KPP_HOME           = '/home/matthias/MAFOR_GIT/mafor/src/CAABA/mecca/kpp', &
+    KPP_HOME           = '/home/matthias/MAFOR_GIT/mafor_v210/src/CAABA/mecca/kpp', &
     KPP_version        = '2.2.3_rs3', &
     integr             = 'rosenbrock_posdef'
 

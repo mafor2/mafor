@@ -13,8 +13,8 @@
 !        R. Sander, Max-Planck Institute for Chemistry, Mainz, Germany
 ! 
 ! File                 : messy_mecca_kpp_Monitor.f90
-! Time                 : Tue Nov  2 10:18:18 2021
-! Working directory    : /home/matthias/MAFOR_GIT/mafor/src/CAABA/mecca
+! Time                 : Mon Nov 14 13:31:14 2022
+! Working directory    : /home/matthias/MAFOR_GIT/mafor_v210/src/CAABA/mecca
 ! Equation file        : messy_mecca_kpp.kpp
 ! Output root filename : messy_mecca_kpp
 ! 
@@ -41,314 +41,315 @@ MODULE messy_mecca_kpp_Monitor
      'CH3CHO_a01                      ','HO2m_a01                        ','IO3m_a01                        ', &
      'CH3SO3m_a01                     ','D1O_a01                         ','CH3CO3_a01                      ', &
      'CH3NHNHCH3_a01                  ','NH2C2H4NH2_a01                  ','DOCO_a01                        ', &
-     'ROO6R5O2                        ','MGLYOAC                         ','DMS_a01                         ', &
-     'DMSO_a01                        ','ROO6R3O                         ','Cl2O2                           ', &
-     'HIO3                            ','PIOV                            ','PELV                            ', &
-     'PSOV                            ','DMOCNH2MOH                      ','CHEX                            ', &
-     'CH3SOCH2                        ','CH3CO2H_a01                     ','DOC_a01                         ', &
-     'BIACET                          ','NC4H10                          ','CPDKETENE                       ', &
-     'NCPDKETENE                      ','MNCPDKETENE                     ','CH3CCl3                         ', &
-     'MMNNO2                          ','HNCO                            ','CH3SCH2                         ', &
-     'CH3COOm_a01                     ','C3H8                            ','METACETHO                       ', &
-     'CH3COOHCHCHO                    ','HCOCCH3CHOOH                    ','IC4H10                          ', &
-     'CO23C4CO3H                      ','NMBOBCO                         ','PBZQCO                          ', &
-     'PTLQCO                          ','NOPINDCO                        ','NOPINDOOH                       ', &
-     'OH2MENTHEN6ONE                  ','ClNO2                           ','OClO                            ', &
-     'C3H7I                           ','N2O4                            ','NAMP                            ', &
-     'AMPAN                           ','CHEXO                           ','HSO3                            ' /)
+     'ROO6R5O2                        ','MGLYOAC                         ','ROO6R3O                         ', &
+     'Cl2O2                           ','HIO3                            ','PIOV                            ', &
+     'PELV                            ','PSOV                            ','DMOCNH2MOH                      ', &
+     'CHEX                            ','CH3SOCH2                        ','CH3CO2H_a01                     ', &
+     'DOC_a01                         ','BIACET                          ','NC4H10                          ', &
+     'CPDKETENE                       ','NCPDKETENE                      ','MNCPDKETENE                     ', &
+     'CH3CCl3                         ','MMNNO2                          ','HNCO                            ', &
+     'CH3SCH2                         ','CH3COOm_a01                     ','C3H8                            ', &
+     'METACETHO                       ','CH3COOHCHCHO                    ','HCOCCH3CHOOH                    ', &
+     'IC4H10                          ','CO23C4CO3H                      ','NMBOBCO                         ', &
+     'PBZQCO                          ','PTLQCO                          ','NOPINDCO                        ', &
+     'NOPINDOOH                       ','OH2MENTHEN6ONE                  ','ClNO2                           ', &
+     'OClO                            ','C3H7I                           ','N2O4                            ', &
+     'NAMP                            ','AMPAN                           ','CHEXO                           ', &
+     'HSO3                            ','DMSO2                           ','DMSO2O                          ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_1 = (/ &
-     'DMSO2                           ','DMSO2O                          ','MSOON                           ', &
-     'MSPN                            ','MSADMA                          ','MSATMA                          ', &
-     'IO_a01                          ','ICl2m_a01                       ','CH3NCO_a01                      ', &
-     'NCOm_a01                        ','C2H4C2O4mm_a01                  ','C2H5C2O4m_a01                   ', &
-     'CH3NHCHO                        ','NCO                             ','HOC2H4CO2H                      ', &
-     'NC3H7NO3                        ','CH3COCOCO2H                     ','BZFUCO                          ', &
-     'CO14O3CO2H                      ','CO2C4DIAL                       ','MALNHYOHCO                      ', &
-     'C1ODC2O2C4OOH                   ','ISOPDOH                         ','C24O3CCO2H                      ', &
-     'C4CO2DCO3H                      ','C5DIALCO                        ','MMALANHY                        ', &
-     'LHC4ACCO2H                      ','PBZQOOH                         ','MCPDKETENE                      ', &
-     'PTLQOOH                         ','TOLUENE                         ','C8BCCO                          ', &
-     'C8BCOOH                         ','NORPINIC                        ','NSTYRENOOH                      ', &
-     'PINIC                           ','CH3I                            ','HOETNHCHO                       ', &
-     'DMCNH2                          ','AMPNNO2                         ','AMPO                            ', &
-     'DEANCH2O2                       ','CHEXONE                         ','DEANCH2CHO                      ', &
-     'DMSOHOO                         ','H2SO4_a01                       ','H2NCHO_a01                      ', &
-     'MALONAC_a01                     ','GLUTARAC_a01                    ','NH2CH2p_a01                     ', &
-     'H2OH2O                          ','ALOV                            ','ASOV                            ', &
-     'BUT2OLO                         ','C513CO                          ','MBOCOCO                         ', &
-     'C4MCONO3OH                      ','LISOPAB                         ','LISOPCD                         ', &
-     'C6125CO                         ','IPROPOL                         ','C109CO                          ', &
-     'Cl2                             ','INO2                            ','SO3                             ', &
-     'MEABO                           ','TMAO                            ','NO3CH2PAN                       ', &
-     'TEA                             ','NH4p_a01                        ','ClOm_a01                        ', &
-     'FeOHp_a01                       ','HOCH2CO2H_a01                   ','MGLYOX_a01                      ', &
-     'ETHGLY                          ','ADIPAC_a01                      ','CH3NH2CH2p_a01                  ', &
-     'NH3CH2CHOHp_a01                 ','DMNHCH2p_a01                    ','DENHp_a01                       ', &
-     'TENHp_a01                       ','HOCH2OH                         ','MPROPENOL                       ', &
-     'HCOCH2CO3H                      ','EPXDLCO2H                       ','EPXDLCO3H                       ', &
-     'C512OOH                         ','C514OOH                         ','CHOC3COOOH                      ' /)
+     'MSOON                           ','MSPN                            ','MSADMA                          ', &
+     'MSATMA                          ','IO_a01                          ','ICl2m_a01                       ', &
+     'CH3NCO_a01                      ','NCOm_a01                        ','C2H4C2O4mm_a01                  ', &
+     'C2H5C2O4m_a01                   ','CH3NHCHO                        ','NCO                             ', &
+     'HOC2H4CO2H                      ','NC3H7NO3                        ','CH3COCOCO2H                     ', &
+     'BZFUCO                          ','CO14O3CO2H                      ','CO2C4DIAL                       ', &
+     'MALNHYOHCO                      ','C1ODC2O2C4OOH                   ','ISOPDOH                         ', &
+     'C24O3CCO2H                      ','C4CO2DCO3H                      ','C5DIALCO                        ', &
+     'MMALANHY                        ','LHC4ACCO2H                      ','PBZQOOH                         ', &
+     'MCPDKETENE                      ','PTLQOOH                         ','TOLUENE                         ', &
+     'C8BCCO                          ','C8BCOOH                         ','NORPINIC                        ', &
+     'NSTYRENOOH                      ','PINIC                           ','CH3I                            ', &
+     'HOETNHCHO                       ','DMCNH2                          ','AMPNNO2                         ', &
+     'AMPO                            ','DEANCH2O2                       ','CHEXONE                         ', &
+     'DEANCH2CHO                      ','DMSOHOO                         ','H2SO4_a01                       ', &
+     'H2NCHO_a01                      ','MALONAC_a01                     ','GLUTARAC_a01                    ', &
+     'NH2CH2p_a01                     ','H2OH2O                          ','ALOV                            ', &
+     'ASOV                            ','BUT2OLO                         ','ETHGLY                          ', &
+     'C513CO                          ','MBOCOCO                         ','C4MCONO3OH                      ', &
+     'LISOPAB                         ','LISOPCD                         ','C6125CO                         ', &
+     'IPROPOL                         ','C109CO                          ','Cl2                             ', &
+     'INO2                            ','SO3                             ','MEABO                           ', &
+     'TMAO                            ','NO3CH2PAN                       ','TEA                             ', &
+     'NH4p_a01                        ','ClOm_a01                        ','FeOHp_a01                       ', &
+     'HOCH2CO2H_a01                   ','MGLYOX_a01                      ','ADIPAC_a01                      ', &
+     'CH3NH2CH2p_a01                  ','NH3CH2CHOHp_a01                 ','DMNHCH2p_a01                    ', &
+     'DENHp_a01                       ','TENHp_a01                       ','HOCH2OH                         ', &
+     'MPROPENOL                       ','HCOCH2CO2H                      ','EPXDLCO2H                       ', &
+     'EPXDLCO3H                       ','HCOCH2CO3H                      ','C512OOH                         ', &
+     'C514OOH                         ','CHOC3COOOH                      ','ISOPAOH                         ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_2 = (/ &
-     'ISOPAOH                         ','HOC2H4CO3H                      ','ACCOMECO3H                      ', &
-     'MMALNHYOOH                      ','NISOPOOH                        ','LMBOABNO3                       ', &
-     'C614CO                          ','BZEMUCCO2H                      ','BZEMUCCO3H                      ', &
-     'CATEC1OOH                       ','NPHEN1OOH                       ','C235C6CO3H                      ', &
-     'C6H5CH2OOH                      ','C6H5CO3H                        ','MCATEC1OOH                      ', &
-     'OXYL1OOH                        ','TLEMUCCO2H                      ','TLEMUCCO3H                      ', &
-     'NCRES1OOH                       ','C721CO3H                        ','C812OOH                         ', &
-     'C89OOH                          ','C8BCNO3                         ','C811CO3H                        ', &
-     'C85CO3H                         ','C97OOH                          ','NORPINENOL                      ', &
-     'PROPENOL                        ','C96NO3                          ','BUTENOL                         ', &
+     'ACCOMECO3H                      ','HOC2H4CO3H                      ','MMALNHYOOH                      ', &
+     'NISOPOOH                        ','LMBOABNO3                       ','C614CO                          ', &
+     'BZEMUCCO2H                      ','BZEMUCCO3H                      ','CATEC1OOH                       ', &
+     'NPHEN1OOH                       ','C235C6CO3H                      ','C6H5CH2OOH                      ', &
+     'C6H5CO3H                        ','MCATEC1OOH                      ','OXYL1OOH                        ', &
+     'TLEMUCCO2H                      ','TLEMUCCO3H                      ','NCRES1OOH                       ', &
+     'C721CO3H                        ','C812OOH                         ','C89OOH                          ', &
+     'C8BCNO3                         ','C811CO3H                        ','C85CO3H                         ', &
+     'C97OOH                          ','NORPINENOL                      ','C96NO3                          ', &
      'MENTHEN6ONE                     ','PERPINONIC                      ','PINALOOH                        ', &
-     'PINENOL                         ','HOCl                            ','ICl                             ', &
-     'C312COCO3H                      ','N2O3                            ','HNCHCH2OH                       ', &
-     'H2NCH2CO3                       ','H2NCOCO3                        ','MEANNO                          ', &
-     'DMNCHOO2                        ','DMCOONH2                        ','PROPACID                        ', &
-     'MSADMAH2O                       ','MSATMAH2O                       ','HCl_a01                         ', &
-     'FeOH2Fepppp_a01                 ','HCOCH2CO2H                      ','CH3NHCH2p_a01                   ', &
-     'DMNCH2p_a01                     ','DENIMp_a01                      ','NH2OH                           ', &
-     'CN                              ','ISOPBOH                         ','C2H6                            ', &
-     'PHCOOH                          ','C8BC                            ','NPROPOL                         ', &
-     'DEA                             ','HOCH2CHNETOH                    ','TME                             ', &
-     'C2H5OH                          ','FeClp_a01                       ','H2NCOCH2OH_a01                  ', &
-     'H                               ','C511OOH                         ','C59OOH                          ', &
+     'PINENOL                         ','BUTENOL                         ','HOCl                            ', &
+     'ICl                             ','C312COCO3H                      ','N2O3                            ', &
+     'HNCHCH2OH                       ','H2NCH2CO3                       ','H2NCOCO3                        ', &
+     'MEANNO                          ','DMNCHOO2                        ','PROPENOL                        ', &
+     'DMCOONH2                        ','MSADMAH2O                       ','PROPACID                        ', &
+     'MSATMAH2O                       ','HCl_a01                         ','FeOH2Fepppp_a01                 ', &
+     'CH3NHCH2p_a01                   ','DMNCH2p_a01                     ','DENIMp_a01                      ', &
+     'NH2OH                           ','CN                              ','ISOPBOH                         ', &
+     'C2H5OH                          ','PHCOOH                          ','C8BC                            ', &
+     'NPROPOL                         ','C2H6                            ','DEA                             ', &
+     'HOCH2CHNETOH                    ','TME                             ','FeClp_a01                       ', &
+     'H2NCOCH2OH_a01                  ','H                               ','C511OOH                         ', &
+     'CH3CO3H                         ','C59OOH                          ','MECOACEOOH                      ', &
      'TLFUOOH                         ','C514NO3                         ','NC4OHCO3H                       ', &
      'NTLFUOOH                        ','LDISOPACO                       ','LHC4ACCO3H                      ', &
      'LIEPOX                          ','CO235C6OOH                      ','BZOBIPEROH                      ', &
      'C5CO2DCO3H                      ','C6H5OOH                         ','NBZQOOH                         ', &
-     'IPRHOCO3H                       ','C716OOH                         ','C721OOH                         ', &
-     'C722OOH                         ','MACO3H                          ','TLOBIPEROH                      ', &
-     'C6H5CH2NO3                      ','NPTLQOOH                        ','MACROH                          ' /)
+     'C716OOH                         ','C721OOH                         ','C722OOH                         ', &
+     'IPRHOCO3H                       ','MACO3H                          ','TLOBIPEROH                      ', &
+     'C6H5CH2NO3                      ','NPTLQOOH                        ','C810OOH                         ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_3 = (/ &
-     'C810OOH                         ','C813OOH                         ','C85OOH                          ', &
-     'C86OOH                          ','IC4H9NO3                        ','C89CO2H                         ', &
-     'C89CO3H                         ','C96OOH                          ','C98OOH                          ', &
-     'C106OOH                         ','RO6R3O2                         ','RO6R1NO3                        ', &
-     'ROO6R1NO3                       ','LAPINABNO3                      ','LNAPINABOOH                     ', &
-     'BZFUOOH                         ','CH3SO3H                         ','CH2NH                           ', &
-     'HOCH2CH2O                       ','C413COOOH                       ','H2NCHO2CHO                      ', &
-     'MEANNO2                         ','CH3CNH2MOH                      ','H2                              ', &
-     'C44OOH                          ','HCOCOHCO3H                      ','TMEO2                           ', &
-     'TEAO                            ','DEANCH2COO2                     ','DMSOOO                          ', &
-     'MALANHYOOH                      ','CH3CO3H                         ','IC3H7NO3                        ', &
-     'NO4m_a01                        ','GLYOX_a01                       ','DMNCHO_a01                      ', &
-     'MMNp_a01                        ','PR2O2HNO3                       ','NH3CH2p_a01                     ', &
-     'CO2H3CO2H                       ','NHOH                            ','MECOACEOOH                      ', &
-     'LTMB                            ','PINONIC                         ','DMSOH                           ', &
-     'NH3_a01                         ','MENp_a01                        ','C5DIALOOH                       ', &
-     'IBUTOLBOOH                      ','C5PAN9                          ','CHOC3COPAN                      ', &
-     'DB1NO3                          ','NC4OHCPAN                       ','ACCOMEPAN                       ', &
-     'C4CO2DBPAN                      ','C5COO2NO2                       ','LZCPANC23DBCOD                  ', &
-     'IC4H9OOH                        ','C614OOH                         ','BENZENE                         ', &
-     'BZBIPEROOH                      ','BZEMUCCO                        ','C5COOHCO3H                      ', &
-     'C615CO2OOH                      ','HOOCH2CO3H                      ','BZEMUCPAN                       ', &
+     'MACROH                          ','C813OOH                         ','C85OOH                          ', &
+     'C86OOH                          ','C89CO2H                         ','C89CO3H                         ', &
+     'C96OOH                          ','C98OOH                          ','C106OOH                         ', &
+     'RO6R3O2                         ','RO6R1NO3                        ','ROO6R1NO3                       ', &
+     'LAPINABNO3                      ','LNAPINABOOH                     ','CH3SO3H                         ', &
+     'BZFUOOH                         ','PR2O2HNO3                       ','CH2NH                           ', &
+     'H2NCHO2CHO                      ','MEANNO2                         ','C413COOOH                       ', &
+     'CH3CNH2MOH                      ','H2                              ','IC4H9NO3                        ', &
+     'TMEO2                           ','HCOCOHCO3H                      ','C44OOH                          ', &
+     'TEAO                            ','DEANCH2COO2                     ','HOCH2CH2O                       ', &
+     'DMSOOO                          ','MALANHYOOH                      ','NO4m_a01                        ', &
+     'GLYOX_a01                       ','DMNCHO_a01                      ','IC3H7NO3                        ', &
+     'MMNp_a01                        ','NH3CH2p_a01                     ','CO2H3CO2H                       ', &
+     'NHOH                            ','LTMB                            ','PINONIC                         ', &
+     'DMSOH                           ','NH3_a01                         ','MENp_a01                        ', &
+     'C5DIALOOH                       ','C5PAN9                          ','CHOC3COPAN                      ', &
+     'DB1NO3                          ','NC4OHCPAN                       ','IBUTOLBOOH                      ', &
+     'ACCOMEPAN                       ','C4CO2DBPAN                      ','C5COO2NO2                       ', &
+     'LZCPANC23DBCOD                  ','C614OOH                         ','BENZENE                         ', &
+     'BZBIPEROOH                      ','BZEMUCCO                        ','IC4H9OOH                        ', &
+     'C5COOHCO3H                      ','C615CO2OOH                      ','BZEMUCPAN                       ', &
      'C5CO2DBPAN                      ','C5CO2OHPAN                      ','DNPHENOOH                       ', &
      'NCATECOOH                       ','NNCATECOOH                      ','NPHENOOH                        ', &
-     'C312COPAN                       ','C6COOHCO3H                      ','MACO2H                          ', &
-     'C4PAN5                          ','IC3H7OOH                        ','TLEMUCCO                        ', &
-     'C7PAN3                          ','C6CO2OHPAN                      ','DNCRESOOH                       ', &
-     'MNCATECOOH                      ','MNNCATCOOH                      ','C1OOHC3O2C4OD                   ', &
-     'TLEMUCPAN                       ','IBUTOLBNO3                      ','NC3H7OOH                        ', &
-     'STYRENOOH                       ','C810NO3                         ','C89NO3                          ' /)
+     'C6COOHCO3H                      ','MACO2H                          ','BUT2OLNO3                       ', &
+     'TLEMUCCO                        ','C7PAN3                          ','C6CO2OHPAN                      ', &
+     'DNCRESOOH                       ','MNCATECOOH                      ','MNNCATCOOH                      ', &
+     'C1OOHC3O2C4OD                   ','TLEMUCPAN                       ','EPXDLPAN                        ', &
+     'C312COPAN                       ','IC3H7OOH                        ','STYRENOOH                       ', &
+     'C810NO3                         ','C89NO3                          ','MALDIALPAN                      ', &
+     'C513OOH                         ','HOOCH2CO3H                      ','NC3H7OOH                        ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_4 = (/ &
-     'C513OOH                         ','C2H5NO3                         ','PERIBUACID                      ', &
-     'C811PAN                         ','BPINAOOH                        ','C109OOH                         ', &
+     'C811PAN                         ','HCOCOHPAN                       ','BPINAOOH                        ', &
+     'C109OOH                         ','PERIBUACID                      ','C2H5NO3                         ', &
      'C106NO3                         ','C10PAN2                         ','PINALNO3                        ', &
-     'LAPINABOOH                      ','LNBPINABOOH                     ','HI                              ', &
-     'HCOCOHPAN                       ','DMAO2                           ','C3DIALOOH                       ', &
-     'MALDIALPAN                      ','BUT2OLNO3                       ','C3PAN1                          ', &
-     'C3PAN2                          ','PERPROACID                      ','C2H5OOH                         ', &
-     'FeHO2pp_a01                     ','EPXDLPAN                        ','C2O4mm_a01                      ', &
-     'DMAp_a01                        ','TMAp_a01                        ','DEAp_a01                        ', &
-     'TEAp_a01                        ','IPRHOCO2H                       ','NCATECHOL                       ', &
+     'LAPINABOOH                      ','LNBPINABOOH                     ','C2H5OOH                         ', &
+     'C4PAN5                          ','HI                              ','IBUTOLBNO3                      ', &
+     'DMAO2                           ','C3DIALOOH                       ','C3PAN1                          ', &
+     'PERPROACID                      ','C3PAN2                          ','DMS_a01                         ', &
+     'FeHO2pp_a01                     ','C2O4mm_a01                      ','DMAp_a01                        ', &
+     'TMAp_a01                        ','DEAp_a01                        ','TEAp_a01                        ', &
+     'BIACETOH                        ','NCATECHOL                       ','IPRHOCO2H                       ', &
      'ROO6R3O2                        ','C811O2                          ','EBENZ                           ', &
      'LXYL                            ','LISOPEFO                        ','BPINANO3                        ', &
      'LHAROM                          ','CRESOL                          ','MMAO2                           ', &
      'MEA                             ','H2NCH2CHO                       ','DMCNH2CO3                       ', &
-     'BIACETOH                        ','ClOHm_a01                       ','FeSO4p_a01                      ', &
-     'CH3COCO3H                       ','C2H2                            ','LBUT1ENNO3                      ', &
-     'HYPROPO2H                       ','PHENOOH                         ','C614NO3                         ', &
-     'BZBIPERNO3                      ','ISOPBNO3                        ','LC4H9NO3                        ', &
-     'NDNPHENOOH                      ','CRESOOH                         ','LBUT1ENOOH                      ', &
+     'ClOHm_a01                       ','FeSO4p_a01                      ','CH3COCO3H                       ', &
+     'C2H2                            ','LBUT1ENNO3                      ','PHENOOH                         ', &
+     'C614NO3                         ','BZBIPERNO3                      ','ISOPBNO3                        ', &
+     'LC4H9NO3                        ','NDNPHENOOH                      ','NBZFUOOH                        ', &
+     'CRESOOH                         ','HYPROPO2H                       ','C5DICAROOH                      ', &
      'NDNCRESOOH                      ','PBZN                            ','TLEMUCNO3                       ', &
-     'C721PAN                         ','C89PAN                          ','C9PAN2                          ', &
-     'TC4H9OOH                        ','H2SO4                           ','PROPOLNO3                       ', &
-     'MEABO2                          ','IC4H9O2                         ','DEAO2                           ', &
-     'DMCNH2CHO                       ','CH3CO2H                         ','CHEXO2                          ', &
-     'LNISOOH                         ','PIPN                            ','TC4H9NO3                        ', &
-     'FeOHHO2p_a01                    ','C5DICAROOH                      ','HNCO_a01                        ', &
-     'CH3CHCO                         ','HOCH2CO3H                       ','NBZFUOOH                        ', &
-     'HCOCOOm_a01                     ','CH3COCOOm_a01                   ','MGLYOAC_a01                     ', &
-     'N2O5                            ','PBZQONE                         ','C812O2                          ', &
-     'LISOPACO                        ','C97O2                           ','OHMENTHEN6ONEO2                 ' /)
+     'LBUT1ENOOH                      ','C721PAN                         ','C89PAN                          ', &
+     'C9PAN2                          ','TC4H9OOH                        ','H2SO4                           ', &
+     'MEABO2                          ','HOCH2CO3H                       ','TC4H9NO3                        ', &
+     'DEAO2                           ','DMCNH2CHO                       ','CHEXO2                          ', &
+     'LNISOOH                         ','CH3CO2H                         ','PROPOLNO3                       ', &
+     'IC4H9O2                         ','FeOHHO2p_a01                    ','HNCO_a01                        ', &
+     'PIPN                            ','HCOCOOm_a01                     ','CH3COCOOm_a01                   ', &
+     'MGLYOAC_a01                     ','CH3CHCO                         ','N2O5                            ', &
+     'HOOCH2CO2H                      ','PBZQONE                         ','C812O2                          ', &
+     'C97O2                           ','LISOPACO                        ','OHMENTHEN6ONEO2                 ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_5 = (/ &
-     'NBZFUONE                        ','LME3FURANO2                     ','HOOCH2CO2H                      ', &
-     'DMNNO2                          ','C44O2                           ','DEANNO2                         ', &
-     'DMSOHO                          ','MSAH2O                          ','MBOACO                          ', &
+     'LME3FURANO2                     ','DMNNO2                          ','DEANNO2                         ', &
+     'C44O2                           ','NBZFUONE                        ','DMSOHO                          ', &
+     'MSAH2O                          ','DMSO_a01                        ','MBOACO                          ', &
      'OXALAC_a01                      ','HOCH2CHO_a01                    ','SUCCAC_a01                      ', &
      'MMAp_a01                        ','MEAp_a01                        ','TMNp_a01                        ', &
-     'HYETHO2H                        ','BUT2OLOOH                       ','NCRESOOH                        ', &
-     'C2H5O2NO2                       ','C54CO                           ','ETHOHNO3                        ', &
-     'CH3NH                           ','TMAO2                           ','DB2OOH                          ', &
-     'MPAN                            ','C5CO14OOH                       ','MALANHY                         ', &
-     'MALDALCO3H                      ','FeOH2p_a01                      ','PPN                             ', &
-     'MC3ODBCO2H                      ','MALDIALOOH                      ','BIACETOOH                       ', &
-     'CO2H3CO3H                       ','HOCH2COCH2OOH                   ','CH3O2NO2                        ', &
-     'HOCH2O2NO2                      ','TLEMUCOOH                       ','LC578OOH                        ', &
-     'C511O2                          ','C813O2                          ','C512O2                          ', &
-     'LC4H9OOH                        ','C98O2                           ','TC4H9O2                         ', &
-     'BZEMUCNO3                       ','BZEMUCOOH                       ','NCCH2O2                         ', &
-     'ISOPDNO3                        ','H2NCOCHO                        ','NDMA                            ', &
-     'NDELA                           ','TEAO2                           ','CH3COCH2O2NO2                   ', &
-     'CH3OH_a01                       ','CO2_a01                         ','FeSO3p_a01                      ', &
-     'PTLQONE                         ','C6H5CH2O2                       ','CO235C6O2                       ', &
-     'HNO4                            ','NH2O                            ','HMAC                            ', &
-     'MEK                             ','RO6R1O2                         ','HVMK                            ', &
-     'HOI                             ','DMSO2OO                         ','DEAN_a01                        ', &
-     'HC2O4m_a01                      ','CH2OOA                          ','MACRO                           ', &
+     'MC3ODBCO2H                      ','HOCH2COCH2OOH                   ','NCRESOOH                        ', &
+     'CO2H3CO3H                       ','HYETHO2H                        ','BIACETOOH                       ', &
+     'BUT2OLOOH                       ','C2H5O2NO2                       ','ETHOHNO3                        ', &
+     'C5CO14OOH                       ','MALANHY                         ','CH3NH                           ', &
+     'TMAO2                           ','DB2OOH                          ','MPAN                            ', &
+     'C54CO                           ','FeOH2p_a01                      ','MALDALCO3H                      ', &
+     'PPN                             ','MALDIALOOH                      ','CH3O2NO2                        ', &
+     'HOCH2O2NO2                      ','TLEMUCOOH                       ','C511O2                          ', &
+     'C813O2                          ','C512O2                          ','LC578OOH                        ', &
+     'LC4H9OOH                        ','C98O2                           ','BZEMUCNO3                       ', &
+     'TC4H9O2                         ','BZEMUCOOH                       ','NCCH2O2                         ', &
+     'H2NCOCHO                        ','NDMA                            ','NDELA                           ', &
+     'PTLQONE                         ','TEAO2                           ','CH3OH_a01                       ', &
+     'ISOPDNO3                        ','FeSO3p_a01                      ','CH3COCH2O2NO2                   ', &
+     'C6H5CH2O2                       ','CO235C6O2                       ','HNO4                            ', &
+     'NH2O                            ','MEK                             ','HMAC                            ', &
+     'RO6R1O2                         ','HOI                             ','HVMK                            ', &
+     'DMSO2OO                         ','MSIA_a01                        ','DEAN_a01                        ', &
+     'MACRO                           ','HC2O4m_a01                      ','CH2OOA                          ', &
      'C6CO4DB                         ','C1OOHC2OOHC4OD                  ','HOCHCHO                         ', &
-     'LMBOABOOH                       ','PAN                             ','PHAN                            ', &
-     'LNMBOABOOH                      ','NC4DCO2H                        ','MEANNO_a01                      ', &
-     'NC4MDCO2H                       ','C513O2                          ','C716O2                          ', &
-     'C1ODC2O2C4OD                    ','NOPINONE                        ','NISOPO2                         ', &
-     'PINALO2                         ','LMEKOOH                         ','DB1OOH                          ' /)
+     'LMBOABOOH                       ','NC4DCO2H                        ','PAN                             ', &
+     'PHAN                            ','NC4MDCO2H                       ','LNMBOABOOH                      ', &
+     'MEANNO_a01                      ','HCOCO2CH3CHO                    ','TOL1O                           ', &
+     'C513O2                          ','C716O2                          ','NOPINONE                        ', &
+     'PINALO2                         ','C1ODC2O2C4OD                    ','NISOPO2                         ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_6 = (/ &
-     'HCOCO2CH3CHO                    ','HOCOC4DIAL                      ','MACRNO3                         ', &
-     'AMP                             ','AMPN                            ','CH3SOO2                         ', &
-     'CH3SO4                          ','HCOOm_a01                       ','FeCl2p_a01                      ', &
-     'TOL1O                           ','C614O2                          ','C721CHO                         ', &
-     'CH3ONO                          ','C514O2                          ','NTLFUO2                         ', &
-     'HO12CO3C4                       ','PBZQO2                          ','BZFUO2                          ', &
-     'CH2CHOH                         ','C32OH13CO                       ','DMSO                            ', &
+     'LMEKOOH                         ','DB1OOH                          ','HOCOC4DIAL                      ', &
+     'MACRNO3                         ','AMP                             ','AMPN                            ', &
+     'CH3SOO2                         ','CH3SO4                          ','HCO3m_a01                       ', &
+     'HCOOm_a01                       ','FeCl2p_a01                      ','C721CHO                         ', &
+     'C614O2                          ','CH3ONO                          ','C514O2                          ', &
+     'NTLFUO2                         ','NBZFUO2                         ','HO12CO3C4                       ', &
+     'BZFUO2                          ','PRONO3BO2                       ','CH2CHOH                         ', &
+     'TLFUO2                          ','MACO2                           ','C32OH13CO                       ', &
      'HCOCOCH2OOH                     ','NO3CH2CO3                       ','C7CO4DB                         ', &
-     'NBZFUO2                         ','I2_a01                          ','C85O2                           ', &
-     'TLFUO2                          ','CH3COCHCO                       ','CH3NHCHO_a01                    ', &
-     'CHOC3COO2                       ','MACO2                           ','TLBIPEROOH                      ', &
-     'PRONO3BO2                       ','CH4                             ','C106O2                          ', &
-     'CO235C6CHO                      ','MCATEC1O                        ','PHENOL                          ', &
-     'CATECHOL                        ','NC3H7O2                         ','HOC6H4NO2                       ', &
-     'C4CODIAL                        ','NCRES1O                         ','NPHEN1O                         ', &
+     'PBZQO2                          ','C85O2                           ','I2_a01                          ', &
+     'CH3COCHCO                       ','TLBIPEROOH                      ','CH3NHCHO_a01                    ', &
+     'CHOC3COO2                       ','CH4                             ','C106O2                          ', &
+     'CO235C6CHO                      ','MNCATECH                        ','HOC6H4NO2                       ', &
+     'PHENOL                          ','C4CODIAL                        ','NC3H7O2                         ', &
+     'NCRES1O                         ','CATECHOL                        ','NPHEN1O                         ', &
      'TLBIPERNO3                      ','C721O2                          ','C8BCO2                          ', &
-     'HCOCO3H                         ','DNCRESO2                        ','INO3                            ', &
-     'OIO                             ','CH3CHOHOOH                      ','MNCATECO2                       ', &
-     'STYRENO2                        ','DNPHENO2                        ','MNNCATECO2                      ', &
-     'NSTYRENO2                       ','IBUTOLBO2                       ','C59O2                           ', &
-     'HOCH2COCHO                      ','C810O2                          ','LMEKNO3                         ', &
-     'LNAPINABO2                      ','ClNO3                           ','C85CO3                          ', &
-     'CO14O3CHO                       ','H2NCHO                          ','IC3H7O2                         ', &
-     'DMSOO                           ','C1ODC3O2C4OOH                   ','MBO                             ', &
-     'PTLQO2                          ','NH2CH2CHOH_a01                  ','NCRESO2                         ', &
-     'CRESO2                          ','C6CO2OHCO3                      ','NPTLQO2                         ', &
-     'LHMVKABOOH                      ','TENp_a01                        ','MEPROPENE                       ', &
-     'LC5PAN1719                      ','CH3CN                           ','BUT1ENE                         ', &
-     'CH2CO                           ','C5CO2DBCO3                      ','DMNCHO                          ', &
-     'C5DICARBO2                      ','MVKNO3                          ','LNISO3                          ' /)
+     'C59O2                           ','INO3                            ','OIO                             ', &
+     'DNCRESO2                        ','HCOCO3H                         ','STYRENO2                        ', &
+     'DNPHENO2                        ','CH3CHOHOOH                      ','HOCH2COCHO                      ', &
+     'NSTYRENO2                       ','IBUTOLBO2                       ','C810O2                          ', &
+     'LNAPINABO2                      ','ClNO3                           ','MCATECHOL                       ', &
+     'IC3H7O2                         ','CO14O3CHO                       ','H2NCHO                          ', &
+     'DMNCHO                          ','MEPROPENE                       ','PTLQO2                          ', &
+     'DMSOO                           ','MBO                             ','NH2CH2CHOH_a01                  ', &
+     'LMEKNO3                         ','NCRESO2                         ','LHMVKABOOH                      ', &
+     'TENp_a01                        ','CRESO2                          ','C6CO2OHCO3                      ', &
+     'NPTLQO2                         ','C1ODC3O2C4OOH                   ','C85CO3                          ', &
+     'CH3CN                           ','LC5PAN1719                      ','BUT1ENE                         ', &
+     'CH2CO                           ','C5CO2DBCO3                      ','LNISO3                          ', &
+     'NBZQO2                          ','NO_a01                          ','C1OOHC2O2C4OD                   ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_7 = (/ &
-     'NBZQO2                          ','C1OOHC2O2C4OD                   ','C5CO14OH                        ', &
-     'NO_a01                          ','LAPINABO2                       ','NDNPHENO2                       ', &
-     'MALDIALO2                       ','NDNCRESO2                       ','HOC2H4CO3                       ', &
-     'C722O2                          ','C5CO2OHCO3                      ','MCATECHOL                       ', &
-     'MCATEC1O2                       ','MMALANHYO2                      ','OXYL1O2                         ', &
-     'NC4OHCO3                        ','CAMPHENE                        ','HOCH2OOH                        ', &
-     'MACROOH                         ','HYPERACET                       ','SO2_a01                         ', &
-     'NCATECO2                        ','FeClpp_a01                      ','MMNNO2_a01                      ', &
-     'BENZAL                          ','ME3FURAN                        ','IPRCO3                          ', &
-     'NNCATECO2                       ','DMNCH2_a01                      ','ACCOMECHO                       ', &
-     'CO235C5CHO                      ','C4CO2DBCO3                      ','DENp_a01                        ', &
-     'CATEC1O2                        ','NPHENO2                         ','NH2                             ', &
-     'HNO                             ','CH3NO3                          ','C312COCO3                       ', &
-     'HCN                             ','LC4H9O2                         ','ALCOCH2OOH                      ', &
-     'C33CO                           ','C109O2                          ','CO23C4CHO                       ', &
-     'LISOPACNO3O2                    ','BPINENE                         ','LNBPINABO2                      ', &
-     'CH3SOH                          ','LBUT1ENO2                       ','NOA                             ', &
-     'DENCH2CHOH_a01                  ','CO2C3CHO                        ','TLEPOXMUC                       ', &
-     'HSO4m_a01                       ','CH3COCO3                        ','CH3SO3                          ', &
-     'MALDALCO2H                      ','CH3O2_a01                       ','BZBIPERO2                       ', &
-     'CO3m_a01                        ','C615CO2O2                       ','HOCH2CO2H                       ', &
-     'LZCO3C23DBCOD                   ','MEANNO2_a01                     ','CH3NHCH2_a01                    ', &
-     'SABINENE                        ','BPINAO2                         ','C89O2                           ', &
-     'NOPINDO2                        ','C5DIALO2                        ','C5134CO2OH                      ', &
-     'CO23C4CO3                       ','HCOCCH3CO                       ','IO2m_a01                        ', &
-     'CH3COCHO2CHO                    ','NCRES1O2                        ','NPHEN1O2                        ', &
-     'C86O2                           ','ROO6R1O2                        ','LMBOABO2                        ', &
-     'LNMBOABO2                       ','IBUTALOH                        ','LC578O2                         ', &
-     'IPRCHO                          ','TLBIPERO2                       ','APINENE                         ', &
-     'CARENE                          ','HYPROPO2                        ','CH2OHSO3m_a01                   ' /)
+     'MVKNO3                          ','NDNPHENO2                       ','LAPINABO2                       ', &
+     'C5CO14OH                        ','MALDIALO2                       ','HOC2H4CO3                       ', &
+     'C5DICARBO2                      ','NDNCRESO2                       ','C312COCO3                       ', &
+     'CAMPHENE                        ','HOCH2OOH                        ','OXYL1O2                         ', &
+     'C5CO2OHCO3                      ','C722O2                          ','CATEC1O2                        ', &
+     'MNCATECO2                       ','NPHENO2                         ','MCATEC1O2                       ', &
+     'IPRCO3                          ','SO2_a01                         ','NCATECO2                        ', &
+     'MNNCATECO2                      ','FeClpp_a01                      ','MMNNO2_a01                      ', &
+     'BENZAL                          ','NC4OHCO3                        ','DMNCH2_a01                      ', &
+     'ME3FURAN                        ','ACCOMECHO                       ','HYPERACET                       ', &
+     'NNCATECO2                       ','CO235C5CHO                      ','DENp_a01                        ', &
+     'MACROOH                         ','NH2                             ','HNO                             ', &
+     'C4CO2DBCO3                      ','CH3NO3                          ','HCN                             ', &
+     'LC4H9O2                         ','ALCOCH2OOH                      ','C33CO                           ', &
+     'C109O2                          ','TLEPOXMUC                       ','CH3SOH                          ', &
+     'CO23C4CHO                       ','BPINENE                         ','LNBPINABO2                      ', &
+     'LBUT1ENO2                       ','DENCH2CHOH_a01                  ','LISOPACNO3O2                    ', &
+     'NOA                             ','CO2C3CHO                        ','HSO4m_a01                       ', &
+     'CH3SO3                          ','CH3COCO3                        ','CH3O2_a01                       ', &
+     'BZBIPERO2                       ','MALDALCO2H                      ','MMALANHYO2                      ', &
+     'BPINAO2                         ','CO3m_a01                        ','C615CO2O2                       ', &
+     'MEANNO2_a01                     ','CH3NHCH2_a01                    ','LZCO3C23DBCOD                   ', &
+     'HOCH2CO2H                       ','C5DIALO2                        ','C5134CO2OH                      ', &
+     'IO2m_a01                        ','NCRES1O2                        ','CO23C4CO3                       ', &
+     'CH3COCHO2CHO                    ','C86O2                           ','C89O2                           ', &
+     'NPHEN1O2                        ','HCOCCH3CO                       ','NOPINDO2                        ', &
+     'LC578O2                         ','LNMBOABO2                       ','IPRCHO                          ', &
+     'IBUTALOH                        ','LMBOABO2                        ','TLBIPERO2                       ', &
+     'HYPROPO2                        ','APINENE                         ','ROO6R1O2                        ', &
+     'SABINENE                        ','CH2OHSO3m_a01                   ','HOETNETOH                       ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_8 = (/ &
-     'BZEMUCCO3                       ','HOETNETOH                       ','MMA                             ', &
-     'C6H5O2                          ','C721CO3                         ','TLEMUCCO3                       ', &
-     'IBUTDIAL                        ','BZEMUCO2                        ','EPXC4DIAL                       ', &
-     'LISOPEFO2                       ','HOCH2COCH2O2                    ','CATEC1O                         ', &
-     'HCOCH2CHO                       ','ACCOMECO3                       ','C6H5CO3                         ', &
-     'MECOACETO2                      ','HNO3_a01                        ','CBUT2ENE                        ', &
-     'HOCH2CO                         ','STYRENE                         ','BZEPOXMUC                       ', &
-     'PHENO2                          ','C3DIALO2                        ','HCOCOHCO3                       ', &
-     'TBUT2ENE                        ','CH3OH                           ','CH3CHOHO2                       ', &
-     'MNCATECH                        ','CO235C6CO3                      ','LMEKO2                          ', &
-     'CH3NCH3                         ','BZFUONE                         ','CH3SOO                          ', &
-     'HCOC5                           ','ICl_a01                         ','BIACETO2                        ', &
-     'CO23C3CHO                       ','EPXDLCO3                        ','C96CO3                          ', &
-     'C2H5CO3                         ','MALANHYO2                       ','TLEMUCO2                        ', &
-     'HCOCO                           ','TOL1OHNO2                       ','DNCRES                          ', &
+     'C6H5O2                          ','CARENE                          ','C721CO3                         ', &
+     'MMA                             ','BZEMUCCO3                       ','TLEMUCCO3                       ', &
+     'TLEMUCO2                        ','EPXC4DIAL                       ','IBUTDIAL                        ', &
+     'HOCH2COCH2O2                    ','BZEMUCO2                        ','LISOPEFO2                       ', &
+     'C3DIALO2                        ','MECOACETO2                      ','CATEC1O                         ', &
+     'C6H5CO3                         ','HCOCH2CHO                       ','HNO3_a01                        ', &
+     'STYRENE                         ','BZEPOXMUC                       ','EPXDLCO3                        ', &
+     'PHENO2                          ','HCOCO                           ','HCOCOHCO3                       ', &
+     'CBUT2ENE                        ','TBUT2ENE                        ','CH3OH                           ', &
+     'CH3CHOHO2                       ','HOCH2CO                         ','HCOC5                           ', &
+     'CO235C6CO3                      ','CH3NCH3                         ','LMEKO2                          ', &
+     'CH3SOO                          ','BZFUONE                         ','ICl_a01                         ', &
+     'BIACETO2                        ','C2H5CO3                         ','ACCOMECO3                       ', &
+     'C96CO3                          ','CO23C3CHO                       ','MALANHYO2                       ', &
+     'MCATEC1O                        ','TOL1OHNO2                       ','DNCRES                          ', &
      'C6H5O                           ','DNPHEN                          ','NH2CH2_a01                      ', &
      'EZCHOCCH3CHO2                   ','C1ODC2OOHC4OD                   ','SO5m_a01                        ', &
-     'TLFUONE                         ','C2H5O2                          ','BUT2OLO2                        ', &
-     'MACO3                           ','DMNp_a01                        ','NO3CH2CHO                       ', &
-     'HOCH2O2                         ','C3H7CHO                         ','C2H5CHO                         ', &
-     'C811CO3                         ','CH3COCH3                        ','DMS                             ', &
-     'NOPINOO                         ','MALDIALCO3                      ','APINAOO                         ', &
-     'CHOC3COCO3                      ','CO2H3CO3                        ','O1D                             ', &
-     'C5H8                            ','HSO5m_a01                       ','HNO4_a01                        ', &
-     'HOOCH2CHO                       ','MEAN                            ','H2NCOCH2OH                      ', &
-     'CH2NCH3                         ','ISOPBDNO3O2                     ','C5CO14O2                        ', &
-     'HCOCO2H                         ','CH3SO                           ','CH3S                            ', &
-     'HOOCH2CO3                       ','CO13C4CHO                       ','CH3OOH                          ', &
-     'MALDIAL                         ','TMA_a01                         ','HONO                            ', &
-     'ISOPBOOH                        ','MVK                             ','NC4CHO                          ' /)
+     'MACO3                           ','DMNp_a01                        ','TLFUONE                         ', &
+     'HOCH2O2                         ','C2H5O2                          ','BUT2OLO2                        ', &
+     'NO3CH2CHO                       ','DMSO                            ','C811CO3                         ', &
+     'C3H7CHO                         ','C2H5CHO                         ','CH3COCH3                        ', &
+     'CHOC3COCO3                      ','APINAOO                         ','NOPINOO                         ', &
+     'O1D                             ','MALDIALCO3                      ','CO2H3CO3                        ', &
+     'C5H8                            ','MEAN                            ','H2NCOCH2OH                      ', &
+     'HOOCH2CHO                       ','HSO5m_a01                       ','HNO4_a01                        ', &
+     'CH2NCH3                         ','CH3S                            ','C5CO14O2                        ', &
+     'ISOPBDNO3O2                     ','HCOCO2H                         ','CO13C4CHO                       ', &
+     'HOOCH2CO3                       ','CH3OOH                          ','TMA_a01                         ', &
+     'MALDIAL                         ','NC4CHO                          ','ISOPBOOH                        ', &
+     'MVK                             ','HONO                            ','APINBOO                         ' /)
   CHARACTER(LEN=32), PARAMETER, DIMENSION(90) :: SPC_NAMES_9 = (/ &
-     'APINBOO                         ','DB2O2                           ','HCOOH_a01                       ', &
-     'EZCH3CO2CHCHO                   ','HCOCH2CO3                       ','IPRHOCO3                        ', &
-     'CH3CO3                          ','LDISOPACO2                      ','MBOOO                           ', &
+     'DB2O2                           ','HCOOH_a01                       ','CH3SO                           ', &
+     'EZCH3CO2CHCHO                   ','HCOCH2CO3                       ','CH3CO3                          ', &
+     'IPRHOCO3                        ','LDISOPACO2                      ','MBOOO                           ', &
      'LHC4ACCO3                       ','MACRO2                          ','C5DICARB                        ', &
      'TEA_a01                         ','HCl                             ','NO3_a01                         ', &
      'MACR                            ','CH3COCO2H                       ','Cl2_a01                         ', &
-     'CH2O2H2_a01                     ','CH3SOOH                         ','CH3SO2                          ', &
-     'HCOCO3                          ','NH3                             ','C2H4                            ', &
-     'CHOCOCH2O2                      ','ISOPDOOH                        ','LISOPACO2                       ', &
-     'BLOV                            ','BSOV                            ','NORPINAL                        ', &
-     'O3_a01                          ','ACETOL                          ','H2O2                            ', &
-     'C3H6                            ','DEA_a01                         ','C89CO3                          ', &
-     'C96O2                           ','CH3COCH2O2                      ','I2                              ', &
-     'LHMVKABO2                       ','NDELA_a01                       ','DEANNO2_a01                     ', &
-     'PINAL                           ','ISOPDO2                         ','FeOHpp_a01                      ', &
-     'DB1O2                           ','HCO3m_a01                       ','CO2H3CHO                        ', &
-     'HOCH2CO3                        ','HCOCH2O2                        ','LHC4ACCHO                       ', &
-     'LISOPACNO3                      ','CH3                             ','MEA_a01                         ', &
-     'LISOPACOOH                      ','ISOPBO2                         ','LZCODC23DBCOOH                  ', &
-     'DB1O                            ','C4MDIAL                         ','LZCO3HC23DBCOD                  ', &
-     'HCOCO2H_a01                     ','CH3CO                           ','HOCH2CH2O2                      ', &
-     'MGLYOX                          ','DMA_a01                         ','ClO                             ', &
-     'CH2OO                           ','HNO3                            ','I                               ', &
-     'CH3CHO                          ','GLYOX                           ','HCHO_a01                        ', &
-     'FeOpp_a01                       ','CH3OOH_a01                      ','O3P                             ', &
-     'MMA_a01                         ','HOCH2CHO                        ','SO4m_a01                        ', &
-     'DMNNO2_a01                      ','NDMA_a01                        ','CH3O                            ', &
-     'N2O4_a01                        ','N2O3_a01                        ','IO                              ', &
-     'Feppp_a01                       ','SO3m_a01                        ','Fepp_a01                        ', &
-     'Cl_a01                          ','H2O                             ','CO                              ' /)
-  CHARACTER(LEN=32), PARAMETER, DIMENSION(36) :: SPC_NAMES_10 = (/ &
-     'HCOOH                           ','NO2_a01                         ','HCHO                            ', &
-     'O2_a01                          ','NO2m_a01                        ','O3                              ', &
-     'H2O2_a01                        ','TMA                             ','SO3mm_a01                       ', &
-     'O2m_a01                         ','OHm_a01                         ','HOCl_a01                        ', &
-     'HOI_a01                         ','Cl                              ','CH3O2                           ', &
-     'SO2                             ','SO4mm_a01                       ','HONO_a01                        ', &
-     'NO2                             ','Cl2m_a01                        ','NO3                             ', &
-     'HO2_a01                         ','NO3m_a01                        ','HO2                             ', &
-     'OH_a01                          ','Clm_a01                         ','OH                              ', &
-     'HSO3m_a01                       ','NO                              ','Im_a01                          ', &
-     'Hp_a01                          ','DMA                             ','O2                              ', &
-     'N2                              ','CO2                             ','H2O_a01                         ' /)
-  CHARACTER(LEN=32), PARAMETER, DIMENSION(936) :: SPC_NAMES = (/&
+     'CH2O2H2_a01                     ','NH3                             ','HCOCO3                          ', &
+     'CHOCOCH2O2                      ','ISOPDOOH                        ','C2H4                            ', &
+     'LISOPACO2                       ','BLOV                            ','BSOV                            ', &
+     'NORPINAL                        ','ACETOL                          ','C3H6                            ', &
+     'DEA_a01                         ','H2O2                            ','DMS                             ', &
+     'C89CO3                          ','C96O2                           ','CH3COCH2O2                      ', &
+     'CH3SO2                          ','I2                              ','LHMVKABO2                       ', &
+     'PINAL                           ','NDELA_a01                       ','DEANNO2_a01                     ', &
+     'ISOPDO2                         ','FeOHpp_a01                      ','DB1O2                           ', &
+     'CO2H3CHO                        ','MEA_a01                         ','HOCH2CO3                        ', &
+     'HCOCH2O2                        ','LHC4ACCHO                       ','LISOPACNO3                      ', &
+     'CH3                             ','MMA_a01                         ','ISOPBO2                         ', &
+     'LISOPACOOH                      ','LZCODC23DBCOOH                  ','C4MDIAL                         ', &
+     'LZCO3HC23DBCOD                  ','HCOCO2H_a01                     ','DB1O                            ', &
+     'CH3CO                           ','HOCH2CH2O2                      ','MGLYOX                          ', &
+     'CH3SOOH                         ','ClO                             ','HNO3                            ', &
+     'CH2OO                           ','CH3CHO                          ','DMNNO2_a01                      ', &
+     'GLYOX                           ','I                               ','FeOpp_a01                       ', &
+     'CO2_a01                         ','HCHO_a01                        ','O3P                             ', &
+     'CH3OOH_a01                      ','NDMA_a01                        ','DMA                             ', &
+     'HOCH2CHO                        ','Feppp_a01                       ','SO3m_a01                        ', &
+     'SO4m_a01                        ','Fepp_a01                        ','CH3O                            ', &
+     'Cl_a01                          ','TMA                             ','DMA_a01                         ', &
+     'Im_a01                          ','N2O3_a01                        ','N2O4_a01                        ' /)
+  CHARACTER(LEN=32), PARAMETER, DIMENSION(37) :: SPC_NAMES_10 = (/ &
+     'HOI_a01                         ','CO                              ','NO2m_a01                        ', &
+     'HCOOH                           ','HCHO                            ','HOCl_a01                        ', &
+     'NO3m_a01                        ','SO4mm_a01                       ','O3_a01                          ', &
+     'O3                              ','Cl                              ','HO2                             ', &
+     'SO2                             ','OH                              ','HSO3m_a01                       ', &
+     'CH3O2                           ','IO                              ','HONO_a01                        ', &
+     'H2O2_a01                        ','NO3                             ','SO3mm_a01                       ', &
+     'O2_a01                          ','O2m_a01                         ','Hp_a01                          ', &
+     'HO2_a01                         ','NO2                             ','H2O                             ', &
+     'Clm_a01                         ','Cl2m_a01                        ','OHm_a01                         ', &
+     'NO                              ','NO2_a01                         ','OH_a01                          ', &
+     'O2                              ','N2                              ','CO2                             ', &
+     'H2O_a01                         ' /)
+  CHARACTER(LEN=32), PARAMETER, DIMENSION(937) :: SPC_NAMES = (/&
     SPC_NAMES_0, SPC_NAMES_1, SPC_NAMES_2, SPC_NAMES_3, SPC_NAMES_4, &
     SPC_NAMES_5, SPC_NAMES_6, SPC_NAMES_7, SPC_NAMES_8, SPC_NAMES_9, &
     SPC_NAMES_10 /)
@@ -366,24 +367,24 @@ MODULE messy_mecca_kpp_Monitor
      '                       HO2 + OH --> H2O + O2                                                        ', &
      '                          2 HO2 --> H2O2 + O2                                                       ', &
      '                      O1D + H2O --> 2 OH                                                            ', &
-     '                      H2O2 + OH --> H2O + HO2                                                       ', &
+     '                      H2O2 + OH --> HO2 + H2O                                                       ', &
      '                          2 H2O --> H2OH2O                                                          ', &
      '                         H2OH2O --> 2 H2O                                                           ', &
      '                       O1D + N2 --> O3P + N2                                                        ', &
      '                        O3 + NO --> NO2 + O2                                                        ', &
      '                       O3 + NO2 --> NO3 + O2                                                        ', &
      '                       NO3 + NO --> 2 NO2                                                           ', &
-     '                      NO2 + NO3 --> N2O5                                                            ', &
-     '                           N2O5 --> NO2 + NO3                                                       ', &
+     '                      NO3 + NO2 --> N2O5                                                            ', &
+     '                           N2O5 --> NO3 + NO2                                                       ', &
      '                        OH + NO --> HONO                                                            ', &
-     '                       HO2 + NO --> NO2 + OH                                                        ', &
-     '                       NO2 + OH --> HNO3                                                            ', &
-     '                      NO2 + HO2 --> HNO4                                                            ', &
-     '                      NO3 + HO2 --> NO2 + OH + O2                                                   ', &
-     '                      HONO + OH --> H2O + NO2                                                       ', &
-     '                      HNO3 + OH --> H2O + NO3                                                       ', &
-     '                           HNO4 --> NO2 + HO2                                                       ', &
-     '                      HNO4 + OH --> H2O + NO2                                                       ', &
+     '                       HO2 + NO --> OH + NO2                                                        ', &
+     '                       OH + NO2 --> HNO3                                                            ', &
+     '                      HO2 + NO2 --> HNO4                                                            ', &
+     '                      HO2 + NO3 --> OH + NO2 + O2                                                   ', &
+     '                      HONO + OH --> NO2 + H2O                                                       ', &
+     '                      HNO3 + OH --> NO3 + H2O                                                       ', &
+     '                           HNO4 --> HO2 + NO2                                                       ', &
+     '                      HNO4 + OH --> NO2 + H2O                                                       ', &
      '                       NH3 + OH --> NH2 + H2O                                                       ', &
      '                       NH2 + O3 --> NH2O + O2                                                       ', &
      '                      NH2 + HO2 --> NH2O + OH                                                       ' /)
@@ -402,42 +403,42 @@ MODULE messy_mecca_kpp_Monitor
      '                     NH2OH + OH --> NHOH + H2O                                                      ', &
      '                       HNO + O2 --> HO2 + NO                                                        ', &
      '                       CH4 + OH --> CH3 + H2O                                                       ', &
-     '                     CH3OH + OH --> 0.15 CH3O + H2O + 0.85 HCHO + 0.85 HO2                          ', &
-     '                    CH3O2 + HO2 --> CH3OOH + O2                                                     ', &
-     '                    CH3O2 + HO2 --> H2O + HCHO + O2                                                 ', &
+     '                     CH3OH + OH --> 0.15 CH3O + 0.85 HCHO + 0.85 HO2 + H2O                          ', &
+     '                    HO2 + CH3O2 --> CH3OOH + O2                                                     ', &
+     '                    HO2 + CH3O2 --> HCHO + H2O + O2                                                 ', &
      '                     CH3O2 + NO --> CH3O + NO2                                                      ', &
      '                     CH3O2 + NO --> CH3NO3                                                          ', &
      '                    CH3O2 + NO3 --> CH3O + NO2 + O2                                                 ', &
      '                          CH3O2 --> CH3O + 0.5 O2                                                   ', &
      '                          CH3O2 --> 0.5 CH3OH + 0.5 HCHO + 0.5 O2                                   ', &
-     '                    CH3OOH + OH --> H2O + 0.4 HCHO + 0.6 CH3O2 + 0.4 OH                             ', &
-     '                      HCHO + OH --> H2O + CO + HO2                                                  ', &
+     '                    CH3OOH + OH --> 0.4 HCHO + 0.4 OH + 0.6 CH3O2 + H2O                             ', &
+     '                      HCHO + OH --> CO + HO2 + H2O                                                  ', &
      '                     HCHO + NO3 --> HNO3 + CO + HO2                                                 ', &
      '                        CO + OH --> H + CO2                                                         ', &
-     '                     HCOOH + OH --> H2O + HO2 + CO2                                                 ', &
+     '                     HCOOH + OH --> HO2 + H2O + CO2                                                 ', &
      '                    CH3O2 + NO2 --> CH3O2NO2                                                        ', &
      '                       CH3O2NO2 --> CH3O2 + NO2                                                     ', &
-     '                  CH3O2NO2 + OH --> H2O + HCHO + NO3                                                ' /)
+     '                  CH3O2NO2 + OH --> HCHO + NO3 + H2O                                                ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_2 = (/ &
-     '                    CH3NO3 + OH --> H2O + HCHO + NO2                                                ', &
+     '                    CH3NO3 + OH --> HCHO + NO2 + H2O                                                ', &
      '                           CH3O --> HCHO + HO2                                                      ', &
      '                     CH3O + NO2 --> CH3NO3                                                          ', &
      '                     CH3O + NO2 --> HONO + HCHO                                                     ', &
      '                      CH3O + NO --> CH3ONO                                                          ', &
      '                      CH3O + NO --> HNO + HCHO                                                      ', &
      '                     O3 + CH3O2 --> CH3O + 2 O2                                                     ', &
-     '                    CH3ONO + OH --> H2O + HCHO + NO                                                 ', &
+     '                    CH3ONO + OH --> HCHO + H2O + NO                                                 ', &
      '                     HCHO + HO2 --> HOCH2O2                                                         ', &
      '                        HOCH2O2 --> HCHO + HO2                                                      ', &
-     '                  HOCH2O2 + HO2 --> 0.5 HOCH2OOH + 0.3 H2O + 0.5 HCOOH + 0.2 HO2 + 0.2 OH ... etc.  ', &
-     '                   HOCH2O2 + NO --> HCOOH + NO2 + HO2                                               ', &
-     '                  HOCH2O2 + NO3 --> HCOOH + NO2 + HO2                                               ', &
+     '                  HOCH2O2 + HO2 --> 0.5 HOCH2OOH + 0.5 HCOOH + 0.2 HO2 + 0.2 OH + 0.3 H2O ... etc.  ', &
+     '                   HOCH2O2 + NO --> HCOOH + HO2 + NO2                                               ', &
+     '                  HOCH2O2 + NO3 --> HCOOH + HO2 + NO2                                               ', &
      '                        HOCH2O2 --> HCOOH + HO2                                                     ', &
      '                        HOCH2O2 --> 0.5 HOCH2OH + 0.5 HCOOH + 0.5 O2                                ', &
      '                  HOCH2OOH + OH --> HOCH2O2 + H2O                                                   ', &
-     '                  HOCH2OOH + OH --> H2O + HCOOH + OH                                                ', &
-     '                   HOCH2OH + OH --> H2O + HCOOH + HO2                                               ', &
-     '                     CH3O2 + OH --> CH3O + HO2                                                      ', &
+     '                  HOCH2OOH + OH --> HCOOH + OH + H2O                                                ', &
+     '                   HOCH2OH + OH --> HCOOH + HO2 + H2O                                               ', &
+     '                     OH + CH3O2 --> CH3O + HO2                                                      ', &
      '                          CH2OO --> CO + HO2 + OH                                                   ', &
      '                    CH2OO + H2O --> HOCH2OOH                                                        ', &
      '                 H2OH2O + CH2OO --> HOCH2OOH + H2O                                                  ', &
@@ -454,7 +455,7 @@ MODULE messy_mecca_kpp_Monitor
      '                        2 CH2OO --> 2 HCHO + O2                                                     ', &
      '                  HOCH2O2 + NO2 --> HOCH2O2NO2                                                      ', &
      '                     HOCH2O2NO2 --> HOCH2O2 + NO2                                                   ', &
-     '                HOCH2O2NO2 + OH --> H2O + HCOOH + NO3                                               ', &
+     '                HOCH2O2NO2 + OH --> HCOOH + NO3 + H2O                                               ', &
      '                       CH3 + O2 --> CH3O2                                                           ', &
      '                       CH3 + O3 --> 0.956 H + 0.044 CH3O + 0.956 HCHO + O2                          ', &
      '                      CH3 + O3P --> H + 0.17 H2 + 0.17 CO + 0.83 HCHO                               ', &
@@ -462,7 +463,7 @@ MODULE messy_mecca_kpp_Monitor
      '                     O3P + CH3O --> 0.75 CH3 + 0.25 HCHO + 0.25 OH + 0.75 O2                        ', &
      '                    O3P + CH3O2 --> CH3O + O2                                                       ', &
      '                     O3P + HCHO --> 0.3 H + 0.7 CO + HO2 + 0.7 OH + 0.3 CO2                         ', &
-     '                         CH2OOA --> 0.37 CH2OO + 0.47 H2O + 0.63 CO + 0.16 HO2 + 0.16 OH ... etc.   ', &
+     '                         CH2OOA --> 0.37 CH2OO + 0.63 CO + 0.16 HO2 + 0.16 OH + 0.47 H2O ... etc.   ', &
      '                       HCN + OH --> CN + H2O                                                        ', &
      '                      HCN + O1D --> HCN + O3P                                                       ', &
      '                      HCN + O1D --> NCO + H                                                         ', &
@@ -475,9 +476,9 @@ MODULE messy_mecca_kpp_Monitor
      '                      C2H4 + O3 --> CH2OOA + HCHO                                                   ', &
      '                      C2H4 + OH --> HOCH2CH2O2                                                      ', &
      '                   C2H5O2 + HO2 --> C2H5OOH                                                         ', &
-     '                    C2H5O2 + NO --> CH3CHO + NO2 + HO2                                              ', &
+     '                    C2H5O2 + NO --> CH3CHO + HO2 + NO2                                              ', &
      '                    C2H5O2 + NO --> C2H5NO3                                                         ', &
-     '                   C2H5O2 + NO3 --> CH3CHO + NO2 + HO2                                              ', &
+     '                   C2H5O2 + NO3 --> CH3CHO + HO2 + NO2                                              ', &
      '                         C2H5O2 --> 0.2 C2H5OH + 0.8 CH3CHO + 0.6 HO2                               ', &
      '                   C2H5OOH + OH --> C2H5O2 + H2O                                                    ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_4 = (/ &
@@ -495,7 +496,7 @@ MODULE messy_mecca_kpp_Monitor
      '                         CH3CO3 --> CH3 + CO2                                                       ', &
      '                         CH3CO3 --> CH3CO2H                                                         ', &
      '                   CH3CO3H + OH --> CH3CO3 + H2O                                                    ', &
-     '                       PAN + OH --> H2O + CO + HCHO + NO2                                           ', &
+     '                       PAN + OH --> CO + HCHO + NO2 + H2O                                           ', &
      '                            PAN --> CH3CO3 + NO2                                                    ', &
      '                      C2H2 + OH --> GLYOX + OH                                                      ', &
      '                      C2H2 + OH --> CO + HCOOH + HO2                                                ', &
@@ -510,15 +511,15 @@ MODULE messy_mecca_kpp_Monitor
      '                 HOCH2CO3 + HO2 --> HCHO + HO2 + OH + CO2                                           ', &
      '                 HOCH2CO3 + HO2 --> HOCH2CO3H                                                       ', &
      '                 HOCH2CO3 + HO2 --> HOCH2CO2H + O3                                                  ', &
-     '                  HOCH2CO3 + NO --> HCHO + NO2 + HO2 + CO2                                          ' /)
+     '                  HOCH2CO3 + NO --> HCHO + HO2 + NO2 + CO2                                          ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_5 = (/ &
      '                 HOCH2CO3 + NO2 --> PHAN                                                            ', &
-     '                 HOCH2CO3 + NO3 --> HCHO + NO2 + HO2 + CO2                                          ', &
-     '                 HOCH2CO2H + OH --> 0.91 HCOCO2H + H2O + 0.09 HCHO + HO2 + 0.09 CO2                 ', &
+     '                 HOCH2CO3 + NO3 --> HCHO + HO2 + NO2 + CO2                                          ', &
+     '                 HOCH2CO2H + OH --> 0.91 HCOCO2H + 0.09 HCHO + HO2 + H2O + 0.09 CO2                 ', &
      '                 HOCH2CO3H + OH --> HOCH2CO3 + H2O                                                  ', &
      '                 HOCH2CO3H + OH --> HCOCO3H + HO2                                                   ', &
      '                           PHAN --> HOCH2CO3 + NO2                                                  ', &
-     '                      PHAN + OH --> H2O + CO + HCHO + NO2                                           ', &
+     '                      PHAN + OH --> CO + HCHO + NO2 + H2O                                           ', &
      '                     GLYOX + OH --> HCOCO + H2O                                                     ', &
      '                    GLYOX + NO3 --> HCOCO + HNO3                                                    ', &
      '                          HCOCO --> 2 CO + HO2                                                      ', &
@@ -527,45 +528,45 @@ MODULE messy_mecca_kpp_Monitor
      '                         HCOCO3 --> CO + HO2 + CO2                                                  ', &
      '                         HCOCO3 --> HCOCO2H                                                         ', &
      '                   HCOCO3 + HO2 --> CO + HO2 + OH + CO2                                             ', &
-     '                    HCOCO3 + NO --> CO + NO2 + HO2 + CO2                                            ', &
-     '                   HCOCO3 + NO3 --> CO + NO2 + HO2 + CO2                                            ', &
-     '                   HCOCO3 + NO2 --> CO + NO3 + HO2 + CO2                                            ', &
-     '                   HCOCO2H + OH --> H2O + CO + HO2 + CO2                                            ', &
+     '                    HCOCO3 + NO --> CO + HO2 + NO2 + CO2                                            ', &
+     '                   HCOCO3 + NO3 --> CO + HO2 + NO2 + CO2                                            ', &
+     '                   HCOCO3 + NO2 --> CO + HO2 + NO3 + CO2                                            ', &
+     '                   HCOCO2H + OH --> CO + HO2 + H2O + CO2                                            ', &
      '                   HCOCO3H + OH --> HCOCO3 + H2O                                                    ', &
-     '                   HCOCO3H + OH --> H2O + CO + OH + CO2                                             ', &
+     '                   HCOCO3H + OH --> CO + OH + H2O + CO2                                             ', &
      '                     HOCH2CH2O2 --> 0.2 ETHGLY + 0.6 HOCH2CH2O + 0.2 HOCH2CHO                       ', &
-     '                HOCH2CH2O2 + NO --> 0.75 HOCH2CH2O + 0.5 HCHO + NO2 + 0.25 HO2                      ', &
+     '                HOCH2CH2O2 + NO --> 0.75 HOCH2CH2O + 0.5 HCHO + 0.25 HO2 + NO2                      ', &
      '                HOCH2CH2O2 + NO --> ETHOHNO3                                                        ', &
      '               HOCH2CH2O2 + HO2 --> HYETHO2H                                                        ', &
      '               HOCH2CH2O2 + HO2 --> HOCH2CH2O + OH                                                  ', &
-     '                  ETHOHNO3 + OH --> 0.93 NO3CH2CHO + 0.07 HOCH2CHO + H2O + 0.07 NO2 + 0.93 HO2 ... e', &
+     '                  ETHOHNO3 + OH --> 0.93 NO3CH2CHO + 0.07 HOCH2CHO + 0.93 HO2 + 0.07 NO2 ... etc.   ', &
      '                  HYETHO2H + OH --> HOCH2CH2O2 + H2O                                                ', &
-     '                  HYETHO2H + OH --> HOCH2CHO + H2O + OH                                             ', &
-     '                  HYETHO2H + OH --> HOOCH2CHO + H2O + HO2                                           ' /)
+     '                  HYETHO2H + OH --> HOCH2CHO + OH + H2O                                             ', &
+     '                  HYETHO2H + OH --> HOOCH2CHO + HO2 + H2O                                           ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_6 = (/ &
      '                      HOCH2CH2O --> HOCH2CHO + HO2                                                  ', &
      '                      HOCH2CH2O --> 2 HCHO + HO2                                                    ', &
-     '                    ETHGLY + OH --> HOCH2CHO + H2O + HO2                                            ', &
+     '                    ETHGLY + OH --> HOCH2CHO + HO2 + H2O                                            ', &
      '                       HCOCH2O2 --> 0.2 GLYOX + 0.2 HOCH2CHO + 0.6 CO + 0.6 HCHO + 0.6 HO2 ... etc. ', &
      '                 HCOCH2O2 + HO2 --> HOOCH2CHO                                                       ', &
      '                 HCOCH2O2 + HO2 --> CO + HCHO + HO2 + OH                                            ', &
-     '                  HCOCH2O2 + NO --> CO + HCHO + NO2 + HO2                                           ', &
+     '                  HCOCH2O2 + NO --> CO + HCHO + HO2 + NO2                                           ', &
      '                  HCOCH2O2 + NO --> NO3CH2CHO                                                       ', &
-     '                 HCOCH2O2 + NO3 --> CO + HCHO + NO2 + HO2                                           ', &
+     '                 HCOCH2O2 + NO3 --> CO + HCHO + HO2 + NO2                                           ', &
      '                 HOOCH2CHO + OH --> HCOCH2O2                                                        ', &
      '                 HOOCH2CHO + OH --> CO + HCHO + OH                                                  ', &
      '                 HOOCH2CHO + OH --> GLYOX + OH                                                      ', &
      '                HOOCH2CHO + NO3 --> HNO3 + CO + HCHO + OH                                           ', &
-     '                 HOOCH2CO3 + NO --> HCHO + NO2 + OH + CO2                                           ', &
-     '                HOOCH2CO3 + NO3 --> HCHO + NO2 + OH + CO2                                           ', &
+     '                 HOOCH2CO3 + NO --> HCHO + OH + NO2 + CO2                                           ', &
+     '                HOOCH2CO3 + NO3 --> HCHO + OH + NO2 + CO2                                           ', &
      '                HOOCH2CO3 + HO2 --> HCHO + 2 OH + CO2                                               ', &
      '                HOOCH2CO3 + HO2 --> HOOCH2CO3H                                                      ', &
      '                HOOCH2CO3 + HO2 --> HOOCH2CO2H + O3                                                 ', &
      '                      HOOCH2CO3 --> HCHO + OH + CO2                                                 ', &
      '                      HOOCH2CO3 --> HOOCH2CO2H                                                      ', &
      '                HOOCH2CO3H + OH --> HOOCH2CO3 + H2O                                                 ', &
-     '                HOOCH2CO3H + OH --> HCOCO3H + H2O + OH                                              ', &
-     '                HOOCH2CO2H + OH --> HCOCO2H + H2O + OH                                              ', &
+     '                HOOCH2CO3H + OH --> HCOCO3H + OH + H2O                                              ', &
+     '                HOOCH2CO2H + OH --> HCOCO2H + OH + H2O                                              ', &
      '                     CH2CO + OH --> 0.4 HOOCH2CO2H + 0.6 CO + 0.6 HCHO + 0.6 HO2                    ', &
      '                CH3CHOHOOH + OH --> CH3CO2H + OH                                                    ', &
      '                CH3CHOHOOH + OH --> CH3CHOHO2                                                       ', &
@@ -574,27 +575,27 @@ MODULE messy_mecca_kpp_Monitor
      '                CH3CHOHO2 + HO2 --> 0.3 CH3CO2H + 0.5 CH3CHOHOOH + 0.2 CH3 + 0.2 HCOOH + 0.2 OH ... ', &
      '                      CH3CHOHO2 --> CH3 + HCOOH + OH                                                ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_7 = (/ &
-     '                 CH3CHOHO2 + NO --> CH3 + HCOOH + NO2 + OH                                          ', &
-     '                   C2H5NO3 + OH --> CH3CHO + H2O + NO2                                              ', &
-     '                 NO3CH2CHO + OH --> GLYOX + H2O + NO2                                               ', &
+     '                 CH3CHOHO2 + NO --> CH3 + HCOOH + OH + NO2                                          ', &
+     '                   C2H5NO3 + OH --> CH3CHO + NO2 + H2O                                              ', &
+     '                 NO3CH2CHO + OH --> GLYOX + NO2 + H2O                                               ', &
      '                 NO3CH2CHO + OH --> NO3CH2CO3 + H2O                                                 ', &
-     '                NO3CH2CO3 + HO2 --> HCHO + NO2 + OH + CO2                                           ', &
+     '                NO3CH2CO3 + HO2 --> HCHO + OH + NO2 + CO2                                           ', &
      '                 NO3CH2CO3 + NO --> HCHO + 2 NO2 + CO2                                              ', &
      '                NO3CH2CO3 + NO2 --> NO3CH2PAN                                                       ', &
      '                      NO3CH2CO3 --> HCHO + NO2 + CO2                                                ', &
      '                      NO3CH2PAN --> NO3CH2CO3 + NO2                                                 ', &
      '                   C2H5O2 + NO2 --> C2H5O2NO2                                                       ', &
      '                      C2H5O2NO2 --> C2H5O2 + NO2                                                    ', &
-     '                 C2H5O2NO2 + OH --> CH3CHO + H2O + NO3                                              ', &
+     '                 C2H5O2NO2 + OH --> CH3CHO + NO3 + H2O                                              ', &
      '                     CH3CO + O2 --> CH3CO3                                                          ', &
      '                     CH3CO + O2 --> CO + HCHO + OH                                                  ', &
-     '                    C2H5OH + OH --> 0.95 C2H5O2 + 0.05 HOCH2CH2O2 + H2O + 0.95 HO2                  ', &
+     '                    C2H5OH + OH --> 0.95 C2H5O2 + 0.05 HOCH2CH2O2 + 0.95 HO2 + H2O                  ', &
      '                     CH3CN + OH --> NCCH2O2 + H2O                                                   ', &
      '                     CH3CN + OH --> CH3CO + OH + NO                                                 ', &
      '                    CH3CN + O1D --> CH3CN + O3P                                                     ', &
      '                    CH3CN + O1D --> 2 H + HCN + CO                                                  ', &
      '                    CH3CN + O1D --> 0.5 NCO + 0.5 NCCH2O2 + 0.5 CH3 + 0.5 OH                        ', &
-     '                   NCCH2O2 + NO --> HCN + NO2 + HO2 + CO2                                           ', &
+     '                   NCCH2O2 + NO --> HCN + HO2 + NO2 + CO2                                           ', &
      '                  NCCH2O2 + HO2 --> HCN + HO2 + CO2                                                 ', &
      '                   CH2CHOH + OH --> HCOOH + HCHO + OH                                               ', &
      '                   CH2CHOH + OH --> HOCH2CHO + HO2                                                  ', &
@@ -608,13 +609,13 @@ MODULE messy_mecca_kpp_Monitor
      '                      C3H6 + OH --> HYPROPO2                                                        ', &
      '                     C3H6 + NO3 --> PRONO3BO2                                                       ', &
      '                  IC3H7O2 + HO2 --> IC3H7OOH                                                        ', &
-     '                   IC3H7O2 + NO --> CH3COCH3 + NO2 + HO2                                            ', &
+     '                   IC3H7O2 + NO --> CH3COCH3 + HO2 + NO2                                            ', &
      '                   IC3H7O2 + NO --> IC3H7NO3                                                        ', &
      '                        IC3H7O2 --> 0.2 IPROPOL + 0.8 CH3COCH3 + 0.6 HO2                            ', &
      '                  IC3H7OOH + OH --> IC3H7O2 + H2O                                                   ', &
-     '                  IC3H7OOH + OH --> CH3COCH3 + H2O + OH                                             ', &
+     '                  IC3H7OOH + OH --> CH3COCH3 + OH + H2O                                             ', &
      '                  NC3H7O2 + HO2 --> NC3H7OOH                                                        ', &
-     '                   NC3H7O2 + NO --> C2H5CHO + NO2 + HO2                                             ', &
+     '                   NC3H7O2 + NO --> C2H5CHO + HO2 + NO2                                             ', &
      '                   NC3H7O2 + NO --> NC3H7NO3                                                        ', &
      '                        NC3H7O2 --> 0.2 NPROPOL + 0.8 CH3COCH3 + 0.6 HO2                            ', &
      '                  CH3COCH3 + OH --> CH3COCH2O2 + H2O                                                ', &
@@ -624,23 +625,23 @@ MODULE messy_mecca_kpp_Monitor
      '                CH3COCH2O2 + NO --> NOA                                                             ', &
      '                     CH3COCH2O2 --> 0.2 ACETOL + 0.3 CH3CO + 0.5 MGLYOX + 0.3 HCHO                  ', &
      '                 HYPERACET + OH --> CH3COCH2O2 + H2O                                                ', &
-     '                 HYPERACET + OH --> MGLYOX + H2O + OH                                               ', &
-     '                    ACETOL + OH --> MGLYOX + H2O + HO2                                              ', &
-     '                    MGLYOX + OH --> 0.4 CH3 + 0.6 CH3CO + H2O + 1.4 CO                              ', &
+     '                 HYPERACET + OH --> MGLYOX + OH + H2O                                               ', &
+     '                    ACETOL + OH --> MGLYOX + HO2 + H2O                                              ', &
+     '                    MGLYOX + OH --> 0.4 CH3 + 0.6 CH3CO + 1.4 CO + H2O                              ', &
      '                  IC3H7NO3 + OH --> CH3COCH3 + NO2                                                  ', &
      '               CH3COCH2O2 + NO3 --> CH3CO + HCHO + NO2                                              ', &
      '                       HYPROPO2 --> CH3CHO + HCHO + HO2                                             ', &
      '                 HYPROPO2 + HO2 --> HYPROPO2H                                                       ', &
      '                 HYPROPO2 + HO2 --> CH3CHO + HCHO + HO2 + OH                                        ', &
-     '                  HYPROPO2 + NO --> CH3CHO + HCHO + NO2 + HO2                                       ', &
+     '                  HYPROPO2 + NO --> CH3CHO + HCHO + HO2 + NO2                                       ', &
      '                  HYPROPO2 + NO --> PROPOLNO3                                                       ', &
-     '                 HYPROPO2 + NO3 --> CH3CHO + HCHO + NO2 + HO2                                       ' /)
+     '                 HYPROPO2 + NO3 --> CH3CHO + HCHO + HO2 + NO2                                       ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_9 = (/ &
      '                 HYPROPO2H + OH --> HYPROPO2                                                        ', &
      '                 HYPROPO2H + OH --> ACETOL + OH                                                     ', &
      '                PRONO3BO2 + HO2 --> PR2O2HNO3                                                       ', &
-     '                 PRONO3BO2 + NO --> NOA + NO2 + HO2                                                 ', &
-     '                PRONO3BO2 + NO3 --> NOA + NO2 + HO2                                                 ', &
+     '                 PRONO3BO2 + NO --> NOA + HO2 + NO2                                                 ', &
+     '                PRONO3BO2 + NO3 --> NOA + HO2 + NO2                                                 ', &
      '                 PR2O2HNO3 + OH --> PRONO3BO2                                                       ', &
      '                 PR2O2HNO3 + OH --> NOA + OH                                                        ', &
      '                   MGLYOX + NO3 --> CH3CO + HNO3 + CO                                               ', &
@@ -653,8 +654,8 @@ MODULE messy_mecca_kpp_Monitor
      '               CHOCOCH2O2 + HO2 --> ALCOCH2OOH                                                      ', &
      '               CHOCOCH2O2 + HO2 --> HCOCO + HCHO + OH                                               ', &
      '               CHOCOCH2O2 + NO3 --> HCOCO + HCHO + NO2                                              ', &
-     '                ALCOCH2OOH + OH --> HOOCH2CO3 + H2O + CO                                            ', &
-     '                ALCOCH2OOH + OH --> C33CO + H2O + OH                                                ', &
+     '                ALCOCH2OOH + OH --> HOOCH2CO3 + CO + H2O                                            ', &
+     '                ALCOCH2OOH + OH --> C33CO + OH + H2O                                                ', &
      '                ALCOCH2OOH + OH --> CHOCOCH2O2 + H2O                                                ', &
      '               ALCOCH2OOH + NO3 --> HOOCH2CO3 + HNO3 + CO                                           ', &
      '                   HOCH2COCH2O2 --> HOCH2CO + HCHO                                                  ', &
@@ -669,10 +670,10 @@ MODULE messy_mecca_kpp_Monitor
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_10 = (/ &
      '               CH3COCH2O2 + NO2 --> CH3COCH2O2NO2                                                   ', &
      '                  CH3COCH2O2NO2 --> CH3COCH2O2 + NO2                                                ', &
-     '             CH3COCH2O2NO2 + OH --> MGLYOX + H2O + NO3                                              ', &
+     '             CH3COCH2O2NO2 + OH --> MGLYOX + NO3 + H2O                                              ', &
      '                  NC3H7OOH + OH --> NC3H7O2 + H2O                                                   ', &
-     '                  NC3H7OOH + OH --> C2H5CHO + H2O + OH                                              ', &
-     '                  NC3H7OOH + OH --> C2H5CHO + H2O + HO2                                             ', &
+     '                  NC3H7OOH + OH --> C2H5CHO + OH + H2O                                              ', &
+     '                  NC3H7OOH + OH --> C2H5CHO + HO2 + H2O                                             ', &
      '                   C2H5CHO + OH --> C2H5CO3 + H2O                                                   ', &
      '                  C2H5CHO + NO3 --> C2H5CO3 + HNO3                                                  ', &
      '                        C2H5CO3 --> C2H5O2 + CO2                                                    ', &
@@ -686,7 +687,7 @@ MODULE messy_mecca_kpp_Monitor
      '                  PROPACID + OH --> CH3CHO + H2O + CO2                                              ', &
      '                PERPROACID + OH --> C2H5CO3 + H2O                                                   ', &
      '                PERPROACID + OH --> CH3CHO + H2O + CO2                                              ', &
-     '                       PPN + OH --> CH3CHO + H2O + NO2 + CO2                                        ', &
+     '                       PPN + OH --> CH3CHO + NO2 + H2O + CO2                                        ', &
      '                 CH3COCO3H + OH --> CH3COCO3 + H2O                                                  ', &
      '                 CH3COCO3 + HO2 --> CH3CO + OH + CO2                                                ', &
      '                 CH3COCO3 + HO2 --> CH3COCO3H                                                       ', &
@@ -695,8 +696,8 @@ MODULE messy_mecca_kpp_Monitor
      '                 CH3COCO3 + NO3 --> CH3CO3 + NO2 + CO2                                              ', &
      '                       CH3COCO3 --> CH3CO3 + CO2                                                    ', &
      '                     C33CO + OH --> 3 CO + HO2                                                      ', &
-     '                   IPROPOL + OH --> CH3COCH3 + H2O + HO2                                            ', &
-     '                   NPROPOL + OH --> C2H5CHO + H2O + HO2                                             ' /)
+     '                   IPROPOL + OH --> CH3COCH3 + HO2 + H2O                                            ', &
+     '                   NPROPOL + OH --> C2H5CHO + HO2 + H2O                                             ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_11 = (/ &
      '                   NPROPOL + OH --> HYPROPO2 + H2O                                                  ', &
      '                  PROPENOL + OH --> CH3CHO + HCOOH + OH                                             ', &
@@ -731,14 +732,14 @@ MODULE messy_mecca_kpp_Monitor
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_12 = (/ &
      '                 C3DIALO2 + HO2 --> C3DIALOOH                                                       ', &
      '                 C3DIALO2 + HO2 --> GLYOX + CO + HO2 + OH                                           ', &
-     '                  C3DIALO2 + NO --> GLYOX + CO + NO2 + HO2                                          ', &
-     '                 C3DIALO2 + NO3 --> GLYOX + CO + NO2 + HO2                                          ', &
+     '                  C3DIALO2 + NO --> GLYOX + CO + HO2 + NO2                                          ', &
+     '                 C3DIALO2 + NO3 --> GLYOX + CO + HO2 + NO2                                          ', &
      '                       C3DIALO2 --> GLYOX + CO + HO2                                                ', &
      '                HCOCOHCO3 + HO2 --> GLYOX + HO2 + OH + CO2                                          ', &
      '                HCOCOHCO3 + HO2 --> HCOCOHCO3H                                                      ', &
-     '                 HCOCOHCO3 + NO --> GLYOX + NO2 + HO2 + CO2                                         ', &
+     '                 HCOCOHCO3 + NO --> GLYOX + HO2 + NO2 + CO2                                         ', &
      '                HCOCOHCO3 + NO2 --> HCOCOHPAN                                                       ', &
-     '                HCOCOHCO3 + NO3 --> GLYOX + NO2 + HO2 + CO2                                         ', &
+     '                HCOCOHCO3 + NO3 --> GLYOX + HO2 + NO2 + CO2                                         ', &
      '                      HCOCOHCO3 --> GLYOX + HO2 + CO2                                               ', &
      '                 METACETHO + OH --> CH3CO + CO2                                                     ', &
      '                 HCOCOHPAN + OH --> GLYOX + CO + NO2                                                ', &
@@ -749,14 +750,14 @@ MODULE messy_mecca_kpp_Monitor
      '                        LC4H9O2 --> C3H7CHO + HO2                                                   ', &
      '                        LC4H9O2 --> 0.636 MEK + 0.364 C2H5O2 + 0.364 CH3CHO + 0.636 HO2 ... etc.    ', &
      '                  LC4H9O2 + HO2 --> LC4H9OOH                                                        ', &
-     '                   LC4H9O2 + NO --> C3H7CHO + NO2 + HO2                                             ', &
-     '                   LC4H9O2 + NO --> 0.636 MEK + 0.364 C2H5O2 + 0.364 CH3CHO + NO2 + 0.636 HO2 ... et', &
+     '                   LC4H9O2 + NO --> C3H7CHO + HO2 + NO2                                             ', &
+     '                   LC4H9O2 + NO --> 0.636 MEK + 0.364 C2H5O2 + 0.364 CH3CHO + 0.636 HO2 ... etc.    ', &
      '                   LC4H9O2 + NO --> LC4H9NO3                                                        ', &
-     '                  LC4H9O2 + NO3 --> C3H7CHO + NO2 + HO2                                             ', &
-     '                  LC4H9O2 + NO3 --> 0.636 MEK + 0.364 C2H5O2 + 0.364 CH3CHO + NO2 + 0.636 HO2 ... et', &
+     '                  LC4H9O2 + NO3 --> C3H7CHO + HO2 + NO2                                             ', &
+     '                  LC4H9O2 + NO3 --> 0.636 MEK + 0.364 C2H5O2 + 0.364 CH3CHO + 0.636 HO2 ... etc.    ', &
      '                  LC4H9OOH + OH --> LC4H9O2 + H2O                                                   ', &
-     '                  LC4H9OOH + OH --> C3H7CHO + H2O + OH                                              ', &
-     '                  LC4H9OOH + OH --> MEK + H2O + OH                                                  ', &
+     '                  LC4H9OOH + OH --> C3H7CHO + OH + H2O                                              ', &
+     '                  LC4H9OOH + OH --> MEK + OH + H2O                                                  ', &
      '                    IC4H10 + OH --> TC4H9O2 + H2O                                                   ', &
      '                    IC4H10 + OH --> IC4H9O2 + H2O                                                   ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_13 = (/ &
@@ -765,15 +766,15 @@ MODULE messy_mecca_kpp_Monitor
      '                   TC4H9O2 + NO --> CH3COCH3 + CH3 + NO2                                            ', &
      '                   TC4H9O2 + NO --> TC4H9NO3                                                        ', &
      '                  TC4H9OOH + OH --> TC4H9O2 + H2O                                                   ', &
-     '                  TC4H9OOH + OH --> CH3COCH3 + H2O + HCHO + OH                                      ', &
-     '                  TC4H9NO3 + OH --> CH3COCH3 + H2O + HCHO + NO2                                     ', &
+     '                  TC4H9OOH + OH --> CH3COCH3 + HCHO + OH + H2O                                      ', &
+     '                  TC4H9NO3 + OH --> CH3COCH3 + HCHO + NO2 + H2O                                     ', &
      '                        IC4H9O2 --> IPRCHO                                                          ', &
      '                  IC4H9O2 + HO2 --> IC4H9OOH                                                        ', &
      '                   IC4H9O2 + NO --> IPRCHO + NO2                                                    ', &
      '                   IC4H9O2 + NO --> IC4H9NO3                                                        ', &
      '                  IC4H9OOH + OH --> IC4H9O2 + H2O                                                   ', &
-     '                  IC4H9OOH + OH --> IPRCHO + H2O + OH                                               ', &
-     '                  IC4H9NO3 + OH --> IPRCHO + H2O + NO2                                              ', &
+     '                  IC4H9OOH + OH --> IPRCHO + OH + H2O                                               ', &
+     '                  IC4H9NO3 + OH --> IPRCHO + NO2 + H2O                                              ', &
      '                       MVK + O3 --> 0.00718 CH3COCO2H + 0.02402 H2O2 + 0.0728 CH3CO + 0.89402 MGLYOX', &
      '                       MVK + OH --> LHMVKABO2                                                       ', &
      '                       MEK + OH --> LMEKO2 + H2O                                                    ', &
@@ -781,9 +782,9 @@ MODULE messy_mecca_kpp_Monitor
      '                    LMEKO2 + NO --> 0.62 CH3CO + 0.38 HOCH2CH2O2 + 0.62 CH3CHO + 0.38 HCHO ... etc. ', &
      '                    LMEKO2 + NO --> LMEKNO3                                                         ', &
      '                   LMEKOOH + OH --> LMEKO2 + H2O                                                    ', &
-     '                   LMEKOOH + OH --> 0.62 BIACET + 0.38 HOCH2CH2O2 + H2O + 0.38 HCHO + OH ... etc.   ', &
-     '                  LC4H9NO3 + OH --> MEK + H2O + NO2                                                 ', &
-     '                  LC4H9NO3 + OH --> C3H7CHO + H2O + NO2                                             ', &
+     '                   LMEKOOH + OH --> 0.62 BIACET + 0.38 HOCH2CH2O2 + 0.38 HCHO + OH + H2O ... etc.   ', &
+     '                  LC4H9NO3 + OH --> MEK + NO2 + H2O                                                 ', &
+     '                  LC4H9NO3 + OH --> C3H7CHO + NO2 + H2O                                             ', &
      '                      MPAN + OH --> ACETOL + CO + NO2                                               ', &
      '                           MPAN --> MACO3 + NO2                                                     ', &
      '                         LMEKO2 --> 0.079 C2H5O2 + 0.462 CH3CO + 0.459 HOCH2CH2O2 + 0.462 CH3CHO ...', &
@@ -823,14 +824,14 @@ MODULE messy_mecca_kpp_Monitor
      '                LHMVKABOOH + OH --> 0.88 BIACETOH + 0.12 CO2H3CHO + OH                              ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_15 = (/ &
      '                  CO2H3CHO + OH --> CO2H3CO3                                                        ', &
-     '                  CO2H3CHO + OH --> CO23C3CHO + H2O + HO2                                           ', &
+     '                  CO2H3CHO + OH --> CO23C3CHO + HO2 + H2O                                           ', &
      '                 CO2H3CHO + NO3 --> CO2H3CO3 + HNO3                                                 ', &
      '                       CO2H3CO3 --> MGLYOX + HO2 + CO2                                              ', &
      '                 CO2H3CO3 + HO2 --> MGLYOX + HO2 + OH + CO2                                         ', &
      '                 CO2H3CO3 + HO2 --> CO2H3CO2H + O3                                                  ', &
      '                 CO2H3CO3 + HO2 --> CO2H3CO3H                                                       ', &
-     '                  CO2H3CO3 + NO --> MGLYOX + NO2 + HO2 + CO2                                        ', &
-     '                 CO2H3CO3 + NO3 --> MGLYOX + NO2 + HO2 + CO2                                        ', &
+     '                  CO2H3CO3 + NO --> MGLYOX + HO2 + NO2 + CO2                                        ', &
+     '                 CO2H3CO3 + NO3 --> MGLYOX + HO2 + NO2 + CO2                                        ', &
      '                 CO2H3CO3H + OH --> CO2H3CO3                                                        ', &
      '                 CO2H3CO3H + OH --> CH3CO + CO + OH + CO2                                           ', &
      '                 CO2H3CO2H + OH --> CH3COCOCO2H + HO2                                               ', &
@@ -839,10 +840,10 @@ MODULE messy_mecca_kpp_Monitor
      '                          MACO2 --> 0.35 CH3COCH2O2 + 0.65 CH3 + 0.65 CO + 0.65 HCHO + 0.35 OH ... e', &
      '                      LHMVKABO2 --> 0.12 HOOCH2CHO + 0.12 CH3CO + 0.88 MGLYOX + 0.88 HCHO ... etc.  ', &
      '                         MACRO2 --> MGLYOX + HCHO + OH                                              ', &
-     '                    MVKNO3 + OH --> MGLYOX + H2O + NO2 + HO2 + CO2                                  ', &
-     '                    MVKNO3 + OH --> BIACETOH + H2O + NO2                                            ', &
-     '                   MACRNO3 + OH --> ACETOL + H2O + NO2 + CO2                                        ', &
-     '                   MACRNO3 + OH --> MGLYOX + H2O + CO + NO2                                         ', &
+     '                    MVKNO3 + OH --> MGLYOX + HO2 + NO2 + H2O + CO2                                  ', &
+     '                    MVKNO3 + OH --> BIACETOH + NO2 + H2O                                            ', &
+     '                   MACRNO3 + OH --> ACETOL + NO2 + H2O + CO2                                        ', &
+     '                   MACRNO3 + OH --> MGLYOX + CO + NO2 + H2O                                         ', &
      '                         MACRO2 --> ACETOL + CO + OH                                                ', &
      '                  EZCH3CO2CHCHO --> 0.9 CH3COCHCO + 0.1 CH3CO + 0.01 GLYOX + 0.18 CO + 0.09 HO2 ... ', &
      '            EZCH3CO2CHCHO + HO2 --> CH3COOHCHCHO                                                    ', &
@@ -862,9 +863,9 @@ MODULE messy_mecca_kpp_Monitor
      '             CH3COCHO2CHO + HO2 --> CH3CO + GLYOX + OH                                              ', &
      '                   CH3COCHO2CHO --> CH3CO + GLYOX                                                   ', &
      '                   HCOCO2CH3CHO --> MGLYOX + CO + HO2                                               ', &
-     '              HCOCO2CH3CHO + NO --> MGLYOX + CO + NO2 + HO2                                         ', &
+     '              HCOCO2CH3CHO + NO --> MGLYOX + CO + HO2 + NO2                                         ', &
      '             HCOCO2CH3CHO + HO2 --> MGLYOX + CO + HO2 + OH                                          ', &
-     '             HCOCO2CH3CHO + NO3 --> MGLYOX + CO + NO2 + HO2                                         ', &
+     '             HCOCO2CH3CHO + NO3 --> MGLYOX + CO + HO2 + NO2                                         ', &
      '                 HCOCCH3CO + OH --> MGLYOX + CO + HO2                                               ', &
      '                 CH3COCHCO + OH --> MGLYOX + CO + HO2                                               ', &
      '                   LMEKNO3 + OH --> 0.38 NO3CH2CHO + 0.38 CH3CO + 0.62 MGLYOX + 0.62 HCHO ... etc.  ', &
@@ -875,12 +876,12 @@ MODULE messy_mecca_kpp_Monitor
      '                      IBUTOLBO2 --> CH3COCH3 + HCHO + HO2                                           ', &
      '                IBUTOLBO2 + HO2 --> IBUTOLBOOH                                                      ', &
      '                IBUTOLBO2 + HO2 --> CH3COCH3 + HCHO + HO2 + OH                                      ', &
-     '                 IBUTOLBO2 + NO --> CH3COCH3 + HCHO + NO2 + HO2                                     ', &
+     '                 IBUTOLBO2 + NO --> CH3COCH3 + HCHO + HO2 + NO2                                     ', &
      '                 IBUTOLBO2 + NO --> IBUTOLBNO3                                                      ', &
-     '                IBUTOLBO2 + NO3 --> CH3COCH3 + HCHO + NO2 + HO2                                     ', &
+     '                IBUTOLBO2 + NO3 --> CH3COCH3 + HCHO + HO2 + NO2                                     ', &
      '                IBUTOLBOOH + OH --> IBUTOLBO2                                                       ', &
      '                IBUTOLBOOH + OH --> CH3COCH3 + HCHO + HO2                                           ', &
-     '                IBUTOLBNO3 + OH --> CH3COCH3 + HCHO + NO2 + HO2                                     ', &
+     '                IBUTOLBNO3 + OH --> CH3COCH3 + HCHO + HO2 + NO2                                     ', &
      '                   BUT1ENE + OH --> LBUT1ENO2                                                       ', &
      '                   BUT1ENE + O3 --> 0.5 C2H5CHO + 0.5 H2O2 + 0.5 CH3CHO + 0.5 CO + HCHO ... etc.    ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_17 = (/ &
@@ -889,12 +890,12 @@ MODULE messy_mecca_kpp_Monitor
      '                      LBUT1ENO2 --> C2H5CHO + HCHO + HO2                                            ', &
      '                LBUT1ENO2 + HO2 --> LBUT1ENOOH                                                      ', &
      '                LBUT1ENO2 + HO2 --> C2H5CHO + HCHO + HO2 + OH                                       ', &
-     '                 LBUT1ENO2 + NO --> C2H5CHO + HCHO + NO2 + HO2                                      ', &
+     '                 LBUT1ENO2 + NO --> C2H5CHO + HCHO + HO2 + NO2                                      ', &
      '                 LBUT1ENO2 + NO --> LBUT1ENNO3                                                      ', &
-     '                LBUT1ENO2 + NO3 --> C2H5CHO + HCHO + NO2 + HO2                                      ', &
+     '                LBUT1ENO2 + NO3 --> C2H5CHO + HCHO + HO2 + NO2                                      ', &
      '                LBUT1ENOOH + OH --> LBUT1ENO2                                                       ', &
      '                LBUT1ENOOH + OH --> C2H5CO3 + HCHO + HO2                                            ', &
-     '                LBUT1ENNO3 + OH --> C2H5CHO + CO + NO2 + HO2                                        ', &
+     '                LBUT1ENNO3 + OH --> C2H5CHO + CO + HO2 + NO2                                        ', &
      '                  CBUT2ENE + OH --> BUT2OLO2                                                        ', &
      '                  CBUT2ENE + O3 --> 0.2 CH4 + 0.16 CH3CHOHOOH + 0.05 CH2CO + 0.09 CH3OH ... etc.    ', &
      '                 CBUT2ENE + NO3 --> 2 CH3CHO + NO2                                                  ', &
@@ -904,9 +905,9 @@ MODULE messy_mecca_kpp_Monitor
      '                       BUT2OLO2 --> C2H5CHO + HCHO + HO2                                            ', &
      '                 BUT2OLO2 + HO2 --> BUT2OLOOH                                                       ', &
      '                 BUT2OLO2 + HO2 --> 2 CH3CHO + HO2 + OH                                             ', &
-     '                  BUT2OLO2 + NO --> 2 CH3CHO + NO2 + HO2                                            ', &
+     '                  BUT2OLO2 + NO --> 2 CH3CHO + HO2 + NO2                                            ', &
      '                  BUT2OLO2 + NO --> BUT2OLNO3                                                       ', &
-     '                 BUT2OLO2 + NO3 --> 2 CH3CHO + NO2 + HO2                                            ', &
+     '                 BUT2OLO2 + NO3 --> 2 CH3CHO + HO2 + NO2                                            ', &
      '                 BUT2OLOOH + OH --> BUT2OLO2                                                        ', &
      '                 BUT2OLOOH + OH --> LMEKOOH + HO2                                                   ', &
      '                 BUT2OLOOH + OH --> BUT2OLO + OH                                                    ', &
@@ -938,7 +939,7 @@ MODULE messy_mecca_kpp_Monitor
      '               IBUTDIAL + HCOOH --> HMAC + HCOOH                                                    ', &
      '                  CO2C3CHO + OH --> CH3COCH2O2 + H2O + CO2                                          ', &
      '                 CO2C3CHO + NO3 --> CH3COCH2O2 + HNO3 + CO2                                         ', &
-     '                  IBUTDIAL + OH --> CH3CHO + H2O + CO + HO2 + CO2                                   ', &
+     '                  IBUTDIAL + OH --> CH3CHO + CO + HO2 + H2O + CO2                                   ', &
      '                 IBUTDIAL + NO3 --> HNO3 + CH3CHO + CO + HO2 + CO2                                  ', &
      '                       BIACETO2 --> CH3CO + CO + HCHO                                               ', &
      '                 BIACETO2 + HO2 --> BIACETOOH                                                       ', &
@@ -947,7 +948,7 @@ MODULE messy_mecca_kpp_Monitor
      '                 BIACETOOH + OH --> BIACETO2                                                        ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_19 = (/ &
      '                    C44O2 + HO2 --> C44OOH                                                          ', &
-     '                     C44O2 + NO --> HCOCH2CHO + NO2 + HO2 + CO2                                     ', &
+     '                     C44O2 + NO --> HCOCH2CHO + HO2 + NO2 + CO2                                     ', &
      '                          C44O2 --> HCOCH2CHO + HO2 + CO2                                           ', &
      '                    C44OOH + OH --> C44O2                                                           ', &
      '                      CHOC3COO2 --> HCOCH2CO3 + HCHO                                                ', &
@@ -970,12 +971,12 @@ MODULE messy_mecca_kpp_Monitor
      '                 IPRHOCO3 + HO2 --> CH3COCH3 + HO2 + OH + CO2                                       ', &
      '                 IPRHOCO3 + HO2 --> IPRHOCO2H + O3                                                  ', &
      '                 IPRHOCO3 + HO2 --> IPRHOCO3H                                                       ', &
-     '                  IPRHOCO3 + NO --> CH3COCH3 + NO2 + HO2 + CO2                                      ', &
+     '                  IPRHOCO3 + NO --> CH3COCH3 + HO2 + NO2 + CO2                                      ', &
      '                 IPRHOCO3 + NO2 --> C4PAN5                                                          ', &
-     '                 IPRHOCO3 + NO3 --> CH3COCH3 + NO2 + HO2 + CO2                                      ', &
+     '                 IPRHOCO3 + NO3 --> CH3COCH3 + HO2 + NO2 + CO2                                      ', &
      '                       IPRHOCO3 --> CH3COCH3 + HO2 + CO2                                            ', &
      '                       IPRHOCO3 --> IPRHOCO2H                                                       ', &
-     '                 IPRHOCO2H + OH --> CH3COCH3 + H2O + HO2 + CO2                                      ' /)
+     '                 IPRHOCO2H + OH --> CH3COCH3 + HO2 + H2O + CO2                                      ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_20 = (/ &
      '                 IPRHOCO3H + OH --> IPRHOCO3                                                        ', &
      '                         C4PAN5 --> IPRHOCO3 + NO2                                                  ', &
@@ -995,9 +996,9 @@ MODULE messy_mecca_kpp_Monitor
      '               MALDIALCO3 + HO2 --> MALDALCO2H + O3                                                 ', &
      '               MALDIALCO3 + HO2 --> MALDALCO3H                                                      ', &
      '               MALDIALCO3 + HO2 --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + OH + 0.4 CO2 ... etc.  ', &
-     '                MALDIALCO3 + NO --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + NO2 + HO2 + 0.4 CO2 ... etc. ', &
+     '                MALDIALCO3 + NO --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + NO2 + 0.4 CO2 ... etc. ', &
      '               MALDIALCO3 + NO2 --> MALDIALPAN                                                      ', &
-     '               MALDIALCO3 + NO3 --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + NO2 + HO2 + 0.4 CO2 ... etc. ', &
+     '               MALDIALCO3 + NO3 --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + NO2 + 0.4 CO2 ... etc. ', &
      '                     MALDIALCO3 --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + 0.4 CO2                ', &
      '                  BZFUONE + NO3 --> NBZFUO2                                                         ', &
      '                   BZFUONE + O3 --> 0.3125 CO14O3CO2H + 0.1875 CO14O3CHO + 0.1875 H2O2 + 0.5 HCOCH2O', &
@@ -1028,10 +1029,10 @@ MODULE messy_mecca_kpp_Monitor
      '                 EPXDLCO3H + OH --> EPXDLCO3                                                        ', &
      '                 CO2C4DIAL + OH --> 4 CO + HO2                                                      ', &
      '                  NBZFUO2 + HO2 --> NBZFUOOH                                                        ', &
-     '                  NBZFUO2 + HO2 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 NO2 + 0.5 HO2 + OH ... etc.  ', &
-     '                   NBZFUO2 + NO --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 1.5 NO2 + 0.5 HO2                ', &
-     '                  NBZFUO2 + NO3 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 1.5 NO2 + 0.5 HO2                ', &
-     '                        NBZFUO2 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 NO2 + 0.5 HO2                ', &
+     '                  NBZFUO2 + HO2 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 HO2 + OH + 0.5 NO2 ... etc.  ', &
+     '                   NBZFUO2 + NO --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 HO2 + 1.5 NO2                ', &
+     '                  NBZFUO2 + NO3 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 HO2 + 1.5 NO2                ', &
+     '                        NBZFUO2 --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 HO2 + 0.5 NO2                ', &
      '                MALDALCO2H + OH --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + 0.4 CO2                ', &
      '                EPXC4DIAL + NO3 --> EPXDLCO3 + HNO3                                                 ', &
      '                 EPXC4DIAL + OH --> EPXDLCO3                                                        ', &
@@ -1046,14 +1047,14 @@ MODULE messy_mecca_kpp_Monitor
      '                  NBZFUONE + OH --> BZFUCO + NO2                                                    ', &
      '                   BZFUO2 + HO2 --> BZFUOOH                                                         ', &
      '                   BZFUO2 + HO2 --> CO14O3CHO + HO2 + OH                                            ', &
-     '                    BZFUO2 + NO --> CO14O3CHO + NO2 + HO2                                           ', &
-     '                   BZFUO2 + NO3 --> CO14O3CHO + NO2 + HO2                                           ', &
+     '                    BZFUO2 + NO --> CO14O3CHO + HO2 + NO2                                           ', &
+     '                   BZFUO2 + NO3 --> CO14O3CHO + HO2 + NO2                                           ', &
      '                         BZFUO2 --> CO14O3CHO + HO2                                                 ', &
      '                    BZFUCO + OH --> CO14O3CHO + HO2                                                 ', &
      '                MALDIALO2 + HO2 --> MALDIALOOH                                                      ', &
      '                MALDIALO2 + HO2 --> 2 GLYOX + HO2 + OH                                              ', &
-     '                 MALDIALO2 + NO --> 2 GLYOX + NO2 + HO2                                             ', &
-     '                MALDIALO2 + NO3 --> 2 GLYOX + NO2 + HO2                                             ', &
+     '                 MALDIALO2 + NO --> 2 GLYOX + HO2 + NO2                                             ', &
+     '                MALDIALO2 + NO3 --> 2 GLYOX + HO2 + NO2                                             ', &
      '                      MALDIALO2 --> 2 GLYOX + HO2                                                   ', &
      '                  EPXDLPAN + OH --> C33CO + CO + NO2                                                ', &
      '                       EPXDLPAN --> EPXDLCO3 + NO2                                                  ', &
@@ -1093,9 +1094,9 @@ MODULE messy_mecca_kpp_Monitor
      '                        ISOPBO2 --> 0.2 ISOPBOH + 0.8 MVK + 0.8 HCHO + 0.8 HO2                      ', &
      '                  ISOPBO2 + HO2 --> ISOPBOOH                                                        ', &
      '                  ISOPBO2 + HO2 --> MVK + 0.024 BLOV + 0.119 BSOV + HCHO + HO2 + OH                 ', &
-     '                   ISOPBO2 + NO --> MVK + 0.003 BLOV + 0.101 BSOV + HCHO + NO2 + HO2                ', &
+     '                   ISOPBO2 + NO --> MVK + 0.003 BLOV + 0.101 BSOV + HCHO + HO2 + NO2                ', &
      '                   ISOPBO2 + NO --> ISOPBNO3                                                        ', &
-     '                  ISOPBO2 + NO3 --> MVK + 0.25 CH3 + 0.75 HCHO + NO2 + 0.75 HO2                     ', &
+     '                  ISOPBO2 + NO3 --> MVK + 0.25 CH3 + 0.75 HCHO + 0.75 HO2 + NO2                     ', &
      '                  ISOPBOOH + OH --> LIEPOX + OH                                                     ', &
      '                  ISOPBOOH + OH --> ISOPBO2                                                         ', &
      '                  ISOPBOOH + OH --> MGLYOX + HOCH2CHO                                               ', &
@@ -1106,9 +1107,9 @@ MODULE messy_mecca_kpp_Monitor
      '                        ISOPDO2 --> 0.1 ISOPDOH + 0.1 HCOC5 + 0.8 MACR + 0.8 HCHO + 0.8 HO2 ... etc.', &
      '                  ISOPDO2 + HO2 --> ISOPDOOH                                                        ', &
      '                  ISOPDO2 + HO2 --> MACR + 0.143 BLOV + HCHO + HO2 + OH                             ', &
-     '                   ISOPDO2 + NO --> MACR + 0.003 BLOV + 0.101 BSOV + HCHO + NO2 + HO2               ', &
+     '                   ISOPDO2 + NO --> MACR + 0.003 BLOV + 0.101 BSOV + HCHO + HO2 + NO2               ', &
      '                   ISOPDO2 + NO --> ISOPDNO3                                                        ', &
-     '                  ISOPDO2 + NO3 --> MACR + HCHO + NO2 + HO2                                         ', &
+     '                  ISOPDO2 + NO3 --> MACR + HCHO + HO2 + NO2                                         ', &
      '                  ISOPDOOH + OH --> LIEPOX + OH                                                     ', &
      '                  ISOPDOOH + OH --> ISOPDO2                                                         ', &
      '                  ISOPDOOH + OH --> HCOC5 + OH                                                      ', &
@@ -1118,15 +1119,15 @@ MODULE messy_mecca_kpp_Monitor
      '                  ISOPDNO3 + OH --> ISOPBDNO3O2                                                     ', &
      '                        NISOPO2 --> 0.8 NC4CHO + 0.2 LISOPACNO3 + 0.6 HO2                           ', &
      '                  NISOPO2 + HO2 --> NISOPOOH                                                        ', &
-     '                   NISOPO2 + NO --> NC4CHO + NO2 + HO2                                              ', &
-     '                  NISOPO2 + NO3 --> NC4CHO + NO2 + HO2                                              ', &
+     '                   NISOPO2 + NO --> NC4CHO + HO2 + NO2                                              ', &
+     '                  NISOPO2 + NO3 --> NC4CHO + HO2 + NO2                                              ', &
      '                  NISOPOOH + OH --> NC4CHO + OH                                                     ', &
      '                    NC4CHO + OH --> LNISO3                                                          ', &
      '                    NC4CHO + O3 --> 0.27 NOA + 0.1458 HCOCO + 0.027 HCOCO2H + 0.0162 H2O2 ... etc.  ', &
      '                   NC4CHO + NO3 --> LNISO3 + HNO3                                                   ', &
      '                   LNISO3 + HO2 --> LNISOOH                                                         ', &
-     '                    LNISO3 + NO --> 0.5 HOCHCHO + NOA + 0.5 CO + NO2 + 0.5 HO2 + 0.5 CO2 ... etc.   ', &
-     '                   LNISO3 + NO3 --> 0.5 HOCHCHO + NOA + 0.5 CO + NO2 + 0.5 HO2 + 0.5 CO2 ... etc.   ', &
+     '                    LNISO3 + NO --> 0.5 HOCHCHO + NOA + 0.5 CO + 0.5 HO2 + NO2 + 0.5 CO2 ... etc.   ', &
+     '                   LNISO3 + NO3 --> 0.5 HOCHCHO + NOA + 0.5 CO + 0.5 HO2 + NO2 + 0.5 CO2 ... etc.   ', &
      '                   LNISOOH + OH --> LNISO3                                                          ', &
      '                 LHC4ACCHO + OH --> LC578O2                                                         ', &
      '                 LHC4ACCHO + OH --> LHC4ACCO3                                                       ', &
@@ -1180,9 +1181,9 @@ MODULE messy_mecca_kpp_Monitor
      '            C1OOHC2OOHC4OD + OH --> C1ODC2OOHC4OD + OH                                              ', &
      '            C1OOHC2OOHC4OD + OH --> HYPERACET + 2 CO + 2 HO2 + OH                                   ', &
      '            C1OOHC2OOHC4OD + OH --> C1OOHC2O2C4OD                                                   ', &
-     '             C1ODC2OOHC4OD + OH --> CO2H3CHO + H2O + CO + OH                                        ', &
+     '             C1ODC2OOHC4OD + OH --> CO2H3CHO + CO + OH + H2O                                        ', &
      '                  C1ODC3O2C4OOH --> HOOCH2CHO + MGLYOX + HO2                                        ', &
-     '             C1ODC3O2C4OOH + NO --> HOOCH2CHO + MGLYOX + NO2 + HO2                                  ', &
+     '             C1ODC3O2C4OOH + NO --> HOOCH2CHO + MGLYOX + HO2 + NO2                                  ', &
      '            C1ODC3O2C4OOH + HO2 --> HOOCH2CO3 + 0.5 CH3CO + 0.5 MGLYOX + 0.5 CO + 0.5 HO2 ... etc.  ', &
      '                  C1ODC3O2C4OOH --> HOOCH2CHO + MGLYOX + OH                                         ', &
      '                  C1OOHC3O2C4OD --> 0.375 CH3CO + 0.625 MGLYOX + 2 CO + 1.625 HO2 + OH + 0.375 CO2 .', &
@@ -1201,7 +1202,7 @@ MODULE messy_mecca_kpp_Monitor
      '                   LISOPACNO3O2 --> 0.49 HO12CO3C4 + 0.045 MVKNO3 + 0.21 NOA + 0.255 NO3CH2CHO ... e', &
      '               ISOPBDNO3O2 + NO --> 0.26 MACRNO3 + 0.14 MVKNO3 + 0.6 ACETOL + 0.6 HOCH2CHO ... etc. ', &
      '                    ISOPBDNO3O2 --> 0.26 MACRNO3 + 0.14 MVKNO3 + 0.6 ACETOL + 0.6 HOCH2CHO ... etc. ', &
-     '                LISOPACNO3 + O3 --> 0.0675 HOCHCHO + 0.135 NOA + 0.0054 HOCH2CO + 0.0405 CH3OH ... e', &
+     '                LISOPACNO3 + O3 --> 0.0675 HOCHCHO + 0.135 NOA + 0.0405 CH3OH + 0.0054 HOCH2CO ... e', &
      '                          DB1O2 --> DB1O                                                            ', &
      '                    DB1O2 + HO2 --> DB1OOH                                                          ', &
      '                    DB1O2 + HO2 --> DB1O + OH                                                       ', &
@@ -1241,7 +1242,7 @@ MODULE messy_mecca_kpp_Monitor
      '                  ME3FURAN + OH --> LME3FURANO2                                                     ', &
      '                 ME3FURAN + NO3 --> LME3FURANO2 + NO2                                               ', &
      '                    LME3FURANO2 --> C4MDIAL + HO2                                                   ', &
-     '               LME3FURANO2 + NO --> C4MDIAL + NO2 + HO2                                             ', &
+     '               LME3FURANO2 + NO --> C4MDIAL + HO2 + NO2                                             ', &
      '              LME3FURANO2 + HO2 --> C4MDIAL + HO2                                                   ', &
      '                  LZCO3C23DBCOD --> 0.38 EZCHOCCH3CHO2 + 0.62 EZCH3CO2CHCHO + CO2                   ', &
      '            LZCO3C23DBCOD + HO2 --> 0.38 EZCHOCCH3CHO2 + 0.62 EZCH3CO2CHCHO + OH + CO2              ', &
@@ -1283,9 +1284,9 @@ MODULE messy_mecca_kpp_Monitor
      '                CHOC3COCO3 + NO --> CHOC3COO2 + NO2 + CO2                                           ', &
      '                    C513CO + OH --> HOC2H4CO3 + 2 CO                                                ', &
      '                   C514O2 + HO2 --> C514OOH                                                         ', &
-     '                    C514O2 + NO --> CO13C4CHO + NO2 + HO2                                           ', &
+     '                    C514O2 + NO --> CO13C4CHO + HO2 + NO2                                           ', &
      '                    C514O2 + NO --> C514NO3                                                         ', &
-     '                   C514O2 + NO3 --> CO13C4CHO + NO2 + HO2                                           ' /)
+     '                   C514O2 + NO3 --> CO13C4CHO + HO2 + NO2                                           ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_30 = (/ &
      '                         C514O2 --> CO13C4CHO + HO2                                                 ', &
      '                   C514OOH + OH --> CO13C4CHO + OH                                                  ', &
@@ -1299,8 +1300,8 @@ MODULE messy_mecca_kpp_Monitor
      '                      MBO + NO3 --> LNMBOABO2                                                       ', &
      '                 LMBOABO2 + HO2 --> LMBOABOOH                                                       ', &
      '                  LMBOABO2 + NO --> LMBOABNO3                                                       ', &
-     '                  LMBOABO2 + NO --> CH3COCH3 + HOCH2CHO + NO2 + HO2                                 ', &
-     '                  LMBOABO2 + NO --> IBUTALOH + HCHO + NO2 + HO2                                     ', &
+     '                  LMBOABO2 + NO --> CH3COCH3 + HOCH2CHO + HO2 + NO2                                 ', &
+     '                  LMBOABO2 + NO --> IBUTALOH + HCHO + HO2 + NO2                                     ', &
      '                       LMBOABO2 --> CH3COCH3 + HOCH2CHO + HO2                                       ', &
      '                       LMBOABO2 --> IBUTALOH + HCHO + HO2                                           ', &
      '                 LMBOABOOH + OH --> MBOACO                                                          ', &
@@ -1315,7 +1316,7 @@ MODULE messy_mecca_kpp_Monitor
      '                LNMBOABOOH + OH --> 0.35 NMBOBCO + 0.65 C4MCONO3OH                                  ', &
      '                LNMBOABOOH + OH --> LNMBOABO2                                                       ', &
      '                   NMBOBCO + OH --> NC4OHCO3                                                        ', &
-     '                 NC4OHCO3 + HO2 --> IBUTALOH + NO2 + OH + CO2                                       ', &
+     '                 NC4OHCO3 + HO2 --> IBUTALOH + OH + NO2 + CO2                                       ', &
      '                 NC4OHCO3 + HO2 --> NC4OHCO3H                                                       ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_31 = (/ &
      '                  NC4OHCO3 + NO --> IBUTALOH + 2 NO2 + CO2                                          ', &
@@ -1330,7 +1331,7 @@ MODULE messy_mecca_kpp_Monitor
      '                    C54CO + NO3 --> CH3CO3 + HNO3 + 3 CO                                            ', &
      '                     C54CO + OH --> CH3CO3 + 3 CO                                                   ', &
      '                  NTLFUO2 + HO2 --> NTLFUOOH                                                        ', &
-     '                  NTLFUO2 + HO2 --> ACCOMECHO + NO2 + OH                                            ', &
+     '                  NTLFUO2 + HO2 --> ACCOMECHO + OH + NO2                                            ', &
      '                   NTLFUO2 + NO --> ACCOMECHO + 2 NO2                                               ', &
      '                  NTLFUO2 + NO3 --> ACCOMECHO + 2 NO2                                               ', &
      '                        NTLFUO2 --> ACCOMECHO + NO2                                                 ', &
@@ -1340,9 +1341,9 @@ MODULE messy_mecca_kpp_Monitor
      '                 C5DIALOOH + OH --> C5DIALCO + OH                                                   ', &
      '               C4CO2DBCO3 + HO2 --> C4CO2DCO3H                                                      ', &
      '               C4CO2DBCO3 + HO2 --> C33CO + CO + HO2 + OH + CO2                                     ', &
-     '                C4CO2DBCO3 + NO --> C33CO + CO + NO2 + HO2 + CO2                                    ', &
+     '                C4CO2DBCO3 + NO --> C33CO + CO + HO2 + NO2 + CO2                                    ', &
      '               C4CO2DBCO3 + NO2 --> C4CO2DBPAN                                                      ', &
-     '               C4CO2DBCO3 + NO3 --> C33CO + CO + NO2 + HO2 + CO2                                    ', &
+     '               C4CO2DBCO3 + NO3 --> C33CO + CO + HO2 + NO2 + CO2                                    ', &
      '                     C4CO2DBCO3 --> C33CO + CO + HO2 + CO2                                          ', &
      '                  MMALANHY + OH --> MMALANHYO2                                                      ', &
      '               MMALANHYO2 + HO2 --> MMALNHYOOH                                                      ', &
@@ -1356,9 +1357,9 @@ MODULE messy_mecca_kpp_Monitor
      '                 C5CO14O2 + HO2 --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                 C5CO14O2 + HO2 --> C5CO14OH + O3                                                   ', &
      '                 C5CO14O2 + HO2 --> C5CO14OOH                                                       ', &
-     '                  C5CO14O2 + NO --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + NO2 ... etc.  ', &
+     '                  C5CO14O2 + NO --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                 C5CO14O2 + NO2 --> C5COO2NO2                                                       ', &
-     '                 C5CO14O2 + NO3 --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + NO2 ... etc.  ', &
+     '                 C5CO14O2 + NO3 --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                       C5CO14O2 --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                  C5CO14OH + OH --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                 C5DICARB + NO3 --> C5CO14O2 + HNO3                                                 ', &
@@ -1387,21 +1388,21 @@ MODULE messy_mecca_kpp_Monitor
      '                      ACCOMEPAN --> ACCOMECO3 + NO2                                                 ', &
      '                   TLFUO2 + HO2 --> TLFUOOH                                                         ', &
      '                   TLFUO2 + HO2 --> ACCOMECHO + HO2 + OH                                            ', &
-     '                    TLFUO2 + NO --> ACCOMECHO + NO2 + HO2                                           ', &
-     '                   TLFUO2 + NO3 --> ACCOMECHO + NO2 + HO2                                           ', &
+     '                    TLFUO2 + NO --> ACCOMECHO + HO2 + NO2                                           ', &
+     '                   TLFUO2 + NO3 --> ACCOMECHO + HO2 + NO2                                           ', &
      '                         TLFUO2 --> ACCOMECHO + HO2                                                 ', &
      '                 C5CO14OOH + OH --> C5CO14O2                                                        ', &
      '                   TLFUOOH + OH --> TLFUO2                                                          ', &
      '                ACCOMECO3H + OH --> ACCOMECO3                                                       ', &
      '                 C5DIALO2 + HO2 --> C5DIALOOH                                                       ', &
      '                 C5DIALO2 + HO2 --> MALDIAL + CO + HO2 + OH                                         ', &
-     '                  C5DIALO2 + NO --> MALDIAL + CO + NO2 + HO2                                        ', &
-     '                 C5DIALO2 + NO3 --> MALDIAL + CO + NO2 + HO2                                        ', &
+     '                  C5DIALO2 + NO --> MALDIAL + CO + HO2 + NO2                                        ', &
+     '                 C5DIALO2 + NO3 --> MALDIAL + CO + HO2 + NO2                                        ', &
      '                       C5DIALO2 --> MALDIAL + CO + HO2                                              ', &
      '               C5DICARBO2 + HO2 --> C5DICAROOH                                                      ', &
      '               C5DICARBO2 + HO2 --> MGLYOX + GLYOX + HO2 + OH                                       ', &
-     '                C5DICARBO2 + NO --> MGLYOX + GLYOX + NO2 + HO2                                      ', &
-     '               C5DICARBO2 + NO3 --> MGLYOX + GLYOX + NO2 + HO2                                      ', &
+     '                C5DICARBO2 + NO --> MGLYOX + GLYOX + HO2 + NO2                                      ', &
+     '               C5DICARBO2 + NO3 --> MGLYOX + GLYOX + HO2 + NO2                                      ', &
      '                     C5DICARBO2 --> MGLYOX + GLYOX + HO2                                            ', &
      '                CO235C6O2 + HO2 --> CO235C6OOH                                                      ', &
      '                CO235C6O2 + HO2 --> CO23C4CO3 + HCHO + OH                                           ', &
@@ -1409,7 +1410,7 @@ MODULE messy_mecca_kpp_Monitor
      '                      CO235C6O2 --> CO23C4CO3 + HCHO                                                ', &
      '                CO235C6OOH + OH --> CO235C6O2                                                       ', &
      '                         C614O2 --> CO23C4CHO + HCHO + HO2                                          ', &
-     '                    C614O2 + NO --> CO23C4CHO + HCHO + NO2 + HO2                                    ' /)
+     '                    C614O2 + NO --> CO23C4CHO + HCHO + HO2 + NO2                                    ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_34 = (/ &
      '                    C614O2 + NO --> C614NO3                                                         ', &
      '                   C614O2 + HO2 --> C614OOH                                                         ', &
@@ -1425,8 +1426,8 @@ MODULE messy_mecca_kpp_Monitor
      '                NDNPHENOOH + OH --> NDNPHENO2                                                       ', &
      '                C615CO2O2 + HO2 --> C615CO2OOH                                                      ', &
      '                C615CO2O2 + HO2 --> C5DICARB + CO + HO2 + OH                                        ', &
-     '                 C615CO2O2 + NO --> C5DICARB + CO + NO2 + HO2                                       ', &
-     '                C615CO2O2 + NO3 --> C5DICARB + CO + NO2 + HO2                                       ', &
+     '                 C615CO2O2 + NO --> C5DICARB + CO + HO2 + NO2                                       ', &
+     '                C615CO2O2 + NO3 --> C5DICARB + CO + HO2 + NO2                                       ', &
      '                      C615CO2O2 --> C5DICARB + CO + HO2                                             ', &
      '                 BZEMUCPAN + OH --> MALDIAL + CO + NO2 + CO2                                        ', &
      '                      BZEMUCPAN --> BZEMUCCO3 + NO2                                                 ', &
@@ -1434,7 +1435,7 @@ MODULE messy_mecca_kpp_Monitor
      '                HOC6H4NO2 + NO3 --> NPHEN1O + HNO3                                                  ', &
      '                 HOC6H4NO2 + OH --> NPHEN1O                                                         ', &
      '                NDNPHENO2 + HO2 --> NDNPHENOOH                                                      ', &
-     '                NDNPHENO2 + HO2 --> NC4DCO2H + HNO3 + 2 CO + NO2 + OH                               ', &
+     '                NDNPHENO2 + HO2 --> NC4DCO2H + HNO3 + 2 CO + OH + NO2                               ', &
      '                 NDNPHENO2 + NO --> NC4DCO2H + HNO3 + 2 CO + 2 NO2                                  ', &
      '                NDNPHENO2 + NO3 --> NC4DCO2H + HNO3 + 2 CO + 2 NO2                                  ', &
      '                      NDNPHENO2 --> NC4DCO2H + HNO3 + 2 CO + NO2                                    ', &
@@ -1448,21 +1449,21 @@ MODULE messy_mecca_kpp_Monitor
      '                 NCATECHOL + OH --> NCATECO2                                                        ', &
      '               C5CO2OHCO3 + HO2 --> C5COOHCO3H                                                      ', &
      '               C5CO2OHCO3 + HO2 --> HOCOC4DIAL + CO + HO2 + OH + CO2                                ', &
-     '                C5CO2OHCO3 + NO --> HOCOC4DIAL + CO + NO2 + HO2 + CO2                               ', &
+     '                C5CO2OHCO3 + NO --> HOCOC4DIAL + CO + HO2 + NO2 + CO2                               ', &
      '               C5CO2OHCO3 + NO2 --> C5CO2OHPAN                                                      ', &
-     '               C5CO2OHCO3 + NO3 --> HOCOC4DIAL + CO + NO2 + HO2 + CO2                               ', &
+     '               C5CO2OHCO3 + NO3 --> HOCOC4DIAL + CO + HO2 + NO2 + CO2                               ', &
      '                     C5CO2OHCO3 --> HOCOC4DIAL + CO + HO2 + CO2                                     ', &
      '                BZEPOXMUC + NO3 --> BZEMUCCO3 + HNO3                                                ', &
      '                 BZEPOXMUC + O3 --> EPXC4DIAL + 0.1125 HCOCO2H + 0.0675 H2O2 + 0.0675 GLYOX ... etc.', &
      '                 BZEPOXMUC + OH --> 0.31 BZEMUCCO3 + 0.69 BZEMUCO2                                  ', &
      '                 NCATECO2 + HO2 --> NCATECOOH                                                       ', &
      '                 NCATECO2 + HO2 --> NC4DCO2H + HCOCO2H + HO2 + OH                                   ', &
-     '                  NCATECO2 + NO --> NC4DCO2H + HCOCO2H + NO2 + HO2                                  ', &
-     '                 NCATECO2 + NO3 --> NC4DCO2H + HCOCO2H + NO2 + HO2                                  ', &
+     '                  NCATECO2 + NO --> NC4DCO2H + HCOCO2H + HO2 + NO2                                  ', &
+     '                 NCATECO2 + NO3 --> NC4DCO2H + HCOCO2H + HO2 + NO2                                  ', &
      '                       NCATECO2 --> NC4DCO2H + HCOCO2H + HO2                                        ', &
      '                 NPHEN1OOH + OH --> NPHEN1O2                                                        ', &
      '                  NPHENO2 + HO2 --> NPHENOOH                                                        ', &
-     '                  NPHENO2 + HO2 --> MALDALCO2H + GLYOX + NO2 + OH                                   ', &
+     '                  NPHENO2 + HO2 --> MALDALCO2H + GLYOX + OH + NO2                                   ', &
      '                   NPHENO2 + NO --> MALDALCO2H + GLYOX + 2 NO2                                      ', &
      '                  NPHENO2 + NO3 --> MALDALCO2H + GLYOX + 2 NO2                                      ', &
      '                        NPHENO2 --> MALDALCO2H + GLYOX + NO2                                        ', &
@@ -1474,7 +1475,7 @@ MODULE messy_mecca_kpp_Monitor
      '                  BZEMUCCO + OH --> EPXDLCO3 + GLYOX                                                ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_36 = (/ &
      '                NNCATECO2 + HO2 --> NNCATECOOH                                                      ', &
-     '                NNCATECO2 + HO2 --> NC4DCO2H + HCOCO2H + NO2 + OH                                   ', &
+     '                NNCATECO2 + HO2 --> NC4DCO2H + HCOCO2H + OH + NO2                                   ', &
      '                 NNCATECO2 + NO --> NC4DCO2H + HCOCO2H + 2 NO2                                      ', &
      '                NNCATECO2 + NO3 --> NC4DCO2H + HCOCO2H + 2 NO2                                      ', &
      '                      NNCATECO2 --> NC4DCO2H + HCOCO2H + NO2                                        ', &
@@ -1490,8 +1491,8 @@ MODULE messy_mecca_kpp_Monitor
      '                   PBZQONE + OH --> PBZQO2                                                          ', &
      '                   PHENO2 + HO2 --> PHENOOH                                                         ', &
      '                   PHENO2 + HO2 --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + HO2 + OH ... etc. ', &
-     '                    PHENO2 + NO --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + NO2 + HO2 ... etc.', &
-     '                   PHENO2 + NO3 --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + NO2 + HO2 ... etc.', &
+     '                    PHENO2 + NO --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + HO2 + NO2 ... etc.', &
+     '                   PHENO2 + NO3 --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + HO2 + NO2 ... etc.', &
      '                         PHENO2 --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + HO2               ', &
      '                C615CO2OOH + OH --> C6125CO + OH                                                    ', &
      '               C5CO2DBCO3 + HO2 --> C5CO2DCO3H                                                      ', &
@@ -1518,7 +1519,7 @@ MODULE messy_mecca_kpp_Monitor
      '                         PBZQO2 --> C5CO2OHCO3                                                      ', &
      '                BZOBIPEROH + OH --> MALDIALCO3 + GLYOX                                              ', &
      '                 DNPHENO2 + HO2 --> DNPHENOOH                                                       ', &
-     '                 DNPHENO2 + HO2 --> NC4DCO2H + HCOCO2H + NO2 + OH                                   ', &
+     '                 DNPHENO2 + HO2 --> NC4DCO2H + HCOCO2H + OH + NO2                                   ', &
      '                  DNPHENO2 + NO --> NC4DCO2H + HCOCO2H + 2 NO2                                      ', &
      '                 DNPHENO2 + NO3 --> NC4DCO2H + HCOCO2H + 2 NO2                                      ', &
      '                       DNPHENO2 --> NC4DCO2H + HCOCO2H + NO2                                        ', &
@@ -1536,7 +1537,7 @@ MODULE messy_mecca_kpp_Monitor
      '                   C6125CO + OH --> C5CO14O2 + CO                                                   ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_38 = (/ &
      '                   NBZQO2 + HO2 --> NBZQOOH                                                         ', &
-     '                   NBZQO2 + HO2 --> C6CO4DB + NO2 + OH                                              ', &
+     '                   NBZQO2 + HO2 --> C6CO4DB + OH + NO2                                              ', &
      '                    NBZQO2 + NO --> C6CO4DB + 2 NO2                                                 ', &
      '                   NBZQO2 + NO3 --> C6CO4DB + 2 NO2                                                 ', &
      '                         NBZQO2 --> C6CO4DB + NO2                                                   ', &
@@ -1566,8 +1567,8 @@ MODULE messy_mecca_kpp_Monitor
      '                BZBIPERO2 + HO2 --> BZFUONE + GLYOX + HO2 + OH                                      ', &
      '                 BZBIPERO2 + NO --> BZBIPERNO3                                                      ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_39 = (/ &
-     '                 BZBIPERO2 + NO --> BZFUONE + GLYOX + NO2 + HO2                                     ', &
-     '                BZBIPERO2 + NO3 --> BZFUONE + GLYOX + NO2 + HO2                                     ', &
+     '                 BZBIPERO2 + NO --> BZFUONE + GLYOX + HO2 + NO2                                     ', &
+     '                BZBIPERO2 + NO3 --> BZFUONE + GLYOX + HO2 + NO2                                     ', &
      '                      BZBIPERO2 --> BZFUONE + GLYOX + HO2                                           ', &
      '               CO235C6CHO + NO3 --> CO235C6CO3 + HNO3                                               ', &
      '                CO235C6CHO + OH --> CO235C6CO3                                                      ', &
@@ -1602,11 +1603,11 @@ MODULE messy_mecca_kpp_Monitor
      '                   TOLUENE + OH --> 0.04 AELV + 0.18 CRESOL + 0.07 C6H5CH2O2 + 0.1 TLEPOXMUC ... etc', &
      '                C6H5CH2O2 + HO2 --> C6H5CH2OOH                                                      ', &
      '                 C6H5CH2O2 + NO --> C6H5CH2NO3                                                      ', &
-     '                 C6H5CH2O2 + NO --> BENZAL + NO2 + HO2                                              ', &
-     '                C6H5CH2O2 + NO3 --> BENZAL + NO2 + HO2                                              ', &
+     '                 C6H5CH2O2 + NO --> BENZAL + HO2 + NO2                                              ', &
+     '                C6H5CH2O2 + NO3 --> BENZAL + HO2 + NO2                                              ', &
      '                      C6H5CH2O2 --> BENZAL + HO2                                                    ', &
      '                   CRESOL + NO3 --> 0.391 TOL1O + 0.506 NCRESO2 + 0.103 CRESO2 + 0.494 HNO3 ... etc.', &
-     '                    CRESOL + OH --> 0.073 TOL1O + 0.2 CRESO2 + 0.727 MCATECHOL + 0.727 HO2 ... etc. ', &
+     '                    CRESOL + OH --> 0.073 TOL1O + 0.727 MCATECHOL + 0.2 CRESO2 + 0.727 HO2 ... etc. ', &
      '                TLBIPERO2 + HO2 --> TLBIPEROOH                                                      ', &
      '                TLBIPERO2 + HO2 --> 0.78 ALOV + 0.2 BZFUONE + 0.2 TLFUONE + 0.2 MALDIAL ... etc.    ', &
      '                 TLBIPERO2 + NO --> 0.097 ALOV + 0.748 ASOV + 0.2 BZFUONE + 0.2 TLFUONE ... etc.    ', &
@@ -1622,11 +1623,11 @@ MODULE messy_mecca_kpp_Monitor
      '                    BENZAL + OH --> C6H5CO3                                                         ', &
      '                   CRESO2 + HO2 --> CRESOOH                                                         ', &
      '                   CRESO2 + HO2 --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2 + OH ... etc.   ', &
-     '                    CRESO2 + NO --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + NO2 + HO2 ... etc.  ', &
-     '                   CRESO2 + NO3 --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + NO2 + HO2 ... etc.  ', &
+     '                    CRESO2 + NO --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2 + NO2 ... etc.  ', &
+     '                   CRESO2 + NO3 --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2 + NO2 ... etc.  ', &
      '                         CRESO2 --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2                 ', &
      '                  NCRESO2 + HO2 --> NCRESOOH                                                        ', &
-     '                  NCRESO2 + HO2 --> C5CO14OH + GLYOX + NO2 + OH                                     ' /)
+     '                  NCRESO2 + HO2 --> C5CO14OH + GLYOX + OH + NO2                                     ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_41 = (/ &
      '                   NCRESO2 + NO --> C5CO14OH + GLYOX + 2 NO2                                        ', &
      '                  NCRESO2 + NO3 --> C5CO14OH + GLYOX + 2 NO2                                        ', &
@@ -1696,7 +1697,7 @@ MODULE messy_mecca_kpp_Monitor
      '                MCATEC1O2 + NO3 --> MCATEC1O + NO2                                                  ', &
      '                      MCATEC1O2 --> MCATEC1O                                                        ', &
      '                  NPTLQO2 + HO2 --> NPTLQOOH                                                        ', &
-     '                  NPTLQO2 + HO2 --> C7CO4DB + NO2 + OH                                              ', &
+     '                  NPTLQO2 + HO2 --> C7CO4DB + OH + NO2                                              ', &
      '                   NPTLQO2 + NO --> C7CO4DB + 2 NO2                                                 ', &
      '                  NPTLQO2 + NO3 --> C7CO4DB + 2 NO2                                                 ', &
      '                        NPTLQO2 --> C7CO4DB + NO2                                                   ', &
@@ -1713,27 +1714,27 @@ MODULE messy_mecca_kpp_Monitor
      '                 NCRES1O2 + NO3 --> NCRES1O + NO2                                                   ', &
      '                       NCRES1O2 --> NCRES1O                                                         ', &
      '               MNNCATECO2 + HO2 --> MNNCATCOOH                                                      ', &
-     '               MNNCATECO2 + HO2 --> NC4MDCO2H + HCOCO2H + NO2 + OH                                  ', &
+     '               MNNCATECO2 + HO2 --> NC4MDCO2H + HCOCO2H + OH + NO2                                  ', &
      '                MNNCATECO2 + NO --> NC4MDCO2H + HCOCO2H + 2 NO2                                     ', &
      '               MNNCATECO2 + NO3 --> NC4MDCO2H + HCOCO2H + 2 NO2                                     ', &
      '                     MNNCATECO2 --> NC4MDCO2H + HCOCO2H + NO2                                       ', &
      '                MNCATECO2 + HO2 --> MNCATECOOH                                                      ', &
      '                MNCATECO2 + HO2 --> NC4MDCO2H + HCOCO2H + HO2 + OH                                  ', &
-     '                 MNCATECO2 + NO --> NC4MDCO2H + HCOCO2H + NO2 + HO2                                 ' /)
+     '                 MNCATECO2 + NO --> NC4MDCO2H + HCOCO2H + HO2 + NO2                                 ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_44 = (/ &
-     '                MNCATECO2 + NO3 --> NC4MDCO2H + HCOCO2H + NO2 + HO2                                 ', &
+     '                MNCATECO2 + NO3 --> NC4MDCO2H + HCOCO2H + HO2 + NO2                                 ', &
      '                      MNCATECO2 --> NC4MDCO2H + HCOCO2H + HO2                                       ', &
      '                MCATEC1OOH + OH --> MCATEC1O2                                                       ', &
      '                  NPTLQOOH + OH --> NPTLQO2                                                         ', &
      '                   PTLQOOH + OH --> PTLQCO + OH                                                     ', &
      '                    PTLQCO + OH --> C6CO2OHCO3                                                      ', &
      '                NDNCRESO2 + HO2 --> NDNCRESOOH                                                      ', &
-     '                NDNCRESO2 + HO2 --> NC4MDCO2H + HNO3 + 2 CO + NO2 + OH                              ', &
+     '                NDNCRESO2 + HO2 --> NC4MDCO2H + HNO3 + 2 CO + OH + NO2                              ', &
      '                 NDNCRESO2 + NO --> NC4MDCO2H + HNO3 + 2 CO + 2 NO2                                 ', &
      '                NDNCRESO2 + NO3 --> NC4MDCO2H + HNO3 + 2 CO + 2 NO2                                 ', &
      '                      NDNCRESO2 --> NC4MDCO2H + HNO3 + 2 CO + NO2                                   ', &
      '                 DNCRESO2 + HO2 --> DNCRESOOH                                                       ', &
-     '                 DNCRESO2 + HO2 --> NC4MDCO2H + HCOCO2H + NO2 + OH                                  ', &
+     '                 DNCRESO2 + HO2 --> NC4MDCO2H + HCOCO2H + OH + NO2                                  ', &
      '                  DNCRESO2 + NO --> NC4MDCO2H + HCOCO2H + 2 NO2                                     ', &
      '                 DNCRESO2 + NO3 --> NC4MDCO2H + HCOCO2H + 2 NO2                                     ', &
      '                       DNCRESO2 --> NC4MDCO2H + HCOCO2H + NO2                                       ', &
@@ -1743,9 +1744,9 @@ MODULE messy_mecca_kpp_Monitor
      '                   C7CO4DB + OH --> C33CO + CH3CO + 2 CO                                            ', &
      '               C6CO2OHCO3 + HO2 --> C5134CO2OH + CO + HO2 + OH + CO2                                ', &
      '               C6CO2OHCO3 + HO2 --> C6COOHCO3H                                                      ', &
-     '                C6CO2OHCO3 + NO --> C5134CO2OH + CO + NO2 + HO2 + CO2                               ', &
+     '                C6CO2OHCO3 + NO --> C5134CO2OH + CO + HO2 + NO2 + CO2                               ', &
      '               C6CO2OHCO3 + NO2 --> C6CO2OHPAN                                                      ', &
-     '               C6CO2OHCO3 + NO3 --> C5134CO2OH + CO + NO2 + HO2 + CO2                               ', &
+     '               C6CO2OHCO3 + NO3 --> C5134CO2OH + CO + HO2 + NO2 + CO2                               ', &
      '                     C6CO2OHCO3 --> C5134CO2OH + CO + HO2 + CO2                                     ', &
      '                NDNCRESOOH + OH --> NDNCRESO2                                                       ', &
      '                 DNCRESOOH + OH --> DNCRESO2                                                        ', &
@@ -1827,8 +1828,8 @@ MODULE messy_mecca_kpp_Monitor
      '                NSTYRENOOH + OH --> NSTYRENO2                                                       ', &
      '                 STYRENO2 + HO2 --> STYRENOOH                                                       ', &
      '                 STYRENO2 + HO2 --> BENZAL + HCHO + HO2 + OH                                        ', &
-     '                  STYRENO2 + NO --> BENZAL + HCHO + NO2 + HO2                                       ', &
-     '                 STYRENO2 + NO3 --> BENZAL + HCHO + NO2 + HO2                                       ', &
+     '                  STYRENO2 + NO --> BENZAL + HCHO + HO2 + NO2                                       ', &
+     '                 STYRENO2 + NO3 --> BENZAL + HCHO + HO2 + NO2                                       ', &
      '                       STYRENO2 --> BENZAL + HCHO + HO2                                             ', &
      '                 STYRENOOH + OH --> STYRENO2                                                        ', &
      '                          C96O2 --> C97O2                                                           ', &
@@ -1902,7 +1903,7 @@ MODULE messy_mecca_kpp_Monitor
      '                      LTMB + OH --> 2 LCARBON + TLBIPERO2 + HO2                                     ', &
      '                     LTMB + NO3 --> 2 LCARBON + C6H5CH2O2 + HNO3                                    ', &
      '                   APINENE + OH --> 0.15 MENTHEN6ONE + 0.75 LAPINABO2 + 0.1 ROO6R1O2 + 0.15 HO2 ... ', &
-     '                 LAPINABO2 + NO --> 0.052 BLOV + 0.184 BSOV + PINAL + NO2 + HO2                     ', &
+     '                 LAPINABO2 + NO --> 0.052 BLOV + 0.184 BSOV + PINAL + HO2 + NO2                     ', &
      '                 LAPINABO2 + NO --> LAPINABNO3                                                      ', &
      '                LAPINABO2 + HO2 --> LAPINABOOH                                                      ', &
      '                LAPINABO2 + HO2 --> PINAL + HO2 + OH                                                ' /)
@@ -1911,7 +1912,7 @@ MODULE messy_mecca_kpp_Monitor
      '                LAPINABOOH + OH --> 0.35 LAPINABO2 + 0.65 C96CO3                                    ', &
      '                LAPINABNO3 + OH --> 0.65 C96CO3 + 0.35 PINAL + NO2                                  ', &
      '               MENTHEN6ONE + OH --> OHMENTHEN6ONEO2                                                 ', &
-     '           OHMENTHEN6ONEO2 + NO --> OH2MENTHEN6ONE + NO2 + HO2                                      ', &
+     '           OHMENTHEN6ONEO2 + NO --> OH2MENTHEN6ONE + HO2 + NO2                                      ', &
      '          OHMENTHEN6ONEO2 + HO2 --> OH2MENTHEN6ONE                                                  ', &
      '                OHMENTHEN6ONEO2 --> OH2MENTHEN6ONE + HO2                                            ', &
      '            OH2MENTHEN6ONE + OH --> 1 LCARBON                                                       ', &
@@ -1969,7 +1970,7 @@ MODULE messy_mecca_kpp_Monitor
      '                  BPINAO2 + HO2 --> BPINAOOH                                                        ', &
      '                  BPINAO2 + HO2 --> NOPINONE + HCHO + HO2 + OH                                      ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_52 = (/ &
-     '                   BPINAO2 + NO --> NOPINONE + 0.052 BLOV + 0.184 BSOV + HCHO + NO2 + HO2 ... etc.  ', &
+     '                   BPINAO2 + NO --> NOPINONE + 0.052 BLOV + 0.184 BSOV + HCHO + HO2 + NO2 ... etc.  ', &
      '                   BPINAO2 + NO --> BPINANO3                                                        ', &
      '                        BPINAO2 --> NOPINONE + HCHO + HO2                                           ', &
      '                  BPINAOOH + OH --> BPINAO2                                                         ', &
@@ -1981,11 +1982,11 @@ MODULE messy_mecca_kpp_Monitor
      '                   RO6R1O2 + NO --> RO6R1NO3                                                        ', &
      '                  RO6R1O2 + HO2 --> 1 LCARBON                                                       ', &
      '                        RO6R1O2 --> RO6R3O2                                                         ', &
-     '                   RO6R3O2 + NO --> 9 LCARBON + HCHO + NO2 + HO2                                    ', &
+     '                   RO6R3O2 + NO --> 9 LCARBON + HCHO + HO2 + NO2                                    ', &
      '                   RO6R3O2 + NO --> LNITROGEN + 1 LCARBON                                           ', &
      '                  RO6R3O2 + HO2 --> 1 LCARBON                                                       ', &
      '                        RO6R3O2 --> 9 LCARBON + HCHO + HO2                                          ', &
-     '                   BPINENE + O3 --> 0.07 BELV + NOPINONE + 0.23 BLOV + 0.37 CH2OO + 0.63 CO ... etc.', &
+     '                   BPINENE + O3 --> 0.07 BELV + NOPINONE + 0.13 BLOV + 0.37 CH2OO + 0.63 CO ... etc.', &
      '                   BPINENE + O3 --> NOPINOO + CO2                                                   ', &
      '                   BPINENE + O3 --> NOPINDO2 + OH + CO2                                             ', &
      '                   BPINENE + O3 --> C8BC + 2 CO2                                                    ', &
@@ -1997,7 +1998,7 @@ MODULE messy_mecca_kpp_Monitor
      '                     LNBPINABO2 --> BPINANO3                                                        ', &
      '               LNBPINABOOH + OH --> LNBPINABO2                                                      ', &
      '                 ROO6R1NO3 + OH --> ROO6R3O2 + CH3COCH3 + NO2                                       ', &
-     '                  RO6R1NO3 + OH --> 9 LCARBON + HCHO + NO2 + HO2                                    ', &
+     '                  RO6R1NO3 + OH --> 9 LCARBON + HCHO + HO2 + NO2                                    ', &
      '                   PINENOL + OH --> NORPINAL + HCOOH + OH                                           ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_53 = (/ &
      '                PINENOL + HCOOH --> PINAL + HCOOH                                                   ', &
@@ -2036,7 +2037,7 @@ MODULE messy_mecca_kpp_Monitor
      '                          Cl2O2 --> 2 ClO                                                           ', &
      '                      H2O2 + Cl --> HCl + HO2                                                       ', &
      '                      ClO + HO2 --> HOCl + O2                                                       ', &
-     '                       HCl + OH --> H2O + Cl                                                        ', &
+     '                       HCl + OH --> Cl + H2O                                                        ', &
      '                       ClO + NO --> Cl + NO2                                                        ', &
      '                      ClO + NO2 --> ClNO3                                                           ', &
      '                          ClNO3 --> ClO + NO2                                                       ', &
@@ -2045,7 +2046,7 @@ MODULE messy_mecca_kpp_Monitor
      '                      HCHO + Cl --> HCl + CO + HO2                                                  ', &
      '                    CH3OOH + Cl --> HCl + HCHO + OH                                                 ', &
      '                    ClO + CH3O2 --> HCHO + Cl + HO2                                                 ', &
-     '                   CH3CCl3 + OH --> 2 LCARBON + H2O + 3 Cl                                          ', &
+     '                   CH3CCl3 + OH --> 2 LCARBON + 3 Cl + H2O                                          ', &
      '                      C2H4 + Cl --> HCl + HOCH2CH2O2                                                ', &
      '                    CH3CHO + Cl --> HCl + CH3CO                                                     ', &
      '                      C2H2 + Cl --> LCARBON + HCl + CH3                                             ', &
@@ -2058,7 +2059,7 @@ MODULE messy_mecca_kpp_Monitor
      '                          2 OIO --> IPART                                                           ', &
      '                           2 IO --> 0.38 OIO + 1.62 I + 0.62 O2                                     ', &
      '                        I + HO2 --> HI + O2                                                         ', &
-     '                       IO + HO2 --> HOI + O2                                                        ', &
+     '                       HO2 + IO --> HOI + O2                                                        ', &
      '                        HI + OH --> I + H2O                                                         ', &
      '                       OIO + OH --> HIO3                                                            ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_55 = (/ &
@@ -2075,8 +2076,8 @@ MODULE messy_mecca_kpp_Monitor
      '                       IO + NO3 --> OIO + NO2                                                       ', &
      '                       INO3 + I --> I2 + NO3                                                        ', &
      '                     C3H7I + OH --> 2 LCARBON + I + CH3O2                                           ', &
-     '                     IO + CH3O2 --> 0.6 OIO + 0.4 I + HCHO + HO2                                    ', &
-     '                     CH3I + NO3 --> HNO3 + IO + HCHO                                                ', &
+     '                     CH3O2 + IO --> 0.6 OIO + 0.4 I + HCHO + HO2                                    ', &
+     '                     CH3I + NO3 --> HNO3 + HCHO + IO                                                ', &
      '                       ClO + IO --> 0.55 OClO + 0.2 ICl + 0.8 I + 0.25 Cl + 0.45 O2                 ', &
      '                       SO2 + OH --> HSO3                                                            ', &
      '                       DMS + OH --> CH3SCH2 + H2O                                                   ', &
@@ -2084,7 +2085,7 @@ MODULE messy_mecca_kpp_Monitor
      '                      DMS + NO3 --> CH3SCH2 + HNO3                                                  ', &
      '                      DMSO + OH --> DMSOHO                                                          ', &
      '                      DMSO + OH --> CH3SOCH2 + H2O                                                  ', &
-     '                         CH3SO2 --> CH3O2 + SO2                                                     ', &
+     '                         CH3SO2 --> SO2 + CH3O2                                                     ', &
      '                    CH3SO2 + O3 --> CH3SO3 + O2                                                     ', &
      '                   CH3SO3 + HO2 --> CH3SO3H + O2                                                    ', &
      '                    CH2OO + SO2 --> H2SO4 + HCHO                                                    ', &
@@ -2102,52 +2103,52 @@ MODULE messy_mecca_kpp_Monitor
      '                            NO2 --> O3P + NO                                                        ', &
      '                            NO3 --> O3P + NO2                                                       ', &
      '                            NO3 --> NO + O2                                                         ', &
-     '                           N2O5 --> NO2 + NO3                                                       ', &
+     '                           N2O5 --> NO3 + NO2                                                       ', &
      '                           HONO --> OH + NO                                                         ', &
-     '                           HNO3 --> NO2 + OH                                                        ', &
-     '                           HNO4 --> 0.667 NO2 + 0.333 NO3 + 0.667 HO2 + 0.333 OH                    ', &
+     '                           HNO3 --> OH + NO2                                                        ', &
+     '                           HNO4 --> 0.667 HO2 + 0.333 OH + 0.333 NO3 + 0.667 NO2                    ', &
      '                         CH3OOH --> CH3O + OH                                                       ', &
      '                           HCHO --> H2 + CO                                                         ', &
      '                           HCHO --> H + CO + HO2                                                    ', &
      '                         CH3ONO --> CH3O + NO                                                       ', &
      '                         CH3NO3 --> CH3O + NO2                                                      ', &
-     '                       CH3O2NO2 --> 0.333 CH3O + 0.667 CH3O2 + 0.667 NO2 + 0.333 NO3                ', &
+     '                       CH3O2NO2 --> 0.333 CH3O + 0.667 CH3O2 + 0.333 NO3 + 0.667 NO2                ', &
      '                       HOCH2OOH --> HCOOH + HO2 + OH                                                ', &
      '                          CH3O2 --> HCHO + OH                                                       ', &
      '                          HCOOH --> CO + HO2 + OH                                                   ', &
-     '                     HOCH2O2NO2 --> 0.667 HOCH2O2 + 0.333 HCOOH + 0.667 NO2 + 0.333 NO3 ... etc.    ', &
+     '                     HOCH2O2NO2 --> 0.667 HOCH2O2 + 0.333 HCOOH + 0.333 HO2 + 0.333 NO3 ... etc.    ', &
      '                        C2H5OOH --> CH3CHO + HO2 + OH                                               ', &
      '                         CH3CHO --> CH3 + CO + HO2                                                  ', &
      '                         CH3CHO --> CH2CHOH                                                         ', &
      '                        CH3CO3H --> CH3 + OH + CO2                                                  ', &
-     '                            PAN --> 0.3 CH3 + 0.7 CH3CO + 0.7 NO2 + 0.3 NO3 + 0.3 CO2               ', &
+     '                            PAN --> 0.3 CH3 + 0.7 CH3CO + 0.3 NO3 + 0.7 NO2 + 0.3 CO2               ', &
      '                       HOCH2CHO --> CO + HCHO + 2 HO2                                               ', &
      '                       HOCH2CHO --> HCOCH2O2 + OH                                                   ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_57 = (/ &
      '                       HOCH2CHO --> CH3OH + CO                                                      ', &
      '                      HOCH2CO3H --> HCHO + HO2 + OH + CO2                                           ', &
-     '                           PHAN --> 0.7 HOCH2CO + 0.3 HCHO + 0.7 NO2 + 0.3 NO3 + 0.3 HO2 ... etc.   ', &
+     '                           PHAN --> 0.7 HOCH2CO + 0.3 HCHO + 0.3 HO2 + 0.3 NO3 + 0.7 NO2 ... etc.   ', &
      '                          GLYOX --> 2 CO + 2 HO2                                                    ', &
      '                        HCOCO2H --> CO + 2 HO2 + CO2                                                ', &
      '                        HCOCO3H --> CO + HO2 + OH + CO2                                             ', &
      '                       HYETHO2H --> HOCH2CH2O + OH                                                  ', &
-     '                       ETHOHNO3 --> 2 HCHO + NO2 + HO2                                              ', &
+     '                       ETHOHNO3 --> 2 HCHO + HO2 + NO2                                              ', &
      '                     HOOCH2CO3H --> HCHO + 2 OH + CO2                                               ', &
      '                     HOOCH2CO2H --> HCHO + HO2 + OH + CO2                                           ', &
      '                          CH2CO --> 0.8 H + 0.16 O3P + 1.34 CO + 0.1 HCOOH + 0.16 HCHO + 0.34 HO2 ..', &
      '                     CH3CHOHOOH --> CH3 + HCOOH + OH                                                ', &
-     '                      NO3CH2CHO --> CO + HCHO + NO2 + HO2                                           ', &
+     '                      NO3CH2CHO --> CO + HCHO + HO2 + NO2                                           ', &
      '                      HOOCH2CHO --> CO + HCHO + HO2 + OH                                            ', &
-     '                        C2H5NO3 --> CH3CHO + NO2 + HO2                                              ', &
-     '                      NO3CH2PAN --> 0.7 NO3CH2CO3 + 0.3 HCHO + NO2 + 0.3 NO3 + 0.3 CO2              ', &
-     '                      C2H5O2NO2 --> 0.667 C2H5O2 + 0.333 CH3CHO + 0.667 NO2 + 0.333 NO3 ... etc.    ', &
+     '                        C2H5NO3 --> CH3CHO + HO2 + NO2                                              ', &
+     '                      NO3CH2PAN --> 0.7 NO3CH2CO3 + 0.3 HCHO + 0.3 NO3 + NO2 + 0.3 CO2              ', &
+     '                      C2H5O2NO2 --> 0.667 C2H5O2 + 0.333 CH3CHO + 0.333 HO2 + 0.333 NO3 ... etc.    ', &
      '                       IC3H7OOH --> CH3COCH3 + HO2 + OH                                             ', &
      '                       CH3COCH3 --> CH3 + CH3CO                                                     ', &
      '                         ACETOL --> 0.5 HOCH2CO + 0.5 CH3 + 0.5 CH3CO + 0.5 HCHO + 0.5 HO2 ... etc. ', &
      '                         MGLYOX --> CH3CO + CO + HO2                                                ', &
      '                      HYPERACET --> CH3CO + HCHO + OH                                               ', &
      '                  HOCH2COCH2OOH --> HOCH2CO + HCHO + OH                                             ', &
-     '                       IC3H7NO3 --> CH3COCH3 + NO2 + HO2                                            ', &
+     '                       IC3H7NO3 --> CH3COCH3 + HO2 + NO2                                            ', &
      '                            NOA --> CH3CO + HCHO + NO2                                              ', &
      '                      HYPROPO2H --> CH3CHO + HCHO + HO2 + OH                                        ', &
      '                      PR2O2HNO3 --> NOA + HO2 + OH                                                  ', &
@@ -2162,13 +2163,13 @@ MODULE messy_mecca_kpp_Monitor
      '                      CH3COCO2H --> 0.07 CH3CO2H + 0.16 CH2CHOH + 0.43 CH3CO + 0.32 CH3CHO ... etc. ', &
      '                      CH3COCO3H --> CH3CO + OH + CO2                                                ', &
      '                        CH3CHCO --> C2H4 + CO                                                       ', &
-     '                      PROPOLNO3 --> HOCH2CHO + HCHO + NO2 + HO2                                     ', &
+     '                      PROPOLNO3 --> HOCH2CHO + HCHO + HO2 + NO2                                     ', &
      '                  CH3COCH2O2NO2 --> CH3CO + HCHO + NO3                                              ', &
      '                       NC3H7OOH --> C2H5CHO + HO2 + OH                                              ', &
-     '                       NC3H7NO3 --> C2H5CHO + NO2 + HO2                                             ', &
+     '                       NC3H7NO3 --> C2H5CHO + HO2 + NO2                                             ', &
      '                        C2H5CHO --> C2H5O2 + CO + HO2                                               ', &
      '                        C2H5CHO --> PROPENOL                                                        ', &
-     '                            PPN --> 0.7 C2H5CO3 + 0.3 C2H5O2 + 0.7 NO2 + 0.3 NO3 + 0.3 CO2 ... etc. ', &
+     '                            PPN --> 0.7 C2H5CO3 + 0.3 C2H5O2 + 0.3 NO3 + 0.7 NO2 + 0.3 CO2 ... etc. ', &
      '                     PERPROACID --> C2H5O2 + OH + CO2                                               ', &
      '                    HCOCOCH2OOH --> HOOCH2CO3 + CO + HO2                                            ', &
      '                    HCOCOCH2OOH --> HCOCO + HCHO + OH                                               ', &
@@ -2182,9 +2183,9 @@ MODULE messy_mecca_kpp_Monitor
      '                            MEK --> C2H5O2 + CH3CO                                                  ', &
      '                        LMEKOOH --> 0.62 CH3CO + 0.38 HOCH2CH2O2 + 0.62 CH3CHO + 0.38 HCHO ... etc. ', &
      '                         BIACET --> 2 CH3CO                                                         ', &
-     '                       LC4H9NO3 --> C3H7CHO + NO2 + HO2                                             ', &
-     '                       LC4H9NO3 --> MEK + NO2 + HO2                                                 ', &
-     '                           MPAN --> 0.3 MACO2 + 0.7 MACO3 + 0.7 NO2 + 0.3 NO3                       ' /)
+     '                       LC4H9NO3 --> C3H7CHO + HO2 + NO2                                             ', &
+     '                       LC4H9NO3 --> MEK + HO2 + NO2                                                 ', &
+     '                           MPAN --> 0.3 MACO2 + 0.7 MACO3 + 0.3 NO3 + 0.7 NO2                       ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_59 = (/ &
      '                      CO2H3CO3H --> MGLYOX + HO2 + OH + CO2                                         ', &
      '                      CO2H3CO3H --> HCOCO3H + CH3CO + HO2                                           ', &
@@ -2211,16 +2212,16 @@ MODULE messy_mecca_kpp_Monitor
      '                     C312COCO3H --> CHOCOCH2O2 + OH + CO2                                           ', &
      '                        LMEKNO3 --> 0.62 CH3CO + 0.38 HOCH2CH2O2 + 0.62 CH3CHO + 0.38 HCHO ... etc. ', &
      '                         MVKNO3 --> CH3CO + HOCH2CHO + NO2                                          ', &
-     '                        MACRNO3 --> ACETOL + CO + NO2 + HO2                                         ', &
+     '                        MACRNO3 --> ACETOL + CO + HO2 + NO2                                         ', &
      '                       TC4H9NO3 --> CH3COCH3 + CH3 + NO2                                            ', &
      '                       TC4H9OOH --> CH3COCH3 + CH3 + OH                                             ', &
-     '                     IBUTOLBNO3 --> CH3COCH3 + HCHO + NO2 + HO2                                     ', &
+     '                     IBUTOLBNO3 --> CH3COCH3 + HCHO + HO2 + NO2                                     ', &
      '                     IBUTOLBOOH --> CH3COCH3 + HCHO + HO2 + OH                                      ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_60 = (/ &
      '                     LBUT1ENOOH --> C2H5CHO + HCHO + HO2 + OH                                       ', &
-     '                     LBUT1ENNO3 --> C2H5CHO + HCHO + NO2 + HO2                                      ', &
+     '                     LBUT1ENNO3 --> C2H5CHO + HCHO + HO2 + NO2                                      ', &
      '                      BUT2OLOOH --> 2 CH3CHO + HO2 + OH                                             ', &
-     '                      BUT2OLNO3 --> 2 CH3CHO + NO2 + HO2                                            ', &
+     '                      BUT2OLNO3 --> 2 CH3CHO + HO2 + NO2                                            ', &
      '                        BUT2OLO --> HOCH2CO + CH3CO                                                 ', &
      '                        C3H7CHO --> NC3H7O2 + CO + HO2                                              ', &
      '                        C3H7CHO --> CH2CHOH + C2H4                                                  ', &
@@ -2228,12 +2229,12 @@ MODULE messy_mecca_kpp_Monitor
      '                       IC4H9NO3 --> IPRCHO + NO2                                                    ', &
      '                       IC4H9OOH --> IPRCHO + HO2 + OH                                               ', &
      '                     PERIBUACID --> IC3H7O2 + OH + CO2                                              ', &
-     '                           PIPN --> 0.3 IC3H7O2 + 0.7 IPRCO3 + 0.7 NO2 + 0.3 NO3 + 0.3 CO2 ... etc. ', &
+     '                           PIPN --> 0.3 IC3H7O2 + 0.7 IPRCO3 + 0.3 NO3 + 0.7 NO2 + 0.3 CO2 ... etc. ', &
      '                           HVMK --> MGLYOX + CO + 2 OH                                              ', &
      '                           HMAC --> HCOCCH3CO + 2 OH                                                ', &
      '                       CO2C3CHO --> CH3COCH2O2 + CO + HO2                                           ', &
      '                       CO2C3CHO --> HVMK                                                            ', &
-     '                       IBUTDIAL --> CH3CHO + H2O + CO + HO2 + CO2                                   ', &
+     '                       IBUTDIAL --> CH3CHO + CO + HO2 + H2O + CO2                                   ', &
      '                       IBUTDIAL --> HMAC                                                            ', &
      '                       IBUTALOH --> CH3COCH3 + CO + 2 HO2                                           ', &
      '                      IPRHOCO3H --> CH3COCH3 + HO2 + OH + CO2                                       ', &
@@ -2241,7 +2242,7 @@ MODULE messy_mecca_kpp_Monitor
      '                     MALDIALOOH --> 2 GLYOX + HO2 + OH                                              ', &
      '                        BZFUOOH --> CO14O3CHO + HO2 + OH                                            ', &
      '                     HOCOC4DIAL --> HCOCOHCO3 + CO + HO2                                            ', &
-     '                       NBZFUOOH --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 NO2 + 0.5 HO2 + OH ... etc.  ', &
+     '                       NBZFUOOH --> 0.5 NBZFUONE + 0.5 CO14O3CHO + 0.5 HO2 + OH + 0.5 NO2 ... etc.  ', &
      '                     MALDALCO3H --> HCOCO3H + 2 CO + 2 HO2                                          ', &
      '                     MALDALCO3H --> 0.6 MALANHY + 0.4 GLYOX + 0.4 CO + HO2 + OH + 0.4 CO2 ... etc.  ', &
      '                      EPXDLCO2H --> C3DIALO2 + HO2 + CO2                                            ', &
@@ -2257,16 +2258,16 @@ MODULE messy_mecca_kpp_Monitor
      '                     LISOPACOOH --> LISOPACO + OH                                                   ', &
      '                     LISOPACNO3 --> LISOPACO + NO2                                                  ', &
      '                       ISOPBOOH --> MVK + HCHO + HO2 + OH                                           ', &
-     '                       ISOPBNO3 --> MVK + HCHO + NO2 + HO2                                          ', &
+     '                       ISOPBNO3 --> MVK + HCHO + HO2 + NO2                                          ', &
      '                       ISOPDOOH --> MACR + HCHO + HO2 + OH                                          ', &
-     '                       ISOPDNO3 --> MACR + HCHO + NO2 + HO2                                         ', &
+     '                       ISOPDNO3 --> MACR + HCHO + HO2 + NO2                                         ', &
      '                       NISOPOOH --> NC4CHO + HO2 + OH                                               ', &
      '                         NC4CHO --> LHC4ACCO3 + NO2                                                 ', &
      '                        LNISOOH --> 0.5 HOCHCHO + NOA + 0.5 CO + 0.5 HO2 + OH + 0.5 CO2 ... etc.    ', &
      '                      LHC4ACCHO --> 0.5 LHC4ACCO3 + 0.25 MACRO2 + 0.25 LHMVKABO2 + 0.5 CO ... etc.  ', &
      '                       LC578OOH --> 0.25 HOCHCHO + 0.25 ACETOL + 0.75 MGLYOX + 0.75 HOCH2CHO ... etc', &
      '                     LHC4ACCO3H --> 0.5 MACRO2 + 0.5 LHMVKABO2 + 2 OH + CO2                         ', &
-     '                     LC5PAN1719 --> 0.7 LHC4ACCO3 + 0.15 MACRO2 + 0.15 LHMVKABO2 + 0.7 NO2 ... etc. ', &
+     '                     LC5PAN1719 --> 0.7 LHC4ACCO3 + 0.15 MACRO2 + 0.15 LHMVKABO2 + 0.3 NO3 ... etc. ', &
      '                          HCOC5 --> HOCH2CO + 0.35 CH3COCH2O2 + 0.65 CH3 + 0.65 CO + 0.65 HCHO ... e', &
      '                         C59OOH --> HOCH2CO + ACETOL + OH                                           ', &
      '                        C511OOH --> HCOCH2CHO + CH3CO + OH                                          ', &
@@ -2279,7 +2280,7 @@ MODULE messy_mecca_kpp_Monitor
      '                         C513CO --> HOC2H4CO3 + 2 CO + HO2                                          ', &
      '                        C514OOH --> CO13C4CHO + HO2 + OH                                            ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_62 = (/ &
-     '                        C514NO3 --> CO13C4CHO + NO2 + HO2                                           ', &
+     '                        C514NO3 --> CO13C4CHO + HO2 + NO2                                           ', &
      '                 LZCODC23DBCOOH --> HVMK + CO + 2 OH                                                ', &
      '                 LZCODC23DBCOOH --> CH3CO + HOCH2CHO + CO + OH                                      ', &
      '                 LZCODC23DBCOOH --> HMAC + CO + 2 OH                                                ', &
@@ -2299,8 +2300,8 @@ MODULE messy_mecca_kpp_Monitor
      '                         MBOACO --> IPRHOCO3 + HCHO + HO2                                           ', &
      '                        MBOCOCO --> IPRHOCO3 + CO + HO2                                             ', &
      '                     LNMBOABOOH --> NO3CH2CHO + CH3COCH3 + HO2 + OH                                 ', &
-     '                     LNMBOABOOH --> IBUTALOH + HCHO + NO2 + OH                                      ', &
-     '                      NC4OHCO3H --> IBUTALOH + NO2 + OH + CO2                                       ', &
+     '                     LNMBOABOOH --> IBUTALOH + HCHO + OH + NO2                                      ', &
+     '                      NC4OHCO3H --> IBUTALOH + OH + NO2 + CO2                                       ', &
      '                          C54CO --> CH3CO + 3 CO + HO2                                              ', &
      '                     C5134CO2OH --> CO23C3CHO + CO + 2 HO2                                          ', &
      '                      C5DIALOOH --> MALDIAL + CO + HO2 + OH                                         ', &
@@ -2311,20 +2312,20 @@ MODULE messy_mecca_kpp_Monitor
      '                     MMALNHYOOH --> CO2H3CO3 + OH + CO2                                             ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_63 = (/ &
      '                     C5DICAROOH --> MGLYOX + GLYOX + HO2 + OH                                       ', &
-     '                       NTLFUOOH --> ACCOMECHO + NO2 + OH                                            ', &
+     '                       NTLFUOOH --> ACCOMECHO + OH + NO2                                            ', &
      '                      C5CO14OOH --> 0.83 MALANHY + 0.83 CH3 + 0.17 MGLYOX + 0.17 CO + 0.17 HO2 ... e', &
      '                        TLFUOOH --> ACCOMECHO + HO2 + OH                                            ', &
      '                     ACCOMECO3H --> MECOACETO2 + OH + CO2                                           ', &
      '                       C5DIALCO --> MALDIALCO3 + CO + HO2                                           ', &
-     '                        C614NO3 --> CO23C4CHO + HCHO + NO2 + HO2                                    ', &
+     '                        C614NO3 --> CO23C4CHO + HCHO + HO2 + NO2                                    ', &
      '                        C614OOH --> CO23C4CHO + HCHO + HO2 + OH                                     ', &
      '                     CO235C5CHO --> CO23C4CO3 + CO + HO2                                            ', &
      '                     CO235C6OOH --> CO23C4CO3 + HCHO + OH                                           ', &
      '                        PHENOOH --> 0.29 PBZQONE + 0.71 MALDALCO2H + 0.71 GLYOX + HO2 + OH ... etc. ', &
      '                        C6CO4DB --> C4CO2DBCO3 + CO + HO2                                           ', &
      '                     C5CO2DCO3H --> C33CO + CH3CO + OH + CO2                                        ', &
-     '                     NDNPHENOOH --> NC4DCO2H + HNO3 + 2 CO + NO2 + OH                               ', &
-     '                     BZBIPERNO3 --> BZFUONE + GLYOX + NO2 + HO2                                     ', &
+     '                     NDNPHENOOH --> NC4DCO2H + HNO3 + 2 CO + OH + NO2                               ', &
+     '                     BZBIPERNO3 --> BZFUONE + GLYOX + HO2 + NO2                                     ', &
      '                      HOC6H4NO2 --> CPDKETENE + HONO                                                ', &
      '                      CPDKETENE --> MALDIAL + CO + 2 HO2 + CO2                                      ', &
      '                     C5COOHCO3H --> HOCOC4DIAL + CO + HO2 + OH + CO2                                ', &
@@ -2332,22 +2333,22 @@ MODULE messy_mecca_kpp_Monitor
      '                      NPHEN1OOH --> NPHEN1O + OH                                                    ', &
      '                       BZEMUCCO --> C3DIALO2 + HCOCOHCO3                                            ', &
      '                     BZEMUCCO2H --> C5DIALO2 + HO2 + CO2                                            ', &
-     '                     NNCATECOOH --> NC4DCO2H + HCOCO2H + NO2 + OH                                   ', &
+     '                     NNCATECOOH --> NC4DCO2H + HCOCO2H + OH + NO2                                   ', &
      '                     C615CO2OOH --> C5DICARB + CO + HO2 + OH                                        ', &
-     '                       NPHENOOH --> MALDALCO2H + GLYOX + NO2 + OH                                   ', &
+     '                       NPHENOOH --> MALDALCO2H + GLYOX + OH + NO2                                   ', &
      '                      NCATECOOH --> NC4DCO2H + HCOCO2H + HO2 + OH                                   ', &
      '                        PBZQOOH --> C5CO2OHCO3 + OH                                                 ', &
      '                     BZOBIPEROH --> MALDIALCO3 + GLYOX + HO2                                        ', &
      '                     BZBIPEROOH --> BZFUONE + GLYOX + HO2 + OH                                      ', &
-     '                        NBZQOOH --> C6CO4DB + NO2 + OH                                              ' /)
+     '                        NBZQOOH --> C6CO4DB + OH + NO2                                              ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_64 = (/ &
      '                      CATEC1OOH --> CATEC1O + OH                                                    ', &
      '                        C6125CO --> C5CO14O2 + CO + HO2                                             ', &
-     '                      DNPHENOOH --> NC4DCO2H + HCOCO2H + NO2 + OH                                   ', &
+     '                      DNPHENOOH --> NC4DCO2H + HCOCO2H + OH + NO2                                   ', &
      '                     BZEMUCCO3H --> C5DIALO2 + OH + CO2                                             ', &
      '                        C6H5OOH --> C6H5O + OH                                                      ', &
      '                      BZEMUCOOH --> 0.5 C32OH13CO + 0.5 EPXC4DIAL + 0.5 C3DIALO2 + 0.5 GLYOX ... etc', &
-     '                      BZEMUCNO3 --> EPXC4DIAL + GLYOX + NO2 + HO2                                   ', &
+     '                      BZEMUCNO3 --> EPXC4DIAL + GLYOX + HO2 + NO2                                   ', &
      '                         DNPHEN --> NCPDKETENE + HONO                                               ', &
      '                     NCPDKETENE --> NC4DCO2H + CO + 2 HO2 + CO2                                     ', &
      '                     CO235C6CHO --> CHOC3COCO3 + CH3CO                                              ', &
@@ -2357,19 +2358,19 @@ MODULE messy_mecca_kpp_Monitor
      '                        C722OOH --> C44O2 + CH3COCH3 + OH                                           ', &
      '                      TLEPOXMUC --> 0.5 C615CO2O2 + 0.5 EPXC4DIAL + 0.5 CH3CO + CO + HO2 ... etc.   ', &
      '                     C6H5CH2OOH --> BENZAL + HO2 + OH                                               ', &
-     '                     C6H5CH2NO3 --> BENZAL + NO2 + HO2                                              ', &
+     '                     C6H5CH2NO3 --> BENZAL + HO2 + NO2                                              ', &
      '                         BENZAL --> C6H5O2 + CO + HO2                                               ', &
      '                     TLBIPEROOH --> 0.2 BZFUONE + 0.2 TLFUONE + 0.2 MALDIAL + 0.2 C5DICARB ... etc. ', &
      '                     TLBIPERNO3 --> 0.2 BZFUONE + 0.2 TLFUONE + 0.2 MALDIAL + 0.2 C5DICARB ... etc. ', &
      '                     TLOBIPEROH --> C5CO14O2 + GLYOX + HO2                                          ', &
      '                        CRESOOH --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2 + OH ... etc.   ', &
-     '                       NCRESOOH --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + NO2 + HO2 ... etc.  ', &
-     '                       NCRESOOH --> C5CO14OH + GLYOX + NO2 + OH                                     ', &
+     '                       NCRESOOH --> 0.32 PTLQONE + 0.68 C5CO14OH + 0.68 GLYOX + HO2 + OH ... etc.   ', &
+     '                       NCRESOOH --> C5CO14OH + GLYOX + OH + NO2                                     ', &
      '                      TOL1OHNO2 --> MCPDKETENE + HONO                                               ', &
      '                     TLEMUCCO2H --> C615CO2O2 + HO2 + CO2                                           ', &
      '                     TLEMUCCO3H --> C615CO2O2 + OH + CO2                                            ', &
      '                      TLEMUCOOH --> 0.5 EPXC4DIAL + 0.5 C3DIALO2 + 0.5 CO2H3CHO + 0.5 MGLYOX ... etc', &
-     '                      TLEMUCNO3 --> EPXC4DIAL + CH3CO + CO + NO2 + HO2                              ', &
+     '                      TLEMUCNO3 --> EPXC4DIAL + CH3CO + CO + HO2 + NO2                              ', &
      '                       TLEMUCCO --> EPXC4DIAL + CH3CO + CO + HO2                                    ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_65 = (/ &
      '                       C6H5CO3H --> C6H5O2 + OH + CO2                                               ', &
@@ -2379,14 +2380,14 @@ MODULE messy_mecca_kpp_Monitor
      '                         DNCRES --> MNCPDKETENE + HONO                                              ', &
      '                    MNCPDKETENE --> NC4MDCO2H + CO + 2 HO2 + CO2                                    ', &
      '                     MCATEC1OOH --> MCATEC1O + OH                                                   ', &
-     '                       NPTLQOOH --> C7CO4DB + NO2 + OH                                              ', &
+     '                       NPTLQOOH --> C7CO4DB + OH + NO2                                              ', &
      '                        PTLQOOH --> C6CO2OHCO3 + OH                                                 ', &
      '                      NCRES1OOH --> NCRES1O + OH                                                    ', &
-     '                     MNNCATCOOH --> NC4MDCO2H + HCOCO2H + NO2 + OH                                  ', &
+     '                     MNNCATCOOH --> NC4MDCO2H + HCOCO2H + OH + NO2                                  ', &
      '                     MNCATECOOH --> NC4MDCO2H + HCOCO2H + HO2 + OH                                  ', &
      '                        C7CO4DB --> C5CO2DBCO3 + CO + HO2                                           ', &
-     '                     NDNCRESOOH --> NC4MDCO2H + HNO3 + 2 CO + NO2 + OH                              ', &
-     '                      DNCRESOOH --> NC4MDCO2H + HCOCO2H + NO2 + OH                                  ', &
+     '                     NDNCRESOOH --> NC4MDCO2H + HNO3 + 2 CO + OH + NO2                              ', &
+     '                      DNCRESOOH --> NC4MDCO2H + HCOCO2H + OH + NO2                                  ', &
      '                     C6COOHCO3H --> C5134CO2OH + CO + HO2 + OH + CO2                                ', &
      '                         C86OOH --> C511O2 + CH3COCH3 + OH                                          ', &
      '                        C812OOH --> C813O2 + OH                                                     ', &
@@ -2424,11 +2425,11 @@ MODULE messy_mecca_kpp_Monitor
      '                        C106NO3 --> C716O2 + CH3COCH3 + NO2                                         ', &
      '                        C109OOH --> C89CO3 + HCHO + OH                                              ', &
      '                         C109CO --> C89CO3 + CO + HO2                                               ', &
-     '                    LNAPINABOOH --> PINAL + NO2 + OH                                                ', &
+     '                    LNAPINABOOH --> PINAL + OH + NO2                                                ', &
      '                       BPINAOOH --> NOPINONE + HCHO + HO2 + OH                                      ', &
-     '                    LNBPINABOOH --> NOPINONE + HCHO + NO2 + OH                                      ', &
+     '                    LNBPINABOOH --> NOPINONE + HCHO + OH + NO2                                      ', &
      '                      ROO6R1NO3 --> ROO6R3O2 + CH3COCH3 + NO2                                       ', &
-     '                       RO6R1NO3 --> 9 LCARBON + HCHO + NO2 + HO2                                    ', &
+     '                       RO6R1NO3 --> 9 LCARBON + HCHO + HO2 + NO2                                    ', &
      '                            Cl2 --> 2 Cl                                                            ', &
      '                          Cl2O2 --> 2 Cl                                                            ', &
      '                           OClO --> ClO + O3P                                                       ', &
@@ -2457,7 +2458,7 @@ MODULE messy_mecca_kpp_Monitor
      '                       MMA + OH --> LNITROGEN + LCARBON + BELV                                      ', &
      '                    CH3NH + NO2 --> 0.5 MMNNO2 + 0.5 CH2NH + 0.5 HONO                               ', &
      '                     CH3NH + O2 --> CH2NH + HO2                                                     ', &
-     '                     MMAO2 + NO --> H2NCHO + NO2 + HO2                                              ', &
+     '                     MMAO2 + NO --> H2NCHO + HO2 + NO2                                              ', &
      '                    H2NCHO + OH --> HNCO + H2O                                                      ', &
      '                    CH2NH + MMA --> CH2NCH3 + NH3                                                   ', &
      '                       MEA + OH --> 0.05 H2NCH2CHO + 0.8 MEABO2 + 0.15 MEAN + 0.05 HO2              ', &
@@ -2467,7 +2468,7 @@ MODULE messy_mecca_kpp_Monitor
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_68 = (/ &
      '                 H2NCH2CHO + OH --> 0.8 H2NCH2CO3 + 0.2 H2NCHO2CHO + H2O                            ', &
      '                 H2NCH2CO3 + NO --> MMAO2 + NO2 + CO2                                               ', &
-     '                H2NCHO2CHO + NO --> H2NCOCHO + NO2 + HO2                                            ', &
+     '                H2NCHO2CHO + NO --> H2NCOCHO + HO2 + NO2                                            ', &
      '                  H2NCOCHO + OH --> H2NCOCO3 + H2O                                                  ', &
      '                  H2NCOCO3 + NO --> H2NCHO + NO2 + CO2                                              ', &
      '                    MEABO2 + NO --> MEABO + NO2                                                     ', &
@@ -2479,15 +2480,15 @@ MODULE messy_mecca_kpp_Monitor
      '                      MEAN + NO --> MEANNO                                                          ', &
      '                   MEANNO2 + OH --> MEANHA + HO2                                                    ', &
      '                 HNCHCH2OH + OH --> H2NCOCH2OH + HO2                                                ', &
-     '                       OH + DMA --> 0.5 DMAO2 + 0.4 CH3NCH3 + 0.1 CH2NCH3 + 0.1 HO2                 ', &
-     '                       OH + DMA --> LNITROGEN + 2 LCARBON + BSOV                                    ', &
-     '                       OH + DMA --> LNITROGEN + 2 LCARBON + BLOV                                    ', &
-     '                       OH + DMA --> LNITROGEN + 2 LCARBON + BELV                                    ', &
+     '                       DMA + OH --> 0.5 DMAO2 + 0.4 CH3NCH3 + 0.1 CH2NCH3 + 0.1 HO2                 ', &
+     '                       DMA + OH --> LNITROGEN + 2 LCARBON + BSOV                                    ', &
+     '                       DMA + OH --> LNITROGEN + 2 LCARBON + BLOV                                    ', &
+     '                       DMA + OH --> LNITROGEN + 2 LCARBON + BELV                                    ', &
      '                   CH3NCH3 + NO --> NDMA                                                            ', &
      '                   CH3NCH3 + O2 --> CH2NCH3 + HO2                                                   ', &
      '                  CH3NCH3 + NO2 --> 0.1 CH3NO + 0.3 DMNNO2 + 0.6 CH2NCH3 + 0.7 HONO + 0.1 CH3O2 ... ', &
-     '                    DMNNO2 + OH --> CH2NCH3 + H2O + NO2                                             ', &
-     '                     DMAO2 + NO --> CH3NHCHO + 0.5 HONO + 0.5 NO2 + 0.5 HO2                         ', &
+     '                    DMNNO2 + OH --> CH2NCH3 + NO2 + H2O                                             ', &
+     '                     DMAO2 + NO --> CH3NHCHO + 0.5 HONO + 0.5 HO2 + 0.5 NO2                         ', &
      '                      NDMA + OH --> CH2NCH3 + H2O + NO                                              ', &
      '                   CH2NCH3 + OH --> CH3NHCHO + HO2                                                  ', &
      '                   CH2NCH3 + OH --> LNITROGEN + 2 LCARBON + BSOV                                    ', &
@@ -2498,11 +2499,11 @@ MODULE messy_mecca_kpp_Monitor
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_69 = (/ &
      '                       TMA + OH --> LNITROGEN + 3 LCARBON + BLOV                                    ', &
      '                       TMA + OH --> LNITROGEN + 3 LCARBON + BELV                                    ', &
-     '                     TMAO2 + NO --> 0.7 TMAO + 0.3 DMNCHO + 0.3 HONO + 0.7 NO2 + 0.7 HO2 ... etc.   ', &
+     '                     TMAO2 + NO --> 0.7 TMAO + 0.3 DMNCHO + 0.3 HONO + 0.7 HO2 + 0.7 NO2 ... etc.   ', &
      '                      TMAO + O2 --> DMNCHO + HO2                                                    ', &
      '                           TMAO --> CH3NCH3 + HCHO                                                  ', &
      '                    DMNCHO + OH --> DMNCHOO2                                                        ', &
-     '                  DMNCHOO2 + NO --> TMADF + NO2 + HO2                                               ', &
+     '                  DMNCHOO2 + NO --> TMADF + HO2 + NO2                                               ', &
      '                 HOETNHCHO + OH --> HOCH2CONHCHO + HO2                                              ', &
      '                    DMCNH2 + O2 --> 0.1 CH2CNH2CH3 + 0.1 DMCNH + 0.8 DMCOONH2 + HO2                 ', &
      '                  DMCOONH2 + NO --> H2NCOCH3 + HCHO + NO2                                           ', &
@@ -2513,8 +2514,8 @@ MODULE messy_mecca_kpp_Monitor
      '                 HOETNETOH + NO --> NDELA                                                           ', &
      '                 HOETNETOH + O2 --> HOCH2CHNETOH + HO2                                              ', &
      '                HOETNETOH + NO2 --> 0.1 HOCH2CH2NO + 0.6 HOCH2CHNETOH + 0.3 DEANNO2 + 0.7 HONO ... e', &
-     '                   DEANNO2 + OH --> HOCH2CHNETOH + H2O + NO2                                        ', &
-     '                     DEAO2 + NO --> HOETNHCHO + 0.5 HONO + HCHO + 0.5 NO2 + 0.5 HO2                 ', &
+     '                   DEANNO2 + OH --> HOCH2CHNETOH + NO2 + H2O                                        ', &
+     '                     DEAO2 + NO --> HOETNHCHO + 0.5 HONO + HCHO + 0.5 HO2 + 0.5 NO2                 ', &
      '                     NDELA + OH --> HOCH2CHNETOH + H2O + NO                                         ', &
      '              HOCH2CHNETOH + OH --> HOCH2CONETOH + HO2                                              ', &
      '                       AMP + OH --> 0.65 DMCNH2CHO + 0.3 AMPN + 0.05 MACR + 0.05 NH3 + 0.5 HO2 ... e', &
@@ -2533,17 +2534,17 @@ MODULE messy_mecca_kpp_Monitor
      '                           AMPO --> CH3CNH2MOH + HCHO                                               ', &
      '                   AMPNNO2 + OH --> AMPNA + HO2                                                     ', &
      '                      AMP + NO3 --> 0.1 AMPO + 0.4 DMCNH2CHO + 0.5 AMPN + HNO3 + 0.5 HO2 ... etc.   ', &
-     '                 DEANCH2O2 + NO --> DEANCHO + NO2 + HO2                                             ', &
+     '                 DEANCH2O2 + NO --> DEANCHO + HO2 + NO2                                             ', &
      '                       TEA + OH --> TEAO2 + H2O                                                     ', &
-     '                     TEAO2 + NO --> 0.3 DEANCH2CHO + 0.7 TEAO + 0.3 HONO + 0.7 NO2 + 0.7 HO2 ... etc', &
+     '                     TEAO2 + NO --> 0.3 DEANCH2CHO + 0.7 TEAO + 0.3 HONO + 0.7 HO2 + 0.7 NO2 ... etc', &
      '                      TEAO + O2 --> DEANCOCH2OH + HO2                                               ', &
      '                           TEAO --> HOETNETOH + CH3CHO                                              ', &
      '                      TEAO + O2 --> DEANCH2O2 + HCHO                                                ', &
      '                DEANCH2CHO + OH --> DEANCH2COO2                                                     ', &
-     '               DEANCH2COO2 + NO --> DEANCHO + HCHO + NO2 + HO2                                      ', &
+     '               DEANCH2COO2 + NO --> DEANCHO + HCHO + HO2 + NO2                                      ', &
      '                       TME + O3 --> CH3COCH3 + CH3COCH2O2 + OH                                      ', &
      '                       TME + OH --> TMEO2                                                           ', &
-     '                     TMEO2 + NO --> 2 CH3COCH3 + NO2 + HO2                                          ', &
+     '                     TMEO2 + NO --> 2 CH3COCH3 + HO2 + NO2                                          ', &
      '                      CHEX + OH --> CHEXO2                                                          ', &
      '                         CHEXO2 --> 0.2 CHEXOL + 0.6 CHEXO + 0.2 CHEXONE                            ', &
      '                   CHEXO2 + HO2 --> CHEXOOH                                                         ', &
@@ -2587,21 +2588,21 @@ MODULE messy_mecca_kpp_Monitor
      '                      CH3S + O3 --> CH3SO + O2                                                      ', &
      '                     CH3S + NO2 --> CH3SO + NO                                                      ', &
      '                      CH3S + O2 --> CH3SOO                                                          ', &
-     '                      CH3S + O2 --> CH3O2 + SO2                                                     ' /)
+     '                      CH3S + O2 --> SO2 + CH3O2                                                     ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_72 = (/ &
      '                   CH3S + CH3O2 --> CH3SO + HCHO + HO2                                              ', &
-     '                     CH3SO + O3 --> 0.5 CH3SO2 + 0.5 CH3O2 + 0.5 SO2 + 0.5 O2                       ', &
+     '                     CH3SO + O3 --> 0.5 CH3SO2 + 0.5 SO2 + 0.5 CH3O2 + 0.5 O2                       ', &
      '                    CH3SO + NO2 --> CH3SO2 + NO                                                     ', &
-     '                    CH3SO + NO2 --> CH3O2 + SO2 + NO                                                ', &
+     '                    CH3SO + NO2 --> SO2 + CH3O2 + NO                                                ', &
      '                     CH3SO + O2 --> CH3SOO2                                                         ', &
      '                  CH3SO + CH3O2 --> CH3SO2 + HCHO + HO2                                             ', &
      '                    CH3SOH + OH --> CH3SO + H2O                                                     ', &
      '                   CH3SOH + NO3 --> CH3SO + HNO3                                                    ', &
      '                   CH3SOH + HO2 --> CH3SO + H2O2                                                    ', &
-     '                 CH3SOH + CH3O2 --> CH3SO + CH3OOH                                                  ', &
+     '                 CH3SOH + CH3O2 --> CH3OOH + CH3SO                                                  ', &
      '                    CH3SOO + O3 --> CH3SO + 2 O2                                                    ', &
      '                    CH3SOO + NO --> CH3SO + NO2                                                     ', &
-     '                    CH3SOO + O2 --> CH3O2 + SO2                                                     ', &
+     '                    CH3SOO + O2 --> SO2 + CH3O2                                                     ', &
      '                         CH3SOO --> CH3S + O2                                                       ', &
      '                         CH3SOO --> CH3SO2                                                          ', &
      '                 CH3SOO + CH3O2 --> CH3SO + HCHO + HO2                                              ', &
@@ -2658,18 +2659,18 @@ MODULE messy_mecca_kpp_Monitor
      '               HO2_a01 + OH_a01 --> H2O_a01                                                         ', &
      '                      2 HO2_a01 --> H2O2_a01                                                        ', &
      '              H2O2_a01 + OH_a01 --> HO2_a01                                                         ', &
-     '              O3_a01 + NO2m_a01 --> NO3m_a01                                                        ', &
+     '              NO2m_a01 + O3_a01 --> NO3m_a01                                                        ', &
      '                      2 NO2_a01 --> HNO3_a01 + HONO_a01                                             ', &
      '                       NO4m_a01 --> NO2m_a01                                                        ', &
-     '              NO2_a01 + HO2_a01 --> HNO4_a01                                                        ', &
-     '              NO2m_a01 + OH_a01 --> NO2_a01 + OHm_a01                                               ', &
+     '              HO2_a01 + NO2_a01 --> HNO4_a01                                                        ', &
+     '              NO2m_a01 + OH_a01 --> OHm_a01 + NO2_a01                                               ', &
      '              NO3_a01 + OHm_a01 --> NO3m_a01 + OH_a01                                               ', &
      '              HONO_a01 + OH_a01 --> NO2_a01                                                         ', &
-     '   H2O2_a01 + HONO_a01 + Hp_a01 --> HNO3_a01 + Hp_a01                                               ', &
+     '   HONO_a01 + H2O2_a01 + Hp_a01 --> HNO3_a01 + Hp_a01                                               ', &
      '             CO3m_a01 + O2m_a01 --> HCO3m_a01 + OHm_a01                                             ', &
      '            CO3m_a01 + H2O2_a01 --> HCO3m_a01 + HO2_a01                                             ', &
      '           HCOOm_a01 + CO3m_a01 --> 2 HCO3m_a01 + HO2_a01                                           ', &
-     '             HCOOm_a01 + OH_a01 --> CO2_a01 + OHm_a01 + HO2_a01                                     ', &
+     '             HCOOm_a01 + OH_a01 --> CO2_a01 + HO2_a01 + OHm_a01                                     ', &
      '             HCO3m_a01 + OH_a01 --> CO3m_a01                                                        ', &
      '              HCHO_a01 + OH_a01 --> HCOOH_a01 + HO2_a01                                             ', &
      '             HCOOH_a01 + OH_a01 --> CO2_a01 + HO2_a01                                               ', &
@@ -2685,32 +2686,32 @@ MODULE messy_mecca_kpp_Monitor
      '              Cl2_a01 + O2m_a01 --> Cl2m_a01                                                        ', &
      '             O2m_a01 + Cl2m_a01 --> 2 Clm_a01                                                       ', &
      '                         Cl_a01 --> ClOHm_a01 + Hp_a01                                              ', &
-     '              Cl_a01 + H2O2_a01 --> HO2_a01 + Clm_a01 + Hp_a01                                      ', &
-     '               OH_a01 + Clm_a01 --> ClOHm_a01                                                       ', &
-     '              Cl2_a01 + HO2_a01 --> Cl2m_a01 + Hp_a01                                               ', &
-     '                        Cl2_a01 --> HOCl_a01 + Clm_a01 + Hp_a01                                     ', &
-     '             Cl2m_a01 + HO2_a01 --> 2 Clm_a01 + Hp_a01                                              ', &
-     '             O2m_a01 + HOCl_a01 --> Cl_a01 + OHm_a01                                                ', &
+     '              Cl_a01 + H2O2_a01 --> Hp_a01 + HO2_a01 + Clm_a01                                      ', &
+     '               Clm_a01 + OH_a01 --> ClOHm_a01                                                       ', &
+     '              Cl2_a01 + HO2_a01 --> Hp_a01 + Cl2m_a01                                               ', &
+     '                        Cl2_a01 --> HOCl_a01 + Hp_a01 + Clm_a01                                     ', &
+     '             HO2_a01 + Cl2m_a01 --> Hp_a01 + 2 Clm_a01                                              ', &
+     '             HOCl_a01 + O2m_a01 --> Cl_a01 + OHm_a01                                                ', &
      '             HOCl_a01 + HO2_a01 --> Cl_a01                                                          ', &
-     '    HOCl_a01 + Clm_a01 + Hp_a01 --> Cl2_a01                                                         ', &
-     '                      ClOHm_a01 --> OH_a01 + Clm_a01                                                ', &
+     '    HOCl_a01 + Hp_a01 + Clm_a01 --> Cl2_a01                                                         ', &
+     '                      ClOHm_a01 --> Clm_a01 + OH_a01                                                ', &
      '             ClOHm_a01 + Hp_a01 --> Cl_a01                                                          ', &
      '              Cl_a01 + NO3m_a01 --> NO3_a01 + Clm_a01                                               ', &
      '              NO3_a01 + Clm_a01 --> Cl_a01 + NO3m_a01                                               ', &
-     '            NO2m_a01 + Cl2m_a01 --> NO2_a01 + 2 Clm_a01                                             ', &
-     '          CH3OOH_a01 + Cl2m_a01 --> CH3O2_a01 + 2 Clm_a01 + Hp_a01                                  ', &
-     '                O3_a01 + Im_a01 --> OHm_a01 + HOI_a01                                               ', &
+     '            NO2m_a01 + Cl2m_a01 --> 2 Clm_a01 + NO2_a01                                             ', &
+     '          CH3OOH_a01 + Cl2m_a01 --> CH3O2_a01 + Hp_a01 + 2 Clm_a01                                  ', &
+     '                Im_a01 + O3_a01 --> HOI_a01 + OHm_a01                                               ', &
      '                       2 IO_a01 --> IO2m_a01 + HOI_a01 + Hp_a01                                     ', &
      '            IO2m_a01 + H2O2_a01 --> IO3m_a01                                                        ', &
      '             IO2m_a01 + HOI_a01 --> IO3m_a01 + Im_a01 + Hp_a01                                      ', &
-     '      HOI_a01 + Im_a01 + Hp_a01 --> I2_a01                                                          ', &
-     '     IO2m_a01 + Im_a01 + Hp_a01 --> OHm_a01 + 2 HOI_a01                                             ', &
-     '                        ICl_a01 --> HOI_a01 + Clm_a01 + Hp_a01                                      ', &
-     '     HOCl_a01 + Im_a01 + Hp_a01 --> ICl_a01                                                         ', &
-     '            IO2m_a01 + HOCl_a01 --> IO3m_a01 + Clm_a01 + Hp_a01                                     ', &
-     '     HOI_a01 + Clm_a01 + Hp_a01 --> ICl_a01                                                         ', &
-     '              Cl2_a01 + HOI_a01 --> IO2m_a01 + 2 Clm_a01 + 3 Hp_a01                                 ', &
-     '             HOCl_a01 + HOI_a01 --> IO2m_a01 + Clm_a01 + 2 Hp_a01                                   ', &
+     '      Im_a01 + HOI_a01 + Hp_a01 --> I2_a01                                                          ', &
+     '     IO2m_a01 + Im_a01 + Hp_a01 --> 2 HOI_a01 + OHm_a01                                             ', &
+     '                        ICl_a01 --> HOI_a01 + Hp_a01 + Clm_a01                                      ', &
+     '     Im_a01 + HOCl_a01 + Hp_a01 --> ICl_a01                                                         ', &
+     '            IO2m_a01 + HOCl_a01 --> IO3m_a01 + Hp_a01 + Clm_a01                                     ', &
+     '     HOI_a01 + Hp_a01 + Clm_a01 --> ICl_a01                                                         ', &
+     '              Cl2_a01 + HOI_a01 --> IO2m_a01 + 3 Hp_a01 + 2 Clm_a01                                 ', &
+     '             HOI_a01 + HOCl_a01 --> IO2m_a01 + 2 Hp_a01 + Clm_a01                                   ', &
      '               ICl_a01 + Im_a01 --> I2_a01 + Clm_a01                                                ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_76 = (/ &
      '              SO3m_a01 + O2_a01 --> SO5m_a01                                                        ', &
@@ -2718,20 +2719,20 @@ MODULE messy_mecca_kpp_Monitor
      '             SO4m_a01 + O2m_a01 --> SO4mm_a01                                                       ', &
      '           SO4m_a01 + SO3mm_a01 --> SO3m_a01 + SO4mm_a01                                            ', &
      '             SO5m_a01 + O2m_a01 --> HSO5m_a01 + OHm_a01                                             ', &
-     '           SO5m_a01 + SO3mm_a01 --> 0.28 HSO5m_a01 + 0.72 SO4m_a01 + 0.28 SO3m_a01 + 0.28 OHm_a01 ..', &
-     '                     2 SO5m_a01 --> LSULFUR + O2_a01 + SO4mm_a01                                    ', &
+     '           SO5m_a01 + SO3mm_a01 --> 0.28 HSO5m_a01 + 0.28 SO3m_a01 + 0.72 SO4m_a01 + 0.72 SO4mm_a01 ', &
+     '                     2 SO5m_a01 --> LSULFUR + SO4mm_a01 + O2_a01                                    ', &
      '             SO3mm_a01 + OH_a01 --> SO3m_a01 + OHm_a01                                              ', &
      '              SO4m_a01 + OH_a01 --> HSO5m_a01                                                       ', &
      '             SO4m_a01 + HO2_a01 --> SO4mm_a01 + Hp_a01                                              ', &
-     '             SO4m_a01 + H2O_a01 --> SO4mm_a01 + OH_a01 + Hp_a01                                     ', &
-     '            SO4m_a01 + H2O2_a01 --> SO4mm_a01 + HO2_a01 + Hp_a01                                    ', &
-     '            O2m_a01 + HSO3m_a01 --> SO4mm_a01 + OH_a01                                              ', &
+     '             SO4m_a01 + H2O_a01 --> SO4mm_a01 + Hp_a01 + OH_a01                                     ', &
+     '            SO4m_a01 + H2O2_a01 --> SO4mm_a01 + Hp_a01 + HO2_a01                                    ', &
+     '            HSO3m_a01 + O2m_a01 --> SO4mm_a01 + OH_a01                                              ', &
      '             O3_a01 + HSO3m_a01 --> SO4mm_a01 + Hp_a01                                              ', &
-     '             OH_a01 + HSO3m_a01 --> SO3m_a01                                                        ', &
-     '            HO2_a01 + HSO3m_a01 --> SO4mm_a01 + OH_a01 + Hp_a01                                     ', &
-     '           H2O2_a01 + HSO3m_a01 --> SO4mm_a01 + Hp_a01                                              ', &
+     '             HSO3m_a01 + OH_a01 --> SO3m_a01                                                        ', &
+     '            HSO3m_a01 + HO2_a01 --> SO4mm_a01 + Hp_a01 + OH_a01                                     ', &
+     '           HSO3m_a01 + H2O2_a01 --> SO4mm_a01 + Hp_a01                                              ', &
      '           SO4m_a01 + HSO3m_a01 --> SO3m_a01 + SO4mm_a01 + Hp_a01                                   ', &
-     '           SO5m_a01 + HSO3m_a01 --> 0.25 HSO5m_a01 + 0.75 SO4m_a01 + 0.25 SO3m_a01 + 0.75 SO4mm_a01 ', &
+     '           SO5m_a01 + HSO3m_a01 --> 0.25 HSO5m_a01 + 0.25 SO3m_a01 + 0.75 SO4m_a01 + 0.75 SO4mm_a01 ', &
      ' HSO5m_a01 + HSO3m_a01 + Hp_a01 --> 2 HSO4m_a01 + Hp_a01                                            ', &
      '            SO4m_a01 + NO3m_a01 --> NO3_a01 + SO4mm_a01                                             ', &
      '            NO3_a01 + SO4mm_a01 --> SO4m_a01 + NO3m_a01                                             ', &
@@ -2744,28 +2745,28 @@ MODULE messy_mecca_kpp_Monitor
      '        CH2OHSO3m_a01 + OHm_a01 --> HCHO_a01 + SO3mm_a01                                            ', &
      '           SO3mm_a01 + Cl2m_a01 --> SO3m_a01 + 2 Clm_a01                                            ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_77 = (/ &
-     '           SO3mm_a01 + HOCl_a01 --> HSO4m_a01 + Clm_a01                                             ', &
+     '           HOCl_a01 + SO3mm_a01 --> HSO4m_a01 + Clm_a01                                             ', &
      '             SO4m_a01 + Clm_a01 --> Cl_a01 + SO4mm_a01                                              ', &
      '             Cl_a01 + SO4mm_a01 --> SO4m_a01 + Clm_a01                                              ', &
-     '           Cl2m_a01 + HSO3m_a01 --> SO3m_a01 + 2 Clm_a01 + Hp_a01                                   ', &
-     '           HOCl_a01 + HSO3m_a01 --> HSO4m_a01 + Clm_a01 + Hp_a01                                    ', &
+     '           HSO3m_a01 + Cl2m_a01 --> SO3m_a01 + Hp_a01 + 2 Clm_a01                                   ', &
+     '           HOCl_a01 + HSO3m_a01 --> HSO4m_a01 + Hp_a01 + Clm_a01                                    ', &
      '            HSO5m_a01 + Clm_a01 --> HOCl_a01 + SO4mm_a01                                            ', &
      '             I2_a01 + HSO3m_a01 --> HSO4m_a01 + 2 Im_a01 + 2 Hp_a01                                 ', &
      '             Fepp_a01 + O2m_a01 --> HO2m_a01 + Feppp_a01 + OHm_a01                                  ', &
      '            Feppp_a01 + O2m_a01 --> Fepp_a01 + O2_a01                                               ', &
-     '              O3_a01 + Fepp_a01 --> FeOpp_a01 + O2_a01                                              ', &
+     '              Fepp_a01 + O3_a01 --> FeOpp_a01 + O2_a01                                              ', &
      '              Fepp_a01 + OH_a01 --> Feppp_a01 + OHm_a01                                             ', &
      '             FeOHp_a01 + OH_a01 --> Feppp_a01 + 2 OHm_a01                                           ', &
      '            Fepp_a01 + H2O2_a01 --> Feppp_a01 + OHm_a01 + OH_a01                                    ', &
      '           FeOHp_a01 + H2O2_a01 --> Feppp_a01 + 2 OHm_a01 + OH_a01                                  ', &
      '                    FeHO2pp_a01 --> Fepp_a01 + HO2_a01                                              ', &
-     '                   FeOHHO2p_a01 --> Fepp_a01 + OHm_a01 + HO2_a01                                    ', &
+     '                   FeOHHO2p_a01 --> Fepp_a01 + HO2_a01 + OHm_a01                                    ', &
      '             Fepp_a01 + HO2_a01 --> HO2m_a01 + Feppp_a01                                            ', &
      '           FeOHpp_a01 + O2m_a01 --> Fepp_a01 + O2_a01 + OHm_a01                                     ', &
      '           FeOH2p_a01 + O2m_a01 --> Fepp_a01 + O2_a01 + 2 OHm_a01                                   ', &
      '             Fepp_a01 + O2m_a01 --> Feppp_a01 + H2O2_a01 + 2 OHm_a01                                ', &
      '              Fepp_a01 + OH_a01 --> FeOHpp_a01                                                      ', &
-     '           FeOpp_a01 + H2O2_a01 --> Feppp_a01 + OHm_a01 + HO2_a01                                   ', &
+     '           FeOpp_a01 + H2O2_a01 --> Feppp_a01 + HO2_a01 + OHm_a01                                   ', &
      '                      FeOpp_a01 --> Feppp_a01 + OHm_a01 + OH_a01                                    ', &
      '            FeOpp_a01 + HO2_a01 --> Feppp_a01 + O2_a01 + OHm_a01                                    ', &
      '             FeOpp_a01 + OH_a01 --> HO2m_a01 + Feppp_a01                                            ', &
@@ -2773,16 +2774,16 @@ MODULE messy_mecca_kpp_Monitor
      '           FeOpp_a01 + Fepp_a01 --> FeOH2Fepppp_a01                                                 ', &
      '       FeOH2Fepppp_a01 + Hp_a01 --> 2 Feppp_a01 + OHm_a01                                           ', &
      '                FeOH2Fepppp_a01 --> 2 Feppp_a01 + 2 OHm_a01                                         ', &
-     '           FeOpp_a01 + HONO_a01 --> Feppp_a01 + NO2_a01 + OHm_a01                                   ' /)
+     '           FeOpp_a01 + HONO_a01 --> Feppp_a01 + OHm_a01 + NO2_a01                                   ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_78 = (/ &
      '             NO3_a01 + Fepp_a01 --> Feppp_a01 + NO3m_a01                                            ', &
      '              Fepp_a01 + Cl_a01 --> Feppp_a01 + Clm_a01                                             ', &
      '            Fepp_a01 + Cl2m_a01 --> Feppp_a01 + 2 Clm_a01                                           ', &
      '            Fepp_a01 + Cl2m_a01 --> FeClpp_a01 + Clm_a01                                            ', &
      '            FeClp_a01 + HO2_a01 --> HO2m_a01 + Feppp_a01 + Clm_a01                                  ', &
-     '            FeClp_a01 + O2m_a01 --> HO2m_a01 + Feppp_a01 + OHm_a01 + Clm_a01                        ', &
-     '           FeClpp_a01 + HO2_a01 --> Fepp_a01 + O2_a01 + Clm_a01 + Hp_a01                            ', &
-     '           FeCl2p_a01 + HO2_a01 --> Fepp_a01 + O2_a01 + 2 Clm_a01 + Hp_a01                          ', &
+     '            FeClp_a01 + O2m_a01 --> HO2m_a01 + Feppp_a01 + Clm_a01 + OHm_a01                        ', &
+     '           FeClpp_a01 + HO2_a01 --> Fepp_a01 + O2_a01 + Hp_a01 + Clm_a01                            ', &
+     '           FeCl2p_a01 + HO2_a01 --> Fepp_a01 + O2_a01 + Hp_a01 + 2 Clm_a01                          ', &
      '           FeClpp_a01 + O2m_a01 --> Fepp_a01 + O2_a01 + Clm_a01                                     ', &
      '           FeCl2p_a01 + O2m_a01 --> Fepp_a01 + O2_a01 + 2 Clm_a01                                   ', &
      '            FeOpp_a01 + Clm_a01 --> Feppp_a01 + Cl_a01 + 2 OHm_a01                                  ', &
@@ -2862,8 +2863,8 @@ MODULE messy_mecca_kpp_Monitor
      '                        DMS_a01 --> DMS                                                             ', &
      '                        HO2_a01 --> O2m_a01 + Hp_a01                                                ', &
      '               O2m_a01 + Hp_a01 --> HO2_a01                                                         ', &
-     '                        H2O_a01 --> OHm_a01 + Hp_a01                                                ', &
-     '               OHm_a01 + Hp_a01 --> H2O_a01                                                         ', &
+     '                        H2O_a01 --> Hp_a01 + OHm_a01                                                ', &
+     '               Hp_a01 + OHm_a01 --> H2O_a01                                                         ', &
      '                       NH4p_a01 --> NH3_a01 + Hp_a01                                                ', &
      '               NH3_a01 + Hp_a01 --> NH4p_a01                                                        ', &
      '                       HONO_a01 --> NO2m_a01 + Hp_a01                                               ' /)
@@ -2879,8 +2880,8 @@ MODULE messy_mecca_kpp_Monitor
      '             HCOOm_a01 + Hp_a01 --> HCOOH_a01                                                       ', &
      '                       Cl2m_a01 --> Cl_a01 + Clm_a01                                                ', &
      '               Cl_a01 + Clm_a01 --> Cl2m_a01                                                        ', &
-     '                        HCl_a01 --> Clm_a01 + Hp_a01                                                ', &
-     '               Clm_a01 + Hp_a01 --> HCl_a01                                                         ', &
+     '                        HCl_a01 --> Hp_a01 + Clm_a01                                                ', &
+     '               Hp_a01 + Clm_a01 --> HCl_a01                                                         ', &
      '                       HOCl_a01 --> ClOm_a01 + Hp_a01                                               ', &
      '              ClOm_a01 + Hp_a01 --> HOCl_a01                                                        ', &
      '              ICl_a01 + Clm_a01 --> ICl2m_a01                                                       ', &
@@ -2919,8 +2920,8 @@ MODULE messy_mecca_kpp_Monitor
      '              2 NO_a01 + O2_a01 --> 2 NO2_a01                                                       ', &
      '                      2 NO2_a01 --> N2O4_a01                                                        ', &
      '               NO_a01 + NO2_a01 --> N2O3_a01                                                        ', &
-     '              NO2_a01 + O2m_a01 --> O2_a01 + NO2m_a01                                               ', &
-     '              NO2_a01 + O2m_a01 --> NO4m_a01                                                        ', &
+     '              O2m_a01 + NO2_a01 --> NO2m_a01 + O2_a01                                               ', &
+     '              O2m_a01 + NO2_a01 --> NO4m_a01                                                        ', &
      '                       N2O4_a01 --> NO2m_a01 + NO3m_a01 + 2 Hp_a01                                  ', &
      '                       N2O3_a01 --> 2 NO2m_a01 + 2 Hp_a01                                           ', &
      '                NO_a01 + OH_a01 --> HONO_a01                                                        ', &
@@ -2939,16 +2940,16 @@ MODULE messy_mecca_kpp_Monitor
      '              MMAp_a01 + OH_a01 --> 0.725 MMNp_a01 + 0.275 NH3CH2p_a01 + H2O_a01                    ', &
      '                       HNCO_a01 --> NH3_a01 + CO2_a01                                               ', &
      '            H2NCHO_a01 + OH_a01 --> HNCO_a01 + H2O_a01                                              ', &
-     '            MMNNO2_a01 + OH_a01 --> NH4p_a01 + HCHO_a01 + NO2_a01 + OHm_a01                         ', &
+     '            MMNNO2_a01 + OH_a01 --> NH4p_a01 + HCHO_a01 + OHm_a01 + NO2_a01                         ', &
      '             GLYOX_a01 + OH_a01 --> HCOCO2H_a01 + HO2_a01                                           ', &
      '           HCOCO2H_a01 + OH_a01 --> OXALAC_a01 + 2 CO2_a01 + HO2_a01                                ', &
-     '           HCOCOOm_a01 + OH_a01 --> 2 CO2_a01 + HC2O4m_a01 + HO2_a01                                ', &
+     '           HCOCOOm_a01 + OH_a01 --> HC2O4m_a01 + 2 CO2_a01 + HO2_a01                                ', &
      '          HOCH2CHO_a01 + OH_a01 --> GLYOX_a01 + HO2_a01                                             ', &
      '         HOCH2CO2H_a01 + OH_a01 --> HCOCO2H_a01 + HO2_a01                                           ', &
      '            C2O4mm_a01 + OH_a01 --> O2m_a01 + OHm_a01                                               ', &
-     '            HC2O4m_a01 + OH_a01 --> OHm_a01 + HO2_a01                                               ', &
+     '            HC2O4m_a01 + OH_a01 --> HO2_a01 + OHm_a01                                               ', &
      '            OXALAC_a01 + OH_a01 --> HO2_a01 + H2O_a01                                               ', &
-     '           CH3COOm_a01 + OH_a01 --> CH3CO3_a01 + OHm_a01 + HO2_a01                                  ', &
+     '           CH3COOm_a01 + OH_a01 --> CH3CO3_a01 + HO2_a01 + OHm_a01                                  ', &
      '           CH3CO2H_a01 + OH_a01 --> CH3CO3_a01 + HO2_a01 + H2O_a01                                  ', &
      '             DMA_a01 + N2O3_a01 --> NDMA_a01 + HONO_a01                                             ', &
      '             DMA_a01 + N2O4_a01 --> 0.2 CH3NHCH2_a01 + 0.6 HNO3_a01 + 0.4 DMNNO2_a01 + 0.4 NDMA_a01 ', &
@@ -2957,7 +2958,7 @@ MODULE messy_mecca_kpp_Monitor
      '             DMNp_a01 + NO2_a01 --> DMNNO2_a01 + Hp_a01                                             ', &
      '               DMA_a01 + OH_a01 --> 0.5 CH3NHCH2_a01 + 0.5 DMNp_a01 + 0.5 OHm_a01 + H2O_a01 ... etc.', &
      '          CH3NHCH2_a01 + O2_a01 --> CH3NHCH2p_a01 + O2m_a01                                         ', &
-     '                  CH3NHCH2p_a01 --> HCHO_a01 + MMA_a01 + Hp_a01                                     ', &
+     '                  CH3NHCH2p_a01 --> MMA_a01 + HCHO_a01 + Hp_a01                                     ', &
      '                 2 CH3NHCH2_a01 --> CH3NHCH2p_a01 + DMA_a01 + OHm_a01                               ', &
      '        CH3NHCH2_a01 + DMNp_a01 --> CH3NHCH2p_a01 + DMA_a01                                         ' /)
   CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_84 = (/ &
@@ -2969,10 +2970,10 @@ MODULE messy_mecca_kpp_Monitor
      '        H2NCOCH2OH_a01 + OH_a01 --> HNCO_a01 + HCHO_a01 + HO2_a01                                   ', &
      '          CH3NHCHO_a01 + OH_a01 --> HNCO_a01 + HCHO_a01 + HO2_a01                                   ', &
      '              NDMA_a01 + OH_a01 --> MMAp_a01 + NO_a01 + HCHO_a01 + OHm_a01                          ', &
-     '            DMNNO2_a01 + OH_a01 --> MMAp_a01 + HCHO_a01 + NO2_a01 + OHm_a01                         ', &
+     '            DMNNO2_a01 + OH_a01 --> MMAp_a01 + HCHO_a01 + OHm_a01 + NO2_a01                         ', &
      '            MEANNO_a01 + OH_a01 --> NH3CH2p_a01 + NO_a01 + HCHO_a01 + OHm_a01                       ', &
-     '           MEANNO2_a01 + OH_a01 --> NH3CH2p_a01 + HCHO_a01 + NO2_a01 + OHm_a01                      ', &
-     '                     CH3NCO_a01 --> CO2_a01 + MMA_a01                                               ', &
+     '           MEANNO2_a01 + OH_a01 --> NH3CH2p_a01 + HCHO_a01 + OHm_a01 + NO2_a01                      ', &
+     '                     CH3NCO_a01 --> MMA_a01 + CO2_a01                                               ', &
      '            MGLYOX_a01 + OH_a01 --> MGLYOAC_a01 + HO2_a01                                           ', &
      '         CH3COCOOm_a01 + OH_a01 --> CH3CO3_a01 + CO2_a01 + O2m_a01 + HO2_a01                        ', &
      '           MGLYOAC_a01 + OH_a01 --> CH3CHO_a01 + CO2_a01 + HO2_a01 + H2O_a01                        ', &
@@ -2982,7 +2983,7 @@ MODULE messy_mecca_kpp_Monitor
      '             TMA_a01 + N2O4_a01 --> 0.9 DMNCH2_a01 + 0.9 HNO3_a01 + 0.05 DMNNO2_a01 + 0.1 NDMA_a01 .', &
      '               TMA_a01 + OH_a01 --> 0.5 TMNp_a01 + 0.5 DMNCH2_a01 + 0.5 OHm_a01 + H2O_a01 ... etc.  ', &
      '            DMNCH2_a01 + O2_a01 --> DMNCH2p_a01 + O2m_a01                                           ', &
-     '                    DMNCH2p_a01 --> DMA_a01 + HCHO_a01 + Hp_a01                                     ', &
+     '                    DMNCH2p_a01 --> HCHO_a01 + DMA_a01 + Hp_a01                                     ', &
      '                   2 DMNCH2_a01 --> DMNCH2p_a01 + TMA_a01 + OHm_a01                                 ', &
      '          TMNp_a01 + DMNCH2_a01 --> DMNCH2p_a01 + TMA_a01                                           ', &
      '              TMAp_a01 + OH_a01 --> 0.275 DMNHCH2p_a01 + 0.725 TMNp_a01 + H2O_a01                   ', &
@@ -2998,7 +2999,7 @@ MODULE messy_mecca_kpp_Monitor
      '              DEAN_a01 + OH_a01 --> MEA_a01 + 2 HCHO_a01                                            ', &
      '              DEAp_a01 + OH_a01 --> 0.275 DENHp_a01 + 0.725 DENp_a01 + H2O_a01                      ', &
      '             NDELA_a01 + OH_a01 --> MEAp_a01 + NO_a01 + 2 HCHO_a01 + OHm_a01                        ', &
-     '           DEANNO2_a01 + OH_a01 --> MEAp_a01 + 2 HCHO_a01 + NO2_a01 + OHm_a01                       ', &
+     '           DEANNO2_a01 + OH_a01 --> MEAp_a01 + 2 HCHO_a01 + OHm_a01 + NO2_a01                       ', &
      '          GLUTARAC_a01 + OH_a01 --> SUCCAC_a01 + HO2_a01                                            ', &
      '            ADIPAC_a01 + OH_a01 --> GLUTARAC_a01 + HO2_a01                                          ', &
      '               TEA_a01 + OH_a01 --> 0.5 TENp_a01 + 0.5 DENCH2CHOH_a01 + 0.5 OHm_a01 + H2O_a01 ... et', &
@@ -3012,17 +3013,22 @@ MODULE messy_mecca_kpp_Monitor
      '                  CH2OHSO3m_a01 --> CH2O2H2_a01 + HSO3m_a01                                         ', &
      '                  CH2OHSO3m_a01 --> CH2O2H2_a01 + SO3mm_a01 + Hp_a01                                ', &
      '        CH2O2H2_a01 + SO3mm_a01 --> CH2OHSO3m_a01 + O2m_a01                                         ', &
-     '         CH2OHSO3m_a01 + OH_a01 --> HCOOH_a01 + HO2_a01 + HSO3m_a01                                 ', &
+     '         CH2OHSO3m_a01 + OH_a01 --> HCOOH_a01 + HSO3m_a01 + HO2_a01                                 ', &
+     '               DMS_a01 + O3_a01 --> DMSO_a01                                                        ', &
+     '               DMS_a01 + OH_a01 --> DMSO_a01 + HO2_a01                                              ', &
+     '              DMSO_a01 + OH_a01 --> MSIA_a01 + CO2_a01 + HO2_a01                                    ', &
+     '              MSIA_a01 + O3_a01 --> CH3SO3m_a01 + Hp_a01                                            ', &
+     '              MSIA_a01 + OH_a01 --> CH3SO3m_a01 + Hp_a01 + HO2_a01                                  ', &
      '                           N2O3 --> N2O3_a01                                                        ', &
      '                       N2O3_a01 --> N2O3                                                            ', &
      '                           N2O4 --> N2O4_a01                                                        ', &
-     '                       N2O4_a01 --> N2O4                                                            ', &
+     '                       N2O4_a01 --> N2O4                                                            ' /)
+  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_86 = (/ &
      '                            MMA --> MMA_a01                                                         ', &
      '                        MMA_a01 --> MMA                                                             ', &
      '                         MMNNO2 --> MMNNO2_a01                                                      ', &
      '                     MMNNO2_a01 --> MMNNO2                                                          ', &
-     '                           HNCO --> HNCO_a01                                                        ' /)
-  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_86 = (/ &
+     '                           HNCO --> HNCO_a01                                                        ', &
      '                       HNCO_a01 --> HNCO                                                            ', &
      '                         H2NCHO --> H2NCHO_a01                                                      ', &
      '                     H2NCHO_a01 --> H2NCHO                                                          ', &
@@ -3047,13 +3053,13 @@ MODULE messy_mecca_kpp_Monitor
      '                         DMNNO2 --> DMNNO2_a01                                                      ', &
      '                     DMNNO2_a01 --> DMNNO2                                                          ', &
      '                     H2NCOCH2OH --> H2NCOCH2OH_a01                                                  ', &
-     '                 H2NCOCH2OH_a01 --> H2NCOCH2OH                                                      ', &
+     '                 H2NCOCH2OH_a01 --> H2NCOCH2OH                                                      ' /)
+  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_87 = (/ &
      '                       CH3NHCHO --> CH3NHCHO_a01                                                    ', &
      '                   CH3NHCHO_a01 --> CH3NHCHO                                                        ', &
      '                         MGLYOX --> MGLYOX_a01                                                      ', &
      '                     MGLYOX_a01 --> MGLYOX                                                          ', &
-     '                        MGLYOAC --> MGLYOAC_a01                                                     ' /)
-  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_87 = (/ &
+     '                        MGLYOAC --> MGLYOAC_a01                                                     ', &
      '                    MGLYOAC_a01 --> MGLYOAC                                                         ', &
      '                            TMA --> TMA_a01                                                         ', &
      '                        TMA_a01 --> TMA                                                             ', &
@@ -3071,20 +3077,22 @@ MODULE messy_mecca_kpp_Monitor
      '                        TEA_a01 --> TEA                                                             ', &
      '                           BLOV --> ADIPAC_a01                                                      ', &
      '                     ADIPAC_a01 --> BLOV                                                            ', &
+     '                        CH3SOOH --> MSIA_a01                                                        ', &
+     '                       MSIA_a01 --> CH3SOOH                                                         ', &
      '                    HCOCO2H_a01 --> HCOCOOm_a01 + Hp_a01                                            ', &
      '           HCOCOOm_a01 + Hp_a01 --> HCOCO2H_a01                                                     ', &
      '                    MGLYOAC_a01 --> CH3COCOOm_a01 + Hp_a01                                          ', &
      '         CH3COCOOm_a01 + Hp_a01 --> MGLYOAC_a01                                                     ', &
      '                     OXALAC_a01 --> HC2O4m_a01 + Hp_a01                                             ', &
-     '            HC2O4m_a01 + Hp_a01 --> OXALAC_a01                                                      ', &
+     '            HC2O4m_a01 + Hp_a01 --> OXALAC_a01                                                      ' /)
+  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_88 = (/ &
      '                     HC2O4m_a01 --> C2O4mm_a01 + Hp_a01                                             ', &
      '            C2O4mm_a01 + Hp_a01 --> HC2O4m_a01                                                      ', &
      '                     SUCCAC_a01 --> C2H5C2O4m_a01 + Hp_a01                                          ', &
      '         C2H5C2O4m_a01 + Hp_a01 --> SUCCAC_a01                                                      ', &
      '                  C2H5C2O4m_a01 --> C2H4C2O4mm_a01 + Hp_a01                                         ', &
      '        C2H4C2O4mm_a01 + Hp_a01 --> C2H5C2O4m_a01                                                   ', &
-     '                       MMAp_a01 --> MMA_a01 + Hp_a01                                                ' /)
-  CHARACTER(LEN=100), PARAMETER, DIMENSION(30) :: EQN_NAMES_88 = (/ &
+     '                       MMAp_a01 --> MMA_a01 + Hp_a01                                                ', &
      '               MMA_a01 + Hp_a01 --> MMAp_a01                                                        ', &
      '                       DMAp_a01 --> DMA_a01 + Hp_a01                                                ', &
      '               DMA_a01 + Hp_a01 --> DMAp_a01                                                        ', &
@@ -3107,15 +3115,15 @@ MODULE messy_mecca_kpp_Monitor
      '                    NH3CH2p_a01 --> NH2CH2_a01 + Hp_a01                                             ', &
      '            NH2CH2_a01 + Hp_a01 --> NH3CH2p_a01                                                     ', &
      '                       MMNp_a01 --> NH2CH2_a01 + Hp_a01                                             ', &
-     '            NH2CH2_a01 + Hp_a01 --> MMNp_a01                                                        ', &
+     '            NH2CH2_a01 + Hp_a01 --> MMNp_a01                                                        ' /)
+  CHARACTER(LEN=100), PARAMETER, DIMENSION(24) :: EQN_NAMES_89 = (/ &
      '                NH3CH2CHOHp_a01 --> NH2CH2CHOH_a01 + Hp_a01                                         ', &
      '        NH2CH2CHOH_a01 + Hp_a01 --> NH3CH2CHOHp_a01                                                 ', &
      '                       MENp_a01 --> NH2CH2CHOH_a01 + Hp_a01                                         ', &
      '        NH2CH2CHOH_a01 + Hp_a01 --> MENp_a01                                                        ', &
      '                      DENHp_a01 --> DEAN_a01 + Hp_a01                                               ', &
      '              DEAN_a01 + Hp_a01 --> DENHp_a01                                                       ', &
-     '                       DENp_a01 --> DEAN_a01 + Hp_a01                                               ' /)
-  CHARACTER(LEN=100), PARAMETER, DIMENSION(17) :: EQN_NAMES_89 = (/ &
+     '                       DENp_a01 --> DEAN_a01 + Hp_a01                                               ', &
      '              DEAN_a01 + Hp_a01 --> DENp_a01                                                        ', &
      '                      TENHp_a01 --> DENCH2CHOH_a01 + Hp_a01                                         ', &
      '        DENCH2CHOH_a01 + Hp_a01 --> TENHp_a01                                                       ', &
@@ -3124,16 +3132,16 @@ MODULE messy_mecca_kpp_Monitor
      '                       HNCO_a01 --> NCOm_a01 + Hp_a01                                               ', &
      '              NCOm_a01 + Hp_a01 --> HNCO_a01                                                        ', &
      '                       H2O2_a01 --> 2 OH_a01                                                        ', &
-     '                       NO3m_a01 --> NO2_a01 + OHm_a01 + OH_a01                                      ', &
+     '                       NO3m_a01 --> OHm_a01 + NO2_a01 + OH_a01                                      ', &
      '                       NO2m_a01 --> NO_a01 + OHm_a01                                                ', &
-     '                     MMNNO2_a01 --> MMNp_a01 + NO2_a01 + OHm_a01                                    ', &
-     '                    MEANNO2_a01 --> MENp_a01 + NO2_a01 + OHm_a01                                    ', &
+     '                     MMNNO2_a01 --> MMNp_a01 + OHm_a01 + NO2_a01                                    ', &
+     '                    MEANNO2_a01 --> MENp_a01 + OHm_a01 + NO2_a01                                    ', &
      '                       NDMA_a01 --> NO_a01 + DMNp_a01 + OHm_a01                                     ', &
-     '                     DMNNO2_a01 --> DMNp_a01 + NO2_a01 + OHm_a01                                    ', &
+     '                     DMNNO2_a01 --> DMNp_a01 + OHm_a01 + NO2_a01                                    ', &
      '                     MEANNO_a01 --> MENp_a01 + NO_a01 + OHm_a01                                     ', &
      '                      NDELA_a01 --> NO_a01 + DENp_a01 + OHm_a01                                     ', &
-     '                    DEANNO2_a01 --> DENp_a01 + NO2_a01 + OHm_a01                                    ' /)
-  CHARACTER(LEN=100), PARAMETER, DIMENSION(2687) :: EQN_NAMES = (/&
+     '                    DEANNO2_a01 --> DENp_a01 + OHm_a01 + NO2_a01                                    ' /)
+  CHARACTER(LEN=100), PARAMETER, DIMENSION(2694) :: EQN_NAMES = (/&
     EQN_NAMES_0, EQN_NAMES_1, EQN_NAMES_2, EQN_NAMES_3, EQN_NAMES_4, &
     EQN_NAMES_5, EQN_NAMES_6, EQN_NAMES_7, EQN_NAMES_8, EQN_NAMES_9, &
     EQN_NAMES_10, EQN_NAMES_11, EQN_NAMES_12, EQN_NAMES_13, EQN_NAMES_14, &
@@ -4039,47 +4047,49 @@ MODULE messy_mecca_kpp_Monitor
      'A4613_a01MK                     ','A4614_a01MK                     ','A4615_a01MK                     ', &
      'A4616_a01MK                     ','A9405_a01MK                     ','A9406a_a01MK                    ', &
      'A9406b_a01MK                    ','A9407_a01MK                     ','A9408_a01MK                     ', &
-     'H3103f_a01MK                    ','H3103b_a01MK                    ','H3104f_a01MK                    ', &
-     'H3104b_a01MK                    ','H4106f_a01MK                    ','H4106b_a01MK                    ', &
-     'H4107f_a01MK                    ','H4107b_a01MK                    ','H4108f_a01MK                    ', &
-     'H4108b_a01MK                    ','H4109f_a01MK                    ','H4109b_a01MK                    ', &
-     'H4203f_a01MK                    ','H4203b_a01MK                    ','H4204f_a01MK                    ', &
-     'H4204b_a01MK                    ','H4205f_a01MK                    ','H4205b_a01MK                    ', &
-     'H4206f_a01MK                    ','H4206b_a01MK                    ','H4207f_a01MK                    ', &
-     'H4207b_a01MK                    ','H4208f_a01MK                    ','H4208b_a01MK                    ', &
-     'H4209f_a01MK                    ','H4209b_a01MK                    ','H4210f_a01MK                    ', &
-     'H4210b_a01MK                    ','H4211f_a01MK                    ','H4211b_a01MK                    ', &
-     'H4212f_a01MK                    ','H4212b_a01MK                    ','H4213f_a01MK                    ', &
-     'H4213b_a01MK                    ','H4214f_a01MK                    ','H4214b_a01MK                    ', &
-     'H4301f_a01MK                    ','H4301b_a01MK                    ','H4302f_a01MK                    ' /)
-  CHARACTER(LEN=32), PARAMETER, DIMENSION(77) :: EQN_TAGS_29 = (/ &
-     'H4302b_a01MK                    ','H4303f_a01MK                    ','H4303b_a01MK                    ', &
-     'H4304f_a01MK                    ','H4304b_a01MK                    ','H4400f_a01MK                    ', &
-     'H4400b_a01MK                    ','H4401f_a01MK                    ','H4401b_a01MK                    ', &
-     'H4402f_a01MK                    ','H4402b_a01MK                    ','H4403f_a01MK                    ', &
-     'H4403b_a01MK                    ','H4600f_a01MK                    ','H4600b_a01MK                    ', &
-     'H4601f_a01MK                    ','H4601b_a01MK                    ','EQ43f_a01MK                     ', &
-     'EQ43b_a01MK                     ','EQ44f_a01MK                     ','EQ44b_a01MK                     ', &
-     'EQ45f_a01MK                     ','EQ45b_a01MK                     ','EQ46f_a01MK                     ', &
-     'EQ46b_a01MK                     ','EQ47f_a01MK                     ','EQ47b_a01MK                     ', &
-     'EQ48f_a01MK                     ','EQ48b_a01MK                     ','EQ120f_a01MK                    ', &
-     'EQ120b_a01MK                    ','EQ121f_a01MK                    ','EQ121b_a01MK                    ', &
-     'EQ122f_a01MK                    ','EQ122b_a01MK                    ','EQ123f_a01MK                    ', &
-     'EQ123b_a01MK                    ','EQ124f_a01MK                    ','EQ124b_a01MK                    ', &
-     'EQ125f_a01MK                    ','EQ125b_a01MK                    ','EQ126f_a01MK                    ', &
-     'EQ126b_a01MK                    ','EQ127f_a01MK                    ','EQ127b_a01MK                    ', &
-     'EQ128f_a01MK                    ','EQ128b_a01MK                    ','EQ129f_a01MK                    ', &
-     'EQ129b_a01MK                    ','EQ130f_a01MK                    ','EQ130b_a01MK                    ', &
-     'EQ131f_a01MK                    ','EQ131b_a01MK                    ','EQ132f_a01MK                    ', &
-     'EQ132b_a01MK                    ','EQ133f_a01MK                    ','EQ133b_a01MK                    ', &
-     'EQ134f_a01MK                    ','EQ134b_a01MK                    ','EQ135f_a01MK                    ', &
-     'EQ135b_a01MK                    ','EQ136f_a01MK                    ','EQ136b_a01MK                    ', &
-     'EQ137f_a01MK                    ','EQ137b_a01MK                    ','EQ138f_a01MK                    ', &
-     'EQ138b_a01MK                    ','PH2100_a01                      ','PH3200_a01                      ', &
-     'PH3201_a01                      ','PH4101_a01                      ','PH4102_a01                      ', &
-     'PH4201_a01                      ','PH4202_a01                      ','PH4203_a01                      ', &
-     'PH4401_a01                      ','PH4402_a01                      ' /)
-  CHARACTER(LEN=32), PARAMETER, DIMENSION(2687) :: EQN_TAGS = (/&
+     'A9409_a01MK                     ','A9410_a01MK                     ','A9411_a01MK                     ', &
+     'A9412_a01MK                     ','A9413_a01MK                     ','H3103f_a01MK                    ', &
+     'H3103b_a01MK                    ','H3104f_a01MK                    ','H3104b_a01MK                    ', &
+     'H4106f_a01MK                    ','H4106b_a01MK                    ','H4107f_a01MK                    ', &
+     'H4107b_a01MK                    ','H4108f_a01MK                    ','H4108b_a01MK                    ', &
+     'H4109f_a01MK                    ','H4109b_a01MK                    ','H4203f_a01MK                    ', &
+     'H4203b_a01MK                    ','H4204f_a01MK                    ','H4204b_a01MK                    ', &
+     'H4205f_a01MK                    ','H4205b_a01MK                    ','H4206f_a01MK                    ', &
+     'H4206b_a01MK                    ','H4207f_a01MK                    ','H4207b_a01MK                    ', &
+     'H4208f_a01MK                    ','H4208b_a01MK                    ','H4209f_a01MK                    ', &
+     'H4209b_a01MK                    ','H4210f_a01MK                    ','H4210b_a01MK                    ', &
+     'H4211f_a01MK                    ','H4211b_a01MK                    ','H4212f_a01MK                    ', &
+     'H4212b_a01MK                    ','H4213f_a01MK                    ','H4213b_a01MK                    ' /)
+  CHARACTER(LEN=32), PARAMETER, DIMENSION(84) :: EQN_TAGS_29 = (/ &
+     'H4214f_a01MK                    ','H4214b_a01MK                    ','H4301f_a01MK                    ', &
+     'H4301b_a01MK                    ','H4302f_a01MK                    ','H4302b_a01MK                    ', &
+     'H4303f_a01MK                    ','H4303b_a01MK                    ','H4304f_a01MK                    ', &
+     'H4304b_a01MK                    ','H4400f_a01MK                    ','H4400b_a01MK                    ', &
+     'H4401f_a01MK                    ','H4401b_a01MK                    ','H4402f_a01MK                    ', &
+     'H4402b_a01MK                    ','H4403f_a01MK                    ','H4403b_a01MK                    ', &
+     'H4600f_a01MK                    ','H4600b_a01MK                    ','H4601f_a01MK                    ', &
+     'H4601b_a01MK                    ','H9403f_a01MK                    ','H9403b_a01MK                    ', &
+     'EQ43f_a01MK                     ','EQ43b_a01MK                     ','EQ44f_a01MK                     ', &
+     'EQ44b_a01MK                     ','EQ45f_a01MK                     ','EQ45b_a01MK                     ', &
+     'EQ46f_a01MK                     ','EQ46b_a01MK                     ','EQ47f_a01MK                     ', &
+     'EQ47b_a01MK                     ','EQ48f_a01MK                     ','EQ48b_a01MK                     ', &
+     'EQ120f_a01MK                    ','EQ120b_a01MK                    ','EQ121f_a01MK                    ', &
+     'EQ121b_a01MK                    ','EQ122f_a01MK                    ','EQ122b_a01MK                    ', &
+     'EQ123f_a01MK                    ','EQ123b_a01MK                    ','EQ124f_a01MK                    ', &
+     'EQ124b_a01MK                    ','EQ125f_a01MK                    ','EQ125b_a01MK                    ', &
+     'EQ126f_a01MK                    ','EQ126b_a01MK                    ','EQ127f_a01MK                    ', &
+     'EQ127b_a01MK                    ','EQ128f_a01MK                    ','EQ128b_a01MK                    ', &
+     'EQ129f_a01MK                    ','EQ129b_a01MK                    ','EQ130f_a01MK                    ', &
+     'EQ130b_a01MK                    ','EQ131f_a01MK                    ','EQ131b_a01MK                    ', &
+     'EQ132f_a01MK                    ','EQ132b_a01MK                    ','EQ133f_a01MK                    ', &
+     'EQ133b_a01MK                    ','EQ134f_a01MK                    ','EQ134b_a01MK                    ', &
+     'EQ135f_a01MK                    ','EQ135b_a01MK                    ','EQ136f_a01MK                    ', &
+     'EQ136b_a01MK                    ','EQ137f_a01MK                    ','EQ137b_a01MK                    ', &
+     'EQ138f_a01MK                    ','EQ138b_a01MK                    ','PH2100_a01                      ', &
+     'PH3200_a01                      ','PH3201_a01                      ','PH4101_a01                      ', &
+     'PH4102_a01                      ','PH4201_a01                      ','PH4202_a01                      ', &
+     'PH4203_a01                      ','PH4401_a01                      ','PH4402_a01                      ' /)
+  CHARACTER(LEN=32), PARAMETER, DIMENSION(2694) :: EQN_TAGS = (/&
     EQN_TAGS_0, EQN_TAGS_1, EQN_TAGS_2, EQN_TAGS_3, EQN_TAGS_4, &
     EQN_TAGS_5, EQN_TAGS_6, EQN_TAGS_7, EQN_TAGS_8, EQN_TAGS_9, &
     EQN_TAGS_10, EQN_TAGS_11, EQN_TAGS_12, EQN_TAGS_13, EQN_TAGS_14, &
