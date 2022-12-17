@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -50,8 +47,9 @@ module gde_aerosol_solver
   use gde_sensitiv,   only      : ICONX,INANO
   use gde_sensitiv,   only      : ICONW
 
-  use gde_constants,  only      : M_H2SO4,M_nh3,M_nit,M_msa,M_ca,M_hcl
-  use gde_constants,  only      : MB,MAH,MAN
+  use gde_constants,  only      : M_H2SO4,M_nh3,M_nit,M_msa,M_hio3
+  use gde_constants,  only      : M_ca,M_hcl
+  use gde_constants,  only      : MB,MAH,MAN,MIO
   use gde_constants,  only      : pi
 
 ! for kelvin effect of n-alkanes
@@ -65,7 +63,7 @@ module gde_aerosol_solver
   use gde_input_data, only      : A_SUL,A_NH4,A_AMI,A_NIT,A_XXX
   use gde_input_data, only      : A_OR1,A_OR2,A_OR3,A_OR4,A_OR5
   use gde_input_data, only      : A_OR6,A_OR7,A_OR8,A_OR9
-  use gde_input_data, only      : A_MSA,A_CHL
+  use gde_input_data, only      : A_MSA,A_CHL,A_IO3
   use gde_input_data, only      : A_WAT
   use gde_input_data, only      : NU,AI,AS,CS
   use gde_input_data, only      : massmin
@@ -263,6 +261,7 @@ contains
     real( dp)                   :: gamma_oc8_tmp
     ! wet particle scavenging [1/s]
     real( dp)                   :: wetdep
+    real( dp)                   :: wetsc
     real( dp)                   :: DNVAPN
     real( dp)                   :: NVAPOLDN
     real( dp)                   :: nnuc
@@ -426,7 +425,8 @@ contains
 !  JNUC: nucleation rate J in m^-3s^-1
        if (INUC == 1) then
          CALL nucleation(INUCMEC,cair,NVAP(A_SUL),NVAP(A_NH4),NVAP(A_AMI), &
-                         NVAP(A_NIT),NVAP(A_OR2),temp,RH,jrno2,CAMI,  &
+                         NVAP(A_NIT),NVAP(A_OR2),NVAP(A_IO3),              &
+                         temp,RH,jrno2,CAMI,                               &
                          KPEQ,fnuc,coags,daytime,lat_deg,natot,jnuc)
                          
          if ((IDEB == 1) .and. (hour_timemin == 120.)) then
@@ -440,6 +440,7 @@ contains
 ! condensation of vapours to particles:
 ! - sulphuric acid           NVAP(A_SUL)
 ! - methane sulphonic acid   NVAP(A_MSA)
+! - iodic acid               NVAP(A_IO3)
 ! - ammonium nitrate         NVAP(A_NH4),NVAP(A_NIT)
 ! - amine nitrate            NVAP(A_AMI),NVAP(A_NIT)
 ! - ammonium chloride        NVAP(A_NH4),NVAP(A_CHL)
@@ -466,7 +467,7 @@ contains
          ! Calculate Kelvin effect if IKELV==1 
 
          if (IKELV==1) then
-         !   First for sulfuric acid and MSA
+         !   First for sulfuric acid, MSA and iodic acid
            if ((ICONS == 1).or.(ICONS == 2)) then
              CALL kelvin_sulf(DPA,temp,keffectsu,IMAX)
              CALL kelvin_msap(DPA,temp,keffectms,IMAX)
@@ -515,37 +516,46 @@ contains
 ! 2) Calculate saturation vapour concentrations, 
 !    condensation coefficients, excess and loss
 
-! Calculate totals for NH4, SO4, NO3
 ! Kelvin effect into one variable
 
        if (ICOND .EQ. 1) then
+
+         do M=NU,CS
+           do I=1,IMAX
+         ! A_SUL = 1, A_MSA = 2, A_NIT = 3
+         ! A_AMI = 4, A_NH4 = 5, A_IO3 = 6
+             keffect(M,I,1)  = keffectsu(M,I)
+             keffect(M,I,2)  = keffectms(M,I)
+             keffect(M,I,3)  = keffectni(M,I)           
+             keffect(M,I,4)  = keffectni(M,I)
+             keffect(M,I,5)  = keffectni(M,I)
+             keffect(M,I,6)  = keffectsu(M,I)
+         ! soa components
+             keffect(M,I,7)  = keffectoc(M,I)
+             keffect(M,I,8)  = keffectoc(M,I)
+             keffect(M,I,9)  = 1.0_dp
+             keffect(M,I,10)  = keffectoc(M,I)
+             keffect(M,I,11) = keffectoc(M,I)
+             keffect(M,I,12) = 1.0_dp
+             keffect(M,I,13) = keffectalk1(M,I)
+             keffect(M,I,14) = keffectalk2(M,I)
+             keffect(M,I,15) = 1.0_dp
+         ! hcl
+             keffect(M,I,16) = keffectni(M,I)
+           end do
+         end do
+
+! Calculate totals for NH4, SO4, NO3, CHL
          CTSO4=0._dp
          CTNH4=0._dp
          CTNIT=0._dp
          CTCHL=0._dp
          do M=NU,CS
            do I=1,IMAX
-             CTSO4=CTSO4+mass(M,I,A_SUL)
+             if (M.LT.CS) CTSO4=CTSO4+mass(M,I,A_SUL)
              CTNH4=CTNH4+mass(M,I,A_NH4)
              CTNIT=CTNIT+mass(M,I,A_NIT)
              CTCHL=CTCHL+mass(M,I,A_CHL)
-             keffect(M,I,1)  = keffectsu(M,I)
-             keffect(M,I,2)  = keffectms(M,I)
-             keffect(M,I,3)  = keffectni(M,I)           
-             keffect(M,I,4)  = keffectni(M,I)
-             keffect(M,I,5)  = keffectni(M,I)
-         ! soa components
-             keffect(M,I,6)  = keffectoc(M,I)
-             keffect(M,I,7)  = keffectoc(M,I)
-             keffect(M,I,8)  = 1.0_dp
-             keffect(M,I,9)  = keffectoc(M,I)
-             keffect(M,I,10) = keffectoc(M,I)
-             keffect(M,I,11) = 1.0_dp
-             keffect(M,I,12) = keffectalk1(M,I)
-             keffect(M,I,13) = keffectalk2(M,I)
-             keffect(M,I,14) = 1.0_dp
-         ! hcl
-             keffect(M,I,15) = keffectni(M,I)
            end do
          end do
 
@@ -647,6 +657,7 @@ contains
           end do
         end do
 
+! for ammonium nitrate condensation?
         if (ctnh4 > ctnit) then
            KOND(:,:,a_nh4)=KOND(:,:,a_nh4)*0.4
         endif
@@ -670,6 +681,7 @@ contains
         mwarray(A_NIT) = M_nit
         mwarray(A_AMI) = M_nit
         mwarray(A_NH4) = M_nh3
+        mwarray(A_IO3) = M_hio3
         mwarray(A_CHL) = M_hcl
         mwarray(A_OR1) = M_oc(1)
         mwarray(A_OR2) = M_oc(2)
@@ -701,19 +713,19 @@ contains
         do Q=1,QMAX
 
 ! special for semi-volatile secondary inorganic
-! A_NH4 = 5 (NH4+)
-          !if (Q==5)  then
+! A_NH4 (NH4+)
+          !if (Q==A_NH4)  then
 
       !      nvap(a_nh4) = nvapo(a_nh4) + (CAT(a_nh4)-CAT2(a_nh4))  * &
       !                    1.e6*(1./molec2ug(M_nh3))
       !               print *,'nvap2',nvap(a_nh4)
-! A_NIT = 3 (NO3-)
+! A_NIT (NO3-)
           !else 
-          if ( (Q==3).and.(ICONX==1) ) then
+          if ( (Q==A_NIT).and.(ICONX==1) ) then
             nvap(a_nit) = nvapo(a_nit) + (CAT(a_nit)-CAT2(a_nit))  * &
                           1.e6*(1./molec2ug(M_nit))
-! A_CHL = 15 (Cl-)
-          else if (Q==15) then
+! A_CHL (Cl-)
+          else if (Q==A_CHL) then
             nvap(a_chl) = nvapo(a_chl) + (CAT(a_chl)-CAT2(a_chl))  * &
                           1.e6*(1./molec2ug(M_hcl))
           else
@@ -921,13 +933,14 @@ contains
        if (INUC .EQ. 1) then 
          ! NNUC: volume ratio particle/vapor
          CALL nucleationratio(DPA(NU,1),vvap,nnuc) 
+       ! Compute number and mass concentration after nucleation
          ! organic/sulfuric acid nucleation    
          if ( (INUCMEC.EQ.8).OR.(INUCMEC.EQ.9).OR.(INUCMEC.EQ.10).OR.(INUCMEC.EQ.12) ) then
             natot=1.0 
             NVAP(A_OR2)=nvap(A_OR2)-jnuc*nnuc*natot*DTIME
             MASS(NU,1,A_OR2) = MASS(NU,1,A_OR2)                      +       &
                        natot*MAH*jnuc*DTIME*CONVM
-         endif     
+         endif
          ! amine/nitric acid nucleation 
          if (INUCMEC .EQ. 6) then
             NVAPOLDN=nvap(A_AMI)
@@ -942,18 +955,27 @@ contains
               NVAP(A_NIT)=nvap(A_NIT)-jnuc*nnuc*natot*DTIME  
             !enddo         
             DNVAPN=DNVAPN+(NVAPOLDN-nvap(A_AMI))
-         else  
-       ! Compute number and mass concentration after nucleation
-       !     sulfuric acid nucleation
+         ! iodic acid / sulfuric acid nucleation    
+         else if (INUCMEC .EQ. 14) then
+            NVAP(A_IO3)=nvap(A_IO3)-jnuc*nnuc*natot*DTIME
+            MASS(NU,1,A_IO3) = MASS(NU,1,A_IO3)                      +       &
+                       natot*MIO*jnuc*DTIME*CONVM
+            ! for the sulfuric acid / iodic acid nucleation
+            nvap(A_SUL) = nvap(A_SUL)-jnuc*nnuc*DTIME
+            mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                      +       &
+                      natot*MB*jnuc*DTIME*CONVM
+            N(NU,1)=N(NU,1)+jnuc*DTIME
+         else
+       !   sulfuric acid nucleation
        !       new check on NVAP(A_SUL), 17.02.2013 
-           if( jnuc*nnuc*DTIME > nvap(A_SUL) ) then
-              jnuc = nvap(A_SUL)/(nnuc*DTIME)
-              nvap(A_SUL) = 0.0
-           else
-              nvap(A_SUL) = nvap(A_SUL)-jnuc*nnuc*DTIME
-           endif    
-           mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                      +       &
-                       natot*MB*jnuc*DTIME*CONVM         
+             if( jnuc*nnuc*DTIME > nvap(A_SUL) ) then
+                jnuc = nvap(A_SUL)/(nnuc*DTIME)
+                nvap(A_SUL) = 0.0
+             else
+                nvap(A_SUL) = nvap(A_SUL)-jnuc*nnuc*DTIME
+             endif    
+             mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                      +       &
+                       natot*MB*jnuc*DTIME*CONVM
        ! New Number concentration in NU,1    
            n(NU,1)=n(NU,1)+jnuc*DTIME
        ! Jacobson (2002), Equation (34)
@@ -1024,12 +1046,19 @@ contains
 ! WET SCAVENGING (Aitken and Coarse Mode)
        if (IWETD.EQ.1) then
          do M=AI,CS
+          wetsc=wetdep
+
           do I=1,IMAX
-           do K=1,AMAX
-            MASS(M,I,K)=MASS(M,I,K)                     -        &
-                   MASS(M,I,K)*wetdep*DTIME
-           end do
-           N(M,I)=N(M,I)-N(M,I)*wetdep*DTIME   
+
+! faster scavening of Aitken mode particles
+!!! remove once CCN activation is implemented
+         !!  if( (M==AI).and.(DPAW(M,I)>3.e-8) ) wetsc=wetdep*8.0
+
+            do K=1,AMAX
+             MASS(M,I,K)=MASS(M,I,K)                     -        &
+                    MASS(M,I,K)*wetsc*DTIME
+            end do
+            N(M,I)=N(M,I)-N(M,I)*wetsc*DTIME   
           end do
          end do
        endif

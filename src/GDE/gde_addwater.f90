@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -157,81 +154,81 @@ module gde_addwater
 
       if (incloud.EQ.1) then
 
-! Cloud droplet activation happens if relative humidity is above 99%
-! and the incloud flag is set to 1 by the user and if the computed
-! supersaturation is greater than equlibrium supersaturation.
-! During cloud droplet activation, the aerosol dynamics processes
-! are stopped.
-! RH > 99 %
-! kinetic growth by water condensation in CS mode      
-! calculate next MASS(CS,I,A_WAT) by kinetic growth (not equilibrium)
-! at the moment not used, instead stop
-        if (RH.ge.rhactiv) then
-
-          if (firstloop) then
-! aerosol water content NU ... CS
-           do M=NU,CS
-             MH2OTOT(M) = 0._dp 
-             do I=1,IMAX
-               CALL awater(RH,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),            &
-                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),  &
-                        MASS(M,I,A_WAT))
-               if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp           
-               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
-             end do
-           end do
-
-          else
-
-! during cloud activation
-          ! the water mass increase is calculated in gde_koehler module
-          ! NEW WATER MASS [ng/m^3]
-          ! Seinfeld and Pandis (2006), EQ(17.65)
-          ! aerosol water content AI ... CS
-           do M=AI,CS
-             do I=1,IMAX
-               MH2OA(M,I)  = MASS(M,I,A_WAT) + dmwdt(M,I) 
-             end do
-           end do
-
-           ! first calculate water mass using the ZRS ruleset
-           ! aerosol water content NU ... CS
-           do M=NU,CS
-             MH2OTOT(M) = 0._dp 
-             do I=1,IMAX
-               CALL awater(rhactiv,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),        &
-                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),   &
-                        MASS(M,I,A_WAT))
-               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
-             end do
-           end do
-
-          ! use the greater water mass of the two methods
-          ! aerosol water content AI ... CS
-           do M=AI,CS
-             MH2OTOT(M) = 0._dp 
-             do I=1,IMAX
-
-               MASS(M,I,A_WAT) = max(MASS(M,I,A_WAT),MH2OA(M,I))
-               MH2OTOT(M) = MH2OTOT(M) + MASS(M,I,A_WAT)
-              ! print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OTOT(M)
-
-             enddo
-           enddo
-
-          endif
-
-! droplet water for aqueous phase chemistry
-          CALL partlwc(MH2OTOT,cwa01,cwa02,cwa03,xaer,lwc)
-
-          lwc(1) = min(lwc(1),1.e-5_dp)
-          !lwc(2) = min(lwc(2),1.e-5_dp)
-          !lwc(3) = min(lwc(3),1.e-5_dp)
-
-          wascloud=.true.
-
-
-        else
+! ! Cloud droplet activation happens if relative humidity is above 99%
+! ! and the incloud flag is set to 1 by the user and if the computed
+! ! supersaturation is greater than equlibrium supersaturation.
+! ! During cloud droplet activation, the aerosol dynamics processes
+! ! are stopped.
+! ! RH > 99 %
+! ! kinetic growth by water condensation in CS mode      
+! ! calculate next MASS(CS,I,A_WAT) by kinetic growth (not equilibrium)
+! ! at the moment not used, instead stop
+!        if (RH.ge.rhactiv) then
+!
+!          if (firstloop) then
+! ! aerosol water content NU ... CS
+!           do M=NU,CS
+!             MH2OTOT(M) = 0._dp 
+!             do I=1,IMAX
+!               CALL awater(RH,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),            &
+!                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),  &
+!                        MASS(M,I,A_WAT))
+!               if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp           
+!               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
+!             end do
+!           end do
+!
+!          else
+!
+! ! during cloud activation
+!          ! the water mass increase is calculated in gde_koehler module
+!          ! NEW WATER MASS [ng/m^3]
+!          ! Seinfeld and Pandis (2006), EQ(17.65)
+!          ! aerosol water content AI ... CS
+!           do M=AI,CS
+!             do I=1,IMAX
+!               MH2OA(M,I)  = MASS(M,I,A_WAT) + dmwdt(M,I) 
+!             end do
+!           end do
+!
+!           ! first calculate water mass using the ZRS ruleset
+!           ! aerosol water content NU ... CS
+!           do M=NU,CS
+!             MH2OTOT(M) = 0._dp 
+!             do I=1,IMAX
+!               CALL awater(rhactiv,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),        &
+!                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),   &
+!                        MASS(M,I,A_WAT))
+!               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
+!             end do
+!           end do
+!
+!          ! use the greater water mass of the two methods
+!          ! aerosol water content AI ... CS
+!           do M=AI,CS
+!             MH2OTOT(M) = 0._dp 
+!             do I=1,IMAX
+!
+!               MASS(M,I,A_WAT) = max(MASS(M,I,A_WAT),MH2OA(M,I))
+!               MH2OTOT(M) = MH2OTOT(M) + MASS(M,I,A_WAT)
+!              ! print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OTOT(M)
+!
+!             enddo
+!           enddo
+!
+!          endif
+!
+! ! droplet water for aqueous phase chemistry
+!          CALL partlwc(MH2OTOT,cwa01,cwa02,cwa03,xaer,lwc)
+!
+!          lwc(1) = min(lwc(1),1.e-5_dp)
+!          !lwc(2) = min(lwc(2),1.e-5_dp)
+!          !lwc(3) = min(lwc(3),1.e-5_dp)
+!
+!          wascloud=.true.
+!
+!
+!        else
 
 ! for fixed cloud water droplets in coarse mode ("SINTEF fog simulation")
 
@@ -266,6 +263,7 @@ module gde_addwater
           MH2OTOT(CS)=cwa03*1.e3*molec2ug(M_H2O)
           ! Number of droplets
           NTOTCS=lwc(1)/((4./3.)*pi*(GMD(CS)/2.)**3.)
+          !print *,'cloud=1, lwc, N(CS)',lwc(1), NTOTCS
           ! distribute over bins of CS mode
           do I=1,IMAX
             lindismwa=(MH2OTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
@@ -287,7 +285,8 @@ module gde_addwater
             endif
           endif
 
-        endif
+! cloud activation or fixed fog/cloud
+!        endif
 
       else
 !(incloud.eq.0)
@@ -307,8 +306,6 @@ module gde_addwater
 ! evaporation of fog ("SINTEF fog simulation")
         if (wascloud) then
             MH2OTOT(:)=0._dp
-            NTOTCS=0._dp
-            N(CS,:)=0._dp
             MASS(CS,1:IMAX,A_WAT)=0._dp
             wascloud=.false.
         endif

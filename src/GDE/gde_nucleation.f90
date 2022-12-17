@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*
@@ -61,7 +58,9 @@ module gde_nucleation
  
   public :: nucleation, nucleationratio
   
-  !public :: kinetic, activation, organcluster
+  !public :: kinetic, activation
+  !public :: kinetic_iodine, activation_iodine
+  !public :: organcluster
   !public :: aminecluster
   !public :: ioncluster, ioninduced
   !public :: yu_timn_nucleation
@@ -73,8 +72,9 @@ module gde_nucleation
   
 contains
 
- subroutine nucleation(INUCMEC,cair,ch2so4,cnh3,camin,cnit,csoa2,temp,RH,jrno2, &
-                      CA,KP,fnuc,coags,daynr,Lati,natot,JNUC)
+ subroutine nucleation(INUCMEC,cair,ch2so4,cnh3,camin,cnit,csoa2,ciod, &
+                       temp,RH,jrno2, CA,KP,fnuc,coags,daynr,          &
+                       Lati,natot,JNUC)
     !********************************************************************
     !
     !     N  U  C  L  E  A  T  I  O  N
@@ -88,11 +88,11 @@ contains
     ! Nucleation module
     !
     !          - nucleation             INUC=1
-    !               kinetic               H2SO4-H2O     (INUCMEC=1) or
+    !               kinetic               H2SO4         (INUCMEC=1) or
     !               homogeneous           H2SO4-H2O     (INUCMEC=2)
     !               homogeneous           H2SO4-H2O-NH3 (INUCMEC=3)
     !               ion-mediated          H2SO4-H2O-NH3 (INUCMEC=4)
-    !               activation            H2SO4-H2O     (INUCMEC=5)
+    !               activation            H2SO4         (INUCMEC=5)
     !               kinetic               HNO3-AMIN     (INUCMEC=6)
     !               combination           H2SO4-H2O     (INUCMEC=7)
     !               "OS1" activation      H2SO4-ORG     (INUCMEC=8)
@@ -101,6 +101,7 @@ contains
     !               neutral & ion-induced H2SO4-H2O     (INUCMEC=11)
     !               diesel-exhaust        H2SO4-ORG     (INUCMEC=12)
     !               ACDC cluster          H2SO4-H2O-NH3 (INUCMEC=13)
+    !               HIO3 kinetic/activ    HIO3          (INUCMEC=14)
     !
     !  INPUT
     !  -----
@@ -112,6 +113,7 @@ contains
     !   camin: concentration of amine         [1/m^3]
     !    cnit: concentration of nitric acid   [1/m^3]
     !   csoa2: concentration of SOA-2         [1/m^3]
+    !    ciod: concentration of HIO3          [1/m^3]
     !    temp: air temperature                [K]
     !      RH: rel. humidity                  [-]
     !   jrno2: phot. freq. NO2                [s^-1]
@@ -142,7 +144,7 @@ contains
 
         integer, intent(in)      :: INUCMEC
         REAL( dp), intent(in)    :: ch2so4,cnh3,cair
-        REAL( dp), intent(in)    :: camin,cnit,csoa2 
+        REAL( dp), intent(in)    :: camin,cnit,csoa2,ciod
         REAL( dp), intent(in)    :: temp,RH,jrno2,CA,KP
         REAL( dp), intent(in)    :: fnuc,daynr,Lati,coags        
         REAL( dp), intent(out)   :: JNUC,natot
@@ -302,7 +304,7 @@ contains
 
              !  write(6,*) ' JNUC        natot'
              !  write(6,'(4ES12.4)') JNUC, natot
-
+             
             CASE (12)
 
             ! Nucleation of sulfuric acid/organic acid clusters "OS3"
@@ -317,10 +319,23 @@ contains
                write(6,*) ' JNUC        natot'
                write(6,'(4ES12.4)') JNUC, natot
 
-            ! CASE (14)
+            ! CASE (1x)
             ! ACDC implementation in a direct way for laminar flow tube simulation
             ! by Shuai Jiang (2017)
             !   CALL ACDC_direct(ch2so4,cnh3,temp,RH,coags,JNUC,natot)
+
+            CASE (14)
+
+            ! Kinetic nucleation of iodic acid
+            !   CALL kinetic_iodine(ciod,JNUC,natot)
+            ! Activation of clusters of one molecule HIO3
+            !   CALL activation_iodine(ciod,JNUC,natot)
+            ! Nucleation of sulfuric acid/iodic acid clusters
+            ! Vuollekoski et al. (2009), Equation (3)
+            ! They assume that diameter of nucleated particles is 1.5 nm
+               natot=1.
+               JNUC=1.e-18 * ch2so4 * ciod
+            !   write(6,'(6ES12.4)') ciod, JNUC, natot
 
             CASE DEFAULT
  
@@ -444,7 +459,69 @@ contains
         jnuc=C_2*(c2**2._dp)       !m^-3s^-1
 
    end subroutine kinetic
-  
+
+
+     subroutine kinetic_iodine(c2,jnuc,natot)
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      kinetic nucleation of iodic acid
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           c2: concentration of hio3 vapour [1/m^3]
+    !           natot: total number of hio3 molecules 
+    !                  in the critical cluster
+    !
+    !      method
+    !      ------
+    !      kinetic nucleation: empirical parameterisation
+    !      OIO nucleation parameterization of Vuollekoski, JGR, 2009
+    !
+    !      reference
+    !      ---------
+    !      Nucleation mechanism proposed in M. Kulmala ACPD,5,11277-11293,2005
+    !      and Kulmala et al.,ACP,6,787-793,2006
+    !      Parameter K from:
+    !      Vuollekoski, H., Kerminen, V.-M., Anttila, T., Sihto, S.-L.,
+    !      Vana, M., Ehn, M., Korhonen, H., McFiggans, G., O'Dowd, C. D.
+    !      Kulmala, M.: Iodine dioxide nucleation simulations in coastal
+    !      and remote marine environments, J. Geophys. Res., 114, D02206, 
+    !      doi:10.1029/2008JD010713, 2009.
+    !
+    !      modifications
+    !      -------------
+    !      none
+    !
+    !------------------------------------------------------------------
+
+     implicit none
+
+        REAL( dp), intent(in)    :: c2
+        REAL( dp), intent(out)   :: jnuc,natot
+        REAL( dp)                :: K
+
+        ! kinetic nucleation of OIO, Vuollekoski (2009):
+        ! best choice is K = 1.e-12 cm^3s^-1
+        ! maximum K value from kinetic gas theory 
+        ! K = 1.e-10 cm^3s^-1
+        !K=1.0e-21_dp             !m^3s^-1
+        K=1.0e-19_dp             !m^3s^-1
+
+        natot=2._dp
+        jnuc=K*(c2**2._dp)       !m^-3s^-1
+
+   end subroutine kinetic_iodine
+
 
      subroutine activation(fnuc,c2,jnuc,natot)
     !----------------------------------------------------------------------
@@ -497,6 +574,67 @@ contains
         jnuc=fnuc*C_1*c2          !m^-3s^-1     
 
    end subroutine activation
+
+
+     subroutine activation_iodine(c2,jnuc,natot)
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      cluster activation of iodic acid
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           c2: concentration of hio3 vapour [1/m^3]
+    !           natot: total number of hio3 molecules 
+    !                  in the critical cluster
+    !
+    !
+    !      method
+    !      ------
+    !      cluster activation: empirical parameterisation
+    !      OIO nucleation parameterization of Vuollekoski, JGR, 2009
+    !
+    !      reference
+    !      ---------
+    !      Nucleation mechanism proposed in M. Kulmala ACPD,5,11277-11293,2005
+    !      and Kulmala et al.,ACP,6,787-793,2006
+    !      Parameter A from:
+    !      Vuollekoski, H., Kerminen, V.-M., Anttila, T., Sihto, S.-L.,
+    !      Vana, M., Ehn, M., Korhonen, H., McFiggans, G., O'Dowd, C. D.
+    !      Kulmala, M.: Iodine dioxide nucleation simulations in coastal
+    !      and remote marine environments, J. Geophys. Res., 114, D02206, 
+    !      doi:10.1029/2008JD010713, 2009.
+    !
+    !      modifications
+    !      -------------
+    !      none
+    !
+    !------------------------------------------------------------------
+
+     implicit none
+
+        REAL( dp), intent(in)    :: c2
+        REAL( dp), intent(out)   :: jnuc,natot
+        REAL( dp)                :: A
+
+        ! cluster activation of OIO, Vuollekoski (2009):
+        ! best choice is A = 3.e-6 s^-1
+        !A=3.0e-6_dp        !s^-1
+        ! better suited for arctic conditions
+        A=0.5e-6_dp        !s^-1
+        natot=1._dp
+        jnuc=A*c2          !m^-3s^-1     
+
+   end subroutine activation_iodine
 
 
      subroutine organcluster(fnuc,c2,c3,temp,jnuc,natot)

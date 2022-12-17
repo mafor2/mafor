@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -48,7 +45,8 @@ module gde_aerosol_props
    use gde_input_data, only  : MMAX, AMAX, iamax
    use gde_input_data, only  : NSOA
    use gde_input_data, only  : NU,AI,AS,CS
-   use gde_input_data, only  : A_SUL,A_MSA,A_NIT,A_NH4,A_AMI
+   use gde_input_data, only  : A_SUL,A_MSA,A_IO3
+   use gde_input_data, only  : A_NIT,A_NH4,A_AMI
    use gde_input_data, only  : A_OR1,A_OR2,A_OR3
    use gde_input_data, only  : A_OR4,A_OR5,A_OR6
    use gde_input_data, only  : A_OR7,A_OR8,A_OR9
@@ -898,7 +896,8 @@ contains
 !------------------------------------------------------------------
 
   subroutine getTotalMass(IMAX,MASS,MPT,MPTW, MTOT, MTOTW,        &
-                          MSULFTOT, MMSAPTOT, MNITRTOT, MAMMOTOT, &
+                          MSULFTOT, MMSAPTOT, MIODATOT,           &
+                          MNITRTOT, MAMMOTOT,                     &
                           MSALTTOT, MECBCTOT, MDUSTTOT, MXXXXTOT, & 
                           MORGCTOT, MORG1TOT, MORG2TOT, MORG3TOT, &
                           MORG4TOT, MORG5TOT, MORG6TOT, MORG7TOT, &
@@ -960,6 +959,7 @@ contains
      real( dp), dimension(MMAX),intent(out)          :: MAMMOTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MNITRTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MMSAPTOT ! [ng/m^3]
+     real( dp), dimension(MMAX),intent(out)          :: MIODATOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MXXXXTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MECBCTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MDUSTTOT ! [ng/m^3]
@@ -994,6 +994,7 @@ contains
           MAMMOTOT(M)=0._dp
           MNITRTOT(M)=0._dp
           MMSAPTOT(M)=0._dp
+          MIODATOT(M)=0._dp
           MSALTTOT(M)=0._dp
           MXXXXTOT(M)=0._dp
           MECBCTOT(M)=0._dp
@@ -1017,6 +1018,7 @@ contains
             MAMMOTOT(M)=MAMMOTOT(M)+MASS(M,I,A_AMI)+MASS(M,I,A_NH4)
             MNITRTOT(M)=MNITRTOT(M)+MASS(M,I,A_NIT)
             MMSAPTOT(M)=MMSAPTOT(M)+MASS(M,I,A_MSA)
+            MIODATOT(M)=MIODATOT(M)+MASS(M,I,A_IO3)
             MSALTTOT(M)=MSALTTOT(M)+MASS(M,I,A_SAL)+MASS(M,I,A_CHL)
             MXXXXTOT(M)=MXXXXTOT(M)+MASS(M,I,A_XXX)
             MECBCTOT(M)=MECBCTOT(M)+MASS(M,I,A_EBC)
@@ -1038,7 +1040,7 @@ contains
                        MASS(M,I,A_OR4)+MASS(M,I,A_OR5)+MASS(M,I,A_OR6) + &
                        MASS(M,I,A_OR7)+MASS(M,I,A_OR8)+MASS(M,I,A_OR9) + &
                        MASS(M,I,A_AMI)+MASS(M,I,A_NH4)                 + &
-                       MASS(M,I,A_NIT)+MASS(M,I,A_MSA)                 + &
+                       MASS(M,I,A_NIT)+MASS(M,I,A_MSA)+MASS(M,I,A_IO3) + &
                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL)+MASS(M,I,A_XXX) + &
                        MASS(M,I,A_EBC)+MASS(M,I,A_DUS) )*1.e-12_dp
 
@@ -1047,7 +1049,7 @@ contains
                        MASS(M,I,A_OR4)+MASS(M,I,A_OR5)+MASS(M,I,A_OR6) + &
                        MASS(M,I,A_OR7)+MASS(M,I,A_OR8)+MASS(M,I,A_OR9) + &
                        MASS(M,I,A_AMI)+MASS(M,I,A_NH4)                 + &
-                       MASS(M,I,A_NIT)+MASS(M,I,A_MSA)                 + &
+                       MASS(M,I,A_NIT)+MASS(M,I,A_MSA)+MASS(M,I,A_IO3) + &
                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL)+MASS(M,I,A_XXX) + &
                        MASS(M,I,A_EBC)+MASS(M,I,A_DUS)                 + &
                        MASS(M,I,A_WAT) )*1.e-12_dp
@@ -1081,6 +1083,118 @@ contains
 
 
   end subroutine getTotalMass
+
+!------------------------------------------------------------------
+
+  subroutine restoreCoarseMode(IMAX,DPA,DLINDP,DEN,                &
+                               MSULFTOT,MMSAPTOT,MAMMOTOT, MASS,N)
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      restore number and mass of aerosol compounds in size bins
+    !      of the coarse mode after fog/cloud evaporation
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           DPA     dry particle diameter           [m]
+    !           MASS    mass concentration              [ng/m^3]
+    !           DLINDP  linear width of bin             [m]
+    !           DEN     density of compound             [kg/m^3]
+    !
+    !        output:
+    !           MASS    mass concentration              [ng/m^3]
+    !           N       number concentration            [part/m^3]
+    !
+    !      method
+    !      ------
+    !      Calculate mass conc of compoound in each bin I
+    !      from log-normal mass distribution
+    !      GMD is geometric-mean mass diameter!!!
+    !      we assume average particle density (DEN) to be
+    !      constant in all bins.
+    !
+    !      reference
+    !      ---------
+    !      none
+    !
+    !      modifications
+    !      -------------
+    !      none
+    !
+    !------------------------------------------------------------------
+
+  implicit none
+
+     integer, intent(in)                                 :: IMAX
+     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)    :: DPA
+     real( dp), DIMENSION(MMAX,IMAX), intent(in)         :: DLINDP
+     real( dp), dimension(iamax), intent(in)             :: DEN
+
+     real( dp), dimension(MMAX),intent(in)               :: MSULFTOT
+     real( dp), dimension(MMAX),intent(in)               :: MMSAPTOT
+     real( dp), dimension(MMAX),intent(in)               :: MAMMOTOT
+
+!in/out
+     real( dp), dimension(MMAX,IMAX,AMAX),intent(in out) :: MASS
+     real( dp), DIMENSION(MMAX,IMAX), intent(in out)     :: N
+
+! local
+     real( dp)                                         :: VDRY
+     REAL( dp),allocatable,dimension(:,:)              :: VCONCCS
+     REAL( dp),allocatable,dimension(:,:)              :: LINDISMCS
+
+     integer          :: I
+
+
+! Allocate aerosol terms
+        if (.not. allocated(VCONCCS))      ALLOCATE(VCONCCS(IMAX,iamax))
+        if (.not. allocated(LINDISMCS))    ALLOCATE(LINDISMCS(IMAX,iamax))
+
+
+
+        do I=1,IMAX
+
+            LINDISMCS(I,SU)=(MSULFTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+            LINDISMCS(I,MS)=(MMSAPTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+            LINDISMCS(I,AM)=(MAMMOTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+
+! Mass concentrations in ng/m3
+            MASS(CS,I,A_SUL)=LINDISMCS(I,SU)*DLINDP(CS,I)
+            MASS(CS,I,A_MSA)=LINDISMCS(I,MS)*DLINDP(CS,I)
+            MASS(CS,I,A_NH4)=LINDISMCS(I,AM)*DLINDP(CS,I)
+
+! Volume concentration in m3/m3
+            VCONCCS(I,SU)=MASS(CS,I,A_SUL)/(CONVM*DEN(SU))
+            VCONCCS(I,MS)=MASS(CS,I,A_MSA)/(CONVM*DEN(MS))
+            VCONCCS(I,AM)=MASS(CS,I,A_NH4)/(CONVM*DEN(AM))
+
+! Calculate dry volume in m3
+            VDRY=(pi/6._dp)*DPA(CS,I)**3._dp
+
+! Calculated particle number concentration per bin
+! consistent GMD (mass-based)
+            N(CS,I) = ( VCONCCS(I,SU)+VCONCCS(I,MS)+VCONCCS(I,AM) ) / VDRY
+
+        end do
+
+! Deallocate aerosol terms
+        deallocate(VCONCCS)
+        deallocate(LINDISMCS)
+
+
+  end subroutine restoreCoarseMode
 
 !------------------------------------------------------------------
 

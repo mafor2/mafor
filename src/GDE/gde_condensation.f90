@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -47,17 +44,20 @@ module gde_condensation
 
     use messy_mecca_kpp_global,    only : APN,dp
 
-    use gde_constants,  only      : MB,MAN,MAH,MVOC,MAC,MNH
-    use gde_constants,  only      : M_H2SO4,M_msa,M_nit,M_ca,M_nh3,M_hcl
+    use gde_constants,  only      : MB,MIO,MAN,MAH,MVOC,MAC,MNH
+    use gde_constants,  only      : M_H2SO4,M_msa,M_hio3
+    use gde_constants,  only      : M_nit,M_ca,M_nh3,M_hcl
     use gde_constants,  only      : M_H2O,M_air,MC
     use gde_constants,  only      : pi,k_B,N_A,R_gas,T0,RHOH2O
 
     use gde_input_data, only      : MMAX,QMAX,AMAX
     use gde_input_data, only      : NU,AI,AS,CS
     use gde_input_data, only      : NSOA
-    use gde_input_data, only      : DENV,DENMS,DENXX,DENNI,DENAM
+    use gde_input_data, only      : DENV,DENMS,DENIO
+    use gde_input_data, only      : DENXX,DENNI,DENAM
     use gde_input_data, only      : DENEC   
-    use gde_input_data, only      : A_SUL,A_MSA,A_NIT,A_AMI,A_NH4
+    use gde_input_data, only      : A_SUL,A_MSA,A_IO3
+    use gde_input_data, only      : A_NIT,A_AMI,A_NH4
     use gde_input_data, only      : A_OR1,A_OR2,A_OR3,A_OR4,A_OR5
     use gde_input_data, only      : A_OR6,A_OR7,A_OR8,A_OR9
     use gde_input_data, only      : A_XXX,A_SAL,A_CHL
@@ -69,8 +69,7 @@ module gde_condensation
     use gde_toolbox,    only      : molec2ug
     use gde_toolbox,    only      : molecdiff
     use gde_toolbox,    only      : waterps
-    use gde_toolbox,    only      : acidps
-    use gde_toolbox,    only      : satpress_alkane
+    !use gde_toolbox,    only      : acidps ! not used
     use gde_toolbox,    only      : satps_sulf
     use gde_toolbox,    only      : sulfhydrates
 
@@ -182,8 +181,8 @@ module gde_condensation
     real( dp), dimension(NSOA),intent(out)            :: csate
 
 ! local
-    real( dp), dimension(MMAX,IMAX)     :: CCONDSUL,CCONDMSA,CCONDNIT
-    real( dp), dimension(MMAX,IMAX)     :: CCONDCHL
+    real( dp), dimension(MMAX,IMAX)     :: CCONDSUL,CCONDMSA,CCONDIOD
+    real( dp), dimension(MMAX,IMAX)     :: CCONDNIT,CCONDCHL
     real( dp), dimension(MMAX,IMAX)     :: CCONDORG1,CCONDORG2,CCONDORG3
     real( dp), dimension(MMAX,IMAX)     :: CCONDORG4,CCONDORG5,CCONDORG6
     real( dp), dimension(MMAX,IMAX)     :: CCONDORG7,CCONDORG8,CCONDORG9
@@ -216,6 +215,8 @@ module gde_condensation
     real( dp)                           :: KPNCL
     real( dp)                           :: psnh4,psno3,pscl
     real( dp)                           :: nh3free,hno3tot
+    real( dp)                           :: Ttrans
+    real( dp), parameter                :: psmin_nh3  = 2.46e08_dp
 
 
     INTEGER                             :: M,I,Q,S
@@ -249,23 +250,53 @@ module gde_condensation
              KPNIT = KPEQ
          endif
 
-         ! 3) sulphuric acid and methane sulphuric acid
+         ! 3) sulphuric acid, methane sulphuric acid, iodic acid
          ! MSK 29.09.2013 New approximation of nsv(A_SUL) for aqueous h2s4o solution
          !    P. Bolsaitis and J. F. Elliott			
          !    Thermodynamic Activities and equilibrium partial 			
          !    pressures for aqueous sulfuric acid solutions			
          !    J Phys Chem Eng Data 1990, 35, 69-85.
+         ! MSK 03.10.2022 Transition temperature below which MSA behaves like a ELVOC
+         !    T_trans = a - b*RH + c*RH^2 - d*RH^3 + e*RH^4
+         !    Hodshire, A. L., Campuzano-Jost, P., Kodros, J. K., 
+         !    Croft, B., Nault, B. A., Schroder, J. C., 
+         !    Jimenez, J. L., and Pierce, J. R.
+         !    The potential role of methanesulfonic acid (MSA) 
+         !    in aerosol formation and growth and the associated 
+         !    radiative forcings
+         !    Atmos Chem Phys 2019, 19, 3137-3160, 
+         !    doi:10.5194/acp-19-3137-2019.
+
+         ! transition temperature (in K)
+         Ttrans = 252.0 - 6.19e-1_dp*RH*100._dp + 3.49e-2_dp*(RH*100._dp)**2 - &
+                  5.6e-4_dp*(RH*100._dp)**3 + 3.32e-6_dp*(RH*100._dp)**4
+
+         !SUL
          !old nsv(A_SUL)=acidps(temp) !Pa
          !old nsv(A_SUL)=nsv(A_SUL)/(k_B*1.e6*temp)        !molec/m^3    (factor 1E6 scaled)
-         nsv(A_SUL) = satps_sulf(temp,RH,NVAP(A_SUL))    !Pa
-         nsv(A_SUL) = nsv(A_SUL)/(k_B*temp)         !molec/m^3
-          
-         nsv(A_MSA)=(-8.00648e3_dp/temp)+2.14237_dp*LOG(temp)+7.45208_dp     !mmHg
-         nsv(A_MSA)=EXP(nsv(A_MSA))                                          !mmHg
-         nsv(A_MSA)=nsv(A_MSA)*(1.e5_dp/750.06_dp)                           !Pa         
-         nsv(A_MSA)=nsv(A_MSA)/(k_B*1.e6*temp)  !molec/m^3    (factor 1E6 scaled)
-                 
-         call condensation_coeff2(temp,RH,press,DPA,GRSU,GRMS,DCSU,CCONDSUL,CCONDMSA,IMAX)
+         nsv(A_SUL) = satps_sulf(temp,RH,NVAP(A_SUL))  !Pa
+         nsv(A_SUL)=nsv(A_SUL)/(k_B*temp)              !molec/m^3
+
+         !MSA
+         if (temp >= Ttrans) then
+         ! MSA behaves as SVOC
+           nsv(A_MSA)=(-8.00648e3_dp/temp)+2.14237_dp*LOG(temp)+7.45208_dp     !mmHg
+           nsv(A_MSA)=EXP(nsv(A_MSA))                                          !mmHg
+           nsv(A_MSA)=nsv(A_MSA)*(1.e5_dp/750.06_dp)                           !Pa
+           nsv(A_MSA)=nsv(A_MSA)*1.e-6_dp              !low volatile vapor, scaled by 1.e-6    
+         else
+         ! MSA behaves as ELVOC
+           nsv(A_MSA)=1.0e-11_dp                       !Pa
+         endif
+         nsv(A_MSA)=nsv(A_MSA)/(k_B*temp)              !molec/m^3
+
+         !HIO3
+         nsv(A_IO3)=2.2e-9_dp                          !Pa, EPISuite MPBPWIN v1.42
+         nsv(A_IO3)=nsv(A_IO3)*1.e-2_dp                !EL vapor, scaled by 0.01
+         nsv(A_IO3)=nsv(A_IO3)/(k_B*temp)              !molec/m^3
+
+         call condensation_coeff2(temp,RH,press,DPA,GRSU,GRMS,DCSU,CCONDSUL,CCONDMSA,CCONDIOD,IMAX)
+
 
          ! 4) ammonium sulfate NH4HSO4, (NH4)2SO4 or ammonium nitrate
          !     seinfeld and pandis (1998):                               
@@ -282,15 +313,22 @@ module gde_condensation
          !hno3tot = ctnit*1e-3/molec2ug(M_nit)     !molec/cm^3
 
 
+         !NH3
          if ( ctnh4 < 2.0*ctso4 ) then
-           nsv(a_nh4) = nsv(a_sul)
+         ! 2 NH3(g) + H2SO4 --> (NH4)2SO4 is one-way
+         ! NH4SO4, p0(NH3) not below psmin_nh3
+           nsv(a_nh4) = max(nsv(a_sul),psmin_nh3)
+           !print *,'pNH3 1',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
          else
            if ( NVAP(A_NIT)*NVAP(A_NH4)*1.e-12 > KPNIT ) then
              nsv(a_nh4) = psnh4
+             !print *,'pNH3 2',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
            else if ( NVAP(A_CHL)*NVAP(A_NH4)*1.e-12 > KPNCL ) then
              nsv(a_nh4) = psnh4
+             !print *,'pNH3 3',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
            else
-             nsv(a_nh4) = nsv(a_sul)
+             nsv(a_nh4) = max(nsv(a_sul),psmin_nh3)
+             !print *,'pNH3 4',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
            endif
          endif
       ! write(6,'(6ES12.4)') KPNIT, Keq_nh4no3_0,NVAP(A_NIT), NVAP(A_NH4), NVAP(A_NIT)*NVAP(A_NH4)*1.e-12
@@ -305,14 +343,14 @@ module gde_condensation
          !   psat0(T) = psat0(298K)*EXP((Hvap/R_gas)*((1/298K)-(1/temp)))
          ! csate is the effective saturation concentration C* (here C0)
          ! do for all SOA components (A_OR1, ..., A_OR9)
-         ! A_OR1 has index 6
+         ! S+A_OR1-1 is the index of SOA components
          do S=1,NSOA
-           nsv(S+5)=(csat0(S)*R_gas*298._dp)/(1.e6_dp*M_oc(S))
-           nsv(S+5)=nsv(S+5)*EXP((hvap(S)/R_gas)*((1._dp/298._dp)-(1._dp/temp)))
+           nsv(S+A_OR1-1)=(csat0(S)*R_gas*298._dp)/(1.e6_dp*M_oc(S))
+           nsv(S+A_OR1-1)=nsv(S+A_OR1-1)*EXP((hvap(S)/R_gas)*  &
+                          ((1._dp/298._dp)-(1._dp/temp)))
            !effective saturation concentration C*(T), assume gamma=1
            csate(S)=csat0(S)*EXP((hvap(S)/R_gas)*((1._dp/298._dp)-(1._dp/temp)))
          enddo
-
          !print *,"nsv(T) Pa ",nsv(A_OR1),nsv(A_OR2),nsv(A_OR3),nsv(A_OR4),nsv(A_OR5)
          !print *,"nsv(T) Pa ",nsv(A_OR6),nsv(A_OR7),nsv(A_OR8),nsv(A_OR9)
 
@@ -331,12 +369,12 @@ module gde_condensation
                fom  = max(fom,0.3_dp)  ! at least 30% OM
                fom  = min(fom,1.0_dp)
              ! total SOA aerosol concentration
-             ! A_OR1 has index 6
+             ! S+A_OR1-1 is the index of SOA components
                do S=1,NSOA
                  mwsoa(S)  = M_oc(S)    ! g/mol
                  msize(S)  = nmo(S)     ! (nC+nO)
                  ocfrac(S) = foc(S)     ! (O:C ratio, carbon fraction)
-                 ps(S)     = nsv(S+5)   ! Pa
+                 ps(S)     = nsv(S+A_OR1-1)   ! Pa
                enddo
              ! biogenic SOA
                soa1tot = MORG1TOT(NU)+MORG1TOT(AI)+MORG1TOT(AS)+MORG1TOT(CS)
@@ -425,6 +463,7 @@ module gde_condensation
           do I=1,IMAX
             ccond(M,I,A_SUL)=CCONDSUL(M,I)
             ccond(M,I,A_MSA)=CCONDMSA(M,I)
+            ccond(M,I,A_IO3)=CCONDIOD(M,I)
             ccond(M,I,A_AMI)=CCONDNIT(M,I)
 !A_CHL
             if (ctchl > ctnit) then
@@ -623,10 +662,13 @@ module gde_condensation
          if (ICONS == 0) then
            excess(:,:,a_sul) = 0.0
            excess(:,:,a_msa) = 0.0
+           excess(:,:,a_io3) = 0.0
            loss(:,:,a_sul  ) = 0.0
            loss(:,:,a_msa  ) = 0.0
+           loss(:,:,a_io3  ) = 0.0
            trans(:,:,a_sul ) = 0.0
            trans(:,:,a_msa ) = 0.0
+           trans(:,:,a_io3 ) = 0.0
          endif
          if (ICONO == 0) then
            excess(:,:,a_or1) = 0.0; excess(:,:,a_or2) = 0.0; excess(:,:,a_or3) = 0.0
@@ -744,7 +786,8 @@ module gde_condensation
 
 ! Initialize vapor molecule volume [m^3]
        VVAPC(A_SUL)=MVAP/DENV 
-       VVAPC(A_MSA)=MVAP/DENV 
+       VVAPC(A_MSA)=MVAP/DENV
+       VVAPC(A_IO3)=MVAP/DENIO
        VVAPC(A_NIT)=MVAP/DENNI   ! VVAPN
        VVAPC(A_NH4)=MVAP/DENNI   ! VVAPN
        VVAPC(A_CHL)=MVAP/DENNI   ! VVAPN
@@ -1106,10 +1149,15 @@ module gde_condensation
           NVAP(A_SUL) =min(NVAP(A_SUL),CAT(A_SUL))
           DNVAP(A_SUL)=NVAPO(A_SUL)-NVAP(A_SUL)
           ! MSA
-          CAT(A_MSA)  =(CATO(A_MSA)*1.e6*(1./molec2ug(M_msa)))+NVAPO(A_MSA)      
+          CAT(A_MSA)  =(CATO(A_MSA)*1.e6*(1./molec2ug(M_msa)))+NVAPO(A_MSA)
           NVAP(A_MSA) =(NVAPO(A_MSA)+(FVAP(A_MSA)*DTIME))/(1._dp+LVAP(A_MSA)*DTIME)
           NVAP(A_MSA) =min(NVAP(A_MSA),CAT(A_MSA))
-          DNVAP(A_MSA)=NVAPO(A_MSA)-NVAP(A_MSA)                    
+          DNVAP(A_MSA)=NVAPO(A_MSA)-NVAP(A_MSA)
+          ! iodic acid
+          CAT(A_IO3)  =(CATO(A_IO3)*1.e6*(1./molec2ug(M_hio3)))+NVAPO(A_IO3)
+          NVAP(A_IO3) =(NVAPO(A_IO3)+(FVAP(A_IO3)*DTIME))/(1._dp+LVAP(A_IO3)*DTIME)
+          NVAP(A_IO3) =min(NVAP(A_IO3),CAT(A_IO3))
+          DNVAP(A_IO3)=NVAPO(A_IO3)-NVAP(A_IO3)
         endif
         IF (ICONO .EQ. 1) THEN
           ! SOA-1
@@ -1120,22 +1168,22 @@ module gde_condensation
           ! SOA-2
           CAT(A_OR2)  =(CATO(A_OR2)*1.e6*(1./molec2ug(M_oc(2))))+NVAPO(A_OR2)
           NVAP(A_OR2) =(NVAPO(A_OR2)+(FVAP(A_OR2)*DTIME))/(1._dp+(LVAP(A_OR2)*DTIME))
-          NVAP(A_OR2) =min(NVAP(A_OR2),CAT(A_OR2))             
+          NVAP(A_OR2) =min(NVAP(A_OR2),CAT(A_OR2))
           DNVAP(A_OR2)=NVAPO(A_OR2)-NVAP(A_OR2)
           ! SOA-3
           CAT(A_OR3)  =(CATO(A_OR3)*1.e6*(1./molec2ug(M_oc(3))))+NVAPO(A_OR3)
           NVAP(A_OR3) =(NVAPO(A_OR3)+(FVAP(A_OR3)*DTIME))/(1._dp+(LVAP(A_OR3)*DTIME))
-          NVAP(A_OR3) =min(NVAP(A_OR3),CAT(A_OR3))             
+          NVAP(A_OR3) =min(NVAP(A_OR3),CAT(A_OR3))        
           DNVAP(A_OR3)=NVAPO(A_OR3)-NVAP(A_OR3)
           ! SOA-4
           CAT(A_OR4)  =(CATO(A_OR4)*1.e6*(1./molec2ug(M_oc(4))))+NVAPO(A_OR4)
           NVAP(A_OR4) =(NVAPO(A_OR4)+(FVAP(A_OR4)*DTIME))/(1._dp+(LVAP(A_OR4)*DTIME))
-          NVAP(A_OR4) =min(NVAP(A_OR4),CAT(A_OR4)) 
+          NVAP(A_OR4) =min(NVAP(A_OR4),CAT(A_OR4))
           DNVAP(A_OR4)=NVAPO(A_OR4)-NVAP(A_OR4)
           ! SOA-5
           CAT(A_OR5) =(CATO(A_OR5)*1.e6*(1./molec2ug(M_oc(5))))+NVAPO(A_OR5)
           NVAP(A_OR5) =(NVAPO(A_OR5)+(FVAP(A_OR5)*DTIME))/(1._dp+(LVAP(A_OR5)*DTIME))
-          NVAP(A_OR5) =min(NVAP(A_OR5),CAT(A_OR5)) 
+          NVAP(A_OR5) =min(NVAP(A_OR5),CAT(A_OR5))
           DNVAP(A_OR5)=NVAPO(A_OR5)-NVAP(A_OR5)
           ! SOA-6
           CAT(A_OR6) =(CATO(A_OR6)*1.e6*(1./molec2ug(M_oc(6))))+NVAPO(A_OR6)
@@ -1145,31 +1193,31 @@ module gde_condensation
           ! SOA-7
           CAT(A_OR7)  =(CATO(A_OR7)*1.e6*(1./molec2ug(M_oc(7))))+NVAPO(A_OR7)
           NVAP(A_OR7) =(NVAPO(A_OR7)+(FVAP(A_OR7)*DTIME))/(1._dp+(LVAP(A_OR7)*DTIME))
-          NVAP(A_OR7) =min(NVAP(A_OR7),CAT(A_OR7))             
+          NVAP(A_OR7) =min(NVAP(A_OR7),CAT(A_OR7))
           DNVAP(A_OR7)=NVAPO(A_OR7)-NVAP(A_OR7)
           ! SOA-8
           CAT(A_OR8)  =(CATO(A_OR8)*1.e6*(1./molec2ug(M_oc(8))))+NVAPO(A_OR8)
           NVAP(A_OR8) =(NVAPO(A_OR8)+(FVAP(A_OR8)*DTIME))/(1._dp+(LVAP(A_OR8)*DTIME))
-          NVAP(A_OR8) =min(NVAP(A_OR8),CAT(A_OR8))             
+          NVAP(A_OR8) =min(NVAP(A_OR8),CAT(A_OR8))
           DNVAP(A_OR8)=NVAPO(A_OR8)-NVAP(A_OR8)
           ! SOA-9
           CAT(A_OR9)  =(CATO(A_OR9)*1.e6*(1./molec2ug(M_oc(9))))+NVAPO(A_OR9)
           NVAP(A_OR9) =(NVAPO(A_OR9)+(FVAP(A_OR9)*DTIME))/(1._dp+(LVAP(A_OR9)*DTIME))
-          NVAP(A_OR9) =min(NVAP(A_OR9),CAT(A_OR9)) 
-          DNVAP(A_OR9)=NVAPO(A_OR9)-NVAP(A_OR9)          
-  
+          NVAP(A_OR9) =min(NVAP(A_OR9),CAT(A_OR9))
+          DNVAP(A_OR9)=NVAPO(A_OR9)-NVAP(A_OR9)
+
         ENDIF
         IF (ICONA .EQ. 1) THEN
           ! amine
           CAT(A_AMI)  =(CATO(A_AMI)*1.e6*(1./molec2ug(M_nit)))+NVAPO(A_AMI)
           NVAP(A_AMI) =(NVAPO(A_AMI)+(FVAP(A_AMI)*DTIME))/(1._dp+LVAP(A_AMI)*DTIME)
           NVAP(A_AMI) =min(NVAP(A_AMI),CAT(A_AMI))
-          DNVAP(A_AMI)=NVAPO(A_AMI)-NVAP(A_AMI)           
+          DNVAP(A_AMI)=NVAPO(A_AMI)-NVAP(A_AMI)
           ! nitrate         
-          CAT(A_NIT)  =(CATO(A_NIT)*1.e6*(1./molec2ug(M_nit)))+NVAPO(A_NIT)         
-          NVAP(A_NIT) =(NVAPO(A_NIT)+(FVAP(A_NIT)*DTIME))/(1._dp+LVAP(A_NIT)*DTIME)          
+          CAT(A_NIT)  =(CATO(A_NIT)*1.e6*(1./molec2ug(M_nit)))+NVAPO(A_NIT)
+          NVAP(A_NIT) =(NVAPO(A_NIT)+(FVAP(A_NIT)*DTIME))/(1._dp+LVAP(A_NIT)*DTIME)     
           NVAP(A_NIT) =min(NVAP(A_NIT),CAT(A_NIT))
-          DNVAP(A_NIT)=NVAPO(A_NIT)-NVAP(A_NIT)                     
+          DNVAP(A_NIT)=NVAPO(A_NIT)-NVAP(A_NIT)                
         ENDIF
         IF (ICONX .EQ. 1) THEN
           ! ammonium (=NH4)
@@ -1177,17 +1225,17 @@ module gde_condensation
           CAT(A_NH4)  =(CATO(A_NH4)*1.e6*(1./molec2ug(M_nh3)))+NVAPO(A_NH4)
           NVAP(A_NH4) =(NVAPO(A_NH4)+(FVAP(A_NH4)*DTIME))/(1._dp+LVAP(A_NH4)*DTIME)
           NVAP(A_NH4) =min(NVAP(A_NH4),CAT(A_NH4))
-          DNVAP(A_NH4)=NVAPO(A_NH4)-NVAP(A_NH4)           
+          DNVAP(A_NH4)=NVAPO(A_NH4)-NVAP(A_NH4)      
           ! nitrate         
-          CAT(A_NIT)  =(CATO(A_NIT)*1.e6*(1./molec2ug(M_nit)))+NVAPO(A_NIT)         
-          NVAP(A_NIT) =(NVAPO(A_NIT)+(FVAP(A_NIT)*DTIME))/(1._dp+LVAP(A_NIT)*DTIME)          
-          NVAP(A_NIT) =min(NVAP(A_NIT),CAT(A_NIT))   
+          CAT(A_NIT)  =(CATO(A_NIT)*1.e6*(1./molec2ug(M_nit)))+NVAPO(A_NIT)
+          NVAP(A_NIT) =(NVAPO(A_NIT)+(FVAP(A_NIT)*DTIME))/(1._dp+LVAP(A_NIT)*DTIME)
+          NVAP(A_NIT) =min(NVAP(A_NIT),CAT(A_NIT))
           DNVAP(A_NIT)=NVAPO(A_NIT)-NVAP(A_NIT)
           ! chloride         
-          CAT(A_CHL)  =(CATO(A_CHL)*1.e6*(1./molec2ug(M_hcl)))+NVAPO(A_CHL)         
-          NVAP(A_CHL) =(NVAPO(A_CHL)+(FVAP(A_CHL)*DTIME))/(1._dp+LVAP(A_CHL)*DTIME)          
-          NVAP(A_CHL) =min(NVAP(A_CHL),CAT(A_CHL))   
-          DNVAP(A_CHL)=NVAPO(A_CHL)-NVAP(A_CHL)                
+          CAT(A_CHL)  =(CATO(A_CHL)*1.e6*(1./molec2ug(M_hcl)))+NVAPO(A_CHL)
+          NVAP(A_CHL) =(NVAPO(A_CHL)+(FVAP(A_CHL)*DTIME))/(1._dp+LVAP(A_CHL)*DTIME)  
+          NVAP(A_CHL) =min(NVAP(A_CHL),CAT(A_CHL))
+          DNVAP(A_CHL)=NVAPO(A_CHL)-NVAP(A_CHL)
         ENDIF
 
   end subroutine apc_update_gasc
@@ -1300,19 +1348,24 @@ module gde_condensation
            if ((ICONS == 1).or.(ICONS == 2)) then
              ! sulphuric acid and MSA            
              MMX(M,I,A_SUL)  = MASS(M,I,A_SUL) +   &
-                             KOND(M,I,A_SUL)*MB*DTIME*CONVM*ROOPW(M,I)/DENV          
-             MMX(M,I,A_SUL)  = MMX(M,I,A_SUL) + FLUXCM(M,I,A_SUL)                             
+                             KOND(M,I,A_SUL)*MB*DTIME*CONVM*ROOPW(M,I)/DENV
+             MMX(M,I,A_SUL)  = MMX(M,I,A_SUL) + FLUXCM(M,I,A_SUL)
              MMXO(M,I,A_SUL) = max(MMX(M,I,A_SUL), massmin)
              
              MMX(M,I,A_MSA)  = MASS(M,I,A_MSA) +   &
                              KOND(M,I,A_MSA)*MB*DTIME*CONVM*ROOPW(M,I)/DENMS
-             MMX(M,I,A_MSA)  = MMX(M,I,A_MSA) + FLUXCM(M,I,A_MSA)                             
-             MMXO(M,I,A_MSA) = max(MMX(M,I,A_MSA), massmin)              
+             MMX(M,I,A_MSA)  = MMX(M,I,A_MSA) + FLUXCM(M,I,A_MSA)           
+             MMXO(M,I,A_MSA) = max(MMX(M,I,A_MSA), massmin)
+
+             MMX(M,I,A_IO3)  = MASS(M,I,A_IO3) +   &
+                             KOND(M,I,A_IO3)*MIO*DTIME*CONVM*ROOPW(M,I)/DENIO
+             MMX(M,I,A_IO3)  = MMX(M,I,A_IO3) + FLUXCM(M,I,A_IO3)          
+             MMXO(M,I,A_IO3) = max(MMX(M,I,A_IO3), massmin)
            endif
            IF (ICONO .EQ. 1) THEN
              ! biogenic secondary oxygenated
              MMX(M,I,A_OR1)  = MASS(M,I,A_OR1) +   &
-                             KOND(M,I,A_OR1)*MOC(1)*DTIME*CONVM*ROOPW(M,I)/DENOC  
+                             KOND(M,I,A_OR1)*MOC(1)*DTIME*CONVM*ROOPW(M,I)/DENOC
              MMX(M,I,A_OR1)  = MMX(M,I,A_OR1) + FLUXCM(M,I,A_OR1)
              MMXO(M,I,A_OR1)  = max(MMX(M,I,A_OR1), massmin)  
              MMX(M,I,A_OR2)  = MASS(M,I,A_OR2) +    &
@@ -1396,7 +1449,8 @@ module gde_condensation
     !----------------------------------------------------------------------
 
 
-  subroutine condensation_coeff2(temp,rh,press,DPA,UPT_SU,UPT_MS,DC0,DNB,DNBMSA,IMAX)
+  subroutine condensation_coeff2(temp,rh,press,DPA,UPT_SU,UPT_MS,DC0,   &
+                                 DNB,DNBMSA,DNBIOD,IMAX)
     !----------------------------------------------------------------------
     !
     !****  Calculates condensation coefficients
@@ -1431,6 +1485,7 @@ module gde_condensation
     !        output:
     !           DNB      condensation coefficient H2SO4 [m^3 s^-1]
     !           DNBMSA   condensation coefficient MSA   [m^3 s^-1]
+    !           DNBIOD   condensation coefficient HIO3  [m^3 s^-1]
     !           DC0      diffusion coefficient          [cm^2 s^-1]
     !           UPT_SU   uptake rate H2SO4              [m4/(s*molec)]
     !           UPT_MS   uptake rate MSA                [m4/(s*molec)]
@@ -1464,7 +1519,7 @@ module gde_condensation
     INTEGER, intent(in)                              :: IMAX
     real( dp), intent(in)                            :: temp,press,rh
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPA
-    real( dp), dimension(MMAX,IMAX),intent(out)      :: DNB, DNBMSA
+    real( dp), dimension(MMAX,IMAX),intent(out)      :: DNB,DNBMSA,DNBIOD
     !REAL( dp), intent(out)                           :: GR
     real( dp), intent(out)                           :: UPT_SU,DC0
     real( dp), intent(out)                           :: UPT_MS
@@ -1474,7 +1529,7 @@ module gde_condensation
     real( dp)                              :: N1,DNBI,wabs
     real( dp), DIMENSION(hydimax)          :: rhoh,kprod
     real( dp), DIMENSION(hydimax)          :: rhohm
-    real( dp)                              :: DNBMSAI
+    real( dp)                              :: DNBMSAI,DNBIODI
     real( dp)                              :: rhohmt
     real( dp), DIMENSION(hydimax+1)        :: dc,lamda,ca,knm,bm
     real( dp), DIMENSION(MMAX,0:(IMAX+1))  :: RP
@@ -1483,15 +1538,16 @@ module gde_condensation
     INTEGER I,J,L,M
 
 ! new parameter list for H2SO4 and MSA (17.02.2013)
-    real,  dimension(2) :: &
-           alphs = (/ 0.5,   0.13   /), &
-           m_s   = (/ 98.08, 96.11  /), &
-           sigma = (/ 19.7,  40.3   /), &
-           as    = (/ 13.1,  15.7   /) 
+    real,  dimension(3) :: &
+           alphs = (/ 0.5,   0.13,  0.5    /), &
+           m_s   = (/ 98.08, 96.11, 175.91 /), &
+           sigma = (/ 19.7,  40.3,  19.7   /), &
+           as    = (/ 13.1,  15.7,  13.1   /) 
 ! overwrite with unity accommodation coefficients
      if (ICONS == 2) then
        alphs(1) = 1.0
        alphs(2) = 1.0
+       alphs(3) = 1.0
      endif
 ! get hydrate coefficients
      wabs=rh*waterps(temp)
@@ -1523,9 +1579,10 @@ module gde_condensation
        RP(M,I)=DPA(M,I)*0.5_dp  ! [m]
        DNBI=0._dp
        DNBMSAI=0._dp
-! Loop for condensation of H2SO4 and MSA as hydrates with up to five H2O molecules
+       DNBIODI=0._dp
+! Loop for condensation of H2SO4, MSA and HIO3 as hydrates with up to five H2O molecules
 ! all molar weights given in g/mol
-       DO J=1,2
+       DO J=1,3
        ! Corrected 30.01.2013 loop l=1,hydimax+1  
           do L=1, hydimax+1
 ! number of h2o molecules
@@ -1549,11 +1606,13 @@ module gde_condensation
           !write(6,*) 'J L DC CA LAMDA',J,L,DC(L),CA(L),LAMDA(L),BM(L),rhoh(L),rhoht
 ! DNBI and DNBMSAI in [cm^2/s]
             if (L==1) then  ! free acid
-              if (J.eq.1) dnbi    = dnbi+bm(L)*dc(L)*(1-rhoht)
+              if (J.eq.1) dnbi    = dnbi   +bm(L)*dc(L)*(1-rhoht)
               if (J.eq.2) dnbmsai = dnbmsai+bm(L)*dc(L)*(1-rhohmt)
+              if (J.eq.3) dnbiodi = dnbiodi+bm(L)*dc(L)*(1-rhoht)
             else            ! hydrates
-              if (J.eq.1) dnbi    = dnbi+bm(L)*dc(L)*rhoh(L-1)
-              if (J.eq.2) dnbmsai = dnbmsai+bm(L)*dc(l)*rhohm(L-1)
+              if (J.eq.1) dnbi    = dnbi   +bm(L)*dc(L)*rhoh(L-1)
+              if (J.eq.2) dnbmsai = dnbmsai+bm(L)*dc(L)*rhohm(L-1)
+              if (J.eq.3) dnbiodi = dnbiodi+bm(L)*dc(L)*rhoh(L-1)
             end if
 
           END DO
@@ -1561,7 +1620,8 @@ module gde_condensation
 ! DNB and DNBMSA in [m^3/s]
        DNB(M,I)    = 4.0e-4_dp*pi*RP(M,I)*DNBI
        DNBMSA(M,I) = 4.0e-4_dp*pi*RP(M,I)*DNBMSAI
-       !write(6,*) M,I,DNB(M,I),'rad:',RP(M,I)
+       DNBIOD(M,I) = 4.0e-4_dp*pi*RP(M,I)*DNBIODI
+      ! write(6,*) M,I,DNB(M,I),DNBIOD(M,I),'rad:',RP(M,I)
       end do
      end do
 
@@ -2086,7 +2146,9 @@ module gde_condensation
     rt=82.056*temp                 ! [cm^3 atm/mol]
     kpmol_cl=kpatm/rt**2           ! [(mol/cm^3)^2]
     ! kpmol: dissociation constant in (molec/cm^3)^2
-    kpmol_cl=kpmol_cl *N_A**2
+    !kpmol_cl=kpmol_cl *N_A**2
+    kpmol_cl=kpmol_cl *N_A
+    kpmol_cl=kpmol_cl *N_A
     ! reduced kp due to interaction with NO3
     kpmol_cl=kpmol_cl*0.01_dp
 
@@ -2232,6 +2294,7 @@ module gde_condensation
     real( dp), parameter                   :: cbet   = 10.0
     real( dp), parameter                   :: gamma1 = 1.0      ! activity coeff.
     real( dp), parameter                   :: conini = 1.e-3    ! ug m^-3
+    real( dp), parameter                   :: xinf   = 1.e-6
     !real( dp), parameter                   :: fom    = 0.3      ! fraction in OM
     real( dp), parameter                   :: bCO    = -0.3     ! carbon-oxygen non-ideality
     
@@ -2290,6 +2353,7 @@ module gde_condensation
     psat(5)=psatn(7)     ! PIOV
     psat(6)=psatn(8)     ! PSOV
 
+    ! molar ratio (ug/m3*mol/g)
     xsoa1=canull(1)/Morg(1)
     xsoa2=canull(2)/Morg(2)
     xsoa3=canull(3)/Morg(3)
@@ -2347,8 +2411,10 @@ module gde_condensation
     !     and >1 ... 2.5 for bulk O:C of 0.75:1
     ! ------------------------------------------
     ! total mass of solvent (organic mixture)
+    ! add infinitesimal mass to avoid division by zero
     xsolv = xsoa1+xsoa2+xsoa3+xsoa4+xsoa5+xsoa6          +    & 
-            xini1+xini2+xini3
+            xini1+xini2+xini3                            +    &
+            xinf
     ! Also add the O:C ratio of the non-volatile OCp !
     ! carbon fraction of the solvent
     fsolv = (xsoa1/xsolv)*fcar(1)   + &
@@ -2361,6 +2427,9 @@ module gde_condensation
             (xini1/xsolv)*ocfrc(3)  + &
             (xini2/xsolv)*ocfrc(6)  + &
             (xini3/xsolv)*ocfrc(9)
+
+    ! Limit fsolv to 0.3 to prevent very high gamma for PIOV and PSOV
+    fsolv = min(fsolv,0.3_dp)
 
     do i=1,nsoal
 

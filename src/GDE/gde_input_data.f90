@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -68,9 +65,9 @@ module gde_input_data
 ! Number of aerosol modes
      integer, parameter       :: MMAX=4
 ! Number of aerosol components 
-     integer, parameter       :: AMAX=20
+     integer, parameter       :: AMAX=21
 ! Number of condensable aerosol components
-     integer, parameter       :: QMAX=15
+     integer, parameter       :: QMAX=16
 ! Number of SOA components
      integer, parameter       :: NSOA=9
 ! NUmber of input aerosol components
@@ -83,22 +80,23 @@ module gde_input_data
      integer, parameter       :: A_NIT = 3
      integer, parameter       :: A_AMI = 4
      integer, parameter       :: A_NH4 = 5
-     integer, parameter       :: A_OR1 = 6
-     integer, parameter       :: A_OR2 = 7
-     integer, parameter       :: A_OR3 = 8
-     integer, parameter       :: A_OR4 = 9
-     integer, parameter       :: A_OR5 = 10
-     integer, parameter       :: A_OR6 = 11
-     integer, parameter       :: A_OR7 = 12
-     integer, parameter       :: A_OR8 = 13
-     integer, parameter       :: A_OR9 = 14
-     integer, parameter       :: A_CHL = 15
+     integer, parameter       :: A_IO3 = 6
+     integer, parameter       :: A_OR1 = 7
+     integer, parameter       :: A_OR2 = 8
+     integer, parameter       :: A_OR3 = 9
+     integer, parameter       :: A_OR4 = 10
+     integer, parameter       :: A_OR5 = 11
+     integer, parameter       :: A_OR6 = 12
+     integer, parameter       :: A_OR7 = 13
+     integer, parameter       :: A_OR8 = 14
+     integer, parameter       :: A_OR9 = 15
+     integer, parameter       :: A_CHL = 16
 !  non-volatile components
-     integer, parameter       :: A_SAL = 16 ! 11
-     integer, parameter       :: A_EBC = 17
-     integer, parameter       :: A_DUS = 18
-     integer, parameter       :: A_XXX = 19
-     integer, parameter       :: A_WAT = 20
+     integer, parameter       :: A_SAL = 17 ! 11
+     integer, parameter       :: A_EBC = 18
+     integer, parameter       :: A_DUS = 19
+     integer, parameter       :: A_XXX = 20
+     integer, parameter       :: A_WAT = 21
 
 !   Aerosol Components from input, number of components: 10
      integer, parameter       :: SU = 1
@@ -128,8 +126,9 @@ module gde_input_data
      real( dp),save           :: NTOT(NU:CS),VTOT(NU:CS),ROOPWAV(NU:CS)
      real( dp),save           :: MSULFTOT(NU:CS),MORGCTOT(NU:CS),MSALTTOT(NU:CS)
      real( dp),save           :: MAMMOTOT(NU:CS),MNITRTOT(NU:CS),MMSAPTOT(NU:CS)
-     real( dp),save           :: MXXXXTOT(NU:CS),MECBCTOT(NU:CS),MH2OTOT(NU:CS)
-     real( dp),save           :: MDUSTTOT(NU:CS)
+     real( dp),save           :: MIODATOT(NU:CS)
+     real( dp),save           :: MXXXXTOT(NU:CS),MECBCTOT(NU:CS),MDUSTTOT(NU:CS)
+     real( dp),save           :: MH2OTOT(NU:CS)
      real( dp),save           :: MORG1TOT(NU:CS),MORG2TOT(NU:CS),MORG3TOT(NU:CS)
      real( dp),save           :: MORG4TOT(NU:CS),MORG5TOT(NU:CS),MORG6TOT(NU:CS)
      real( dp),save           :: MORG7TOT(NU:CS),MORG8TOT(NU:CS),MORG9TOT(NU:CS)
@@ -169,8 +168,9 @@ module gde_input_data
      real( dp),save           :: camidoh,co3  
      real( dp),save           :: lat_deg,daynr,daytime,starttime
      real( dp),save           :: u10,lon_deg
-     real( dp),save           :: RH,zmbl
+     real( dp),save           :: RH,zmbl,owf
      real( dp),save           :: supersat
+     real( dp),save           :: VEN,BSOV_FT
 ! (chamber)     
      real( dp),save           :: alphanit
      real( dp),save           :: cno,cno2,cco3,jno2m,cipn
@@ -229,6 +229,8 @@ module gde_input_data
      real( dp), parameter     :: DENNI=1300._dp
 !   density MSAp aerosol [kg/m3]
      real( dp), parameter     :: DENMS=1770._dp
+!   density iodate aerosol [kg/m3]
+     real( dp), parameter     :: DENIO=4629._dp
 !   density sea salt aerosol [kg/m3]
      real( dp), parameter     :: DENSA=2240._dp
 !   density biological organic aerosol [kg/m3]

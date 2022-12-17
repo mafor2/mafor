@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -164,8 +161,10 @@ MODULE gde_constants
   real( dp), parameter :: MAN     = 63.*1.661e-27*2   ! nitric acid (kg/molec)
   real( dp), parameter :: MNH     = 18.*1.661e-27     ! ammonia (kg/molec)
   real( dp), parameter :: MAC     = 450.*1.661e-27    ! nucleating vapor (kg/molec)
+  real( dp), parameter :: MIO     = 175.91*1.661e-27  ! iodic acid (kg/molec)
   real( dp), parameter :: M_ABS   = 132.26            ! molar mass of ammonium bisulfate [g/mol] 
   real( dp), parameter :: M_msa   = 96.11
+  real( dp), parameter :: M_hio3  = 175.91
   real( dp), parameter :: M_nit   = 63.
   real( dp), parameter :: M_nh3   = 17.
   real( dp), parameter :: M_dma   = 45.08

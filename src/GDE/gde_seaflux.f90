@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2022  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -61,7 +58,7 @@ implicit none
 
 contains
 
-  subroutine seasaltemis(IMAX,DPA,u10,sst,sal,saltemis)
+  subroutine seasaltemis(IMAX,DPA,u10,sst,sal,owf,saltemis)
 
     !----------------------------------------------------------------------
     !
@@ -84,6 +81,7 @@ contains
     !           DPA:  dry particle diameter          [m]
     !           sst:  sea surface temperature        [K]
     !           sal:  salinity in seawater           [g/kg]
+    !           owf:  open water fraction            [-]
     !        output:
     !           saltemis: particle number flux       [1/(m^3s)]
     !
@@ -124,7 +122,12 @@ contains
     !      condensation nuclei activity.
     !      Atmos. Chem. Phys., 7, 1961-1971, 
     !      http://www.atmos-chem-phys.net/7/1961/2007/
-    ! 
+    !
+    !      Zinke, J., Nilsson, E. D., Zieger, P., and Salter, M. E. (2022)
+    !      The effect of seawater salinity and seawater temperature on sea salt
+    !      aerosol production. 
+    !      J. Geophys. Res.-Atmos., 127, e2021JD036005,
+    !      https://doi.org/10.1029/2021JD036005
     ! 
     !      modifications
     !      -------------
@@ -140,6 +143,7 @@ contains
      real( dp), intent(in)                           :: u10       ! [m/s]
      real( dp), intent(in)                           :: sst       ! [K]
      real( dp), intent(in)                           :: sal       ! [g/kg]
+     real( dp), intent(in)                           :: owf       ! [-]
 
      real( dp), dimension(MMAX,IMAX),intent(out)     :: saltemis  ! [1/(m^2*s)]
 
@@ -255,6 +259,11 @@ contains
                DFDR(M,I) = DFDR(M,I) * ( sal/SALREF )**third
         ! Particle number flux through sea surface is [m^-2 s^-1]
                saltemis(M,I) = DFDR(M,I)
+        ! Zinke et al. (2022): MA03 is roughly one order of magnitude higher
+        !                      at high salinity (sal = 35 g/kg)
+               saltemis(M,I) = saltemis(M,I) * 0.1_dp
+        ! Scaled with the open water fraction
+               saltemis(M,I) = saltemis(M,I) * owf
              endif
 
 
@@ -296,6 +305,12 @@ contains
         ! Particle number flux through sea surface is F [m^-2 s^-1]
         ! dF/dlogDp = dF/dDry * ln10 * Ddry
                saltemis(M,I) = DFDR(M,I) * 2.302585093 * DPA(M,I)
+
+        ! Test with scaling by 0.1
+               saltemis(M,I) = saltemis(M,I) * 0.1_dp
+
+        ! Scaled with the open water fraction
+               saltemis(M,I) = saltemis(M,I) * owf 
 
              endif
 
