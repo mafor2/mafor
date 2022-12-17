@@ -4,7 +4,7 @@ clear
 load ../output/concout.res
 
 % SPECIES - LWC
-smax=936;      %kpp_parameters NSPEC
+smax=937;      %kpp_parameters NSPEC
 smax=smax+1    %add 1 for time column
 smax=smax+1;   %NSPEC+1 = LWC(1)
 
@@ -32,33 +32,33 @@ LWCcs=7.0E-08;
 LWCcst = concout(:,smax);
 
 % aq. species  ind_xxx_a01
-ind_Hp_a04    = concout(:,932);
-ind_H2SO4_a04 = concout(:,138);
-ind_HSO4m_a04 = concout(:,686);
-ind_SO4mm_a04 = concout(:,918);
-ind_SO2_a04   = concout(:,652);
-ind_OH_a04    = concout(:,926);
-ind_HO2_a04   = concout(:,923);
-ind_H2O2_a04  = concout(:,908);
-ind_O3_a04    = concout(:,842);
+ind_Hp_a04    = concout(:,925);
+ind_H2SO4_a04 = concout(:,136);
+ind_HSO4m_a04 = concout(:,685);
+ind_SO4mm_a04 = concout(:,909);
+ind_SO2_a04   = concout(:,651);
+ind_OH_a04    = concout(:,934);
+ind_HO2_a04   = concout(:,926);
+ind_H2O2_a04  = concout(:,920);
+ind_O3_a04    = concout(:,910);
 ind_HONO_a04  = concout(:,919);
-ind_DMA_a04   = concout(:,876);
-ind_DMAp_a04  = concout(:,386);
-ind_NDMA_a04  = concout(:,891);
+ind_DMA_a04   = concout(:,898);
+ind_DMAp_a04  = concout(:,385);
+ind_NDMA_a04  = concout(:,888);
 %DMNNO2
-ind_DMN_a04   = concout(:,890);  
+ind_DMN_a04   = concout(:,880);  
 
 
 %gas-phase
-oh    = concout(:,928);
-ho2   = concout(:,925);
-o3    = concout(:,907);
-h2o2  = concout(:,844);
-hono  = concout(:,808);
-dma   = concout(:,933);
-ndma  = concout(:,502);
+oh    = concout(:,915);
+ho2   = concout(:,913);
+o3    = concout(:,911);
+h2o2  = concout(:,843);
+hono  = concout(:,810);
+dma   = concout(:,889);
+ndma  = concout(:,501);
 %DMNNO2
-dnno2 = concout(:,455);
+dnno2 = concout(:,453);
 
 
 % unit conversion

@@ -29,20 +29,25 @@ pncgt100smps  =[1 0.896830392 0.873825402 0.920414649];
 %AEROSOL MASS CONCENTRATION
 pmsulct=aerconc(:,2)+aerconc(:,3)+aerconc(:,4)+aerconc(:,5);
 %no msa_p
-%xxxx=seasalt (no BPBA)
-pmxxxct=aerconc(:,10)+aerconc(:,11)+aerconc(:,12)+aerconc(:,13);
-pmorgct=aerconc(:,14)+aerconc(:,15)+aerconc(:,16)+aerconc(:,17);
-pmamoct=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
-pmnitct=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
-pmecbct=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
-pmwatct=aerconc(:,38)+aerconc(:,39)+aerconc(:,40)+aerconc(:,41);
+%no io3_p
+pmxxxct=aerconc(:,14)+aerconc(:,15)+aerconc(:,16)+aerconc(:,17); % bpba
+pmorgct=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
+pmamoct=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
+pmnitct=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
+pmecbct=aerconc(:,30)+aerconc(:,31)+aerconc(:,32)+aerconc(:,33);
+pmdusct=aerconc(:,34)+aerconc(:,35)+aerconc(:,36)+aerconc(:,37);
+pmsalct=aerconc(:,38)+aerconc(:,39)+aerconc(:,40)+aerconc(:,41);
+pmwatct=aerconc(:,42)+aerconc(:,43)+aerconc(:,44)+aerconc(:,45);
 pmsulf =pmsulct*1.e-3;
+pmbpba =pmxxxct*1.e-3;
+pmorgt =pmorgct*1.e-3;
 pmammo =pmamoct*1.e-3;
 pmanit =pmnitct*1.e-3;
-pmwatt =pmwatct*1.e-3;
-pmdust =pmxxxct*1.e-3;
-pmorgt =pmorgct*1.e-3;
 pmecbt =pmecbct*1.e-3; 
+pmdust =pmdusct*1.e-3;
+pmsalt =pmsalct*1.e-3;
+pmwatt =pmwatct*1.e-3;
+
 % TOTAL in ug/m3 (dry mass)
 pmtotal=(pmorgct+pmecbct+pmsulct+pmxxxct+pmamoct+pmnitct)*1e-3;
 %pmtotal=(pmorgct+pmecbct+pmwatct+pmsulct+pmxxxct+pmamoct+pmnitct)*1e-3;

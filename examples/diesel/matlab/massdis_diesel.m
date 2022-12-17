@@ -29,10 +29,19 @@ inam=strrep(infileam,'.res','');
 yam=eval(inam);
 [row,col]=size(yam);                    %row=xxx col=61
 
+nc=22; % = number of aerosol compounds (amax) +1
 a=1;
-b=22;   %  1 x 21 + 1
-c=190;  %  9 x 21 + 1 
-d=568;  % 27 x 21 + 1
+b=1 *nc+1;   %  1 x 22 + 1
+c=9 *nc+1;   %  9 x 22 + 1 
+d=17*nc+1;   % 27 x 22 + 1
+
+%COMPOUND INDEX
+sul=1;
+blov=8;
+pelv=15;
+soot=18;
+pom=20;
+wat=21;
 
 %TOTAL MASS kg/m3-->ng/m3
 dmdlogdp_bin01=yam(a,2:col)   *1e12  *2.303;
@@ -41,40 +50,40 @@ dmdlogdp_bin03=yam(c,2:col)   *1e12  *2.303;
 dmdlogdp_bin04=yam(d,2:col)   *1e12  *2.303; 
 
 %Sulfate ng/m3
-dmdlogdp_bin01_sul=yam(a+1,2:col)    *2.303;
-dmdlogdp_bin02_sul=yam(b+1,2:col)    *2.303; 
-dmdlogdp_bin03_sul=yam(c+1,2:col)    *2.303; 
-dmdlogdp_bin04_sul=yam(d+1,2:col)    *2.303; 
+dmdlogdp_bin01_sul=yam(a+sul,2:col)    *2.303;
+dmdlogdp_bin02_sul=yam(b+sul,2:col)    *2.303; 
+dmdlogdp_bin03_sul=yam(c+sul,2:col)    *2.303; 
+dmdlogdp_bin04_sul=yam(d+sul,2:col)    *2.303; 
 
 %SOA-2 ng/m3 (BLOV)
-dmdlogdp_bin01_adi=yam(a+7,2:col)    *2.303; 
-dmdlogdp_bin02_adi=yam(b+7,2:col)    *2.303; 
-dmdlogdp_bin03_adi=yam(c+7,2:col)    *2.303; 
-dmdlogdp_bin04_adi=yam(d+7,2:col)    *2.303; 
+dmdlogdp_bin01_adi=yam(a+blov,2:col)    *2.303; 
+dmdlogdp_bin02_adi=yam(b+blov,2:col)    *2.303; 
+dmdlogdp_bin03_adi=yam(c+blov,2:col)    *2.303; 
+dmdlogdp_bin04_adi=yam(d+blov,2:col)    *2.303; 
 
 %SOA-9 ng/m3 (PELV)
-dmdlogdp_bin01_elv=yam(a+14,2:col)   *2.303;
-dmdlogdp_bin02_elv=yam(b+14,2:col)   *2.303; 
-dmdlogdp_bin03_elv=yam(c+14,2:col)   *2.303; 
-dmdlogdp_bin04_elv=yam(d+14,2:col)   *2.303; 
+dmdlogdp_bin01_elv=yam(a+pelv,2:col)   *2.303;
+dmdlogdp_bin02_elv=yam(b+pelv,2:col)   *2.303; 
+dmdlogdp_bin03_elv=yam(c+pelv,2:col)   *2.303; 
+dmdlogdp_bin04_elv=yam(d+pelv,2:col)   *2.303; 
 
 %SOOT
-dmdlogdp_bin01_ebc=yam(a+17,2:col)   *2.303; 
-dmdlogdp_bin02_ebc=yam(b+17,2:col)   *2.303; 
-dmdlogdp_bin03_ebc=yam(c+17,2:col)   *2.303; 
-dmdlogdp_bin04_ebc=yam(d+17,2:col)   *2.303; 
+dmdlogdp_bin01_ebc=yam(a+soot,2:col)   *2.303; 
+dmdlogdp_bin02_ebc=yam(b+soot,2:col)   *2.303; 
+dmdlogdp_bin03_ebc=yam(c+soot,2:col)   *2.303; 
+dmdlogdp_bin04_ebc=yam(d+soot,2:col)   *2.303; 
 
 %POM
-dmdlogdp_bin01_pom=yam(a+19,2:col)   *2.303; 
-dmdlogdp_bin02_pom=yam(b+19,2:col)   *2.303; 
-dmdlogdp_bin03_pom=yam(c+19,2:col)   *2.303; 
-dmdlogdp_bin04_pom=yam(d+19,2:col)   *2.303; 
+dmdlogdp_bin01_pom=yam(a+pom,2:col)   *2.303; 
+dmdlogdp_bin02_pom=yam(b+pom,2:col)   *2.303; 
+dmdlogdp_bin03_pom=yam(c+pom,2:col)   *2.303; 
+dmdlogdp_bin04_pom=yam(d+pom,2:col)   *2.303; 
 
 %H2O
-dmdlogdp_bin01_wat=yam(a+20,2:col)   *2.303; 
-dmdlogdp_bin02_wat=yam(b+20,2:col)   *2.303; 
-dmdlogdp_bin03_wat=yam(c+20,2:col)   *2.303; 
-dmdlogdp_bin04_wat=yam(d+20,2:col)   *2.303;
+dmdlogdp_bin01_wat=yam(a+wat,2:col)   *2.303; 
+dmdlogdp_bin02_wat=yam(b+wat,2:col)   *2.303; 
+dmdlogdp_bin03_wat=yam(c+wat,2:col)   *2.303; 
+dmdlogdp_bin04_wat=yam(d+wat,2:col)   *2.303;
 
 figure(1);clf
 axes('linewidth',1.6,'fontsize',20)

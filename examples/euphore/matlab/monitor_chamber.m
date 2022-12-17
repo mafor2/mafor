@@ -20,20 +20,20 @@ M=101325./(R*TM)
 ppb=M/1.E9
 ppt=M/1.e12
 
-o3mod  =concout(:,907);
-nomod  =concout(:,930);
-no2mod =concout(:,920);
-hono   =concout(:,808);
-ohmod  =concout(:,928);
-hno3mod=concout(:,879);
-comod  =concout(:,901);
+o3mod  =concout(:,911);
+nomod  =concout(:,932);
+no2mod =concout(:,927);
+hono   =concout(:,810);
+ohmod  =concout(:,915);
+hno3mod=concout(:,877);
+comod  =concout(:,903);
 mea    =concout(:,401);
 %LTMB   
-tmb    =concout(:,314);  
+tmb    =concout(:,312);  
 %H2NCHO
-formd  =concout(:,609);   
+formd  =concout(:,607);   
 %MEANNO2
-nitmd  =concout(:,293);   
+nitmd  =concout(:,291);   
 
 o3mod=o3mod/ppb;
 nomod=nomod/ppb;
@@ -48,11 +48,10 @@ comod=comod/ppb;
 
 
 % ORG and MEA condensation
-%pmxxxxt=aerconc(:,10)+aerconc(:,11)+aerconc(:,12)+aerconc(:,13);
-pmorgct=aerconc(:,14)+aerconc(:,15)+aerconc(:,16)+aerconc(:,17);
-pmammot=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
-pmnitrt=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
-pmecbct=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
+pmorgct=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
+pmammot=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
+pmnitrt=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
+pmecbct=aerconc(:,30)+aerconc(:,31)+aerconc(:,32)+aerconc(:,33);
 pmorgt =pmorgct*1.e-3;
 %pmxxxt =pmxxxxt*1.e-3; 
 pmno3t =pmnitrt*1.e-3;

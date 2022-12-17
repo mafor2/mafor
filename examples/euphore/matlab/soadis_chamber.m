@@ -34,11 +34,11 @@ soapar3=soadis(:,22);
 soatot=soapar1+soapar2+soapar3;
 
 % ORG and MEA condensation
-%pmxxxxt=aerconc(:,10)+aerconc(:,11)+aerconc(:,12)+aerconc(:,13);
-pmorgct=aerconc(:,14)+aerconc(:,15)+aerconc(:,16)+aerconc(:,17);
-pmammot=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
-pmnitrt=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
-pmecbct=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
+pmorgct=aerconc(:,18)+aerconc(:,19)+aerconc(:,20)+aerconc(:,21);
+pmammot=aerconc(:,22)+aerconc(:,23)+aerconc(:,24)+aerconc(:,25);
+pmnitrt=aerconc(:,26)+aerconc(:,27)+aerconc(:,28)+aerconc(:,29);
+pmecbct=aerconc(:,30)+aerconc(:,31)+aerconc(:,32)+aerconc(:,33);
+
 pmorgt =pmorgct*1.e-3;
 %pmxxxt =pmxxxxt*1.e-3; 
 pmno3t =pmnitrt*1.e-3;
