@@ -4,7 +4,7 @@
 #  Version 2.0 (Community Model)
 #.........................................................................
 # COPYRIGHT
-#    (C) 2011-2021 Dr. Matthias Karl
+#    (C) 2011-2022 Dr. Matthias Karl
 #
 #    Contact Information:
 #          Dr. Matthias Karl
@@ -65,7 +65,7 @@
 ######################################################################
 .SUFFIXES: .f90
 
-BASEDIR  = /home/matthias/MAFOR_GIT/mafor/src
+BASEDIR  = /home/matthias/MAFOR_GIT/mafor_v210/src
 
 GDEDIR   = ${BASEDIR}/GDE/
 CHEDIR   = ${BASEDIR}/CHEM/
@@ -95,7 +95,7 @@ INFLAGS  = -I$(INCDIR)
 LIBS     = -L${INCDIR} -lmessy -lmtem
 
 
-TARGET   = maforv199.exe
+TARGET   = maforv210.exe
 
 # SOURCES #
 
