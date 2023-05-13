@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2023  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -52,6 +52,7 @@ module gde_condensation
 
     use gde_input_data, only      : MMAX,QMAX,AMAX
     use gde_input_data, only      : NU,AI,AS,CS
+    use gde_input_data, only      : aqmax
     use gde_input_data, only      : NSOA
     use gde_input_data, only      : DENV,DENMS,DENIO
     use gde_input_data, only      : DENXX,DENNI,DENAM
@@ -62,7 +63,6 @@ module gde_condensation
     use gde_input_data, only      : A_OR6,A_OR7,A_OR8,A_OR9
     use gde_input_data, only      : A_XXX,A_SAL,A_CHL
     use gde_input_data, only      : CONVM,massmin,MVAP,DIFV
-    use gde_input_data, only      : aqmax
     use gde_input_data, only      : nucomin
     use gde_sensitiv,   only      : ICONS,ICONA,ICONO,ICONX,ISOA 
     use gde_sensitiv,   only      : ICONW
@@ -79,6 +79,7 @@ module gde_condensation
     public :: condensation
     public :: apc_update_pmass
     public :: apc_update_gasc
+    public :: condensation_incloud
     public :: condensation_coeff2
     public :: nitcondens
 
@@ -325,6 +326,8 @@ module gde_condensation
              !print *,'pNH3 2',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
            else if ( NVAP(A_CHL)*NVAP(A_NH4)*1.e-12 > KPNCL ) then
              nsv(a_nh4) = psnh4
+         ! TEST MSK 01.04.2023 condensation of NH4Cl
+         !    nsv(a_nh4) = psnh4*0.1
              !print *,'pNH3 3',nsv(a_nh4),ctnh4,ctso4,ctnh4/ctso4
            else
              nsv(a_nh4) = max(nsv(a_sul),psmin_nh3)
@@ -381,7 +384,7 @@ module gde_condensation
                soa2tot = MORG2TOT(NU)+MORG2TOT(AI)+MORG2TOT(AS)+MORG2TOT(CS)
              ! aromatic SOA
                soa4tot = MORG4TOT(NU)+MORG4TOT(AI)+MORG4TOT(AS)+MORG4TOT(CS)
-               soa4tot = MORG5TOT(NU)+MORG5TOT(AI)+MORG5TOT(AS)+MORG5TOT(CS)
+               soa5tot = MORG5TOT(NU)+MORG5TOT(AI)+MORG5TOT(AS)+MORG5TOT(CS)
              ! nalkene SOA
                soa7tot = MORG7TOT(NU)+MORG7TOT(AI)+MORG7TOT(AS)+MORG7TOT(CS)
                soa8tot = MORG8TOT(NU)+MORG8TOT(AI)+MORG8TOT(AS)+MORG8TOT(CS)
@@ -438,8 +441,9 @@ module gde_condensation
                NSV(A_OR9)=NSV(A_OR9)/(k_B*temp)
          endif
 
-        ! print *,"nsv(T) molec/m^3 ",nsv(A_OR1),nsv(A_OR2),nsv(A_OR3),nsv(A_OR4),nsv(A_OR5)
-        ! print *,"nsv(T) molec/m^3 ",nsv(A_OR6),nsv(A_OR7),nsv(A_OR8),nsv(A_OR9)
+        ! print *,"nsv(T) molec/m^3 ",nsv(A_OR1),nsv(A_OR2),nsv(A_OR3)
+        ! print *,"nsv(T) molec/m^3 ",nsv(A_OR4),nsv(A_OR5),nsv(A_OR6)
+        ! print *,"nsv(T) molec/m^3 ",nsv(A_OR7),nsv(A_OR8),nsv(A_OR9)
 
 
 ! condensation coefficient of organic vapors
@@ -905,14 +909,15 @@ module gde_condensation
                    FLUXC(M,I)=FLUXC(M,I)+N(M,I)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
                    FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
                  ! mass fluxes                
+                 ! MSK 13.05.2023 Fixed brackets around volume ratio term
                    do Q=1,QMAX                              
                      FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
-                     FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
-                     FLUXCM(M,I+1,Q)=FLUXCM(M,I+1,Q)+MASS(M,I,Q)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+                     FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
+                     FLUXCM(M,I+1,Q)=FLUXCM(M,I+1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
                    end do
                    FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
-                   FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
-                   FLUXCMC(M,I+1)=FLUXCMC(M,I+1)+MASS(M,I,A_XXX)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+                   FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
+                   FLUXCMC(M,I+1)=FLUXCMC(M,I+1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
                  ELSE  ! VPNEW LT VPT(M,I)                 
                  ! number fluxes
                     FLUXC(M,I)=FLUXC(M,I)-N(M,I)
@@ -1441,6 +1446,224 @@ module gde_condensation
 
 
   end subroutine apc_update_pmass
+
+
+
+    !----------------------------------------------------------------------
+    !----------------  INCLOUD CONDENSATION       -------------------------
+    !----------------------------------------------------------------------
+
+  subroutine condensation_incloud( IMAX,DTIME,VPT,ROOP,DPA,    &
+                 N,MASS,caqdiff, DPCRIT,                       &
+                 FLUXC,FLUXCM )
+    !********************************************************************
+    !
+    !     C  O  N  D  E  N  S  A  T  I  O  N   I N   C L O U D
+    !
+    !********************************************************************
+    !
+    ! Condensation in cloud module
+    !
+    !   Computes condensation flux for aqueous phase modes
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !  INPUT
+    !  -----
+    !
+    !  DPCRIT: critical diameter                  [m]
+    !     VPT: particle volume in bin             [m^3]
+    !     DPA: particle diameter                  [m^3]
+    !    ROOP: wet particle density               [kg/m^3]
+    !       N: particle number conc. in bin       [1/m^3]
+    !    MASS: component mass conc. in bin        [ng/m^3]
+    ! CAQDIFF: concentration change dCaq          [ng/m^3]
+    ! 
+    !
+    !  OUTPUT
+    !  ------
+    !
+    !  FLUXC:  condensation flux N in bin      [1/m^3] 
+    ! FLUXCM:  condensation flux m in bin      [ng/m^3]
+    !
+    !  reference
+    !  ---------
+    !  S.N Pandis, J.H. Seinfeld, C. Pilinis,
+    !      Chemical composition differences in fog and
+    !      cloud droplets of different sizes,
+    !      Atmospheric Environment, 24A(7), 1957-1969, 1990a
+    !
+    !********************************************************************   
+    
+     implicit none
+
+    ! input
+    integer, intent(in)                               :: IMAX
+    real( dp), intent(in)                             :: DTIME
+    real( dp), intent(in)                             :: DPCRIT
+
+    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
+    real( dp), dimension(MMAX,IMAX),intent(in)        :: VPT
+    real( dp), dimension(MMAX,IMAX),intent(in)        :: N
+    real( dp), dimension(MMAX,IMAX),intent(in)        :: ROOP
+    real( dp),dimension(aqmax,APN),intent(in)         :: caqdiff
+
+    real( dp), dimension(MMAX,IMAX,AMAX-1),intent(in) :: MASS
+         
+    ! output
+    real( dp), dimension(MMAX,IMAX),intent(out)       :: FLUXC
+    real( dp), dimension(MMAX,IMAX,aqmax),intent(out) :: FLUXCM
+
+    ! local
+    real( dp)                                         :: VPNEW
+    real( dp)                                         :: JCOND
+    real( dp),dimension(aqmax,APN)                    :: cdiff
+
+    integer     :: I,M
+    integer     :: L
+
+
+       ! initialization
+         FLUXC(:,:)=0._dp
+         FLUXCM(:,:,:)=0._dp
+
+
+       ! Calculate change of volume in a size bin
+       ! Based on Pandis et al. (1990a) EQ (7)
+       ! JCOND = Dp^2*dDp/dt = dV/dt
+       ! convert kg to ng with CONVM
+       ! AI mode is aqueous phase mode 1
+
+         do M=AI,MMAX             
+           do I=1,IMAX
+
+             VPNEW = VPT(M,I)
+             JCOND = 0._dp
+
+          ! JCOND has unit [m^6/ng]
+          ! Conversion of ROOP from kg/m^3 into ng/m^3
+             if (N(M,I).gt.nucomin) then
+               JCOND = 2._dp/(pi*ROOP(M,I)*CONVM*N(M,I))
+             endif
+
+
+          ! No growth below critical diameter
+             if (DPA(M,I).le.DPCRIT) then
+               VPNEW=VPT(M,I)
+             else
+
+          ! New volume after condensation
+                do L=1,aqmax
+
+          ! Weighting of mass change rate dCaq for each bin
+                  !!cdiff(L,M-1) = caqdiff(L,M-1) * (DPAW(M,I)/sumdpcs(M))
+                  cdiff(L,M-1) = caqdiff(L,M-1) / IMAX
+
+          ! Condensation of aqueous species L
+          ! cdiff: change of mass rate per bin [ng/m^3/s]
+          ! zkc=M-1
+                  VPNEW = VPNEW + JCOND * cdiff(L,M-1) *DTIME
+
+               enddo
+             endif
+
+             ! Lower bound of volume growth
+             VPNEW=max( VPT(M,I),VPNEW )
+             ! Upper bound of volume growth
+             if (I.eq.IMAX) then
+               if (M.eq.CS) then
+                  VPNEW=min( VPT(M,I)*1.10,VPNEW )
+               else
+                  VPNEW=min( VPT(M+1,1),VPNEW )
+               endif
+             else
+              VPNEW=min( VPT(M,I+1),VPNEW )
+             endif
+
+          !   print *,'cond',M,I,N(M,I),JCOND,cdiff(1,M-1),VPT(M,I),VPNEW
+
+
+       ! Subroutine condensation_incloud
+       ! Compute condensation flux for
+       ! aqueous phase modes
+       ! Aerosol species
+       !      SVI = 1   => A_SUL (1)
+       !      MSA = 2   => A_MSA (2)
+       !      NO3 = 3   => A_NIT (3)
+       !      DMA = 4   => A_AMI (4)
+       !      NH4 = 5   => A_NH4 (5)
+       !      IOD = 6   => A_IO3 (6)
+       !      OXA = 7   => A_OR1 (7)
+       !      SUC = 8   => A_OR2 (8)
+       !      SAL = 9   => A_SAL (17)
+
+             if (I.eq.1) then
+          ! number fluxes
+               FLUXC(M,I)=FLUXC(M,I)-N(M,I)
+               FLUXC(M,I)=FLUXC(M,I)+N(M,I)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+               FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+          ! mass fluxes of the aqueous phase species (1 to aqmax-1)  
+               do L=1,aqmax-1               
+                 FLUXCM(M,I,L)=FLUXCM(M,I,L)-MASS(M,I,L)
+                 FLUXCM(M,I,L)=FLUXCM(M,I,L)+MASS(M,I,L)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+                 FLUXCM(M,I+1,L)=FLUXCM(M,I+1,L)+MASS(M,I,L)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+               enddo
+          ! mass flux of seasalt
+               FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)-MASS(M,I,A_SAL)
+               FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)+MASS(M,I,A_SAL)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+               FLUXCM(M,I+1,aqmax)=FLUXCM(M,I+1,aqmax)+MASS(M,I,A_SAL)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+            endif
+
+             if ((I.gt.1).and.(I.lt.IMAX)) then
+          ! number fluxes
+               FLUXC(M,I)=FLUXC(M,I)-N(M,I)
+               FLUXC(M,I)=FLUXC(M,I)+N(M,I)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+               FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+          ! mass fluxes of the aqueous phase species (1 to aqmax-1)  
+               do L=1,aqmax-1             
+                  FLUXCM(M,I,L)=FLUXCM(M,I,L)-MASS(M,I,L)
+                  FLUXCM(M,I,L)=FLUXCM(M,I,L)+MASS(M,I,L)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+                  FLUXCM(M,I+1,L)=FLUXCM(M,I+1,L)+MASS(M,I,L)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+               enddo
+          ! mass flux of seasalt
+               FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)-MASS(M,I,A_SAL)
+               FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)+MASS(M,I,A_SAL)*(VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I))
+               FLUXCM(M,I+1,aqmax)=FLUXCM(M,I+1,aqmax)+MASS(M,I,A_SAL)*(VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I))
+             endif
+
+
+             if (I.eq.IMAX) then
+          ! number fluxes
+               FLUXC(M,I)=FLUXC(M,I)-N(M,I)
+               if (M.lt.CS) then
+                 FLUXC(M,I)=FLUXC(M,I)+N(M,I)*(VPT(M+1,1)-VPNEW)/(VPT(M+1,1)-VPT(M,I))
+                 FLUXC(M+1,1)=FLUXC(M+1,1)+N(M,I)*(VPNEW-VPT(M,I))/(VPT(M+1,1)-VPT(M,I))
+               endif
+          ! mass fluxes of the aqueous phase species (1 to aqmax-1)  
+               do L=1,aqmax-1
+                  FLUXCM(M,I,L)=FLUXCM(M,I,L)-MASS(M,I,L)
+                 if (M.lt.CS) then 
+                   FLUXCM(M,I,L)=FLUXCM(M,I,L)+MASS(M,I,L)*(VPT(M+1,1)-VPNEW)/(VPT(M+1,1)-VPT(M,I))
+                   FLUXCM(M+1,1,L)=FLUXCM(M+1,1,L)+MASS(M,I,L)*(VPNEW-VPT(M,I))/(VPT(M+1,1)-VPT(M,I))
+                 endif
+               enddo
+          ! mass flux of seasalt
+               FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)-MASS(M,I,A_SAL)
+               if (M.lt.CS) then 
+                 FLUXCM(M,I,aqmax)=FLUXCM(M,I,aqmax)+       &
+                                   MASS(M,I,A_SAL)*(VPT(M+1,1)-VPNEW)/(VPT(M+1,1)-VPT(M,I))
+                 FLUXCM(M+1,1,aqmax)=FLUXCM(M+1,1,aqmax)+   &
+                                   MASS(M,I,A_SAL)*(VPNEW-VPT(M,I))/(VPT(M+1,1)-VPT(M,I))
+               endif
+             endif
+
+        enddo
+      enddo
+
+
+  end subroutine condensation_incloud
 
 
 
@@ -2150,7 +2373,8 @@ module gde_condensation
     kpmol_cl=kpmol_cl *N_A
     kpmol_cl=kpmol_cl *N_A
     ! reduced kp due to interaction with NO3
-    kpmol_cl=kpmol_cl*0.01_dp
+    !kpmol_cl=kpmol_cl*0.01_dp
+    kpmol_cl=kpmol_cl*0.05_dp
 
     !! Equil. conc. of ammonium in molec/cm^3
     cnull=camin-cnac-cchl
