@@ -119,7 +119,9 @@
       integer              :: kount
 
 ! *** Simplex initial information
-      integer, parameter   :: maxcnt = 500
+      integer, parameter   :: maxcnt1 = 500
+! stop at 20 error evaluations for AI mode
+      integer, parameter   :: maxcnt2 = 20
       real, parameter      :: errmin = 1.0e-03
       !scaling <0 expands, >0 shrinks, 0: no scaling
       real, parameter      :: scalf  = -0.1
@@ -185,15 +187,15 @@
 
 ! *** Parameter (beta) estimates
       real, dimension(nm), parameter :: es2_gmd   = (/             &
-                                        9.8, 40.0, 110.0, 250.0 /)
+                                        9.8, 40.0, 120.0, 270.0 /)
       real, dimension(nm), parameter :: es2_sigma = (/             &
-                                        1.30, 1.75, 1.65, 1.80 /)
+                                        1.30, 1.75, 1.70, 1.80 /)
       real, dimension(nm), parameter :: es2_mm    = (/             &
                                         0.005, 350.0, 3.e3, 7.e3 /)
 
 ! *** Parameter (beta) upper limits
       real, dimension(nm), parameter :: max2_gmd   = (/             &
-                                        10.0, 80.0, 160.0, 800.0 /)
+                                        10.0, 80.0, 180.0, 800.0 /)
       real, dimension(nm), parameter :: max2_sigma = (/             &
                                         1.60, 1.90, 2.10, 2.20 /)
       real, dimension(nm), parameter :: max2_mm    = (/             &
@@ -203,7 +205,7 @@
       real, dimension(nm), parameter :: min2_gmd   = (/             &
                                         1.0, 15.0, 70.0, 140.0 /) 
       real, dimension(nm), parameter :: min2_sigma = (/             &
-                                        1.30, 1.65, 1.60, 1.60 /)
+                                        1.30, 1.65, 1.65, 1.60 /)
       real, dimension(nm), parameter :: min2_mm    = (/             &
                                         0.001, 10.0, 100.0, 100.0 /)
 

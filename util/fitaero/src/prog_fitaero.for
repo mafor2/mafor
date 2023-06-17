@@ -5,7 +5,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2020  Matthias Steffen Karl
+!*    Copyright (C) 2011-2023  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -47,8 +47,21 @@
 !***      FITAERO
 !***      Aerosol size distribution fit tool
 !***      for MAFOR's inaero.dat
+!***      Version: 1.1
+!***
 !***********************************************************************
-
+!*
+!***********************************************************************
+!***
+!***      REVISION HISTORY
+!***
+!***  15 Jun 2023 M. Karl L763 close(funit_out_inaero)
+!***  17 Jun 2023 M. Karl      maxcnt = 20 error evaluations (m=2)
+!***  17 Jun 2023 M. Karl      improved mass estimate calculation
+!***  17 Jun 2023 M. Karl      output_fitaero subtract water mass (m>2)
+!***
+!***
+!***********************************************************************
       program prog_fitaero
 
 !***********************************************************************
@@ -89,7 +102,7 @@
 
 ! Simplex
       integer                     :: nsim
-      integer                     :: i,j,k,m,o
+      integer                     :: i,j,k,m,o,b
       integer                     :: ilo, ihi, nhi
       integer                     :: mstart
       real                        :: erfr, ex
@@ -102,6 +115,8 @@
       real, dimension(nm)         :: wamass
       real, dimension(nm)         :: shrmode
       integer                     :: nobsm
+      real                        :: mass
+      real                        :: numb
       real                        :: yhat
       real                        :: massbin
       real                        :: masswbin
@@ -254,6 +269,7 @@
 !     Find lower and upper bin of each mode
       call findmodes(dataa,n_obins,mstart,binlo,binup)
 
+      print *,'start mode',mstart
       print *,'bin low',binlo(:)
       print *,'bin  up',binup(:)
 
@@ -264,7 +280,7 @@
         betamin(m,1) = dataa(binlo(m),1)
       enddo
 
-!     Adjust Aitken mode limits
+!     Adjust Aitken (AI) mode limits
       if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
          betamin(2,1) = min1_gmd(2)
       endif
@@ -292,6 +308,9 @@
         endif
         if (dataa(i,2).eq.accmax) then
            beta(3,1) = dataa(i,1)
+           if (dpmax<2.0E-6) then
+             beta(3,1) = beta(3,1) * 1.2
+           endif
         endif
       enddo
 
@@ -299,12 +318,19 @@
 !     Estimate of mass based on observed dN and GMD_es
 !     MASS[ng/m3] = N[1/cm3]*VPT(gmd)[m3]*CONV[ng/kg]*DENS[kg/m3]*1.E6
       do m = 1, nm
-        !print *,'gmd',m,beta(m,1)
-        ntot(m)    = sum(dataa(binlo(m):binup(m),2))
-        vpt(m)     = (pi/6.)*(beta(m,1)*1.e-9)**3.0
-        beta(m,3)  = ntot(m)*vpt(m)*conv*dens(m)*1.e6
+        ntot(m)    = 0.0
+        beta(m,3)  = 0.0
+        mass       = 0.0
+        numb       = 0.0
+        do b = binlo(m), binup(m)
+          numb       = (dataa(b,2))
+          vpt(m)     = (pi/6.)*((dataa(b,1))*1.e-9)**3.0
+          mass       = numb*vpt(m)*conv*dens(m)*1.e6
+          beta(m,3)  = beta(m,3) + mass
+          ntot(m)    = ntot(m)   + numb
+        enddo
+        print *,'mass es',m,beta(m,3)
         shrmode(m) = 1.0
-        print *,'es',m,ntot(m),vpt(m),beta(m,3)
       enddo
 
       betamin(:,3)=betamin(:,3)*0.08
@@ -315,6 +341,17 @@
           betamax(m,3) = beta(m,3)*300.0
         enddo
       endif
+!     Attention AS mode can have too high mass estimate
+!     for FINE Non-Combustion
+      if (dpmax<2.0E-6) then
+         betamax(3,3)  = betamax(3,3)/300.0  ! undo the above
+         betamax(3,3)  = betamax(3,3)*0.8
+         betamax(4,3)  = betamax(4,3)*0.8
+         beta(2,3)     = beta(2,3)*2.0
+         beta(3,3)     = beta(3,3)*0.5
+         beta(4,3)     = beta(4,3)*0.5
+      endif
+
 
 !     Update lower mass limit (AI Background)
       if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
@@ -337,7 +374,6 @@
           betamin(2,3) = 200.0  ! ug/m^3 (coastal)
         endif
       endif
-
 
 !     Generic Nucleation Mode (mstart=2)
 !     Add small mass in nucleation mode if zero
@@ -368,10 +404,10 @@
       print *,'sig est',beta(:,2)
 
       print *,'mm min',betamin(:,3)
-      print *,'mm est',beta(:,3)
       print *,'mm max',betamax(:,3)
+      print *,'mm est',beta(:,3)
 
-    !! stop
+   !!  stop
 
 ! **************************
 ! *** BEGIN THE SIMPLEX  ***
@@ -512,7 +548,8 @@
  
 ! stopping criterion
 
-       if (kount.gt.maxcnt) then
+       if ( ((m==2).and.(kount.gt.maxcnt2))  &
+             .or. ((m.ne.2).and.(kount.gt.maxcnt1))  ) then
          print *,'!!!max. number simulations reached for mode ',m
          !call stopit_fitaero('Max. number of simulations reached')
          if (fe_log) then
@@ -527,7 +564,9 @@
        erf(ilo) = max(erf(ilo),1.e-18)
 
        if(( (abs(erf(ilo)-erf(ihi))/erf(ilo)).lt.errmin) &
-            .or.(kount.gt.maxcnt)) then
+            .or.((m==2).and.(kount.gt.maxcnt2))          &
+            .or.((m.ne.2).and.(kount.gt.maxcnt1)) )      &
+            then
       
         ! End of simplex
 
@@ -542,6 +581,7 @@
 
         print *,'Normal termination of simplex in mode ',m
 
+        ! stop
 
         ! Write output
         do j=1,np
@@ -749,6 +789,7 @@
 
 !     Close all i/o files
       close(funit_in_sizedis)
+      close(funit_out_inaero)
       close(funit_in_massfra)
       close(funit_out_sizedis)
 

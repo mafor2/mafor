@@ -4,7 +4,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2020  Matthias Steffen Karl
+!*    Copyright (C) 2011-2023  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -110,7 +110,7 @@
               status = 'unknown', form  = 'formatted', action = 'write')
 
 ! ***   Write a header line
-         write (funit_out_sizedis,'(A41)')    '*   Dp[nm]   dN_obs[cm-3]     dN_est[cm-3]'
+         write (funit_out_sizedis,'(A42)')    '*   Dp[nm]   dN_obs[cm-3]     dN_est[cm-3]'
        endif
 
 ! ***   Write data to file
@@ -138,21 +138,32 @@
 
          do n= 1,nm
 
-         print *,'water',para(n,3),wamass(n),para(n,3)*(1.0-wamass(n))
+           print *,'mass - watermass',n,para(n,3)*(1.0-wamass(n))
 
 
-         ! Not sure yet if the water shall be subtracted
+           ! Not sure yet if the water shall be subtracted
 
-           msulf(n) = ndens(n,SU)*para(n,3) !*(1.0-wamass(n))
-           morgc(n) = ndens(n,OC)*para(n,3) !*(1.0-wamass(n))
-           mammo(n) = ndens(n,AM)*para(n,3) !*(1.0-wamass(n))
-           mnitr(n) = ndens(n,NI)*para(n,3) !*(1.0-wamass(n))
-           mmsap(n) = ndens(n,MS)*para(n,3) !*(1.0-wamass(n))
-           msalt(n) = ndens(n,SA)*para(n,3) !*(1.0-wamass(n))
-           mxxxx(n) = ndens(n,XX)*para(n,3) !*(1.0-wamass(n))
-           mecbc(n) = ndens(n,EC)*para(n,3) !*(1.0-wamass(n))
-           mdust(n) = ndens(n,DU)*para(n,3) !*(1.0-wamass(n))
-
+           if (n<3) then
+             msulf(n) = ndens(n,SU)*para(n,3)
+             morgc(n) = ndens(n,OC)*para(n,3)
+             mammo(n) = ndens(n,AM)*para(n,3)
+             mnitr(n) = ndens(n,NI)*para(n,3)
+             mmsap(n) = ndens(n,MS)*para(n,3)
+             msalt(n) = ndens(n,SA)*para(n,3)
+             mxxxx(n) = ndens(n,XX)*para(n,3)
+             mecbc(n) = ndens(n,EC)*para(n,3)
+             mdust(n) = ndens(n,DU)*para(n,3)
+           else
+             msulf(n) = ndens(n,SU)*para(n,3)  *(1.0-wamass(n))
+             morgc(n) = ndens(n,OC)*para(n,3)  *(1.0-wamass(n))
+             mammo(n) = ndens(n,AM)*para(n,3)  *(1.0-wamass(n))
+             mnitr(n) = ndens(n,NI)*para(n,3)  *(1.0-wamass(n))
+             mmsap(n) = ndens(n,MS)*para(n,3)  *(1.0-wamass(n))
+             msalt(n) = ndens(n,SA)*para(n,3)  *(1.0-wamass(n))
+             mxxxx(n) = ndens(n,XX)*para(n,3)  *(1.0-wamass(n))
+             mecbc(n) = ndens(n,EC)*para(n,3)  *(1.0-wamass(n))
+             mdust(n) = ndens(n,DU)*para(n,3)  *(1.0-wamass(n))
+           endif
 
            sigout(n) = para(n,2)
            gmdout(n) = para(n,1)*1.e-9  !GMD in [m]
@@ -213,7 +224,8 @@
              if (dpmax==1.0E-5) then
                 gmdout(n) = gmdout(n)*1.00
              else if (dpmax<2.0E-6) then
-                gmdout(n) = gmdout(n)*max(shrf(n),0.92)
+                !gmdout(n) = gmdout(n)*max(shrf(n),0.92)
+                gmdout(n) = gmdout(n)*1.03    ! FINE non-traffic
              else
        !MSK 26.11.2020 MARINE & COASTAL
              ! SALT > 0.1 [marine case]
@@ -231,7 +243,9 @@
              endif
 ! CS MODE
            elseif (n==4) then
-             gmdout(n) = gmdout(n)*max(shrf(n),0.90)
+             if (dpmax>=2.0E-6) then
+                gmdout(n) = gmdout(n)*max(shrf(n),0.90)
+             endif
            endif
 
            print *,'out',n,gmdout(n)*1.e9
