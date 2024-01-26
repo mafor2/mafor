@@ -5,7 +5,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2023  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -47,7 +47,39 @@
 !***      FITAERO
 !***      Aerosol size distribution fit tool
 !***      for MAFOR's inaero.dat
-!***      Version: 1.1
+!***      Version: 1.2
+!***
+!***      FITAERO treats three sets of aerosols
+!***      dpmax <  2.0E-6 [m]            (FINE)
+!***      2.0E-6 <= dpmax < 1.0E-5  [m]  (FINE + COARSE)
+!***      dpmax = 1.0E-5  [m]            (PM10)
+!***
+!***      FINE subgroups:
+!***          marine  background [beta(3,3) <   500.0]
+!***          coastal background [beta(3,3) <  2000.0]
+!***          urban   background [beta(3,3) < 10000.0]
+!***          bioburn background [beta(3,3) < 25000.0]
+!***          exhaust/combustion [beta(3,3) > 25000.0]
+!***
+!***      FINE+COARSE subgroups:
+!***          marine  background [beta(2,3) <   100.0]
+!***          coastal background [beta(2,3) <   200.0]
+!***          urban   background [beta(2,3) < 10000.0]
+!***          exhaust/combustion [beta(2,3) > 10000.0]
+!***
+!***      PM10 subgroups:
+!***          marine  background [beta(2,3) <   200.0]
+!***          urban   background [beta(2,3) < 10000.0]
+!***          exhaust/combustion [beta(2,3) > 10000.0]
+!***
+!***
+!***      How to add a new Subgroup
+!***      prog_fitaero:       L375-600  gmd, sigma, mass estimate
+!***      module_fitaero_exe: L333-451  shrmode --> mass change 
+!***      output_fitaero:     L173-266  gmd, sigma after fitting
+!***
+!***      How to calculate dlogDp of observed Number Size Distr
+!***          dlogDp = LOG10 ( Dp(i+1) / Dp(i) )
 !***
 !***********************************************************************
 !*
@@ -59,6 +91,14 @@
 !***  17 Jun 2023 M. Karl      maxcnt = 20 error evaluations (m=2)
 !***  17 Jun 2023 M. Karl      improved mass estimate calculation
 !***  17 Jun 2023 M. Karl      output_fitaero subtract water mass (m>2)
+!***  29 Dec 2023 M. Karl      output_fitaero subtract water only m=4
+!***  31 Dec 2023 M. Karl      module_fitaero_exe same sigma estimates
+!***                           for all sets, as in FITAERO_params.xls
+!***  03 Jan 2024 M. Karl      FINE+COARSE subgroups coastal & marine
+!***  04 Jan 2024 M. Karl      PM10 subgroups marine & urban
+!***  13 Jan 2024 M. Karl      FINE subgroup exhaust
+!***  20 Jan 2024 M. Karl      reset mode diameter lower limits after
+!***                           call to findmodes
 !***
 !***
 !***********************************************************************
@@ -253,9 +293,10 @@
          endif
       end do
 
-      print *,'betaes ',beta(:,1)
-      print *,'betamax',betamax(:,1)      
+      print *,'size ranges (nm)' 
       print *,'betamin',betamin(:,1)
+      print *,'betamax',betamax(:,1)
+      print *,'betaes ',beta(:,1)
 
 
 !     Nucleation mode yes/no
@@ -279,38 +320,38 @@
         betamax(m,1) = dataa(binup(m),1)
         betamin(m,1) = dataa(binlo(m),1)
       enddo
+      betamax(4,1) = dataa(binup(4),1)
 
-!     Adjust Aitken (AI) mode limits
+
+!     Reset Mode diameter lower limits
+      !AIT
       if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
          betamin(2,1) = min1_gmd(2)
       endif
-      betamax(2,1) =betamax(2,1)*0.91
-
-
-!     Set gmd limits for COARSE mode
+      !ACC,COA
       if (dpmax<2.0E-6) then
+        betamin(3,1) = min2_gmd(3)
         betamin(4,1) = min2_gmd(4)
       else if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
+        betamin(3,1) = min1_gmd(3)  
         betamin(4,1) = min1_gmd(4)         
       else
+        betamin(3,1) = min3_gmd(3)
         betamin(4,1) = min3_gmd(4)
       endif
-      betamax(4,1) = dataa(binup(4),1)
 
 
 !     Find Aitken and Acc mode maximum
       aitmax = maxval( dataa(binlo(2):binup(2),2) )
       accmax = maxval( dataa(binlo(3):binup(3),2) )
-      
+
+     
       do i = 1, n_obins
         if (dataa(i,2).eq.aitmax) then
            beta(2,1) = dataa(i,1)
         endif
         if (dataa(i,2).eq.accmax) then
            beta(3,1) = dataa(i,1)
-           if (dpmax<2.0E-6) then
-             beta(3,1) = beta(3,1) * 1.2
-           endif
         endif
       enddo
 
@@ -333,64 +374,263 @@
         shrmode(m) = 1.0
       enddo
 
-      betamin(:,3)=betamin(:,3)*0.08
 
-!     Update upper mass limit
-      if (dpmax<1.0E-5)  then
-        do m = mstart, nm
-          betamax(m,3) = beta(m,3)*300.0
-        enddo
-      endif
-!     Attention AS mode can have too high mass estimate
-!     for FINE Non-Combustion
+!     Update upper mass limits and mass estimates
+
+! FINE set
       if (dpmax<2.0E-6) then
-         betamax(3,3)  = betamax(3,3)/300.0  ! undo the above
-         betamax(3,3)  = betamax(3,3)*0.8
-         betamax(4,3)  = betamax(4,3)*0.8
-         beta(2,3)     = beta(2,3)*2.0
-         beta(3,3)     = beta(3,3)*0.5
-         beta(4,3)     = beta(4,3)*0.5
-      endif
 
+         print *,'FINE set'
 
-!     Update lower mass limit (AI Background)
-      if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
-        if(beta(2,3)<50.0) then
-          if (dense(2,SU)>0.4) then 
-            betamin(2,3) =  5.0  ! ug/m^3 (marine)
-          else
-            betamin(2,3) = 20.0  ! ug/m^3 (coastal)
-          endif
-        else if(beta(2,3)<100.0) then   !@ 82 ug/m3
-          betamin(2,3) = 280.0  ! ug/m^3
-          betamin(2,3) =  70.0  ! ug/m^3 (marine)
-        else if(beta(2,3)<200.0) then
-          if (dense(2,SU)>0.4) then 
-            betamin(2,3) = 70.0  ! ug/m^3 (marine)
-          else
-            betamin(2,3) = 400.0  ! ug/m^3 (coastal)
-          endif
-        else if(beta(2,3)<300.0) then
-          betamin(2,3) = 200.0  ! ug/m^3 (coastal)
+         print *,'mstart ',mstart
+         print *,'beta(2,3) ',beta(2,3)
+         print *,'beta(3,3) ',beta(3,3)
+
+         ! update GMD estimate for Ait and Acc
+         beta(2,1) = beta(2,1) * 1.2
+         beta(3,1) = beta(3,1) * 1.2
+
+! ** Division in exhaust / urban backgr / coastal backgr
+
+        if (beta(3,3)<500.0) then
+        !bkgr2_test
+
+           print *,'MARINE'
+           !mass min
+           betamin(:,3)  = betamin(:,3)*0.1
+           !mass max
+           betamax(:,3)  = betamax(:,3)/100.
+           !AIT
+           beta(2,1)     = beta(2,1)*1.5
+           betamin(2,1)  = betamin(2,1)*1.5
+           betamax(2,1)  = betamax(2,1)*1.5
+           !ACC
+           beta(3,1)     = beta(3,1)*0.7
+
+        else if (beta(3,3)<2000.0) then
+        !bktr1_test
+
+           print *,'COASTAL'
+           !mass min
+           betamin(:,3)  = betamin(:,3)*0.5
+           !AIT
+           beta(2,1)     = beta(2,1)*1.25
+           betamax(2,1)  = betamax(2,1)*1.25
+           beta(2,3)     = beta(2,3)*2.7
+           !COA
+           betamax(4,1)  = betamax(4,1)*0.97
+           beta(4,3)     = beta(4,3)*2.5
+
+        else if ( beta(3,3) < 10000.0) then
+        !traff1_test
+        !init1_test: do not change here
+
+           print *,'URBAN'
+           !gmd
+           beta(2,1)     = beta(2,1)   *1.80
+           betamax(2,1)  = betamax(2,1)*1.80
+           beta(3,1)     = beta(3,1)   *1.80
+           betamax(3,1)  = betamax(3,1)*1.80
+           !mass
+           beta(4,3)     = beta(4,3)*1.5
+           betamin(:,3)  = beta(:,3)*0.20
+           betamax(:,3)  = betamax(:,3)*1.5
+
+        else if ( beta(3,3) < 25000.0) then
+        !aces_test
+
+           print *,'BIOBURN'
+           ! change GMD
+           beta(2,1)     = beta(2,1)   *1.70
+           betamax(2,1)  = betamax(2,1)*1.70
+           beta(3,1)     = beta(3,1)   *1.45
+           betamin(3,1)  = betamin(3,1)*1.45
+           betamax(3,1)  = betamax(3,1)*1.45
+           beta(4,1)     = beta(4,1)   *1.50
+           betamin(4,1)  = betamin(4,1)*1.50
+           betamax(4,1)  = betamax(4,1)*1.50
+           !sigma
+           betamin(3,2)  = 1.67
+           beta(3,2)     = 1.77
+           !mass
+           beta(2,3)     = beta(2,3)*9.0
+
+        else
+        !stena_test
+
+           print *,'EXHAUST'
+           ! set NUC mode diameter
+           betamax(1,1) = 10.0   ! nm
+           ! change GMD
+           beta(2,1)     = beta(2,1)   *0.65
+           betamin(2,1)  = betamin(2,1)*0.65
+           betamax(2,1)  = betamax(2,1)*0.65
+           beta(3,1)     = beta(3,1)   *1.25
+           betamin(3,1)  = betamin(3,1)*1.25
+           betamax(3,1)  = betamax(3,1)*1.25
+
+           ! change mode width
+           betamax(1,2)  = 1.45
+           betamin(2,2)  = 1.44
+           betamax(2,2)  = 1.64
+           betamin(3,2)  = 1.75
+           betamax(3,2)  = 2.00
+           !update mass min & max
+           betamax(:,3)  = betamax(:,3)*300.0
+           betamin(:,3)  = beta(:,3)*0.08
+           !mass estimate AIT
+           beta(2,3)     = beta(2,3)*7.0
+
         endif
+
+
+! 'FINE + COARSE set'
+      else if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
+
+        print *,'FINE + COARSE set'
+
+        print *,'mstart ',mstart
+        print *,'beta(2,3) ',beta(2,3)
+        print *,'beta(3,3) ',beta(3,3)
+
+        ! update MASS min & max
+        betamin(:,3) = betamin(:,3)*0.08
+
+        do m = mstart, nm
+           betamax(m,3) = beta(m,3)*300.0
+        enddo
+
+        if(beta(2,3)<100.0) then
+        !amar2_test
+        ! ("coastal marine")
+           print *,'MARINE'
+           !NUC
+           beta(1,3)     = beta(1,3)*35.0
+           !AIT
+           beta(2,1)     = beta(2,1)   *0.95
+           betamin(2,1)  = 25.0
+           betamax(2,1)  = betamax(2,1)*0.95
+           beta(2,3)     = beta(2,3)*3.5
+           !ACC
+           beta(3,1)     = beta(3,1)   *0.7
+           betamin(3,1)  = betamin(3,1)*0.7
+           betamax(3,1)  = betamax(3,1)*0.7
+
+           betamin(:,3)  = beta(:,3)*0.40
+
+        else if (beta(2,3)<200.0) then
+        !acont_test
+        ! ("coastal continental")
+           print *,'COASTAL'
+           !NUC
+           beta(1,3)     = beta(1,3)*7.0
+           betamin(1,3)  = beta(1,3)*0.5
+           !AIT
+           beta(2,1)     = beta(2,1)*1.43
+           betamax(2,1)  = betamax(2,1)*1.43
+           beta(2,3)     = beta(2,3)*9.5
+           !ACC
+           betamax(3,2)  = 1.60
+           beta(3,1)     = beta(3,1)*0.91
+           betamax(3,1)  = betamax(3,1)*0.91
+
+        else if (beta(2,3)<10000.0) then
+        !bkgr1_test
+           print *,'URBAN'
+           beta(2,1)     = beta(2,1)*1.60
+           betamin(2,1)  = betamin(2,1)*1.60
+           
+           beta(2,3)     = beta(2,3) * 0.23
+           betamax(2,3)  = beta(2,3) * 1.20
+
+        else
+        !xprs1,2_test
+           print *,'EXHAUST'
+           !NUC
+           betamax(1,1)  = 7.0 ! nm
+           betamax(1,2)  = 1.35
+           beta(1,3)     = beta(1,3) * 0.70
+           betamin(1,3)  = beta(1,3) * 0.20
+           betamax(1,3)  = beta(1,3) * 2.00
+           !AIT  
+           betamin(2,2)  = 1.62
+           betamax(2,2)  = 1.85
+           !ACC
+           betamin(3,2)  = 1.45
+           betamax(3,2)  = 1.60
+           !COA
+           betamin(4,2)  = 1.85
+           betamax(4,2)  = 2.20
+
+        endif
+
+! 'PM10 set'
+      else
+
+        print *,'PM10 set'
+
+        print *,'mstart ',mstart
+        print *,'beta(2,3) ',beta(2,3)
+        print *,'beta(3,3) ',beta(3,3)
+
+        ! update GMD estimate
+        beta(3,1) = beta(3,1) * 1.3
+        beta(4,1) = beta(4,1) * 1.2
+        betamin(3,1) = betamin(3,1)*1.3
+        betamin(4,1) = betamin(4,1)*1.2
+
+        ! update MASS min & max
+        betamin(:,3) = betamin(:,3)*0.08
+
+        do m = mstart, nm
+           betamax(m,3) = beta(m,3)*300.0
+        enddo
+
+        if(beta(2,3)<200.0) then
+        !arctic_test
+        ! ("arctic example")
+           print *,'MARINE'
+           !NUC
+           beta(1,3)     = beta(1,3)*6.5
+           !AIT
+           betamax(2,1)  = betamax(2,1)*0.49
+           beta(2,2)     = 1.55
+           betamin(2,2)  = 1.50
+           betamax(2,2)  = 1.60
+           beta(2,3)     = beta(2,3)*7.0
+           !ACC
+           beta(3,3)     = beta(3,3)*1.4
+
+           betamin(:,3)  = beta(:,3)*0.20
+
+        else if (beta(2,3)<10000.0) then
+        !
+           print *,'URBAN'
+           !nothing special
+
+        else
+           print *,'EXHAUST'
+           betamax(1,1)  = 7.0 ! nm
+           betamax(1,2)  = 1.35 
+           betamin(2,2)  = 1.62
+           betamax(2,2)  = 1.85
+           betamin(3,2)  = 1.45
+           betamax(3,2)  = 1.65
+        endif
+
       endif
+
+      !print *,'mm2 min',betamin(:,3)
+      !print *,'mm2 max',betamax(:,3)
+      !print *,'mm2 est',beta(:,3)
+
 
 !     Generic Nucleation Mode (mstart=2)
 !     Add small mass in nucleation mode if zero
       if (mstart==2) then
-         beta(1,1) =  9.5  ! nm
+         beta(1,1) =  9.6  ! nm
          beta(1,2) =  1.30
-         beta(1,3) =  0.45 * dataa(1,2)/1200.0
-      endif
-
-!     Adjustment of Exhaust mode widths
-      if (beta(2,3)>10000.0) then
-         betamax(1,1) = 7.0 ! nm
-         betamax(1,2) = 1.35 
-         betamin(2,2) = 1.62
-         betamax(2,2) = 1.85
-         betamin(3,2) = 1.45
-         betamax(3,2) = 1.65
+         beta(1,3) =  0.45 * dataa(2,2)/3000.0
       endif
 
 
@@ -403,11 +643,12 @@
       print *,'sig max',betamax(:,2)
       print *,'sig est',beta(:,2)
 
-      print *,'mm min',betamin(:,3)
-      print *,'mm max',betamax(:,3)
-      print *,'mm est',beta(:,3)
+      print *,'mm  min',betamin(:,3)
+      print *,'mm  max',betamax(:,3)
+      print *,'mm  est',beta(:,3)
 
-   !!  stop
+     !! stop
+
 
 ! **************************
 ! *** BEGIN THE SIMPLEX  ***
@@ -507,9 +748,9 @@
            write(funit_log,39)k,erf(k), (p(m,k,j),j=1,np)
  40      continue
 
-         do k=1,np1
-          print *,'ini simplex',(p(m,k,j),j=1,np)
-         enddo
+         !do k=1,np1
+         !  print *,'ini simplex',(p(m,k,j),j=1,np)
+         !enddo
        endif
 
 
@@ -771,7 +1012,7 @@
  139       continue
  138     continue
 
-         print*,'hello start walking again'
+         !print*,'hello start walking again'
          go to 31   ! start walking again
 
        endif

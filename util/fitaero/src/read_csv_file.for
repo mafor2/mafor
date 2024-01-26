@@ -4,7 +4,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2020  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl

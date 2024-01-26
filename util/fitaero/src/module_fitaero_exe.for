@@ -4,7 +4,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2020  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -162,7 +162,7 @@
       real, dimension(nm), parameter :: es1_gmd   = (/             &
                                         8.5, 120.0, 270.0, 2800.0 /) 
       real, dimension(nm), parameter :: es1_sigma = (/             &
-                                        1.35, 1.90, 1.90, 1.50 /)
+                                        1.40, 1.90, 1.55, 1.55 /)
       real, dimension(nm), parameter :: es1_mm    = (/             &
                                         0.55, 2400.0, 6.e3, 8.e3 /)
 
@@ -170,7 +170,7 @@
       real, dimension(nm), parameter :: max1_gmd   = (/             &
                                         13.0, 200.0, 480.0, 5000.0 /)
       real, dimension(nm), parameter :: max1_sigma = (/             &
-                                        1.50, 2.15, 2.20, 2.20 /)
+                                        1.60, 2.15, 2.00, 2.00 /)
       real, dimension(nm), parameter :: max1_mm    = (/             &
               12.*es1_mm(1),10.*es1_mm(2),10.*es1_mm(3),10.*es1_mm(4) /) 
 
@@ -178,7 +178,7 @@
       real, dimension(nm), parameter :: min1_gmd   = (/             &
                                         5.0, 45.0, 150.0, 1600.0 /) 
       real, dimension(nm), parameter :: min1_sigma = (/             &
-                                        1.30, 1.75, 1.80, 1.60 /)
+                                        1.35, 1.75, 1.45, 1.45 /)
       real, dimension(nm), parameter :: min1_mm    = (/             &
                                         0.01, 350.0, 1000.0, 1000.0 /)
 
@@ -189,34 +189,34 @@
       real, dimension(nm), parameter :: es2_gmd   = (/             &
                                         9.8, 40.0, 120.0, 270.0 /)
       real, dimension(nm), parameter :: es2_sigma = (/             &
-                                        1.30, 1.75, 1.70, 1.80 /)
+                                        1.40, 1.90, 1.55, 1.55 /)
       real, dimension(nm), parameter :: es2_mm    = (/             &
                                         0.005, 350.0, 3.e3, 7.e3 /)
 
 ! *** Parameter (beta) upper limits
       real, dimension(nm), parameter :: max2_gmd   = (/             &
-                                        10.0, 80.0, 180.0, 800.0 /)
+                                        10.0, 80.0, 160.0, 800.0 /)
       real, dimension(nm), parameter :: max2_sigma = (/             &
-                                        1.60, 1.90, 2.10, 2.20 /)
+                                        1.60, 2.15, 2.00, 2.20 /)
       real, dimension(nm), parameter :: max2_mm    = (/             &
               100.*es2_mm(1),10.*es2_mm(2),10.*es2_mm(3),10.*es2_mm(4) /) 
 
 ! *** Parameter (beta) lower limits
       real, dimension(nm), parameter :: min2_gmd   = (/             &
-                                        1.0, 15.0, 70.0, 140.0 /) 
+                                        5.0, 15.0, 70.0, 190.0 /) 
       real, dimension(nm), parameter :: min2_sigma = (/             &
-                                        1.30, 1.65, 1.65, 1.60 /)
+                                        1.35, 1.75, 1.45, 1.45 /)
       real, dimension(nm), parameter :: min2_mm    = (/             &
                                         0.001, 10.0, 100.0, 100.0 /)
 
 
-! *** IF dpmax = 1.0E-5  [m]      *******************************!
+! *** IF dpmax = 1.0E-5  [m] (PM10)        *******************************!
 
 ! *** Parameter (beta) estimates
       real, dimension(nm), parameter :: es3_gmd   = (/             &
-                                        7.0, 40.0, 250.0, 1400.0 /) 
+                                        7.0, 40.0, 250.0, 1500.0 /) 
       real, dimension(nm), parameter :: es3_sigma = (/             &
-                                        1.30, 1.55, 1.55, 1.50 /)
+                                        1.40, 1.90, 1.55, 1.55 /)
       real, dimension(nm), parameter :: es3_mm    = (/             &
                                         0.15, 300.0, 1100.0, 800.0 /)
 
@@ -224,15 +224,15 @@
       real, dimension(nm), parameter :: max3_gmd   = (/             &
                                         10.0, 130.0, 580.0, 3000.0 /)
       real, dimension(nm), parameter :: max3_sigma = (/             &
-                                        1.50, 1.65, 2.00, 2.00 /)
+                                        1.60, 2.15, 2.00, 2.00 /)
       real, dimension(nm), parameter :: max3_mm    = (/             &
               10.*es3_mm(1),5.*es3_mm(2),5.*es3_mm(3),10.*es3_mm(4) /) 
 
 ! *** Parameter (beta) lower limits
       real, dimension(nm), parameter :: min3_gmd   = (/             &
-                                        1.0,  20.0, 130.0, 1200.0 /) 
+                                        5.0,  20.0, 150.0, 1300.0 /) 
       real, dimension(nm), parameter :: min3_sigma = (/             &
-                                        1.25, 1.45, 1.45, 1.50 /)
+                                        1.35, 1.75, 1.45, 1.45 /)
       real, dimension(nm), parameter :: min3_mm    = (/             &
                                         0.01, 40.0, 100.0, 600.0 /)
 
@@ -285,7 +285,6 @@
         !print *,'lo up',m,binlo(m),binup(m)
         !print *,'errf xbeta',m,xbeta(m,:)
 
-
 ! Allow relative uncertainty of 10 % for observed dN
         sigma_rel=0.1
         error=0.0
@@ -331,17 +330,14 @@
 
 
         if (m==2) then
-           print *,'m=2 shr a',shrmode
-
-          !!!if (dpmax==1.E-5) then
-          !!!   shrmode=shrmode*0.55
-          !!!else
+           !print *,'m=2 shr a',shrmode
 
             if (ndens(2,SU)<0.15) then
               if (rhi > 0.65) then
                 shrmode=shrmode*1.08
               else if (rhi > 0.45) then
-                shrmode=shrmode*1.07
+              ! traff1_test, bktr1_test
+                shrmode=shrmode*0.97
               else
                 shrmode=shrmode*0.97
               endif
@@ -349,63 +345,80 @@
              !use DU in AI mode to divide between exhaust and background
              !exhaust AI: DU<0.1, EC>0.15
              ! EXHAUST
-              if ((ndens(2,DU)<0.1).and.(ndens(2,EC)>0.15)) then
+             ! bkgr1_test, bkgr2_test
+             ! xprs1, xprs2
+              if (ndens(2,EC)>0.15) then
                 if (rhi > 0.90) then
                   shrmode=shrmode*1.40
                 else if (rhi > 0.85) then
                   shrmode=shrmode*1.20
                 else if (rhi > 0.60) then
-                  shrmode=shrmode*1.10
+                  shrmode=shrmode*1.00
                 else if (rhi > 0.45) then
                   shrmode=shrmode*1.05
                 else
-                  shrmode=shrmode*0.95
+                  shrmode=shrmode*0.90
                 endif
-              else
               ! BACKGROUND
+              else if (ndens(2,EC)>0.10) then
+              ! init1_test
                 if (rhi > 0.90) then
-                  shrmode=shrmode*0.70  !0.80
+                  shrmode=shrmode*0.70
                 else if (rhi > 0.75) then
                   shrmode=shrmode*1.05
                 else if (rhi > 0.65) then
                   shrmode=shrmode*1.15
                 else if (rhi > 0.45) then
-                  shrmode=shrmode*0.95
+                  shrmode=shrmode*1.05
                 else
-                  shrmode=shrmode*0.95
+                  shrmode=shrmode*1.00
+                endif
+              else if (ndens(2,EC)>0.05) then
+              ! aces_test
+                  shrmode=shrmode*1.15
+              else  ! EC < 0.05
+                if (rhi > 0.85) then
+              ! amar2_test, acont_test
+                  shrmode=shrmode*1.30
+                else if (rhi > 0.75) then
+              ! arctic_test
+                  shrmode=shrmode*1.05
                 endif
               endif
             endif
 
           !!!endif
 
-          print *,'m=2 shr b',shrmode
+          !print *,'m=2 shr b',shrmode
           !stop
         endif
 
         if (m==3) then
 
-          print *,'m=3 shr',shrmode
+          !print *,'m=3 shr',shrmode
 
-          !!!if (dpmax==1.E-5) then
-          !!!   shrmode=shrmode*0.70
-          !!!else
-
-            if (ndens(3,SU)<0.15) then 
-              if (rhi > 0.65) then
-                shrmode=shrmode*0.97
-              else if (rhi > 0.45) then
-                shrmode=shrmode*1.17
-              else
-                shrmode=shrmode*0.99
-              endif
+            if (ndens(3,SU)<=0.15) then
+               if (ndens(3,EC)<0.15) then
+                 if (rhi > 0.65) then
+                 !stena_test
+                   shrmode=shrmode*0.83
+                 else if (rhi > 0.45) then
+                 !aces_test
+                   shrmode=shrmode*1.04
+                 else
+                   shrmode=shrmode*0.99
+                 endif
+               else ! EC>0.15
+               ! bktr1_test, traff1_test
+                  shrmode=shrmode*0.95
+               endif
             endif
 
           ! use EC in AS mode to divide between exhaust and background
           ! BACKGROUND (high SU, low EC)
           ! 26.11.2020 MSK use SALT>0.1 in AS mode for marine
           !                and SULF>0.2 in AS mode for coastal
-            if ((ndens(3,SU)>=0.15).and.   &
+            if ((ndens(3,SU)>0.15).and.   &
                 (ndens(3,EC)<0.15)   ) then
               if (rhi > 0.92) then
                 if (ndens(3,SA)>0.1) then
@@ -415,36 +428,44 @@
                 endif
               else if (rhi > 0.89) then
                 if (ndens(3,SA)>0.1) then
-                  shrmode=shrmode*0.74       !marine ! critical not change
-                else if (ndens(3,SU)>0.2) then
-                  shrmode=shrmode*0.90    ! coastal
+                  !amar2_test
+                  shrmode=shrmode*0.91       ! marine
                 else
-                  shrmode=shrmode*1.2
+                  if (ndens(3,SU)>0.2) then
+                  !acont_test
+                    shrmode=shrmode*1.30     ! coastal
+                  else
+                   shrmode=shrmode*1.2
+                  endif
                 endif
+              ! init1_test
+              ! arctic_test
               else if (rhi > 0.79) then
-                shrmode=shrmode*1.08
+                shrmode=shrmode*0.90
               else if (rhi > 0.65) then
                 shrmode=shrmode*0.98
               else if (rhi > 0.55) then
                 shrmode=shrmode*1.05
               else if (rhi > 0.45) then
-                shrmode=shrmode*0.97
+                shrmode=shrmode*1.03
               else
-                shrmode=shrmode*0.98
+              ! xprs1, xprs2
+                shrmode=shrmode*0.90
               endif
             endif
  
            ! EXHAUST (high SU, high EC)
-            if ((ndens(3,SU)>=0.15).and.   &
+           ! bkgr1_test, bkgr2_test
+            if ((ndens(3,SU)>0.15).and.   &
                 (ndens(3,EC)>=0.15)   ) then
               if (rhi > 0.89) then
                 shrmode=shrmode*0.90
               else if (rhi > 0.60) then
-                shrmode=shrmode*0.80
+                shrmode=shrmode*0.82
               else if (rhi > 0.45) then
                 shrmode=shrmode*0.97
               else
-                shrmode=shrmode*0.98
+                shrmode=shrmode*0.77
               endif
             endif
 
@@ -452,6 +473,21 @@
           ! print *,'m=3 shr',shrmode
           ! stop
 
+        endif
+
+
+        if (m==4) then
+            if (rhi > 0.75) then
+               shrmode=shrmode*1.20 
+            else if (rhi > 0.60) then
+               shrmode=shrmode*1.08
+            else if (rhi > 0.40) then
+               shrmode=shrmode*0.97
+            else if (rhi > 0.15) then
+               shrmode=shrmode*1.00
+            else
+               shrmode=shrmode*1.00
+            endif
         endif
 
 

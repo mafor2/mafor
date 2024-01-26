@@ -4,7 +4,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2023  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -141,9 +141,7 @@
            print *,'mass - watermass',n,para(n,3)*(1.0-wamass(n))
 
 
-           ! Not sure yet if the water shall be subtracted
-
-           if (n<3) then
+           if (n<4) then
              msulf(n) = ndens(n,SU)*para(n,3)
              morgc(n) = ndens(n,OC)*para(n,3)
              mammo(n) = ndens(n,AM)*para(n,3)
@@ -154,6 +152,7 @@
              mecbc(n) = ndens(n,EC)*para(n,3)
              mdust(n) = ndens(n,DU)*para(n,3)
            else
+           ! Subtract water for COARSE mode components
              msulf(n) = ndens(n,SU)*para(n,3)  *(1.0-wamass(n))
              morgc(n) = ndens(n,OC)*para(n,3)  *(1.0-wamass(n))
              mammo(n) = ndens(n,AM)*para(n,3)  *(1.0-wamass(n))
@@ -176,77 +175,104 @@
                gmdout(n) = gmdout(n)*0.85
              endif
            endif
-! AI MODE
+! AIT MODE
            if (n==2) then
-             if ( (ndens(2,SU)>0.15).and.(rhi>0.15) ) then
-             !use DU in AI mode to divide between exhaust and background
-           !exhaust AI: DU<0.1, EC>0.15
-               if ((ndens(2,DU)<0.1).and.(ndens(2,EC)>0.15)) then
-                 if (rhi>0.89) then
-                   gmdout(n) = gmdout(n)*0.75
-                 else if (rhi>0.15) then
-                   gmdout(n) = gmdout(n)*0.84
-                 endif
-               else   
-               
-           !background
-                 if (dpmax==1.0E-5) then
-                   gmdout(n) = gmdout(n)*1.00             
-                 else if (dpmax<2.0E-6) then
-                   gmdout(n) = gmdout(n)*0.92               
-                 else
-                   if (rhi>0.85) then
-                      gmdout(n) = gmdout(n)*1.1
-                      if (ndens(3,SU)<0.3) then
-                        sigout(n) = sigout(n)*0.92   ! coastal
-                      else
-                        sigout(n) = sigout(n)*0.91   ! marine
-                        gmdout(n) = min(gmdout(n), 0.50E-7)
-                      endif
-                   else if (rhi>0.45) then
-                     if (para(2,1).gt.95.0) then
-                       gmdout(n) = gmdout(n)*1.05
-                     else
-                       gmdout(n) = gmdout(n)*1.4
-                     endif
-                   else if (rhi>0.15) then
-                     gmdout(n) = gmdout(n)*0.89
-                   endif
-                 endif
-
-               endif
-             else
-               gmdout(n) = gmdout(n)*max(shrf(n),0.96)
-             endif
-! AS MODE
-           elseif (n==3) then
 
              if (dpmax==1.0E-5) then
+             !PM10
+                if (rhi>0.85) then
+                !arctic
+                  gmdout(n) = gmdout(n)*0.98
+                else
+                  gmdout(n) = gmdout(n)*1.00
+                endif
+             else if (dpmax<2.0E-6) then
+             !FINE
+             !init1_test, RH=80%
+                if (rhi>0.75) then
+                  gmdout(n) = gmdout(n) * (shrf(n)*1.10)
+             !nkgr2_test, RH=74%
+                else if (rhi>0.60) then
+                  gmdout(n) = gmdout(n) * (shrf(n)*1.20)
+                endif
+             else
+             !FINE + COARSE
+                if ((ndens(2,DU)<0.1).and.(ndens(2,EC)>0.20)) then
+             !EXHAUST AIT: DU<0.1, EC>0.20
+             !xprs1, xprs2
+                  print *,'n=2, du<0.1, ec>0.2'
+                  gmdout(n) = gmdout(n)*0.85
+                else
+             !ALL OTHER
+                  print *,'n=2, other'
+                  gmdout(n) = gmdout(n)*max(shrf(n),0.96)                
+                endif
+             endif
+             
+           endif  !n==2
+! ACC MODE
+           if (n==3) then
+
+             if (dpmax==1.0E-5) then
+             !PM10
                 gmdout(n) = gmdout(n)*1.00
              else if (dpmax<2.0E-6) then
-                !gmdout(n) = gmdout(n)*max(shrf(n),0.92)
-                gmdout(n) = gmdout(n)*1.03    ! FINE non-traffic
+             !FINE
+             !xinit1
+                if (rhi>0.65) then
+                  gmdout(n) = gmdout(n)*0.70
+                  sigout(n) = sigout(n)*0.92
+                else if (rhi>0.45) then
+                  gmdout(n) = gmdout(n)*0.96
+                  sigout(n) = sigout(n)*1.00
+                else
+                  gmdout(n) = gmdout(n)*0.92
+                  sigout(n) = sigout(n)*1.00 
+                endif
+
              else
-       !MSK 26.11.2020 MARINE & COASTAL
+             !FINE + COARSE
+             ! MSK 26.11.2020 MARINE & COASTAL
              ! SALT > 0.1 [marine case]
                if (ndens(3,SA)>0.1) then
+               print *,'n=3, sa>0.1'
                    gmdout(n) = max(gmdout(n)*0.66, 1.80E-7)
                    sigout(n) = sigout(n)*0.85
-             ! SULF > 0.2 [coastal case] 
+             ! SULF > 0.2 [coastal case]
+             ! mfhels
                else if (ndens(3,SU)>0.2) then
-                   gmdout(n) = gmdout(n)*0.70
+               print *,'n=3, su>0.2'
+                   gmdout(n) = gmdout(n)*0.95
                    sigout(n) = sigout(n)*1.08
+             ! DU > 0.1 [EXHAUST]
+               else if (ndens(3,DU)>0.1) then
+               print *,'n=3, du>0.1'
+                   gmdout(n) = gmdout(n)*0.90
+                   sigout(n) = sigout(n)*1.00
                else
+               print *,'n=3, other'
                !!! do not change !!!
                    gmdout(n) = gmdout(n)*max(shrf(n),0.92)
+                   sigout(n) = sigout(n)*1.00
                endif
              endif
+
+           endif  !n==3
 ! CS MODE
-           elseif (n==4) then
-             if (dpmax>=2.0E-6) then
+           if (n==4) then
+
+             if (dpmax==1.0E-5) then
+             !PM10
+                gmdout(n) = gmdout(n)*1.00
+             else if (dpmax<2.0E-6) then
+             !FINE
+                gmdout(n) = gmdout(n)*0.90
+             else
+             !FINE + COARSE
                 gmdout(n) = gmdout(n)*max(shrf(n),0.90)
              endif
-           endif
+
+           endif  !n==4
 
            print *,'out',n,gmdout(n)*1.e9
 
@@ -257,15 +283,15 @@
                 mammo(n),tab,mnitr(n),tab,mmsap(n),tab,               &
                 msalt(n),tab,mxxxx(n),tab,mecbc(n),tab,mdust(n)
 
-         enddo
+         enddo  !loop over modes
 
-       endif
+       endif    !if (m.eq.nm)
 
       return
 
 
  1000 format(F11.2, 4X, F11.2, 4X, F11.2)
  2000 format(E9.2, 2X, I3)
- 2100 format(1L1,A,E8.2,A,F0.3,A,E8.2,A, 9(F0.3,A))
+ 2100 format(1L1,A,E9.3,A,F0.3,A,E8.2,A, 9(F0.3,A))
 
       end subroutine output_fitaero
