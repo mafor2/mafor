@@ -38,6 +38,7 @@
 !*
 !*    All routines written by Matthias Karl
 !*    except the following routines:
+!*    routine NEUTRAL_IONM_IODINE written by Bin Zhao
 !*    routine YU_TIMN_NUCLEATION written by Fangqun Yu
 !*    routine ACDC_NUCLEATION written by Shuai Jiang
 !*    routine TERNARY_FIT written by Joonas Merikanto,
@@ -102,6 +103,7 @@ contains
     !               diesel-exhaust        H2SO4-ORG     (INUCMEC=12)
     !               ACDC cluster          H2SO4-H2O-NH3 (INUCMEC=13)
     !               HIO3 kinetic/activ    HIO3          (INUCMEC=14)
+    !               HIO3 neutral/ion-ind  HIO3          (INUCEMEC=15)
     !
     !  INPUT
     !  -----
@@ -337,6 +339,24 @@ contains
                JNUC=1.e-18 * ch2so4 * ciod
             !   write(6,'(6ES12.4)') ciod, JNUC, natot
 
+            CASE (15)
+
+            ! Neutral and ion-induced nucleation of iodic acid
+            ! According to Zhao et al. (Nature, 2024), 
+            ! Equation in Method Appendix
+            ! Based on He et al. (Science, 2021) experiments in CLOUD chamber
+            ! which shows J(1.7nm)
+               CALL  neutral_ionm_iodine(ch2so4,cnh3,ciod,cair,  &
+                                         temp,jnuc_n,jnuc_i,natot)
+
+            ! Nucleation rate of neutral and charged case should be added
+            ! and multiplied by 10^6 to get nucleation rate J in m^-3s^-1
+            ! Insert new particles at 1.5 nm diameter
+               JNUC=jnuc_n + jnuc_i
+               JNUC=JNUC*1.e6
+               JNUC=JNUC*fnuc    ! scaling
+              ! write(6,'(4ES12.4)') ciod, JNUC
+
             CASE DEFAULT
  
               write(6,*) 'no valid nucleation option'
@@ -459,6 +479,257 @@ contains
         jnuc=C_2*(c2**2._dp)       !m^-3s^-1
 
    end subroutine kinetic
+
+
+     subroutine neutral_ionm_iodine(c2,c3,c4,cair,temp,jnuc_n,jnuc_i,natot)
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      neutral and ion-induced nucleation of iodic acid
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           c2:    concentration of h2so4 vapour  [1/m^3]
+    !           c3:    concentration of nh3 vapour    [1/m^3]
+    !           c4:    concentration of hio3 vapour   [1/m^3]
+    !           cair:  mixing ratio of air (M)        [1/m^3]
+    !           temp:  air temperature                [K]
+    !           natot: total number of hio3 molecules 
+    !                  in the critical cluster
+    !
+    !        output:
+    !           jnuc_n: Neutral nucleation rate       [cm^-3s^-1]
+    !           jnuc_i: Charged nucleation rate       [cm^-3s^-1]
+    !
+    !      method
+    !      ------
+    !      neutral and ion-induced nucleation of HIO3
+    !      based on CLOUD chamber experiments published in
+    !      He et al. (2021).
+    !
+    !      Parameterization of Zhao et al., Nature, 2024
+    !      Community Model of Aerosol Nucleation (CMAN), 
+    !      Global Version, V1.0:
+    !         modal_aero_newnuc.F90
+    !      Coded by Bin Zhao, Tsinghua University, 1-march-2023; 
+    !      Gordon and Dunne's nucleation module in GLOMAP was 
+    !      used as a reference.
+    !      This is not an officical CLOUD parameterization
+    !
+    !      Because the experiments by He et al.(2021) did not cover the 
+    !      full temperature range but instead focused only on +10 degC 
+    !      and -10 degC. For neutral nucleation, the NPF rate increases
+    !      substantially when the temperature changes from +10 degC to 
+    !      -10 degC. The temperature-dependence function has the Arrhenius
+    !      form and was fitted to the function to the experimental data at
+    !      +10 degC and -10 degC. Moreover, previous quantum chemistry 
+    !      calculations have shown that the neutral NPF rate increases 
+    !      minimally with further temperature reduction below -10 degC 
+    !      because the iodine oxoacid clusters are already highly stable 
+    !      at -10 degC.
+    !      For ion-induced nucleation, Zhao et al. derived the NPF rates 
+    !      using the difference between the measurements under neutral and 
+    !      galactic cosmic ray conditions. He et al. proved that ion-induced
+    !      nucleation proceeds at the kinetic limit below +10 degC.
+    !      Therefore, the temperature dependence of ion-induced nucleation 
+    !      below +10 degC was not considered. The temperature dependence 
+    !      above +10 degC is the same as that of neutral nucleation.
+    !
+    !      reference
+    !      ---------
+    !      He, X.-C. et al. Role of iodine oxoacids in atmospheric aerosol 
+    !      nucleation. Science 371, 589-595, 2021.
+    !      Parameterization:
+    !      
+    !      Zhao, B., Donahue, N.M., Zhang, K., Mao, L., Shirvastava, M.,
+    !      Shen, J., Wang, S., Sun, J., Gordon, H., Tang, S., Fast, J.,
+    !      Wang, M., Gao, Y., Yan, C., Singh, B., Li, Z., Huang, L.,
+    !      Lou, S., Lin, G., Wang, H., Jiang, J., Ding, A., Nie, W.,
+    !      Qi, X., Chi, X., Wang, L.: Global variablity in atmospheric
+    !      new particle formation mechanisms, Nature, 631, 98-125,
+    !      doi:, 2024.
+    !
+    !      modifications
+    !      -------------
+    !      Calculate X (sink of ions) without org_bi_ch (BELV molecules)
+    !      Without sulfuric acid kinetic limit
+    !
+    !------------------------------------------------------------------
+
+     use gde_constants,    only      : pi,k_B,N_A,IONMOB,E_ELEC,M_hio3
+     use gde_init_aero,    only      : GMD
+     use gde_input_data,   only      : NTOT
+     use gde_input_data,   only      : MMAX
+     use gde_input_data,   only      : NU,AI,AS,CS
+     use gde_input_data,   only      : DENV,DENAM
+
+     implicit none
+
+        REAL( dp), intent(in)    :: c2,c3,c4
+        REAL( dp), intent(in)    :: temp,cair
+        REAL( dp), intent(out)   :: jnuc_n,jnuc_i,natot
+        REAL( dp),dimension(20)  :: AD
+        REAL( dp)                :: chio3
+        REAL( dp)                :: CRI
+        REAL( dp)                :: TMP_CS
+        REAL( dp)                :: ND
+        REAL( dp)                :: ALFA
+        REAL( dp)                :: CSINK_ION
+        REAL( dp)                :: X,AIRD,TEMPN
+        REAL( dp)                :: nh3_coeff_ch
+        REAL( dp)                :: sa_bi,k_bch,k_tch,sa_ti
+        REAL( dp)                :: ION_CONC
+        REAL( dp)                :: SA_SCALE,NH3_SCALE
+        REAL( dp)                :: KINLIM
+        REAL( dp)                :: diameter_part,vol_part
+        REAL( dp)                :: mass_part_hio3
+        REAL( dp)                :: dtnuc,duma,dume,qhio3_cur
+        REAL( dp)                :: freduce
+        REAL( dp)                :: j_neu,j_ion
+        integer                  :: M
+
+        ! Dunne parameters
+        AD = (/3.95451,9.702973,12.62259,-0.007066146,182.4495,1.203451,      &
+           -4.188065,9.003471,636801.6,2.891024,-11.48166,25.49469,0.1810722, &
+            3.373738,4.071246, -23.8002,37.03029,0.227413,206.9792,3.138719 /)
+
+        ! h2so4 scale concentration for kinetic limit
+        SA_SCALE  = c2 *1.E-6_dp*1.E-6_dp
+
+        ! nh3 scale concentration for ion condensation sink
+        NH3_SCALE = c3 *1.E-6_dp*1.E-6_dp
+
+        ! iodic acid concentration
+        chio3 = c4*1.E-6_dp      ! cm^-3
+
+        ! ionization rate (ion-pairs cm^-3 s^-1) (2-100)
+        CRI = 2.00E+00_dp        
+
+        ! density of molecules in air
+        AIRD = cair*1.E-6_dp     ! cm^-3
+
+        ! normalized temperature
+        TEMPN = temp / 1000.
+
+        ! Recombination ALFA
+        ! Brasseur and Chattel (1983)
+        ALFA = 6.e-8_dp*sqrt(300._dp/temp) + 6.e-26_dp*AIRD*(300._dp/temp)**4.0
+           
+        ! condensation sink of ions (s^-1)
+        CSINK_ION = 0._dp
+        TMP_CS    = 4 * pi * k_B * temp * IONMOB / E_ELEC
+        do M = 1, MMAX
+          ND = NTOT(M)* 1.e-6  ! number conc. in cm^-3
+          CSINK_ION = CSINK_ION +TMP_CS *0.5* GMD(M) *ND * 1.E6
+        end do
+        
+        nh3_coeff_ch =AD(19) * (NH3_SCALE**(1-AD(15)))                 &
+        / (1 + AD(19) * (NH3_SCALE**(1-AD(15))) * (SA_SCALE**AD(20)) )
+
+        k_bch = EXP(AD(11) - EXP(AD(12)*(TEMPN-AD(13))))
+
+        k_tch =(EXP(AD(16)-EXP(AD(17)*(TEMPN-AD(18)))))*nh3_coeff_ch * &
+                (NH3_SCALE**AD(15))
+
+        sa_bi = SA_SCALE**AD(14)
+        sa_ti = SA_SCALE**AD(20) 
+
+        ! Total condensation sink of ions (s^-1)
+        X = CSINK_ION + sa_bi * k_bch + k_tch * sa_ti  ! + org_bi_ch
+
+        ! Ion concentration in air (1/cm3)
+        ! following Dunne et al., 2016
+        !ION_CONC = (SQRT(X**2 + 4. * ALFA * CRI) - X) / (2 * ALFA)
+        ! max function is to avoid ION_CONC to go practically zero
+        !  at very high J_ion 
+        ION_CONC = MAX(0.01,(SQRT(X**2 + 4. * ALFA * CRI) - X) / (2 * ALFA))
+
+        IF (ION_CONC .EQ. 0.) THEN   ! does not happen
+           IF (X*X .GT. CRI*ALFA) THEN
+              ION_CONC = CRI / X
+           ELSE
+              ION_CONC = SQRT(CRI / ALFA)   ! no ion losses
+           ENDIF
+        ENDIF
+
+        ! Ion-induced nucleation rate in cm^-3 s^-1
+        j_ion = 1.28E-18_dp*chio3**2.48*ION_CONC/700._dp             * &
+                 ( 1.40E-46_dp*EXP(2.99E4_dp / max(temp,283._dp)) )
+
+        ! Neutral nucleation rate in cm^-3 s^-1
+        j_neu = (2.57E-32_dp * MIN(chio3,1.0E8_dp)**4.23)            * &
+                 ( 1.40E-46_dp*EXP(2.99E4_dp / MAX(temp,263._dp)) )
+
+
+        ! Prevent nucleation rate exceeding sulfuric acid kinetic limit
+!        if(SA_SCALE .gt. 0.0) then
+!
+!          KINLIM = (49.19_dp*SA_SCALE**2.016_dp) /                     &
+!                    (1+3.126_dp*SA_SCALE**(-3.594_dp))
+!
+!          IF(j_neu .GT. KINLIM) THEN
+!             j_neu = KINLIM
+!          ENDIF
+!          IF(j_ion .GT. KINLIM) THEN
+!             j_ion = KINLIM
+!          ENDIF
+!
+!        endif
+
+        ! Set the neutral nucleation rate to 0.0 if less than 1.0e-8      
+        if(j_neu.lt.1.e-8) then
+           j_neu=0.0
+        endif
+        ! Set the ion-induced nucleation rate to 0.0 if less than 1.0e-8      
+        if(j_ion.lt.1.e-8) then
+           j_ion=0.0
+        endif
+
+        ! Reduction factor
+        ! diameter and volume of nucleated particles
+        diameter_part = 1.5 ! nm
+        vol_part = (pi/6.0)* (diameter_part**3) * 1.0e-21  ! cm^3
+        ! calculate single-particle mass
+        mass_part_hio3 = vol_part*( (DENV/1000.)+(DENAM/1000.) )/2  ! g
+        ! calculate max production of aerosol hio3 moles through 
+        ! hio3 neutral and ion-induced nucleation
+        dtnuc = 5.0   ! nucleation time step (s)
+        duma = MAX( 0.0, (j_ion + j_neu)*dtnuc*mass_part_hio3/M_hio3/AIRD )
+        duma = duma * N_A         ! molec_hio3/molec_air
+        ! check if max production exceeds available hio3 vapor
+        !   -> if yes, calculate a scaling factor
+        dume = 0.9999
+        freduce = 1.0
+        qhio3_cur = chio3/AIRD    ! molec_hio3/ molec_air
+        if (duma .gt. qhio3_cur*dume) then
+           freduce = qhio3_cur*dume/duma
+        end if
+
+        ! Output nucleation rate in cm^3 s^-1
+
+        natot=1._dp
+        jnuc_n=j_neu * freduce
+        jnuc_i=j_ion * freduce
+
+        !print *,'HIO3(#/cm3)',chio3
+        !print *,'ION_CONC',ION_CONC
+        !print *,'SA_SCALE',SA_SCALE
+        !print *,'KINLIM',  KINLIM
+        !print *,'duma',  duma,qhio3_cur
+        !print *,'freduce', freduce
+        !print *,'J neutral',j_neu
+        !print *,'J ionmed',j_ion
+
+   end subroutine neutral_ionm_iodine
 
 
      subroutine kinetic_iodine(c2,jnuc,natot)

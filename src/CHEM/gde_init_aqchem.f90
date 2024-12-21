@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2023  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -110,7 +110,7 @@ contains
         open(27,file='inaqchem.dat',status='old', iostat=stat)
 ! open error handling    
         if (stat.ne.0) then
-           write(6,*) 'File inchem.dat cannot be opened !'
+           write(6,*) 'File inaqchem.dat cannot be opened !'
            stop
         end if
         do jk=1,aqspec
@@ -130,23 +130,57 @@ contains
 
       ! initialize aqueous phase species concentrations
       ! ca0 of some aqueous phase species [mcl/cm3(air)]
+      ! in the coarse (droplet) mode
       ! all in molec/cm^3(air)
       ! this works only for modal aqueous chemistry
 
-        c(   ind_O2_a( 1)) = ca0( 1)  
-        c(  ind_OHm_a( 1)) = ca0( 2)       
-        c(   ind_Hp_a( 1)) = ca0( 3) 
-        c(   ind_O3_a( 1)) = ca0( 4)        
+! aqueous mode 1 (= AI mode)
+        c(   ind_O2_a( 1)) = ca0( 1)
+        c(  ind_OHm_a( 1)) = ca0( 2)
+        c(   ind_Hp_a( 1)) = ca0( 3)
+        c(   ind_O3_a( 1)) = ca0( 4)
         c(  ind_O2m_a( 1)) = ca0( 5)
-        c(  ind_Clm_a( 1)) = ca0( 6)        
+        c(  ind_Clm_a( 1)) = ca0( 6)
         c(ind_Feppp_a( 1)) = ca0( 7)
-        c(ind_HSO4m_a( 1)) = ca0( 8)                                                       
+        c(ind_HSO4m_a( 1)) = ca0( 8)                                                
         c(ind_SO4mm_a( 1)) = ca0( 9)
-        c(ind_H2SO4_a( 1)) = ca0(10) 
+        c(ind_H2SO4_a( 1)) = ca0(10)
         c( ind_NH4p_a( 1)) = ca0(11)
-        c(ind_HCO3m_a( 1)) = ca0(12) 
+        c(ind_HCO3m_a( 1)) = ca0(12)
         c( ind_NO3m_a( 1)) = ca0(13)  
         c(  ind_DOC_a( 1)) = ca0(14)
+
+! aqueous mode 2 (= AS mode)
+        c(   ind_O2_a( 2)) = ca0( 1)  
+        c(  ind_OHm_a( 2)) = ca0( 2)       
+        c(   ind_Hp_a( 2)) = ca0( 3) 
+        c(   ind_O3_a( 2)) = ca0( 4)        
+        c(  ind_O2m_a( 2)) = ca0( 5)
+        c(  ind_Clm_a( 2)) = ca0( 6)        
+        c(ind_Feppp_a( 2)) = ca0( 7)
+        c(ind_HSO4m_a( 2)) = ca0( 8)                                                       
+        c(ind_SO4mm_a( 2)) = ca0( 9)
+        c(ind_H2SO4_a( 2)) = ca0(10) 
+        c( ind_NH4p_a( 2)) = ca0(11)
+        c(ind_HCO3m_a( 2)) = ca0(12) 
+        c( ind_NO3m_a( 2)) = ca0(13)  
+        c(  ind_DOC_a( 2)) = ca0(14)
+
+! aqueous mode 3 (= CS mode)
+        c(   ind_O2_a( 3)) = ca0( 1)  
+        c(  ind_OHm_a( 3)) = ca0( 2)       
+        c(   ind_Hp_a( 3)) = ca0( 3) 
+        c(   ind_O3_a( 3)) = ca0( 4)        
+        c(  ind_O2m_a( 3)) = ca0( 5)
+        c(  ind_Clm_a( 3)) = ca0( 6)        
+        c(ind_Feppp_a( 3)) = ca0( 7)
+        c(ind_HSO4m_a( 3)) = ca0( 8)                                                       
+        c(ind_SO4mm_a( 3)) = ca0( 9)
+        c(ind_H2SO4_a( 3)) = ca0(10) 
+        c( ind_NH4p_a( 3)) = ca0(11)
+        c(ind_HCO3m_a( 3)) = ca0(12) 
+        c( ind_NO3m_a( 3)) = ca0(13)  
+        c(  ind_DOC_a( 3)) = ca0(14)
 
 
 

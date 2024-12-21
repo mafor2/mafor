@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -42,7 +42,8 @@ module gde_seaflux
 
 
    use gde_input_data, only  : MMAX
-   use gde_input_data, only  : NU,AI,AS,CS
+   use gde_input_data, only  : NU,NA,AI,AS,CS
+   use gde_constants,  only  : pi
 
 
 implicit none
@@ -58,7 +59,7 @@ implicit none
 
 contains
 
-  subroutine seasaltemis(IMAX,DPA,u10,sst,sal,owf,saltemis)
+  subroutine seasaltemis(IMAX,DPA,DLOGDP,u10,sst,sal,owf,saltemis)
 
     !----------------------------------------------------------------------
     !
@@ -70,8 +71,11 @@ contains
     !
     !      purpose
     !      -------
-    !      Calculate seasalt particle flux dF/dr
-    !      according to Spada et al. (2013)
+    !      Calculate seasalt particle flux dF/dlogDp
+    !      according to Salter et al. (2015).
+    !      Replaces earlier routine with same name
+    !      that calculated seasalt particle flux
+    !      according to Spada et al. (2013).
     !
     !      interface
     !      ---------
@@ -79,6 +83,7 @@ contains
     !        input:
     !           u10:  wind speed                     [m/s]
     !           DPA:  dry particle diameter          [m]
+    !           DLOGDP:                              [-]
     !           sst:  sea surface temperature        [K]
     !           sal:  salinity in seawater           [g/kg]
     !           owf:  open water fraction            [-]
@@ -87,11 +92,20 @@ contains
     !
     !      method
     !      ------
-    !      Combination of the seasalt flux parameterizations of
-    !      MO86, SM93 and MA03 to cover the entire diameter spectrum
+    !      Empirical seasalt flux parameterization that covers
+    !      the entire diameter spectrum.
+    !      For sectional representation dF/dlogDp is multiplied by dlogDp.
     !
     !      reference
     !      ---------
+    !      SAL15
+    !      Salter, M. D., Zieger, P., Acosta Navarro, J. C., Grythe, H.,
+    !      Kirkevag, A., Riipinen, I., Nilsson, E. D. (2015)
+    !      An empirically derived inorganic sea spray source function
+    !      incorporating sea surface temperature.
+    !      Atmos. Chem. Phys., 15, 11047-11066,
+    !      https://doi.org/10.5194/acp-15-11047-2015
+    !
     !      Spada, M., Jorba, O., Perez Garcia-Pando, C., Janjic, Z.,
     !      and Baldasano, J. M. (2013)
     !      Modeling and evaluation of the global sea-salt aerosol
@@ -99,226 +113,179 @@ contains
     !      effects at coastal/orographic sites.
     !      Atmos. Chem. Phys., 13, 11735-11755, doi:10.5194/acp-13-11735-2013
     !
-    !      MO86
-    !      Monahan, E. C., Spiel, D. E., and Davidson, K. L. (1986)
-    !      A Model of Marine Aerosol Generation via Whitecaps and Wave Disruption. 
-    !      167–174, Oceanographic Sciences Library, Springer, 
-    !      Dordrecht, the Netherlands, doi:10.1007/978-94-009-4668-2_16
-    !
-    !      SM93
-    !      Smith, M. H., Park, P. M., and Consterdine, I. E. (1993)
-    !      Marine aerosol concentrations and estimated fluxes over the sea.
-    !      Q. J. Roy. Meteor. Soc., 119, 809–824, doi:10.1002/qj.49711951211
-    !
-    !      MA03
-    !      Martensson, E. M., Nilsson, E. D., de Leeuw, G., Cohen, L. H., 
-    !      and Hansson, H.-C. (2003) 
-    !      Laboratory simulations and parameterization of the primary marine 
-    !      aerosol production.
-    !      J. Geophys. Res.-Atmos., 108, 4297, doi:10.1029/2002JD002263
-    !
-    !      Petters, M. D. and Kreidenweis, S. M. (2007)
-    !      A single parameter representation of hygroscopic growth and cloud
-    !      condensation nuclei activity.
-    !      Atmos. Chem. Phys., 7, 1961-1971, 
-    !      http://www.atmos-chem-phys.net/7/1961/2007/
-    !
     !      Zinke, J., Nilsson, E. D., Zieger, P., and Salter, M. E. (2022)
-    !      The effect of seawater salinity and seawater temperature on sea salt
-    !      aerosol production. 
+    !      The effect of seawater salinity and seawater temperature on 
+    !      sea salt aerosol production. 
     !      J. Geophys. Res.-Atmos., 127, e2021JD036005,
     !      https://doi.org/10.1029/2021JD036005
-    ! 
+    !
+    !      Ovadnevaite, J., Ceburnis, D., Canagaratna, M., Berresheim, H.,
+    !      Bialek, J., Martucci, G., Worsnop, D. R. and O’Dowd, O. (2012)
+    !      On the effect of wind speed on submicron sea salt mass concentrations
+    !      and source fluxes, J. Geophys. Res., 117, D16201,
+    !      doi:10.1029/2011JD017379.
+    !
     !      modifications
     !      -------------
-    !      none
+    !      Salinity adjustment by multiplication with 
+    !      (sal/SALREF)**third
+    !      Multiplication of dlogF/dlogDp by dlogDp
+    !      If OWF < 70% use Ovadnevaite et al. (2012) exponent 2.7
+    !      for the wind dependence
     !
     !------------------------------------------------------------------
 
 
   implicit none
 
-     integer, intent(in)                             :: IMAX
-     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA     ! [m]
-     real( dp), intent(in)                           :: u10       ! [m/s]
-     real( dp), intent(in)                           :: sst       ! [K]
-     real( dp), intent(in)                           :: sal       ! [g/kg]
-     real( dp), intent(in)                           :: owf       ! [-]
+     integer, intent(in)                              :: IMAX
+     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPA       ! [m]
+     real( dp), dimension(MMAX,IMAX), intent(in)      :: DLOGDP    ! [-]
+     real( dp), intent(in)                            :: u10       ! [m/s]
+     real( dp), intent(in)                            :: sst       ! [K]
+     real( dp), intent(in)                            :: sal       ! [g/kg]
+     real( dp), intent(in)                            :: owf       ! [-]
 
-     real( dp), dimension(MMAX,IMAX),intent(out)     :: saltemis  ! [1/(m^2*s)]
+     real( dp), dimension(MMAX,IMAX),intent(out)      :: saltemis  ! [1/(m^2*s)]
 
 ! local
      real( dp), dimension(MMAX,IMAX)   :: DFDR
-     real( dp), dimension(MMAX,IMAX)   :: RPD
-     real( dp), dimension(MMAX,IMAX)   :: RP80
-     real( dp), dimension(MMAX,IMAX)   :: DLOGDP
+
      real( dp)                         :: W
-     real( dp)                         :: DR
-     real( dp)                         :: kappa
-     real( dp)                         :: rhwet
      real( dp)                         :: third
+     real( dp)                         :: sstc
+     real( dp)                         :: logdp
 
-! MO86
-     real( dp)                         :: B
-     real( dp)                         :: mo86
-! SM93
-     real( dp), dimension(2)           :: r0,A,f
-     real( dp), dimension(2)           :: sm93
-     real( dp)                         :: sumsm93
-! MA03
-     real( dp), dimension(3)           :: c0,c1,c2,c3,c4
-     real( dp), dimension(3)           :: d0,d1,d2,d3,d4
-     real( dp)                         :: AM, BM
+!SAL15
+! Number of modes in SAL15
+     integer, parameter                :: nmod = 3
 
-     integer                           :: M,I,K,L
+     real( dp), dimension(nmod)        :: effprod
+     real( dp), dimension(nmod)        :: NP
+     real( dp), dimension(nmod)        :: dpmod,sigmo
+     real( dp), dimension(nmod)        :: a0,b0,c0,d0
+
+
+     integer                           :: M,I
+     integer                           :: j
 
 ! Reference salinity (north sea) [-]
      real( dp), parameter              :: SALREF = 35._dp 
 
-! MA03 polynomial coefficients, three size ranges
 
-        data c0/ -2.881e6 , -6.743e6 ,  2.181e6  /
-        data c1/ -3.003e13,  1.183e14, -4.165e12 /
-        data c2/ -2.867e21, -8.148e20,  3.132e18 /
-        data c3/  5.932e28,  2.404e27, -9.841e23 /
-        data c4/ -2.576e35, -2.452e33,  1.085e29 /
+! SAL15 Modal parameters for the SST dependence given
+! for three aerosol modes. Table 2 in Salter et al. (2015)
+! Modes
+        data dpmod/ 0.095e-6, 0.60e-6, 1.50e-6   /
+        data sigmo/ 2.10    , 1.72   , 1.60      /
+! Ai to Di
+        data a0/ -5.2168e5 ,  0.00    , 0.00      /
+        data b0/ 3.31725e7 ,  7.374e5 , 1.4210e4  /
+        data c0/ -6.95275e8, -2.4803e7, 1.4662e7  /
+        data d0/ 1.0684e10 , 7.7373e8 , 1.7075e8  /
 
-        data d0/  7.609e8 ,  2.279e9 , -5.800e8  /
-        data d1/  1.829e16, -3.787e16,  1.105e15 /
-        data d2/  6.791e23,  2.528e23, -8.297e20 /
-        data d3/ -1.616e31, -7.310e29,  2.601e26 /
-        data d4/  7.188e37,  7.368e35, -2.859e31 /
 
-        ! Whitecap cover W as fraction [-]
-        W = 3.84_dp * 1.e-6 * u10**(3.41_dp)
+!SAL15
+! Entrainment flux of air into the ocean water column
+! according to Eq.(7) in Salter et al. (2015)
+! W :: Entrainment flux [m^3 m^-2 s^-1]
 
-        ! SM93 parameters
-        r0(1) = 2.1   ! um
-        r0(2) = 9.2   ! um
-        A(1)  = 10._dp**(0.0676*u10+2.43)
-        A(2)  = 10._dp**(0.959*u10**(0.5_dp)-1.476)
-        f(1)  = 3.1
-        f(2)  = 3.3
 
-        ! Hygroscopic Growth factor for NaCl
-        ! kappa_mean in Petters and Kreidenfels (2007)
-        ! Equation (3) therein:
-        ! Vwet = (rh/(1-rh))*kappa*Vdry
-        ! Dpwet**3 = Vwet*(6/pi)
-        ! Dpwet**3 = (rh/(1-rh))*kappa*Dpdry**3
-        ! Dpwet    = ((rh/(1-rh))*kappa)**(1/3) * Dpdry
-        kappa = 1.12_dp
-        rhwet = 0.80_dp
+        if (owf.lt.0.70) then
+
+!Ovadnevaite JGR 2012 !EAC2024 abstract
+           if (u10>3.7_dp) then
+             W = 0.1_dp * 1.e-8 * u10**(2.7_dp)
+           else
+             W = 0._dp
+           endif
+
+        else
+
+           W = 2.0_dp * 1.e-8 * u10**(3.41_dp)
+
+        endif 
+
         third = 1._dp/3._dp
 
+! Sea surface temperature in degree Celsius
+        sstc = sst - 273.0_dp
 
-        do M=NU,CS
+! First calculate number production flux
+! in each of the three modes
+! according to Eq.(9) in Salter et al. (2015)
+! NP :: Number production flux [m^3 m^-2 s^-1]
+
+       do j=1,nmod
+
+           NP(j) = W * ( a0(j)*sstc**3 + b0(j)*sstc**2 + c0(j)*sstc + d0(j) )
+
+       end do
+
+! No particles in NU mode
+       do I=1,IMAX
+           DFDR(NU,I)     = 0.0_dp
+           saltemis(NU,I) = 0.0_dp
+       end do
+
+       do M=NA,CS
          do I=1,IMAX
 
-        ! dry particle radius in m 
-             RPD(M,I) = 0.5*DPA(M,I)
-        ! wet particle radius in m at RH=80%  
-             RP80(M,I) = RPD(M,I) * ( (rhwet/(1._dp-rhwet))*kappa )**third
-
-
-        ! Calculation of particle number flux dF/dr in [m^-3 s^-1]
-        ! Smaller particles: dF/dr = 0
-
-             if ( DPA(M,I).lt.2.e-8 ) DFDR(M,I) = 0.0
-
-
-        ! MA03, dF/dlog(dp) [m^-2 s^-1] for 0.02 < Dp < 2.8 um
-
-             if ( (DPA(M,I).ge.2.e-8).and.(DPA(M,I).lt.1.45e-7) ) then 
-               AM = c4(1)*DPA(M,I)**4 + c3(1)*DPA(M,I)**3 + c2(1)*DPA(M,I)**2  +  & 
-                    c1(1)*DPA(M,I) + c0(1)
-               BM = d4(1)*DPA(M,I)**4 + d3(1)*DPA(M,I)**3 + d2(1)*DPA(M,I)**2  +  &
-                    d1(1)*DPA(M,I) + d0(1)
-               DFDR(M,I) = W * (AM*sst + BM)
-             endif
-
-             if ( (DPA(M,I).ge.1.45e-7).and.(DPA(M,I).lt.4.19e-7) ) then 
-               AM = c4(2)*DPA(M,I)**4 + c3(2)*DPA(M,I)**3 + c2(2)*DPA(M,I)**2  +  & 
-                    c1(2)*DPA(M,I) + c0(2)
-               BM = d4(2)*DPA(M,I)**4 + d3(2)*DPA(M,I)**3 + d2(2)*DPA(M,I)**2  +  &
-                    d1(2)*DPA(M,I) + d0(2)
-               DFDR(M,I) = W * (AM*sst + BM)
-             endif
-
-             if ( (DPA(M,I).ge.4.19e-7).and.(DPA(M,I).le.2.8e-6) ) then 
-               AM = c4(3)*DPA(M,I)**4 + c3(3)*DPA(M,I)**3 + c2(3)*DPA(M,I)**2  +  & 
-                    c1(3)*DPA(M,I) + c0(3)
-               BM = d4(3)*DPA(M,I)**4 + d3(3)*DPA(M,I)**3 + d2(3)*DPA(M,I)**2  +  &
-                    d1(3)*DPA(M,I) + d0(3)
-               DFDR(M,I) = W * (AM*sst + BM)
-             endif
-
-
-             if ( (DPA(M,I).ge.2.e-8).and.(DPA(M,I).le.2.8e-6) ) then 
-        ! Salinity adjustment for MA03
-               DFDR(M,I) = DFDR(M,I) * ( sal/SALREF )**third
-        ! Particle number flux through sea surface is [m^-2 s^-1]
-               saltemis(M,I) = DFDR(M,I)
-        ! Zinke et al. (2022): MA03 is roughly one order of magnitude higher
-        !                      at high salinity (sal = 35 g/kg)
-               saltemis(M,I) = saltemis(M,I) * 0.1_dp
-        ! Scaled with the open water fraction
-               saltemis(M,I) = saltemis(M,I) * owf
-             endif
-
-
-        ! In Coarse mode (CS): MO86 or SM93
-             if (DPA(M,I).gt.2.8e-6) then 
-
-        ! MO86, dF/dr80 [m^-2 s^-1 um^-1] for Dp > 2.8 um
-
-               B = (0.380_dp-log10(RP80(M,I)*1.e6)) / 0.650_dp
-               mo86 = 1.373 * (u10)**(3.41_dp) * (RP80(M,I)*1.e6 )**(-3._dp)   *  &
-                      (1._dp + 0.057_dp*(RP80(M,I)*1.e6)**1.05)                *  &
-                      10._dp**(1.19*exp((-1._dp)*B**2))
-
-
-        ! SM93, dF/dr80 [m^-2 s^-1 um^-1] for Dp > 2.8 um
-
-               do K=1,2
-                 sm93(K) = A(K) * exp( (-1._dp)*f(K)*(log(RP80(M,I)*1.e6/r0(K)))**2 )
-               enddo
-               sumsm93 = sm93(1) + sm93(2)
-
-
-               if (u10.lt.9.0_dp) then
-
-                 DFDR(M,I) = mo86
-
-               else
-
-                 DFDR(M,I) = max(mo86,sumsm93)
-
-               endif
-
-        ! Salinity adjustment
-               DFDR(M,I) = DFDR(M,I) * ( sal/SALREF )**third
-
-        ! Convert to [m^-3 s^-1]
-               DFDR(M,I) = DFDR(M,I)*1.e6
+        ! initialize DFDR
+            DFDR(M,I) = 0.0_dp
+            logdp = LOG(DPA(M,I))
 
         ! Particle number flux through sea surface is F [m^-2 s^-1]
         ! dF/dlogDp = dF/dDry * ln10 * Ddry
-               saltemis(M,I) = DFDR(M,I) * 2.302585093 * DPA(M,I)
+        ! Calculate dF/dlog(dp) [m^-2 s^-1] for all size bins
+        ! according to Eq.(8) in Salter et al. (2015)
+            do j=1,nmod
+              effprod(j) =  NP(j) / (SQRT(2._dp*pi)*LOG(sigmo(j)))
+              effprod(j) = effprod(j)                                    *  &
+                           EXP(-0.5_dp*( ((logdp-LOG(dpmod(j)))**2._dp)  /  &
+                           ((LOG(sigmo(j)))**2._dp) ))
 
-        ! Test with scaling by 0.1
-               saltemis(M,I) = saltemis(M,I) * 0.1_dp
+              DFDR(M,I) = DFDR(M,I) + effprod(j)
+            end do
 
-        ! Scaled with the open water fraction
-               saltemis(M,I) = saltemis(M,I) * owf 
 
-             endif
+        ! No sea salt flux for particles with Ddry < 10 nm
+            if (DPA(M,I).lt.1.0e-8) DFDR(M,I) = 0._dp
 
-         ! Write the sea-salt particle emissions
-     !        write(6,'(I2,A1,I2,4ES12.4)') M,' ',I,DPA(M,I), saltemis(M,I)
+        ! Particle number flux through sea surface is [m^-2 s^-1]
+        ! DFDR is dF/dlogDp
+        ! dF = dF/dlogDp * dlogDp
+            saltemis(M,I) = DFDR(M,I) * DLOGDP(M,I)
+
+        ! Salinity adjustment
+        ! The sea salt number, surface area and mass (or volume) 
+        ! emissions are all scaled by the salinity SAL.
+        ! NOTE: However, when assuming that the water droplet generation 
+        ! process is not affected by variable salinity, then the 
+        ! dry particle diameter and mass emission should be scaled by 
+        ! the salinity correction, but not number emission.
+        ! Zink et al. (2022), Figure 1 shows for SAL>10 g/kg that
+        ! number, surface area and volume distribution increases
+        ! with increasing salinity. A shift of diameter is only seen
+        ! for SAL<10 g/kg.
+            saltemis(M,I) = saltemis(M,I) * ( sal/SALREF )**third
+
+        ! Linear scaling with the open water fraction
+            saltemis(M,I) = saltemis(M,I) * owf
+
 
          end do
        end do
+
+! Write the sea-salt particle emission dF/dlogDp
+! for comparison with literature
+! DFDR(M,I) := dF/dlogDp
+!       do M=NU,CS
+!         do I=1,IMAX
+!             write(6,'(I2,A1,I2,4ES12.4)') M,' ',I,DPA(M,I),DFDR(M,I),saltemis(M,I)
+!         end do
+!       end do
+!    stop
 
 
   end subroutine seasaltemis

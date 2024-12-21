@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -88,7 +88,9 @@ module gde_aerosol_solver
   use gde_deposition,     only  : depozhang01  
   use gde_deposition,     only  : depofrough
   use gde_deposition,     only  : depositwall
-  use gde_deposition,     only  : wetscav
+  use gde_deposition,     only  : wetscavbulk
+  use gde_deposition,     only  : wetscavsize
+  use gde_coagulation,    only  : coagulation_coeff
   use gde_coagulation,    only  : coagulation
   use gde_coagulation,    only  : coagulation_target
   use gde_nucleation,     only  : nucleation
@@ -120,7 +122,8 @@ contains
   subroutine aerosol_solver(DTIME,IMAX,press,temp,DENSPAR,DENSPARW,DPA,DPAW,VPT,N,     &
                            MASS,IAG,NVAP,                                              &
                            mbl,rain,hsta_st,u10,cair,RH,daytime,lat_deg,               &
-                           hour_timemin,jrno2,alphanit,fcoj,                           &
+                           incloud,owf,hour_timemin,                                   &
+                           jrno2,alphanit,fcoj,                                        &
                            CAMI,KP_NIT,fnuc,INUCMEC,                                   &
                            DENOC,surfin,surf_org,                                      &
                            M_oc,nmo,foc,hvap,csat0,                                    &
@@ -179,12 +182,19 @@ contains
     ! input
     integer, intent(in)                        :: IMAX
     real( dp), intent(in)                      :: DTIME
-    real( dp), intent(in)                      :: temp,press,mbl
+    real( dp), intent(in)                      :: temp
+    real( dp), intent(in)                      :: press
+    real( dp), intent(in)                      :: mbl
     real( dp), intent(in)                      :: hsta_st
-    real( dp), intent(in)                      :: u10,rain
-    real( dp), intent(in)                      :: cair,RH
+    real( dp), intent(in)                      :: u10
+    real( dp), intent(in)                      :: rain
+    real( dp), intent(in)                      :: cair
+    real( dp), intent(in)                      :: RH
     real( dp), intent(in)                      :: jrno2
-    real( dp), intent(in)                      :: daytime,lat_deg
+    real( dp), intent(in)                      :: daytime
+    real( dp), intent(in)                      :: lat_deg
+    real( dp), intent(in)                      :: owf
+    integer, intent(in)                        :: incloud
     real( dp), intent(in)                      :: hour_timemin
     real( dp), intent(in)                      :: CAMI,KP_NIT,fnuc
     real( dp), intent(in)                      :: alphanit,fcoj
@@ -254,14 +264,17 @@ contains
     real( dp), dimension(NSOA),intent(out)            :: csate
 
     ! local
-    integer                     :: M,I,Q,K
-    real( dp)                   :: sum_gamma(NU:CS)
+    integer                     :: M,I,Q,K,J
+
     ! for kelvin effect of n-alkanes
+    real( dp)                   :: sum_gamma(NU:CS)
     real( dp)                   :: gamma_oc7_tmp
     real( dp)                   :: gamma_oc8_tmp
     ! wet particle scavenging [1/s]
-    real( dp)                   :: wetdep
     real( dp)                   :: wetsc
+    ! in-cloud interstitial scavenging [1/s]
+    real( dp)                   :: coagscav
+    ! condensation
     real( dp)                   :: DNVAPN
     real( dp)                   :: NVAPOLDN
     real( dp)                   :: nnuc
@@ -292,11 +305,13 @@ contains
     real( dp),allocatable,dimension(:,:,:)   :: FLUXCM
     real( dp),allocatable,dimension(:,:)     :: FLUXCMC
     real( dp),allocatable,dimension(:,:)     :: FLUXC
+    real( dp),allocatable,dimension(:,:,:,:) :: kcoag     
     real( dp),allocatable,dimension(:,:,:)   :: FLUXM
     real( dp),allocatable,dimension(:,:)     :: FLUX
     real( dp),allocatable,dimension(:,:,:)   :: cccond
     real( dp),allocatable,dimension(:,:)     :: depo
     real( dp),allocatable,dimension(:,:)     :: depowall
+    real( dp),allocatable,dimension(:,:)     :: wetdep
     real( dp),allocatable,dimension(:,:,:)   :: keffect
     real( dp),allocatable,dimension(:,:)     :: keffectwat
     real( dp),allocatable,dimension(:,:)     :: keffectni,keffectsu
@@ -315,10 +330,12 @@ contains
        if (.not. allocated(FLUXCM))       ALLOCATE(FLUXCM(MMAX,IMAX,QMAX))
        if (.not. allocated(FLUXCMC))      ALLOCATE(FLUXCMC(MMAX,IMAX))
        if (.not. allocated(FLUXC))        ALLOCATE(FLUXC(MMAX,IMAX))
+       if (.not. allocated(kcoag))        ALLOCATE(kcoag(MMAX,MMAX,IMAX,IMAX) )
        if (.not. allocated(FLUXM))        ALLOCATE(FLUXM(MMAX,IMAX,AMAX))
        if (.not. allocated(FLUX))         ALLOCATE(FLUX(MMAX,IMAX))
        if (.not. allocated(depo))         ALLOCATE(depo(MMAX,IMAX))
        if (.not. allocated(depowall))     ALLOCATE(depowall(MMAX,IMAX))       
+       if (.not. allocated(wetdep))       ALLOCATE(wetdep(MMAX,IMAX))
        if (.not. allocated(keffect))      ALLOCATE(keffect(MMAX,IMAX,QMAX))       
        if (.not. allocated(keffectwat))   ALLOCATE(keffectwat(MMAX,IMAX))
        if (.not. allocated(keffectni))    ALLOCATE(keffectni(MMAX,IMAX))
@@ -330,41 +347,42 @@ contains
 
 ! Initialize all aerosol terms
 ! that are output and that are local or locally allocated
-       depo(:,:)     = 0._dp 
-       depowall(:,:) = 0._dp
-       wetdep        = 0._dp 
-       flux(:,:)     = 0._dp
-       fluxm(:,:,:)  = 0._dp
-       coags         = 0._dp
-       jnuc          = 0._dp
-       natot         = 0._dp
-       nnuc          = 0._dp
-       keffect(:,:,:)= 1._dp
-       LVAP(:)       = 0._dp
-       FVAP(:)       = 0._dp
-       DNVAP(:)      = 0._dp
-       DNVAPN        = 0._dp
-       NVAPOLDN      = 0._dp
-       NVAPO(:)      = 0._dp
-       nsv(:)        = 0._dp
-       CAT(:)        = 0._dp
-       CAT2(:)       = 0._dp
-       DIFFMASS1(:)  = 0._dp
-       DIFFMASS2(:)  = 0._dp
-       MMX(:,:,:)    = 0._dp
-       EXCESS(:,:,:) = 0._dp
-       LOSS(:,:,:)   = 0._dp
-       KOND(:,:,:)   = 0._dp
-       CCCOND(:,:,:) = 0._dp
-       FLUXCM(:,:,:) = 0._dp
-       FLUXCMC(:,:)  = 0._dp
-       FLUXC(:,:)    = 0._dp
-       CSSULT        = 0._dp
-       CSORGT        = 0._dp
-       GRSU          = 0._dp
-       GRMS          = 0._dp
-       GROC          = 0._dp
-       GRTOT         = 0._dp
+       depo(:,:)      = 0._dp 
+       depowall(:,:)  = 0._dp
+       wetdep(:,:)    = 0._dp
+       kcoag(:,:,:,:) = 0._dp
+       flux(:,:)      = 0._dp
+       fluxm(:,:,:)   = 0._dp
+       coags          = 0._dp
+       jnuc           = 0._dp
+       natot          = 0._dp
+       nnuc           = 0._dp
+       keffect(:,:,:) = 1._dp
+       LVAP(:)        = 0._dp
+       FVAP(:)        = 0._dp
+       DNVAP(:)       = 0._dp
+       DNVAPN         = 0._dp
+       NVAPOLDN       = 0._dp
+       NVAPO(:)       = 0._dp
+       nsv(:)         = 0._dp
+       CAT(:)         = 0._dp
+       CAT2(:)        = 0._dp
+       DIFFMASS1(:)   = 0._dp
+       DIFFMASS2(:)   = 0._dp
+       MMX(:,:,:)     = 0._dp
+       EXCESS(:,:,:)  = 0._dp
+       LOSS(:,:,:)    = 0._dp
+       KOND(:,:,:)    = 0._dp
+       CCCOND(:,:,:)  = 0._dp
+       FLUXCM(:,:,:)  = 0._dp
+       FLUXCMC(:,:)   = 0._dp
+       FLUXC(:,:)     = 0._dp
+       CSSULT         = 0._dp
+       CSORGT         = 0._dp
+       GRSU           = 0._dp
+       GRMS           = 0._dp
+       GROC           = 0._dp
+       GRTOT          = 0._dp
 
 
 ! PARTICLE DEPOSITION
@@ -373,7 +391,7 @@ contains
 ! particle deposition only when box is in contact with ground
 
        if ( (IDEPO.EQ.1).AND.(mbl.ge.2.0*hsta_st) ) then
-         CALL depositpar(press,temp,DENSPAR,DPAW,mbl,depo,IMAX)
+         CALL depositpar(press,temp,DENSPAR,DPAW,mbl,owf,depo,IMAX)
        endif
 
        if ( (IDEPO.EQ.2).AND.(mbl.ge.2.0*hsta_st) ) then
@@ -397,18 +415,37 @@ contains
        endif
 
 ! particle wet scavenging rate [1/s]
-       if (IWETD.EQ.1) wetdep = wetscav(rain)
+       if (rain .gt. 0.0) then
+         ! bulk aerosol
+         if (IWETD.EQ.1) then
+           wetsc = wetscavbulk(rain)
+           do M=AI,CS
+             do I=1,IMAX
+               wetdep(M,I) = wetsc
+             enddo
+           enddo 
+         endif
+         ! size-resolved aerosol
+         if (IWETD.EQ.2) CALL wetscavsize(IMAX,DPAW,press,temp,DENSPAR,rain,wetdep)
+       endif
 
 
 ! PARTICLE COAGULATION
 ! coagulation of particles
 
        if (ICOAG .ge. 1) then
-         CALL coagulation(temp,DTIME,DENSPARW,DPAW,VPT,N,MASS,    &
-                          IMAX,IAG,coags,fluxm,flux)
+       
+! coagulation coefficient kcoag(M,O,I,J)
+! (also used for interstitial aerosol scavenging)
+           CALL coagulation_coeff(temp,DENSPARW,DPAW,kcoag,IMAX)
+
+! coagulation by Brownian diffusion
+           CALL coagulation(temp,DTIME,DENSPARW,DPAW,VPT,N,MASS,  &
+                          IMAX,IAG,kcoag,coags,fluxm,flux)
 
 ! compute updated coagulation target classes      
-         CALL coagulation_target(VPT,IMAX,IAG)
+           CALL coagulation_target(VPT,IMAX,IAG)
+
        endif
 
 
@@ -424,9 +461,10 @@ contains
 ! Nucleation of particles, N(1)
 !  JNUC: nucleation rate J in m^-3s^-1
        if (INUC == 1) then
-         CALL nucleation(INUCMEC,cair,NVAP(A_SUL),NVAP(A_NH4),NVAP(A_AMI), &
-                         NVAP(A_NIT),NVAP(A_OR2),NVAP(A_IO3),              &
-                         temp,RH,jrno2,CAMI,                               &
+         CALL nucleation(INUCMEC,cair,NVAP(A_SUL),NVAP(A_NH4),    &
+                         NVAP(A_AMI),NVAP(A_NIT),                 &
+                         NVAP(A_OR2),NVAP(A_IO3),                 &
+                         temp,RH,jrno2,CAMI,                      &
                          KPEQ,fnuc,coags,daytime,lat_deg,natot,jnuc)
                          
          if ((IDEB == 1) .and. (hour_timemin == 120.)) then
@@ -660,6 +698,12 @@ contains
 ! for ammonium nitrate condensation?
         if (ctnh4 > ctnit) then
            KOND(:,:,a_nh4)=KOND(:,:,a_nh4)*0.4
+        endif
+
+! If incloud=1 no condensation to CS mode
+        if (incloud .eq. 1) then
+           KOND(CS,:,:)   = 0._dp
+           FLUXCM(CS,:,:) = 0._dp
         endif
 
 ! compute new particle mass concentrations after condensation
@@ -958,12 +1002,18 @@ contains
          ! iodic acid / sulfuric acid nucleation    
          else if (INUCMEC .EQ. 14) then
             NVAP(A_IO3)=nvap(A_IO3)-jnuc*nnuc*natot*DTIME
-            MASS(NU,1,A_IO3) = MASS(NU,1,A_IO3)                      +       &
+            MASS(NU,1,A_IO3) = MASS(NU,1,A_IO3)                     +       &
                        natot*MIO*jnuc*DTIME*CONVM
             ! for the sulfuric acid / iodic acid nucleation
             nvap(A_SUL) = nvap(A_SUL)-jnuc*nnuc*DTIME
-            mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                      +       &
+            mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                     +       &
                       natot*MB*jnuc*DTIME*CONVM
+            N(NU,1)=N(NU,1)+jnuc*DTIME
+         ! iodic acid nucleation    
+         else if (INUCMEC .EQ. 15) then
+            NVAP(A_IO3)=nvap(A_IO3)-jnuc*nnuc*natot*DTIME
+            MASS(NU,1,A_IO3) = MASS(NU,1,A_IO3)                     +       &
+                       natot*MIO*jnuc*DTIME*CONVM
             N(NU,1)=N(NU,1)+jnuc*DTIME
          else
        !   sulfuric acid nucleation
@@ -974,7 +1024,7 @@ contains
              else
                 nvap(A_SUL) = nvap(A_SUL)-jnuc*nnuc*DTIME
              endif    
-             mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                      +       &
+             mass(NU,1,A_SUL) = mass(NU,1,A_SUL)                    +       &
                        natot*MB*jnuc*DTIME*CONVM
        ! New Number concentration in NU,1    
            n(NU,1)=n(NU,1)+jnuc*DTIME
@@ -996,26 +1046,58 @@ contains
            write(12,*) 'Mass conservation for coagulation:'
            write(12,fmt='(a,f13.5)') '    MTOT before coagulation           [ng/m^3]', DEB_MTOT
          endif       
-       
-         do M=NU,CS
-          do I=1,IMAX
-             IF (N(M,I) .GT. nucomin) THEN
-               do K=1,AMAX   
-                 MASS(M,I,K)=MASS(M,I,K)+FLUXM(M,I,K)*DTIME  
-                 MASS(M,I,K)=max(MASS(M,I,K),0.0_dp)             
-               end do 
-             ENDIF
-             N(M,I)=N(M,I)+FLUX(M,I)*DTIME
-             ! apply non-negative constraint because N(M,I) has already
-             ! been changed by condensation flux
-             N(M,I)=max(N(M,I),0.0_dp)
 
-           !  write(6,*) 'Fcoag',M,I,N(M,I),FLUX(M,I)
-          end do
-         end do
+         if (incloud .eq. 1) then
+    ! Collection of interstatial particles in the non-precipitating cloud
+    ! where the coarse mode droplets act as collectors and the particles
+    ! in NU to AS mode are captured by Brownian diffusion and removed.
+    ! Particles smaller than 10 nm will be scavenged in few minutes.
+    ! Seinfeld & Pandis book 1998, ch. 15.7.4
+    ! Limit this to not activated particles (Dp_dry < 100 nm)
 
+           do M=NU,AS
+             do I=1,IMAX
+               if (DPA(M,I).lt.1.e-7) then
+                 do J=1,IMAX
+                   coagscav = kcoag(M,CS,I,J) * N(CS,J)
+                   do K=1,AMAX
+                     MASS(M,I,K)= MASS(M,I,K)             -      &
+                              MASS(M,I,K)*coagscav*DTIME
+                   end do
+                   N(M,I)=N(M,I) - N(M,I)*coagscav*DTIME
+               
+               !  write(6,*) 'Kcoag',M,I,CS,J,DPAW(M,I),coagscav
+                 enddo
+               endif
+             enddo
+           enddo
+
+         else
+
+    ! Particle coagulation by Brownian diffusion
+
+           do M=NU,CS
+            do I=1,IMAX
+               IF (N(M,I) .GT. nucomin) THEN
+                 do K=1,AMAX   
+                   MASS(M,I,K)=MASS(M,I,K)+FLUXM(M,I,K)*DTIME  
+                   MASS(M,I,K)=max(MASS(M,I,K),0.0_dp)             
+                 end do 
+               ENDIF
+               N(M,I)=N(M,I)+FLUX(M,I)*DTIME
+               ! apply non-negative constraint because N(M,I) has already
+               ! been changed by condensation flux
+               N(M,I)=max(N(M,I),0.0_dp)
+
+             !  write(6,*) 'Fcoag',M,I,N(M,I),FLUX(M,I)
+            end do
+           end do
+
+         endif
+
+
+    ! Test of mass conversation for coagulation
          if (IDEB == 1) then         
-           ! test of mass conversation for coagulation
            DEB_MTOT=0.
            do M=NU,CS
              do I=1,IMAX
@@ -1026,6 +1108,7 @@ contains
            end do
            write(12,fmt='(a,f13.5)') '    MTOT after coagulation            [ng/m^3]', DEB_MTOT
          endif
+
        endif
 
 
@@ -1043,22 +1126,15 @@ contains
        endif
 
 
-! WET SCAVENGING (Aitken and Coarse Mode)
-       if (IWETD.EQ.1) then
-         do M=AI,CS
-          wetsc=wetdep
-
+! WET SCAVENGING
+       if (IWETD.GE.1) then
+         do M=NU,CS
           do I=1,IMAX
-
-! faster scavening of Aitken mode particles
-!!! remove once CCN activation is implemented
-         !!  if( (M==AI).and.(DPAW(M,I)>3.e-8) ) wetsc=wetdep*8.0
-
             do K=1,AMAX
-             MASS(M,I,K)=MASS(M,I,K)                     -        &
-                    MASS(M,I,K)*wetsc*DTIME
+             MASS(M,I,K)=MASS(M,I,K)                     -       &
+                    MASS(M,I,K)*wetdep(M,I)*DTIME
             end do
-            N(M,I)=N(M,I)-N(M,I)*wetsc*DTIME   
+            N(M,I)=N(M,I)-N(M,I)*wetdep(M,I)*DTIME
           end do
          end do
        endif
@@ -1105,10 +1181,12 @@ contains
        deallocate(fluxcm)
        deallocate(fluxcmc)
        deallocate(fluxc)
+       deallocate(kcoag)
        deallocate(fluxm)
        deallocate(flux)
        deallocate(depo)
        deallocate(depowall)
+       deallocate(wetdep)
        deallocate(keffect)
        deallocate(keffectwat)
        deallocate(keffectoc)

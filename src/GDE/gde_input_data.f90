@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -55,23 +55,31 @@ module gde_input_data
 
 !----------------------------------------------------------------
 !   GDE Aerosol Parameters
-!   Aerosol Modes, number of modes: 4
+!   Aerosol Modes, number of modes: 5
+!
+! IMPORTANT NOTE:
+! If any of the aerosol indices below are changed
+! do the corresponding changes in MESA/gde_thermo_data.f90
+!----------------------------------------------------------------
 
 ! Name of aerosol mode
      integer, parameter       :: NU =1
-     integer, parameter       :: AI =2
-     integer, parameter       :: AS =3
-     integer, parameter       :: CS =4  
+     integer, parameter       :: NA =2  ! new nanoparticle mode
+     integer, parameter       :: AI =3
+     integer, parameter       :: AS =4
+     integer, parameter       :: CS =5  
 ! Number of aerosol modes
-     integer, parameter       :: MMAX=4
+     integer, parameter       :: MMAX=5
 ! Number of aerosol components 
      integer, parameter       :: AMAX=21
 ! Number of condensable aerosol components
      integer, parameter       :: QMAX=16
 ! Number of SOA components
      integer, parameter       :: NSOA=9
-! NUmber of input aerosol components
+! Number of input aerosol components
      integer, parameter       :: iamax=10
+! Number of aqueous aerosol species
+     integer, parameter       :: aqmax=9
 
 ! INDEX declaration aerosol components
 !  condensable components       
@@ -98,7 +106,8 @@ module gde_input_data
      integer, parameter       :: A_XXX = 20
      integer, parameter       :: A_WAT = 21
 
-!   Aerosol Components from input, number of components: 10
+!   Aerosol Components from input
+!        number of components: 10
      integer, parameter       :: SU = 1
      integer, parameter       :: OC = 2
      integer, parameter       :: AM = 3
@@ -109,6 +118,17 @@ module gde_input_data
      integer, parameter       :: EC = 8
      integer, parameter       :: DU = 9
      integer, parameter       :: WA = 10
+
+!   Aqueous aerosol species
+     integer, parameter       :: SVI = 1
+     integer, parameter       :: MSA = 2
+     integer, parameter       :: NO3 = 3
+     integer, parameter       :: DMA = 4
+     integer, parameter       :: NH4 = 5
+     integer, parameter       :: IOD = 6
+     integer, parameter       :: OXA = 7
+     integer, parameter       :: SUC = 8
+     integer, parameter       :: SSA = 9
 
 !----------------------------------------------------------------
 ! mafor static arrays
@@ -150,6 +170,7 @@ module gde_input_data
      real( dp),save           :: DEB_CTOTO21,DEB_CTOTO22
      real( dp),save           :: model_time,dummy_time
      real( dp),save           :: hour_time,hour_timec,hour_timet,hour_timeo
+     real( dp),save           :: hour_after_fog
      real( dp),save           :: hour_timemin,dilut_time,dilut2_time
      real( dp),save           :: cpu_time_start, cpu_time_end
 ! Parameterized particle number concentration
@@ -258,12 +279,11 @@ module gde_input_data
 
 !----------------------------------------------------------------
 ! Cloud droplet activation
+   ! threshold LWD for partitioning [m^3/m^3]
+     real( dp), parameter     :: lwcpart=1.e-10_dp
    ! threshold RH for activation (99%) [-]
      real( dp), parameter     :: rhactiv=0.99_dp
-   ! time of full salt dissolution [s]
-     real( dp), parameter     :: tdiss=10._dp
-   ! number of aqueous aerosol species
-     integer, parameter       :: aqmax=8
+     real( dp), parameter     :: rhstart=0.98_dp
    ! thermal jump length [m]
      real( dp), parameter     :: Lthjump=2.16E-7_dp
    ! vapor jump length [m]

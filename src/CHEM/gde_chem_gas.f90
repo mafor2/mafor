@@ -346,8 +346,8 @@ contains
     cgas(ind_HNO4)     = cgas(ind_HNO4)    +emis(ind_HNO4   )* fct
     cgas(ind_NO3)      = cgas(ind_NO3)     +emis(ind_NO3    )* fct
     cgas(ind_HCl)      = cgas(ind_HCl)     +emis(ind_HCl    )* fct
-    ! Marine/ice iodine emission activated if owf<=20% (arctic)
-    if (owf.le.0.20) then
+    ! Marine/ice iodine emission activated if owf<=30% (arctic)
+    if (owf.le.0.40) then
       cgas(ind_I2)     = cgas(ind_I2)      +emis(ind_I2     )* fct
     endif
     cgas(ind_CH3I)     = cgas(ind_CH3I)    +emis(ind_CH3I   )* fct

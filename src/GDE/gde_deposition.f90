@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021 Matthias Steffen Karl
+!*    Copyright (C) 2011-2023 Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -27,15 +27,12 @@
 !*    The MAFOR code is intended for research and educational purposes. 
 !*    Users preparing publications resulting from the usage of MAFOR are 
 !*    requested to cite:
-!*    1.  Karl, M., Gross, A., Pirjola, L., Leck, C., A new flexible
-!*        multicomponent model for the study of aerosol dynamics
-!*        in the marine boundary layer, Tellus B, 63(5),1001-1025,
-!*        doi:10.1111/j.1600-0889.2011.00562.x, 2011.
-!*    2.  Karl, M., Kukkonen, J., Keuken, M.P., Lutzenkirchen, S.,
-!*        Pirjola, L., Hussein, T., Modelling and measurements of urban
-!*        aerosol processes on the neighborhood scale in Rotterdam,
-!*        Oslo and Helsinki, Atmos. Chem. Phys., 16,
-!*        4817-4835, doi:10.5194/acp-16-4817-2016, 2016.
+!*    1.  Karl, M., Pirjola, L., Grönholm, T., Kurppa, M., Anand, S., 
+!*        Zhang, X., Held, A., Sander, R., Dal Maso, M., Topping, D., 
+!*        Jiang, S., Kangas, L., and Kukkonen, J., Description and 
+!*        evaluation of the community aerosol dynamics model MAFOR v2.0,
+!*        Geosci. Model Dev., 15, 
+!*        3969-4026, doi:10.5194/gmd-15-3969-2022, 2022.
 !*
 !*****************************************************************************!
 !*    All routines written by Matthias Karl
@@ -72,7 +69,8 @@ module gde_deposition
     public :: depozhang01
     public :: settling
     public :: depofrough
-    public :: wetscav
+    public :: wetscavbulk
+    public :: wetscavsize
 
 ! KPP DP - Double precision kind
   INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(14,300)
@@ -192,7 +190,7 @@ subroutine depositwall(press,temp,DPA,DIL,VC,AS,AD,depowall,IMAX)
   end subroutine depositwall
 
 
-subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
+subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
     !----------------------------------------------------------------------
     !
     !****
@@ -219,6 +217,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
     !           press    [Pa]
     !           temp     [K]
     !           mbh      [m]
+    !           owf      [-]
     !           denspar  [kg/m3]
     !           DPA      [m]
     !         output:
@@ -246,20 +245,22 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
 
     implicit none
 
-    INTEGER, intent(in)                               :: IMAX
-    REAL( dp), intent(in)                             :: temp,press,mbh
+    integer, intent(in)                               :: IMAX
+    real( dp), intent(in)                             :: temp,press,mbh
+    real( dp), intent(in)                             :: owf
    ! REAL( dp), intent(in)                             :: ustar,znot
    ! REAL( dp), intent(in)                             :: ADEP,BDEP    
-    REAL( dp), DIMENSION(MMAX,IMAX), intent(in)       :: DENSPAR
-    REAL( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
-    REAL( dp), DIMENSION(MMAX,IMAX), intent(out)      :: depo
-    REAL( dp), DIMENSION(MMAX,0:(IMAX+1))             :: RP
+    real( dp), dimension(MMAX,IMAX), intent(in)       :: DENSPAR
+    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
+    real( dp), dimension(MMAX,IMAX), intent(out)      :: depo
+    real( dp), dimension(MMAX,0:(IMAX+1))             :: RP
 
-    REAL( dp)                              :: DENS,pres
-    REAL( dp)                              :: Sc,MYY,DIFFCO,X,VS,VG,CC
+    real( dp)                              :: DENS,pres
+    real( dp)                              :: Sc,MYY,DIFFCO,X,VS,VG,CC
     real( dp)                              :: DENSPA
+    real( dp)                              :: znotcm
 
-    INTEGER                                :: M,I
+    integer                                :: M,I
 
       pres=press/101325._dp
       DENS= 1.2929*273.15/temp*pres/1.      !air density in kg/m^3, P in atm
@@ -270,6 +271,15 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
       !ADEP=1.7
       !BDEP=51.8
 !      P = 1.        !atm
+      znotcm=znot
+      ! set ZNOT over water/ice (water: 0.001 m/s)
+      ! value from dispers.dat is taken
+      ! if 0.<= owf <= 0.3
+      if (owf.eq.1._dp) then
+        znotcm=0.001
+      else if ((owf.gt.0.3).and.(owf.lt.1._dp)) then
+        znotcm=0.0005
+      endif
       do M=1,MMAX
        do I=1,IMAX
          RP(M,I)=DPA(M,I)*0.5_dp
@@ -277,7 +287,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
          CALL diffpar(RP(M,I),pres,temp,MYY,DIFFCO,CC)
          MYY=MYY/DENS     !m^2/s
          Sc = MYY/DIFFCO  !laaduton
-         X = 2._dp*RP(M,I)*(ustar/znot/MYY)**(0.5_dp)*Sc**(1/3._dp)
+         X = 2._dp*RP(M,I)*(ustar/znotcm/MYY)**(0.5_dp)*Sc**(1/3._dp)
          !VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPA*g*DIFFCO/k_B/temp     !m/s
          VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPAR(M,I)*g*DIFFCO/k_B/temp     !m/s
          VG = DIFFCO/(2*RP(M,I))*(ADEP*X + BDEP*X**3) + VS     !m/s
@@ -655,117 +665,6 @@ subroutine diffpar(RP,pres,temp,MYY,DIFFCO,CC)
 
   end subroutine diffpar
 
-subroutine settling(DPAW,pres,temp,DENSPAR,IMAX,vterm  )
-    !----------------------------------------------------------------------
-    !
-    !****
-    !
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !
-    !      purpose
-    !      -------
-    !      calculates terminal velocity for settling
-    !      of particles. Considers drag force at higher
-    !      Reynold numbers, for the larger droplets.
-    !
-    !      interface
-    !      ---------
-    !
-    !        input:
-    !           press    [Pa]
-    !           temp     [K]
-    !           DPAW     [m]
-    !           DENSPAR  [kg/m^3]
-    !        output:
-    !           vterm    [m/s]
-    !
-    !      method
-    !      ------
-    !      J.H. Seinfeld and S.N. Pandis,
-    !        Atmospheric Chemistry and Physics, From Air
-    !        Pollution to Climate Change, 2nd Edition,
-    !        John Wiley & Sons, Inc., Hoboken New Jersey, 2006,
-    !        Pages 406-411
-    !
-    !      external
-    !      --------
-    !      none
-    !
-    !      reference
-    !      ---------
-    !      none
-    !
-    !------------------------------------------------------------------
-
-    implicit none
-
-    ! input
-    integer, intent(in)                              :: IMAX
-    real( dp), intent(in)                            :: temp     ! [K]
-    real( dp), intent(in)                            :: pres     ! [Pa]
-    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPAW     ! [m]
-    real( dp), dimension(MMAX,IMAX), intent(in)      :: DENSPAR  ! [kg/m^3]
-
-    real( dp), dimension(MMAX,IMAX), intent(out)     :: vterm    ! [m/s]
-
-    real( dp)                                        :: rho_air
-    real( dp)                                        :: LAMB
-    real( dp)                                        :: MYY
-    real( dp)                                        :: KN
-    real( dp)                                        :: CC
-    real( dp)                                        :: CDRE2
-    real( dp)                                        :: RE
-
-    real( dp), parameter                             :: T0=288.15          ! [K]
-
-    integer  :: I,M
-
-     !density of dry air [g m^-3]
-       rho_air = pres*M_air/(R_gas*T0)
-
-     ! free mean path [m]
-       LAMB= (6.73e-8_dp*temp*(1.+(110.4_dp/temp)))/ &
-          (296._dp*pres*1.373_dp)
-
-     ! gas viscosity [kg/m/s]
-       MYY= (1.832e-5_dp*(temp**(1.5_dp))*406.4_dp)/ &
-          (5093._dp*(temp+110.4_dp))
-
-     ! Calculate settling velocity [m/s]
-     ! REPLACE LATER WITH THE INTERPOLATION DONE IN DEPOFROUGH
-      do M=1,MMAX                
-        do I=1,IMAX
-
-        ! Knudsen number
-          KN= 2._dp*LAMB/DPAW(M,I)
-        ! Slip correction factor
-          CC = 1._dp + (KN*(1.142_dp+(0.558_dp*EXP((-.999_dp)/KN))))
-
-        ! Seinfeld and Pandis (2006), EQ(9.46) p. 410
-        ! Drag coefficient CD, Reynold number RE
-          CDRE2 = ( 4._dp*(DPAW(M,I)**3)*rho_air*1.e-3   * &
-                  DENSPAR(M,I)*g*CC )                    / &
-                  (3._dp*MYY**2)
-
-          if (CDRE2.lt.120_dp) then
-            RE = 0.0231222619*CDRE2
-          else
-            RE =7.735017e-13*CDRE2**3                   -  &
-                1.38757e-7*CDRE2**2                     +  &
-                0.010351*CDRE2 + 2._dp
-          endif
-
-          vterm(M,I) = (MYY*RE)/(rho_air**1.e-3*DPAW(M,I))
-          
-          !print *,'vterm',M,I,DPAW(M,I),CDRE2,RE,vterm(M,I)
-
-        enddo
-      enddo
-
-
-  end subroutine settling
 
 subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
     !--------------------------------------------------------------------------
@@ -872,7 +771,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
 
       roh   = press/R/temp                ! air density [kg/m^3] 1.2928
       miu   = miuair(temp)                ! dynamic viscosity of air [kg/ms]
-      niu   = miu / roh                   ! kinetic viscosity of air [m2/s]
+      niu   = miu / roh                   ! kinematic viscosity of air [m2/s]
       lam   = lambda(temp,press)          ! mean free path of air [m]
       
    
@@ -915,12 +814,12 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
            CDRE(j) = CD*RE(j)*RE(j)
          endif                             
       end do
-      
+
       ! nre order polynomial curve fit CDRE-RE
       do j=1,nre
           xa(j) = LOG(CDRE(j))
           ya(j) = LOG(RE(j))
-          !write(6,*) 're',i,RE(i),CDRE(i),LOG(RE(i)),LOG(CDRE(i))  
+          !write(6,*) 're',j,RE(j),CDRE(j),LOG(RE(j)),LOG(CDRE(j))  
       end do
 
       !% Boundary limits and surface orientation parameters
@@ -1073,6 +972,440 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
 
     end subroutine depofrough
 
+
+subroutine settling(DPAW,pres,temp,DENSPAR,IMAX,vterm  )
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      calculates terminal velocity for settling
+    !      of particles. Considers drag force at higher
+    !      Reynold numbers, for the larger droplets.
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           press    [Pa]
+    !           temp     [K]
+    !           DPAW     [m]
+    !           DENSPAR  [kg/m^3]
+    !        output:
+    !           vterm    [m/s]
+    !
+    !      method
+    !      ------
+    !      Creating the Re-CDRe grid is taken from the
+    !      routine DEPOFROUGH
+    !      For large particle the formulation of
+    !      Beard and Pruppacher (1969) is used
+    !      
+    !      external
+    !      --------
+    !      none
+    !
+    !      reference
+    !      ---------
+    !      J.H. Seinfeld and S.N. Pandis,
+    !        Atmospheric Chemistry and Physics, From Air
+    !        Pollution to Climate Change, 2nd Edition,
+    !        John Wiley & Sons, Inc., Hoboken New Jersey, 2006,
+    !        Pages 406-411.
+    !      K.V. Beard and H.R. Pruppacher,
+    !        A determination of the terminal velocity and
+    !        drag of small water drops by means of a wind
+    !        tunnel, J. Atmos. Sci., 26, 1066-1072, 1996.
+    !
+    !------------------------------------------------------------------
+
+    implicit none
+
+    ! input
+    integer, intent(in)                              :: IMAX
+    real( dp), intent(in)                            :: temp     ! [K]
+    real( dp), intent(in)                            :: pres     ! [Pa]
+    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPAW     ! [m]
+    real( dp), dimension(MMAX,IMAX), intent(in)      :: DENSPAR  ! [kg/m^3]
+
+    ! output
+    real( dp), dimension(MMAX,IMAX), intent(out)     :: vterm    ! [m/s]
+
+    ! local
+    ! specific gas constant for dry air [J/(kgK)]
+    real( dp), parameter                             :: R=287.058   ! [J/kg/K]
+
+    ! Number of points for polynomial fitting
+    integer, parameter                               :: nre=25
+    real( dp), dimension(nre)                        :: rlin
+    real( dp), dimension(nre)                        :: RE
+    real( dp), dimension(nre)                        :: CDRE
+    real( dp), dimension(nre)                        :: xa,ya
+    real( dp)                                        :: f1,f2
+    real( dp)                                        :: CD
+    real( dp)                                        :: cdrex,rex
+    real( dp)                                        :: xcd,ypol 
+
+    real( dp)                                        :: rho_air
+    real( dp)                                        :: DRP
+    real( dp)                                        :: LAMB
+    real( dp)                                        :: MYY
+    real( dp)                                        :: KN
+    real( dp)                                        :: CC
+    integer                                          :: I,M
+    integer                                          :: j,n
+
+
+      ! air density [kg/m^3] 1.2928
+       rho_air = pres / R / temp
+       
+       ! free mean path [m]
+       LAMB= (6.73e-8_dp*temp*(1.+(110.4_dp/temp)))/ &
+          (296._dp*pres*1.373_dp)
+
+       ! dynamic viscosity of air [kg/m/s]
+       MYY= (1.832e-5_dp*(temp**(1.5_dp))*406.4_dp)/ &
+          (5093._dp*(temp+110.4_dp))
+
+       !-- Creating the Re-CDRe grid:
+       f1   = -16.0
+       f2   = 3.0
+       do n=2,nre-1
+           rlin(n)  = f1 + (f2/nre)*n - (f1/nre)*n
+       end do
+       rlin(1)   = f1
+       rlin(nre) = f2
+       do j=1,nre
+         RE(j)   = 10**rlin(j)     
+         CDRE(j) = 0.0
+       end do
+
+       do j=1,nre
+          if ( RE(j) .le. 0.1 ) then
+            CD      = 24./RE(j)
+            CDRE(j) = CD*RE(j)*RE(j)
+          else if ( RE(j) .le. 2.0 ) then  
+            CD      = (24./RE(j)) * ( 1. + (3./16.)*RE(j) + &
+                      (9./160.)*RE(j)*RE(j) * LOG(2*RE(j)) )
+            CDRE(j) = CD*RE(j)*RE(j)
+          else if ( RE(j) .le. 500. ) then
+            CD      = (24./RE(j)) * (1. + 0.15*(RE(j)**0.687))
+            CDRE(j) = CD*RE(j)*RE(j)
+          else if ( RE(j) .le. 2.e5) then
+            CD      = 0.44
+            CDRE(j) = CD*RE(j)*RE(j)
+          endif
+       end do
+
+       ! nre order polynomial curve fit CDRE-RE
+       do j=1,nre
+           xa(j) = LOG(CDRE(j))
+           ya(j) = LOG(RE(j))
+           !write(6,*) 're',j,RE(j),CDRE(j),LOG(RE(j)),LOG(CDRE(j))  
+       end do
+
+
+       ! Calculate settling velocity [m/s]
+       do M=1,MMAX                
+         do I=1,IMAX
+
+         ! Droplet diameter
+           DRP=DPAW(M,I)
+
+         ! Knudsen number
+           KN= 2._dp*LAMB/DRP
+
+         ! Cunningham-Milliken slip correction factor
+         ! as in Fitzgerald et al., 1998
+           CC = 1._dp + KN * ( 1.37_dp + 0.4_dp * EXP( -1.1_dp / KN ) )
+
+         !-- Settling Velocity calculation
+
+           if (DRP .lt. 5.e-8) then
+         ! if DRP < 50 nm we neglect settling
+
+             cdrex = 0.0
+             rex   = 0.0
+             vterm(M,I) = 0.0
+
+           elseif (DRP .lt. 1.e-5) then
+         ! if 50 nm < DRP < 10 um
+         ! Seinfeld and Pandis (2006), EQ 9.42
+
+             cdrex = 0.0
+             rex   = 0.0
+             vterm(M,I) = (1._dp/18._dp)                      *  &
+                          (DRP**2 *DENSPAR(M,I) * g*CC)
+             vterm(M,I) = vterm(M,I) / MYY 
+
+           else
+         ! for large particles, the formulation of 
+         ! Beard and Pruppacher (1969) is used.
+         ! Reynold number based on CDRE-RE grid
+
+             cdrex = ( 4.*(DRP**3) *rho_air *                    &
+                     (DENSPAR(M,I) - rho_air) *g*CC )         /  &  
+                     (3._dp*MYY*MYY)
+
+             xcd=LOG(cdrex)
+
+             ! polint returns value ypol of a polynomial of 
+             ! degree nre to the curve CDRE-RE 
+             ! evaluated at xcd=log(cdrex)
+             call polint(nre, xa, ya, xcd, ypol)
+
+             ! the exponential of ypol is the desired Reynold value
+             ! it is approx.: cdre = 24*re  =>  re = cdre/24 
+             ! (see above)
+             rex = EXP(ypol)
+
+             ! Beard and Pruppacher (1969)
+             vterm(M,I) = (MYY * rex)/(rho_air*DRP)
+
+           endif
+
+      
+           !write(6,*) 'vterm',M,I,DRP,cdrex,rex,vterm(M,I)
+
+         enddo
+       enddo
+
+
+  end subroutine settling
+
+
+  subroutine wetscavsize(IMAX,DPAW,pres,temp,DENSPAR,rain,wetscav )
+    !----------------------------------------------------------------------
+    !
+    !****
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      calculates size-dependent precipitation scavenging
+    !      of particles based on raindrop-aerosol collection
+    !      efficiency E. For a fix raindrop diameter of 1 mm.
+    !      Based on the correlation for E that fits experiments
+    !      presented by Slinn, 1983.
+    !      Average MBL volume cloud fraction: 5-10%
+    !
+    !      interface
+    !      ---------
+    !
+    !        input:
+    !           press    [Pa]
+    !           temp     [K]
+    !           DPAW     [m]
+    !           DENSPAR  [kg/m^3]
+    !           rain     [mm/h]
+    !        output:
+    !           wetscav  [1/s]
+    !
+    !      method
+    !      ------
+    !      J.H. Seinfeld and S.N. Pandis,
+    !        Atmospheric Chemistry and Physics, From Air
+    !        Pollution to Climate Change, 2nd Edition,
+    !        John Wiley & Sons, Inc., Hoboken New Jersey, 2006.
+    !
+    !      external
+    !      --------
+    !      none
+    !
+    !      reference
+    !      ---------
+    !      Slinn, W.G.N., 1983.
+    !      Precipitation scavenging, In: Atmospheric Sciences and
+    !      Power Production - 1979, Chap. 11 Divsion of Biomedical
+    !      Environmental Research, U.S. Department of Energy, 
+    !      Washington, DC.
+    !
+    !------------------------------------------------------------------
+
+    implicit none
+
+    ! input
+    integer, intent(in)                              :: IMAX
+    real( dp), intent(in)                            :: temp     ! [K]
+    real( dp), intent(in)                            :: pres     ! [Pa]
+    real( dp), intent(in)                            :: rain     ! [mm/h]
+    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPAW     ! [m]
+    real( dp), dimension(MMAX,IMAX), intent(in)      :: DENSPAR  ! [kg/m^3]
+
+    real( dp), dimension(MMAX,IMAX), intent(out)     :: wetscav  ! [1/s]
+
+    real( dp), dimension(MMAX,IMAX)                  :: vterm    ! [m/s]
+    real( dp)                                        :: rainfall
+    real( dp)                                        :: rho_air
+    real( dp)                                        :: miu_air
+    real( dp)                                        :: niu_air
+    real( dp)                                        :: miu_water
+    real( dp)                                        :: LAMBDA
+    real( dp)                                        :: CC
+    real( dp)                                        :: KN
+    real( dp)                                        :: DIFFCO
+    real( dp)                                        :: Sc
+    real( dp)                                        :: Re
+    real( dp)                                        :: St
+    real( dp)                                        :: taup
+    real( dp)                                        :: omega
+    real( dp)                                        :: sstar
+    real( dp)                                        :: dpaero
+    real( dp)                                        :: dpratio
+    real( dp)                                        :: EC
+
+
+    ! specific gas constant for dry air [J/(kgK)]
+    real( dp), parameter                             :: R      = 287.058     ! [J/kg/K]
+
+    ! velocity of rain drop [m/s] for drop diameter 0.5 mm
+    ! as in Table 20.1 in Seinfeld and Pandis, 1998
+    real( dp), parameter                             :: dprain = 0.5*1.e-3   ! [m]
+    real( dp), parameter                             :: urain  = 1.59        ! [m/s] @ 0.5 mm
+    ! velocity of rain drop [m/s] for drop diameter 0.1 mm
+    ! scavenging coefficient is larger for smaller rain drops
+   ! real( dp), parameter                             :: dprain = 0.1*1.e-3   ! [m]
+   ! real( dp), parameter                             :: urain  = 0.26        ! [m/s] @ 0.1 mm
+
+    ! average cloud volume for precipation
+    real( dp), parameter                             :: FC     = 0.10
+
+    integer  :: I,M
+
+      ! rainfall intensity [m/s]
+      rainfall=rain*1.e-3/3600.
+      !rainfall= 1.0*1.e-3/3600. !test 1 mm/h
+
+      ! free mean path [m]
+      LAMBDA= (6.73e-8_dp*temp*(1.+(110.4_dp/temp)))/ &
+              (296._dp*pres*1.373_dp)
+      ! air density [kg/m^3] 1.2928
+      rho_air   = pres/R/temp
+      ! dynamic viscosity of air [kg/m/s]
+      miu_air   = miuair(temp)
+      ! kinetic viscosity of air [m^2/s]
+      niu_air   = miu_air / rho_air
+      ! dynamic viscocity of water [kg/m/s]
+      ! Atkins Physical Chemistry p. 761
+      miu_water = 0.891e-3_dp
+
+      ! Reynold number of raindrop based on its radius [-]
+      ! 22.386 @ 0.5 mm
+      Re        = (dprain * urain * rho_air) / (2.*miu_air)
+
+      ! S*
+      sstar   = 1.2_dp + (1./12.)*log(1._dp + Re)
+      sstar   = sstar / (1._dp + log(1._dp + Re))
+
+      ! Viscocity ratio
+      omega     = miu_water / miu_air
+
+      ! get terminal velocity [m/s]
+      CALL settling(DPAW,pres,temp,DENSPAR,IMAX,vterm)
+
+
+      ! Particle Size Dependent Parameters
+      ! Collection Efficiency Ec
+      do M=1,MMAX
+        do I=1,IMAX
+
+          dpaero = DPAW(M,I)
+
+         ! Ratio of particle-to-rain drop
+          dpratio = dpaero / dprain
+
+         ! Knudsen number [m/m]
+          KN = 2._dp*LAMBDA / dpaero
+
+         ! Slip correction factor
+          CC = 1._dp + (KN*(1.142_dp+(0.558_dp*EXP((-.999_dp)/KN))))
+
+         ! particle diffusion coefficient [m^2/s]
+          DIFFCO = (k_B * temp * CC) / (3._dp * miu_air * pi * dpaero)
+          
+         ! Schmidt number of collected particle [-]
+          Sc     = niu_air/DIFFCO
+
+         ! Relaxation time of particles [s]
+         taup    = CC * DENSPAR(M,I) * dpaero**2. / (18._dp * miu_air)
+
+         ! Stoke number of collected particle [-]
+         St      = (2*taup * (urain - vterm(M,I))) / dprain
+
+         ! Collision Efficiency [-]
+         EC      =    &
+              ! Brownian Diffusion
+                   (4._dp/(Re*Sc)) * ( 1._dp + 0.4_dp*Re**(1./2.)*Sc**(1./3.)   +  &
+                   0.16_dp * Re**(1./2.) * Sc**(1./2.) )                        +  &
+              ! Interception
+                   4.*dpratio*(1._dp/omega + (1._dp + 2.*Re**(1./2.))*dpratio)        
+         if (St>sstar) then
+              ! Impaction
+            EC   = EC + ( (St - sstar) / (St - sstar + (2./3.)) )**(3./2.)      *  &
+                       ! scale by squared density ratio water/particle
+                        (1000._dp/DENSPAR(M,I))**(1./2.)
+         endif
+
+         ! Scavenging coefficient [1/s]
+         ! For monodisperse aerosols and raindrops that have same diameter dprain
+         wetscav(M,I) = FC * (3./2.) * EC * rainfall / dprain
+
+         ! if (rainfall>0.) print *,M,I,dpaero,EC,wetscav(M,I)*3600.
+
+        enddo
+      enddo
+
+
+  end subroutine wetscavsize
+
+
+  ELEMENTAL REAL(dp) function wetscavbulk(rain)
+    !------------------------------------------------------------------
+    !
+    ! Wet scavenging of particles in s^-1
+    !   
+    ! Follows the bulk Precipitation Scavenging for particles
+    ! as described in Fitzgerald et al., 1998
+    ! We consider only in-cloud scavenging of aerosols in those
+    ! sections that contain particles large enough to be activated
+    ! during cloud formation.
+    ! Thus nucleation mode aerosols are not scavenged.
+    ! input: rainfall rate in mm hr^-1
+    ! output: scavenging efficiency in s^-1
+    !     average MBL volume cloud fraction: 5-10%
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      reference
+    !      ---------
+    !      Fitzgerald, J.W., Hoppel, W.A., Gelbard, F., 1998.
+    !      A one-dimensional sectional model to simulate multicomponent
+    !      aerosol dynamics in the marine boundary layer.
+    !      1. Model description,
+    !      Journal of Geophysical Research, 103, D13, 16085-16102.
+    !
+    !------------------------------------------------------------------
+    !
+      implicit none
+        REAL( dp), intent(in)     :: rain
+        REAL( dp), parameter      :: FC=0.10
+
+
+        wetscavbulk=FC*3.49E-04*rain**(0.79)     
+
+
+    END FUNCTION wetscavbulk
+
+
 subroutine polint(PMAX, xa,ya,x,y)
     !----------------------------------------------------------------------
     !
@@ -1177,33 +1510,6 @@ subroutine polint(PMAX, xa,ya,x,y)
 
   end subroutine polint
 
-  ELEMENTAL REAL(dp) function wetscav(rain)
-    !------------------------------------------------------------------
-    !
-    ! Wet scavenging of particles in s^-1
-    !   
-    ! Follows the Precipitation Scavenging for particles
-    ! as described in Fitzgerald et al., 1998
-    ! only in-cloud scavenging, nucleation mode aerosol not scavenged
-    ! input: rainfall rate in mm hr^-1
-    ! output: scavenging efficiency in s^-1
-    !     average MBL volume cloud fraction: 5-10%
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !------------------------------------------------------------------
-    !
-      implicit none
-        REAL( dp), intent(in)     :: rain
-        REAL( dp), parameter      :: FC=0.10
-
-      IF (rain.gt.0.0 ) THEN
-        wetscav=FC*3.49E-04*rain**(0.79)     
-      ELSE
-        wetscav=0.0    
-      ENDIF  
-
-    END FUNCTION wetscav
 
   ELEMENTAL REAL(dp) function miuair(temp)
     !------------------------------------------------------------------

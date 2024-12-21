@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -44,7 +44,7 @@
 module gde_init_aero
 
    use gde_input_data, only  : MMAX
-   use gde_input_data, only  : NU,AI,AS,CS
+   use gde_input_data, only  : NU,NA,AI,AS,CS
    use gde_input_data, only  : iamax
    use gde_input_data, only  : SU,OC,AM,NI,MS,SA,XX,EC,DU
 
@@ -92,8 +92,9 @@ contains
 
    !!! Read Aerosol input
    !!! The modal structure is
-   !!! 1) 1-10nm, 10-100nm, 100-1000nm, 1000-10000nm or
-   !!! 2) 1-10nm, 10-50nm, 50-100nm, 100-1000nm
+   !!!    NU      NA       AI        AS          CS
+   !!! 1) 1-10nm, 10-30nm, 30-100nm, 100-1000nm, 1000-10000nm or
+   !!! 2) 1-5nm , 5-20nm,  20-50nm,  50-100nm,   100-1000nm
 
   implicit none
 
@@ -136,11 +137,13 @@ contains
 ! Minimum mode GMD [m]
         DPMMIN(NU)=1.5e-9_dp    
         IF (DPMAX.GE.1.0e-5_dp) THEN
-         DPMMIN(AI)=1.5e-8_dp
-         DPMMIN(AS)=1.5e-7_dp
+         DPMMIN(NA)=9.0e-9_dp
+         DPMMIN(AI)=3.0E-8_dp
+         DPMMIN(AS)=1.0e-7_dp
          DPMMIN(CS)=1.5e-6_dp
        ELSE  !DPMAX=1.e-6
-         DPMMIN(AI)=1.5e-8_dp
+         DPMMIN(NA)=9.0e-9_dp
+         DPMMIN(AI)=2.0E-8_dp
          DPMMIN(AS)=3.1e-8_dp
          DPMMIN(CS)=1.0e-7_dp
        ENDIF

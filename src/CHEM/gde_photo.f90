@@ -159,7 +159,6 @@ contains
       FCT=50._dp
       DN = exp(FCT*SINPSI)/(exp(-FCT*SINPSI)+exp(FCT*SINPSI))
 
-
       jr(:)=0.0
 
       jr(ip_O1D   )= DN*4.4916E-04*exp(-3.5807E+00 /(3.2382E-01+PHOTON)) !J01
@@ -363,6 +362,7 @@ contains
       ! diurnal cycle of psi, the solar elevation angle
       cossza = sin(Latitu) * sin(SoDecli) &
            - cos(Latitu) * cos(SoDecli) * cos(2 * pi * DayREAL)
+
 
       ! array of photolysis rates with 3 dims
       IF (firstloop) THEN

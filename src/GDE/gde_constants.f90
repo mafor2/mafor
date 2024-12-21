@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2023  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -150,7 +150,7 @@ MODULE gde_constants
   ! mz_ab_20090525-
 
   ! MAFOR PHYSICAL CONSTANTS
-  real( dp), parameter :: Rv_h2o  = 0.4614       ! Rv (J/g*K)
+  real( dp), parameter :: Rv_h2o  = 0.4614      ! Rv (J/g*K)
   real( dp), parameter :: AVOng   = 1.e09_dp/N_A
   
   ! MAFOR CHEMISTRY CONSTANTS
@@ -170,12 +170,19 @@ MODULE gde_constants
   real( dp), parameter :: M_dma   = 45.08
   real( dp), parameter :: M_ca    = 450.00
   real( dp), parameter :: M_hcl   = 36.
+  real( dp), parameter :: M_oxal  = 90.03
+  real( dp), parameter :: M_succ  = 118.09
+  real( dp), parameter :: M_adip  = 146.14
   real( dp), parameter :: RHOH2O  = 999.9668          ! density of water [kg/m3]  
   
   ! MAFOR PLANETARY parameterS
   real( dp), parameter :: InitSpr = 80.               ! first day of spring [d]
   real( dp), parameter :: Cancer  = 23.45 * (pi/180.) ! angle of earth
   real( dp), parameter :: latitu  = 45. * (pi/180.)   ! latitude
+
+  ! MAFOR ION parameters
+  real( dp), parameter :: IONMOB  = 1.2E-4_dp         ! ion mobility (m2 V^-1 s^-1)
+  real( dp), parameter :: E_ELEC  = 1.6022E-19_dp     ! charge on the electron (C)
 
 END MODULE gde_constants
 

@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -44,7 +44,7 @@ module gde_aerosol_props
 
    use gde_input_data, only  : MMAX, AMAX, iamax
    use gde_input_data, only  : NSOA
-   use gde_input_data, only  : NU,AI,AS,CS
+   use gde_input_data, only  : NU,NA,AI,AS,CS
    use gde_input_data, only  : A_SUL,A_MSA,A_IO3
    use gde_input_data, only  : A_NIT,A_NH4,A_AMI
    use gde_input_data, only  : A_OR1,A_OR2,A_OR3
@@ -167,6 +167,7 @@ contains
             DPA(M,I)=DPMIN*(QDPM**(DBLE(cm*IMAX+I)-1._dp))
 ! Bin volume (dry)
             VPT(M,I)=(pi/6._dp)*DPA(M,I)**3._dp
+          !  print *,'Mode,bin Dp Vp ',M,I,DPA(M,I),VPT(M,I)
          end do
          cm=cm+1
         end do
@@ -175,7 +176,7 @@ contains
         do M=NU,CS
           DPA(M,0)=DPA(M,1)/(DPA(M,2)/DPA(M,1))
           DPA(M,IMAX+1)=DPA(M,IMAX)*(DPA(M,IMAX)/DPA(M,IMAX-1))
-          VRAT(M)=(DPA(M,IMAX)/DPA(M,1))**(3./(IMAX-1))      
+          VRAT(M)=(DPA(M,IMAX)/DPA(M,1))**(3./(IMAX-1))
         end do
 
 ! all other bins
@@ -284,7 +285,7 @@ contains
 
 
 
-        do M=NU,CS
+        do M=1,MMAX
           do I=1,IMAX
 
             LINDISM(M,I,SU)=(MSULFTOT(M)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M)))) &
@@ -379,6 +380,8 @@ contains
                        VCONC(M,I,NI) + VCONC(M,I,MS) + VCONC(M,I,SA)  +  &
                        VCONC(M,I,XX) + VCONC(M,I,EC) + VCONC(M,I,DU)) / VPT(M,I) 
 
+            !print *,'init ',M,I,VPT(M,I),N(M,I)
+
            end do
         end do
 
@@ -466,7 +469,7 @@ contains
 
 
 
-        do M=NU,CS
+        do M=1,MMAX
           do I=1,IMAX
 
 ! calculate linear bin width for background aerosol (except for water)
@@ -623,12 +626,10 @@ contains
         if (.not. allocated(ELINDISM))     ALLOCATE(ELINDISM(MMAX,IMAX,iamax))
 
 
-
-        do M=NU,CS
-          do I=1,IMAX
-
-
 ! calculate linear bin width for emitted aerosol (except for water)
+
+        do M=1,MMAX
+          do I=1,IMAX
             do K=1,iamax-1
               ELINDISM(M,I,K)=( EMMCTOT(M,K) /(SQRT(2.*pi)*DPA(M,I)*LOG(ESIG(M)))) &
                                *EXP(-0.5*(LOG(DPA(M,I)/EGMD(M))/LOG(ESIG(M)))**2.)
@@ -694,6 +695,7 @@ contains
             EN(M,I)=(EVCONC(M,I,SU)+EVCONC(M,I,OC)+EVCONC(M,I,AM)        +  &              
                      EVCONC(M,I,NI)+EVCONC(M,I,MS)+EVCONC(M,I,SA)        +  &
                      EVCONC(M,I,XX)+EVCONC(M,I,EC)+EVCONC(M,I,DU) )/VPT(M,I) 
+           ! print *,'EN',M,I,ELINDISM(M,I,XX),EN(M,I)
 
            end do
         end do
@@ -782,7 +784,7 @@ contains
         deffpsoot(:,:)=1200._dp
         Dp0=2._dp*rp0
 
-        do M=NU,CS
+        do M=1,MMAX
          do I=1,IMAX
          
 ! effective density of soot particles [kg/m^3]
@@ -806,7 +808,7 @@ contains
 
 
 
-        do M=NU,CS
+        do M=1,MMAX
          do I=1,IMAX
       !!! predefined density is that of elemental carbon
            if (MPT(M,I).eq. 0.0_dp) then
@@ -883,9 +885,9 @@ contains
            endif
           
            ROOP(M,I)  = max(ROOP(M,I),1000._dp)
-           ROOPW(M,I) = max(ROOPW(M,I),1000._dp) 
+           ROOPW(M,I) = max(ROOPW(M,I),1000._dp)
 !debug
-!          write(6,*) M,I,MPT(M,I),massocs(M,I),ROOP(M,I),ROOPW(M,I)
+          !write(6,*) 'DENS',M,I,MPT(M,I),massocs(M,I),ROOP(M,I),DPA(M,I),ROOPW(M,I)
 
 
          end do
@@ -985,7 +987,7 @@ contains
 ! in kg/m^3
 
 
-        do M=NU,CS
+        do M=1,MMAX
 
 ! initialize variables in mode M
           MTOT(M)=0._dp
@@ -1071,23 +1073,24 @@ contains
         end do
 
 ! Finally calculate the total SOA(part) mass concentrations [ug/m^3]
-        casoa(1) = 1.e-3_dp*(MORG1TOT(NU)+MORG1TOT(AI)+MORG1TOT(AS)+MORG1TOT(CS))
-        casoa(2) = 1.e-3_dp*(MORG2TOT(NU)+MORG2TOT(AI)+MORG2TOT(AS)+MORG2TOT(CS))
-        casoa(3) = 1.e-3_dp*(MORG3TOT(NU)+MORG3TOT(AI)+MORG3TOT(AS)+MORG3TOT(CS))
-        casoa(4) = 1.e-3_dp*(MORG4TOT(NU)+MORG4TOT(AI)+MORG4TOT(AS)+MORG4TOT(CS))
-        casoa(5) = 1.e-3_dp*(MORG5TOT(NU)+MORG5TOT(AI)+MORG5TOT(AS)+MORG5TOT(CS))
-        casoa(6) = 1.e-3_dp*(MORG6TOT(NU)+MORG6TOT(AI)+MORG6TOT(AS)+MORG6TOT(CS))
-        casoa(7) = 1.e-3_dp*(MORG7TOT(NU)+MORG7TOT(AI)+MORG7TOT(AS)+MORG7TOT(CS))
-        casoa(8) = 1.e-3_dp*(MORG8TOT(NU)+MORG8TOT(AI)+MORG8TOT(AS)+MORG8TOT(CS))
-        casoa(9) = 1.e-3_dp*(MORG9TOT(NU)+MORG9TOT(AI)+MORG9TOT(AS)+MORG9TOT(CS))
+        casoa(1) = 1.e-3_dp*(MORG1TOT(NU)+MORG1TOT(NA)+MORG1TOT(AI)+MORG1TOT(AS)+MORG1TOT(CS))
+        casoa(2) = 1.e-3_dp*(MORG2TOT(NU)+MORG2TOT(NA)+MORG2TOT(AI)+MORG2TOT(AS)+MORG2TOT(CS))
+        casoa(3) = 1.e-3_dp*(MORG3TOT(NU)+MORG3TOT(NA)+MORG3TOT(AI)+MORG3TOT(AS)+MORG3TOT(CS))
+        casoa(4) = 1.e-3_dp*(MORG4TOT(NU)+MORG4TOT(NA)+MORG4TOT(AI)+MORG4TOT(AS)+MORG4TOT(CS))
+        casoa(5) = 1.e-3_dp*(MORG5TOT(NU)+MORG5TOT(NA)+MORG5TOT(AI)+MORG5TOT(AS)+MORG5TOT(CS))
+        casoa(6) = 1.e-3_dp*(MORG6TOT(NU)+MORG6TOT(NA)+MORG6TOT(AI)+MORG6TOT(AS)+MORG6TOT(CS))
+        casoa(7) = 1.e-3_dp*(MORG7TOT(NU)+MORG7TOT(NA)+MORG7TOT(AI)+MORG7TOT(AS)+MORG7TOT(CS))
+        casoa(8) = 1.e-3_dp*(MORG8TOT(NU)+MORG8TOT(NA)+MORG8TOT(AI)+MORG8TOT(AS)+MORG8TOT(CS))
+        casoa(9) = 1.e-3_dp*(MORG9TOT(NU)+MORG9TOT(NA)+MORG9TOT(AI)+MORG9TOT(AS)+MORG9TOT(CS))
 
 
   end subroutine getTotalMass
 
 !------------------------------------------------------------------
 
-  subroutine restoreCoarseMode(IMAX,DPA,DLINDP,DEN,                &
-                               MSULFTOT,MMSAPTOT,MAMMOTOT, MASS,N)
+  subroutine restoreCoarseMode(IMAX,DPA,DLINDP,DEN,                     &
+                               MSULFTOT,MMSAPTOT,MAMMOTOT,MORGCTOT,     &
+                               MSALTTOT,MDUSTTOT,  MASS,N)
     !----------------------------------------------------------------------
     !
     !****
@@ -1142,6 +1145,9 @@ contains
      real( dp), dimension(MMAX),intent(in)               :: MSULFTOT
      real( dp), dimension(MMAX),intent(in)               :: MMSAPTOT
      real( dp), dimension(MMAX),intent(in)               :: MAMMOTOT
+     real( dp), dimension(MMAX),intent(in)               :: MORGCTOT
+     real( dp), dimension(MMAX),intent(in)               :: MSALTTOT
+     real( dp), dimension(MMAX),intent(in)               :: MDUSTTOT
 
 !in/out
      real( dp), dimension(MMAX,IMAX,AMAX),intent(in out) :: MASS
@@ -1163,31 +1169,50 @@ contains
 
         do I=1,IMAX
 
+            LINDISMCS(I,DU)=(MDUSTTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+            LINDISMCS(I,SA)=(MSALTTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
             LINDISMCS(I,SU)=(MSULFTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
             LINDISMCS(I,MS)=(MMSAPTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
             LINDISMCS(I,AM)=(MAMMOTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+            LINDISMCS(I,OC)=(MORGCTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                           *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
 
 ! Mass concentrations in ng/m3
+            MASS(CS,I,A_DUS)=LINDISMCS(I,DU)*DLINDP(CS,I)
+            MASS(CS,I,A_SAL)=LINDISMCS(I,SA)*DLINDP(CS,I)
             MASS(CS,I,A_SUL)=LINDISMCS(I,SU)*DLINDP(CS,I)
             MASS(CS,I,A_MSA)=LINDISMCS(I,MS)*DLINDP(CS,I)
             MASS(CS,I,A_NH4)=LINDISMCS(I,AM)*DLINDP(CS,I)
+            MASS(CS,I,A_OR2)=LINDISMCS(I,OC)*DLINDP(CS,I)
 
 ! Volume concentration in m3/m3
+            VCONCCS(I,DU)=MASS(CS,I,A_DUS)/(CONVM*DEN(DU))
+            VCONCCS(I,SA)=MASS(CS,I,A_SAL)/(CONVM*DEN(SA))
             VCONCCS(I,SU)=MASS(CS,I,A_SUL)/(CONVM*DEN(SU))
             VCONCCS(I,MS)=MASS(CS,I,A_MSA)/(CONVM*DEN(MS))
             VCONCCS(I,AM)=MASS(CS,I,A_NH4)/(CONVM*DEN(AM))
+            VCONCCS(I,OC)=MASS(CS,I,A_OR2)/(CONVM*DEN(OC))
 
 ! Calculate dry volume in m3
+! VDRY is better than VPT (wet diameter) to return to the
+! original number size distribution
             VDRY=(pi/6._dp)*DPA(CS,I)**3._dp
 
 ! Calculated particle number concentration per bin
 ! consistent GMD (mass-based)
-            N(CS,I) = ( VCONCCS(I,SU)+VCONCCS(I,MS)+VCONCCS(I,AM) ) / VDRY
+            N(CS,I) = ( VCONCCS(I,DU)+VCONCCS(I,SA)+      &
+                        VCONCCS(I,SU)+VCONCCS(I,MS)+      &
+                        VCONCCS(I,AM)+VCONCCS(I,OC) )   / VDRY
+
+          !  print *,'restore ',I,VPT(CS,I),N(CS,I)
 
         end do
+
 
 ! Deallocate aerosol terms
         deallocate(VCONCCS)

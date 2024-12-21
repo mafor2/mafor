@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -52,14 +52,16 @@ module gde_addwater
 
     use gde_input_data, only            : AMAX
     use gde_input_data, only            : MMAX
-    use gde_input_data, only            : NU,AI,AS,CS
+    use gde_input_data, only            : NU,NA,AI,AS,CS
     use gde_input_data, only            : A_SUL,A_NH4,A_AMI,A_NIT,A_XXX
     use gde_input_data, only            : A_OR1,A_OR2,A_SAL,A_CHL
     use gde_input_data, only            : A_WAT
     use gde_input_data, only            : CONVM
     use gde_input_data, only            : rhactiv
     use gde_input_data, only            : rho_air
+    use gde_input_data, only            : surf_h2o_std
 
+    use gde_init_aero,  only            : GMD
 
     private
 
@@ -72,8 +74,8 @@ module gde_addwater
 
 
     subroutine water_content(incloud,firstloop,IMAX,RH,lwcm,MASS,N,dmwdt, &
-               DPA,GMD,SIG,DLINDP,VPT,DPAW,MH2OTOT,NTOTCS,                &
-               lwc,cwa03,xaer,wascloud  )
+               DPA,SIG,DLINDP,VPT,DPAW,MH2OTOT,NTOTCS,                &
+               lwc,cwa01,cwa02,cwa03,xaer,wascloud1,wascloud2  )
     !----------------------------------------------------------------------
     !
     !****  central routine to compute aerosol water content and
@@ -94,13 +96,23 @@ module gde_addwater
     !
     !        input:
     !          RH,lwcm
-    !    
+    !          dmwdt  (mass conc of water per bin)
+    !
+    !        output:
+    !          c(ind_H2O_a**)
+    !          lwc
+    !          MH2OTOT
+    !          
     !      method
     !      ------
     !      Water activity from sulphate - ammonium - nitrate. MH2O in ng/m^3
-    !       Munkelwitz and Tang 1994 / Seinfeld and Pandis 1997
-    !       Sea salt hygroscopicity same  
-    !       If in-cloud, MH2O and N of CS mode is calculated from LWC(CS)
+    !      Munkelwitz and Tang 1994 / Seinfeld and Pandis 1997
+    !      Sea salt hygroscopicity same  
+    !      If in-cloud, MH2O and N of CS mode is calculated from LWC(CS)
+    !      Three cases are divided:
+    !      1) wet aerosol, no fog/cloud
+    !      2) cloud droplets, fog/cloud, prescribed LWC
+    !      3) cloud droplets, RH>RHactive, fog/cloud, dynamic LWC
     !
     !      external
     !      --------
@@ -117,7 +129,6 @@ module gde_addwater
     ! input
     INTEGER, intent(in)                               :: IMAX
     real( dp), intent(in)                             :: RH,lwcm
-    real( dp), intent(in)                             :: GMD(NU:CS)
     real( dp), intent(in)                             :: SIG(NU:CS)
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPAW
@@ -129,113 +140,42 @@ module gde_addwater
     logical, intent(in)                               :: firstloop
 
     ! in/out
-    real( dp), dimension(MMAX,IMAX,AMAX),intent(in out)   :: MASS
-    real( dp), DIMENSION(MMAX,IMAX), intent(in out)       :: N
-    real( dp),dimension(APN), intent(in out)          :: lwc
-    real( dp),dimension(APN), intent(in out)          :: xaer
-    logical, intent(in out)                           :: wascloud
+    real( dp), dimension(MMAX,IMAX,AMAX),intent(in out) :: MASS
+    real( dp), DIMENSION(MMAX,IMAX), intent(in out)     :: N
+    real( dp),dimension(APN), intent(in out)            :: lwc
+    real( dp),dimension(APN), intent(in out)            :: xaer
+    logical, intent(in out)                             :: wascloud1
+    logical, intent(in out)                             :: wascloud2
 
     ! output
     real( dp), intent(out)                            :: MH2OTOT(NU:CS)
-    !real( dp), intent(out)                            :: cwa01
-    !real( dp), intent(out)                            :: cwa02
+    real( dp), intent(out)                            :: cwa01
+    real( dp), intent(out)                            :: cwa02
     real( dp), intent(out)                            :: cwa03
     real( dp), intent(out)                            :: NTOTCS
 
     ! local
     real( dp), DIMENSION(MMAX,IMAX)                   :: MH2OA
-    real( dp)                   :: lindismwa,vconcwa
-    real( dp)                   :: cwa01,cwa02
+    real( dp)                   :: lindismwa
+    real( dp)                   :: lindisn
+    !!!real( dp)                   :: cwa01,cwa02
     integer                     :: M,I
+    integer                     :: cmode
 
 
 ! Initialize all terms
 ! that are output and that are local or locally allocated
+      cwa01      = 0._dp
+      cwa02      = 0._dp
+      cwa03      = 0._dp
+
 
       if (incloud.EQ.1) then
+      
+! For fixed cloud water droplets in coarse mode ("SINTEF fog simulation")
 
-! ! Cloud droplet activation happens if relative humidity is above 99%
-! ! and the incloud flag is set to 1 by the user and if the computed
-! ! supersaturation is greater than equlibrium supersaturation.
-! ! During cloud droplet activation, the aerosol dynamics processes
-! ! are stopped.
-! ! RH > 99 %
-! ! kinetic growth by water condensation in CS mode      
-! ! calculate next MASS(CS,I,A_WAT) by kinetic growth (not equilibrium)
-! ! at the moment not used, instead stop
-!        if (RH.ge.rhactiv) then
-!
-!          if (firstloop) then
-! ! aerosol water content NU ... CS
-!           do M=NU,CS
-!             MH2OTOT(M) = 0._dp 
-!             do I=1,IMAX
-!               CALL awater(RH,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),            &
-!                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),  &
-!                        MASS(M,I,A_WAT))
-!               if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp           
-!               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
-!             end do
-!           end do
-!
-!          else
-!
-! ! during cloud activation
-!          ! the water mass increase is calculated in gde_koehler module
-!          ! NEW WATER MASS [ng/m^3]
-!          ! Seinfeld and Pandis (2006), EQ(17.65)
-!          ! aerosol water content AI ... CS
-!           do M=AI,CS
-!             do I=1,IMAX
-!               MH2OA(M,I)  = MASS(M,I,A_WAT) + dmwdt(M,I) 
-!             end do
-!           end do
-!
-!           ! first calculate water mass using the ZRS ruleset
-!           ! aerosol water content NU ... CS
-!           do M=NU,CS
-!             MH2OTOT(M) = 0._dp 
-!             do I=1,IMAX
-!               CALL awater(rhactiv,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),        &
-!                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),   &
-!                        MASS(M,I,A_WAT))
-!               MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
-!             end do
-!           end do
-!
-!          ! use the greater water mass of the two methods
-!          ! aerosol water content AI ... CS
-!           do M=AI,CS
-!             MH2OTOT(M) = 0._dp 
-!             do I=1,IMAX
-!
-!               MASS(M,I,A_WAT) = max(MASS(M,I,A_WAT),MH2OA(M,I))
-!               MH2OTOT(M) = MH2OTOT(M) + MASS(M,I,A_WAT)
-!              ! print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OTOT(M)
-!
-!             enddo
-!           enddo
-!
-!          endif
-!
-! ! droplet water for aqueous phase chemistry
-!          CALL partlwc(MH2OTOT,cwa01,cwa02,cwa03,xaer,lwc)
-!
-!          lwc(1) = min(lwc(1),1.e-5_dp)
-!          !lwc(2) = min(lwc(2),1.e-5_dp)
-!          !lwc(3) = min(lwc(3),1.e-5_dp)
-!
-!          wascloud=.true.
-!
-!
-!        else
-
-! for fixed cloud water droplets in coarse mode ("SINTEF fog simulation")
-
-          cwa01      = 0._dp
-          cwa02      = 0._dp
-          cwa03      = 0._dp
           NTOTCS     = 0._dp
+          cmode      = 3     ! 1 = CS mode
 
 ! aerosol water content NU ... AS
           do M=NU,AS
@@ -250,46 +190,142 @@ module gde_addwater
           end do
 
 ! droplet water for aqueous phase chemistry (AI,AS,CS)
+! get xaer (aq. phase partitioning)
           CALL partlwc(MH2OTOT,cwa01,cwa02,cwa03,xaer,lwc)
+
+
+! intiialize lwc
+          lwc(:) = 1.e-32_dp
 
 ! use LWC for CS mode from ingeod.dat
 ! recalculate water content and lwc in coarse mode
 ! droplet distribution  CS
-          ! Existing aerosol mass in CS mode is lost
-          MASS(CS,1:IMAX,1:AMAX)=0._dp
-          ! Prescribe droplet distribution in CS mode
-          lwc(1)=lwcm
-          cwa03=RHOH2O*lwc(1)*N_A*1.E-3_dp/M_H2O
+
+! existing aerosol mass in CS mode is lost
+!!!          MASS(CS,1:IMAX,1:AMAX)=0._dp
+
+! prescribe droplet distribution in CS mode
+          lwc( cmode )=lwcm
+
+          cwa03=RHOH2O*lwc( cmode )*N_A*1.E-3_dp/M_H2O
+
           MH2OTOT(CS)=cwa03*1.e3*molec2ug(M_H2O)
-          ! Number of droplets
-          NTOTCS=lwc(1)/((4./3.)*pi*(GMD(CS)/2.)**3.)
-          !print *,'cloud=1, lwc, N(CS)',lwc(1), NTOTCS
-          ! distribute over bins of CS mode
+
+          NTOTCS=0._dp
+
+! number of droplets
+! physical correct estimate of NTOTCS:
+!   NTOTCS=lwc( cmode )/( (RHOH2O/rho_air)*(pi/6.)*GMD(CS)**3.)
+! we assume that mean diameter of fog droplets is GMD(CS)
+! and set rho_air to 1.2928 kg/m3
+
+          NTOTCS = lwc( cmode )/ ( (RHOH2O/1.2928_dp)*(pi/6.)*GMD(CS)**3.)
+
+
+! distribute over bins of CS mode
           do I=1,IMAX
             lindismwa=(MH2OTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                   *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
-            MASS(CS,I,A_WAT)=lindismwa*DLINDP(CS,I)
-            vconcwa=MASS(CS,I,A_WAT)/(CONVM*RHOH2O)
-            N(CS,I)=vconcwa/VPT(CS,I) 
+            lindisn  =(NTOTCS/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+                  *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
+            MASS(CS,I,A_WAT)= lindismwa*DLINDP(CS,I)
+            N(CS,I)         = lindisn  *DLINDP(CS,I)
+
           end do
 
-          wascloud=.true.
+          !print *,'cloud=1, lwc, N(CS)',lwc( cmode ), NTOTCS
+
+          wascloud1=.true.
 
           if (firstloop) then
-            write(6,*) 'init drop number in mode CS',NTOTCS*1.e-6
-            write(6,*) 'incloud',lwc(1),cwa03,MH2OTOT(CS)
+            write(6,fmt='(a,f13.5)') 'init drop number in mode CS',NTOTCS*1.e-6
+            write(6,fmt='(a,3es12.4)') 'incloud lwc',lwc( cmode ),cwa03,MH2OTOT(CS)
             if (IDEB == 1) then
               write(12,fmt='(a,f13.5)' ) 'Init drop number in mode CS',NTOTCS*1.e-6      
-              write(12,fmt='(a,e10.4,a,e10.4,a,e10.4)' ) 'incloud lwc ',lwc(1), &
+              write(12,fmt='(a,e10.4,a,e10.4,a,e10.4)' ) 'incloud lwc ',lwc( cmode ), &
                    '  c(H2O)aq ',cwa03,'  m(H2O) ',MH2OTOT(CS) 
             endif
           endif
 
-! cloud activation or fixed fog/cloud
-!        endif
+
+      else if ((incloud.EQ.2).and.(RH.ge.rhactiv)) then
+
+! For cloud activation when RH > RH_activation
+!
+! Cloud droplet activation happens if relative humidity is above 99%
+! and the incloud flag is set to 1 by the user and if the computed
+! supersaturation is greater than equlibrium supersaturation.
+! Kinetic growth by water condensation in CS mode      
+! Calculate next MASS(CS,I,A_WAT) by kinetic growth (not equilibrium)
+
+! The water mass increase is calculated in gde_cloud_activation
+! NEW WATER MASS [ng/m^3]
+! Seinfeld and Pandis (2006), EQ(17.65)
+
+          ! aerosol water content AI ... CS
+          do M=AI,CS
+            do I=1,IMAX
+              !print *,'MH2OA',M,I,MASS(M,I,A_WAT),dmwdt(M,I)
+              MH2OA(M,I)  = MASS(M,I,A_WAT) + dmwdt(M,I)
+            end do
+          end do
+
+
+          ! first calculate water mass using the ZRS ruleset
+          ! aerosol water content NU ... CS
+          do M=NU,CS
+            MH2OTOT(M) = 0._dp 
+            do I=1,IMAX
+              CALL awater(RH,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),        &
+                       MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),   &
+                       MASS(M,I,A_WAT))
+              MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)
+            end do
+          end do
+
+
+          ! use the greater water mass of the two methods
+          ! aerosol water content AI ... CS
+          do M=AI,CS
+            MH2OTOT(M) = 0._dp 
+            do I=1,IMAX
+
+              !print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OA(M,I)
+              MASS(M,I,A_WAT) = max(MASS(M,I,A_WAT),MH2OA(M,I))
+              MH2OTOT(M) = MH2OTOT(M) + MASS(M,I,A_WAT)
+
+            enddo
+          enddo
+
+
+! droplet water for aqueous phase chemistry
+          CALL partlwc(MH2OTOT,cwa01,cwa02,cwa03,xaer,lwc)
+
+          ! No LWC in Aitken mode if not present (N(AI) < 20#/cm3)
+          if ( sum(N(AI,:))/1.e6 .lt. 20._dp ) then
+            lwc(1)  = 1.e-11_dp
+            xaer(1) = 0._dp
+          endif
+
+          lwc(1) = min(lwc(1),1.e-5_dp)
+          lwc(2) = min(lwc(2),1.e-5_dp)
+          lwc(3) = min(lwc(3),1.e-5_dp)
+
+          wascloud2=.true.
+
+          !print *,'caw01',cwa01
+          !print *,'caw02',cwa02
+          !print *,'caw03',cwa03
+
+          if (IDEB == 1) then
+             write(12,fmt='(a,e10.4,a,e10.4,a,e10.4)' ) 'incloud lwc(CS) ',lwc(3), &
+                  '  c(H2O)aq ',cwa03,'  m(H2O) ',MH2OTOT(CS) 
+          endif
+
 
       else
-!(incloud.eq.0)
+!For (incloud.eq.0)  or  (incloud.eq.2).and.(RH.lt.rhactiv)
+
 
 ! aerosol water content NU ... CS
         do M=NU,CS
@@ -298,16 +334,20 @@ module gde_addwater
             CALL awater(RH,MASS(M,I,A_SUL),MASS(M,I,A_NH4),MASS(M,I,A_NIT),            &
                      MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),  &
                      MASS(M,I,A_WAT))
-            if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp       
+            if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp
             MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)
           end do
         end do
 
-! evaporation of fog ("SINTEF fog simulation")
-        if (wascloud) then
+! evaporation of fog ("SINTEF fog simulation") or cloud ("cloud acivation")
+        if (wascloud1) then
             MH2OTOT(:)=0._dp
             MASS(CS,1:IMAX,A_WAT)=0._dp
-            wascloud=.false.
+            wascloud1=.false.
+        endif
+        if (wascloud2) then
+            MH2OTOT(:)=0._dp
+            wascloud2=.false.
         endif
 
 ! droplet water for aqueous phase chemistry
@@ -373,36 +413,39 @@ module gde_addwater
       ch2ocs = (MH2OTOT(CS)/(M_H2O*1E9_dp))* N_A/1.E6_dp
 
 
-! coarse aq. phase mode
-      lwca(1) = 1.E3_dp*(MH2OTOT(CS)/1.E9_dp)/1.E6_dp /RHOH2O
-
 ! several aq. phase modes
-!      do jb=1,APN
-!        lwca(jb) = 1.E3_dp*(MH2OTOT(jb+1)/1.E9_dp)/1.E6_dp /RHOH2O
-!       ! print *,'lwc',jb,MH2OTOT(jb+1),lwca(jb)
-!      end do
+! jb=1: AI=3
+! jb=2: AS=4
+! jb=3: CS=5
+      do jb=1,APN
+        lwca(jb) = 1.E3_dp*(MH2OTOT(jb+2)/1.E9_dp)/1.E6_dp /RHOH2O
+        !print *,'lwc',jb,MH2OTOT(jb+2),lwca(jb)
+      end do
  
 
-     ! if (ch2oai.le.0.0) then
-     !   ch2oai=1.0E-32_dp
-     !   lwca(1)=1.0E-32_dp
-     !   xaera(1)=0.0
-     ! end if
-     ! if (ch2oas.le.0.0) then
-     !   ch2oas=1.0E-32_dp
-     !   lwca(2)=1.0E-32_dp
-     !   xaera(2)=0.0         
-     ! end if
+      if (ch2oai.le.0.0) then
+        ch2oai   = 1.0E-32_dp
+        lwca(1)  = 1.0E-32_dp
+        xaera(1) = 0.0
+      end if
+      if (ch2oas.le.0.0) then
+        ch2oas   = 1.0E-32_dp
+        lwca(2)  = 1.0E-32_dp
+        xaera(2) = 0.0         
+      end if
       if (ch2ocs.le.0.0) then
-        ch2ocs=1.0E-32_dp
-        lwca(1)=1.0E-32_dp
-        xaera(1)=0.0
+        ch2ocs   = 1.0E-32_dp
+        lwca(3)  = 1.0E-32_dp
+        xaera(3) = 0.0
+!  coarse aq. phase mode
+!        lwca(1)=1.0E-32_dp
+!        xaera(1)=0.0
       end if
 
     end subroutine partlwc
 
 
-    subroutine wetdiameter(IMAX,incloud,RH,MTOT,MTOTW,DPA,DPAW)
+    subroutine wetdiameter(IMAX,RH,temp,MTOT,MTOTW,DPA,DPAW)
     !----------------------------------------------------------------------
     !
     !****  Calculate diameter of wet particle
@@ -421,6 +464,8 @@ module gde_addwater
     !      ---------
     !
     !        input:
+    !           rel. humidty   [-]
+    !           temperature    [K]
     !           total mass dry [ng/m^3]
     !           total mass wet [ng/m^3]
     !           dry diameter   [m]
@@ -437,6 +482,7 @@ module gde_addwater
     !      aerosol dynamics in the marine boundary layer"
     !      J. Geophys. Res., 103, D13, 16085-16102, 1998.
     !      Equation (10)
+    !      Modified with correction for particle curvature
     !
     !      external
     !      --------
@@ -444,43 +490,67 @@ module gde_addwater
     !
     !      reference
     !      ---------
-    !      none
+    !      Fitzgerald et al. (1998)
+    !      "A one-dimensional sectional model to simulate multicomponent
+    !      aerosol dynamics in the marine boundary layer"
+    !      J. Geophys. Res., 103, D13, 16085-16102, 1998.
     !
     !------------------------------------------------------------------
 
     implicit none
 
-    integer, intent(in)                               :: incloud
     integer, intent(in)                               :: IMAX
     real( dp), intent(in)                             :: RH
+    real( dp), intent(in)                             :: temp
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
     real( dp), dimension(MMAX),intent(in)             :: MTOT,MTOTW
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(out) :: DPAW
         
     real( dp), dimension(MMAX)             :: SWF
-!    real( dp)                              :: swfav
+    real( dp)                              :: surf_H2O
+    real( dp)                              :: sigma_H2O
+    real( dp)                              :: A = 4.33e-6_dp
+    real( dp)                              :: surfac
+    real( dp)                              :: kelv
+    real( dp)                              :: swfsum
+    real( dp)                              :: swftest
+    real( dp)                              :: TT
     integer                                :: M,I
-    
+
+      ! surface tension of water (in kg/s^2)
+      surf_H2O= surf_h2o_std-0.155*(temp-273.15)
+      sigma_H2O=surf_H2O*1.e-3_dp
+      surfac=A*sigma_H2O/temp
+
+      ! calculate swelling factor per mode
+      swfsum=0.0_dp
       do M=1,MMAX
         SWF(M)=(MTOTW(M)/ (max(MTOT(M),1.e-32_dp)) )**(1./3.)
         SWF(M)=min(SWF(M),3.0_dp)
         SWF(M)=max(SWF(M),1.0_dp)
-        if ((incloud.EQ.1).and.(RH.lt.rhactiv)) SWF(M)=1.0        
+        swfsum=swfsum+SWF(M)
       end do 
-      
-      SWF(NU)=min(SWF(NU), 0.5*SWF(NU) + 0.5*SWF(AI) )
-      SWF(AI)=max(SWF(NU), 0.5*SWF(AI) + 0.5*SWF(AS) )
-      SWF(AS)=max(SWF(AI),SWF(AS))
-      SWF(CS)=max(SWF(AS),SWF(CS))
-      
+
+!!!      SWF(NU)=max(SWF(NU), 0.5*SWF(NU) + 0.5*SWF(NA) )
+!!!      SWF(NA)=max(SWF(NU), 0.5*SWF(NA) + 0.5*SWF(AI) )
+!!!      SWF(AI)=max(SWF(NA), 0.5*SWF(AI) + 0.5*SWF(AS) )
+!!!      SWF(AS)=max(SWF(AI),SWF(AS))
+!!!      SWF(CS)=max(SWF(AS),SWF(CS))
+!!!      ! avoid particle accumulation at NU-NA barrier
+!!!      SWF(NU)=SWF(NA)
+
+     ! Assume uniform SWF in all modes
+     ! SWF is modified by curvature
       do M=1,MMAX
         do I=1,IMAX
-          DPAW(M,I)=DPA(M,I)*SWF(M)
+          SWF(M)=swfsum/MMAX
+          kelv=1._dp + ( surfac/(0.5*DPA(M,I)))   ! curvature (1+A/r)
+          swftest=max( SWF(M)/kelv,1.0_dp)
+          DPAW(M,I)=DPA(M,I) *swftest
+          !  print *,'wetdp',M,I,DPA(M,I),SWF(M),swftest,DPAW(M,I)
         end do
-      end do      
+      end do
 
-
-    
     end subroutine wetdiameter
     
     

@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2024  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -46,7 +46,7 @@ module gde_init_gas
    use messy_mecca_kpp_Global, only : wall
    use messy_mecca_kpp_Global, only : fch3so2
 
-   use gde_input_data, only  : NU,AI,AS,CS
+   use gde_input_data, only  : NU,NA,AI,AS,CS
    use gde_input_data, only  : NSOA
    use gde_input_data, only  : gspec
    use gde_input_data, only  : edms,eso2,eh2o2,cnh3
@@ -582,6 +582,7 @@ contains
     !      purpose
     !      -------
     !      read input for organic components
+    !      SOA mole fraction specified in 5 modes
     !
     !      interface
     !      ---------
@@ -657,15 +658,15 @@ contains
        read(22,*) nc9,no9,hvap9,c09      ! PELV
 
 ! next lines contain the SOA mole fractions in OC
-       read(22,*) gamma_oc1(NU),gamma_oc1(AI),gamma_oc1(AS),gamma_oc1(CS)
-       read(22,*) gamma_oc2(NU),gamma_oc2(AI),gamma_oc2(AS),gamma_oc2(CS)
-       read(22,*) gamma_oc3(NU),gamma_oc3(AI),gamma_oc3(AS),gamma_oc3(CS)
-       read(22,*) gamma_oc4(NU),gamma_oc4(AI),gamma_oc4(AS),gamma_oc4(CS)
-       read(22,*) gamma_oc5(NU),gamma_oc5(AI),gamma_oc5(AS),gamma_oc5(CS)
-       read(22,*) gamma_oc6(NU),gamma_oc6(AI),gamma_oc6(AS),gamma_oc6(CS)
-       read(22,*) gamma_oc7(NU),gamma_oc7(AI),gamma_oc7(AS),gamma_oc7(CS)
-       read(22,*) gamma_oc8(NU),gamma_oc8(AI),gamma_oc8(AS),gamma_oc8(CS)
-       read(22,*) gamma_oc9(NU),gamma_oc9(AI),gamma_oc9(AS),gamma_oc9(CS)
+       read(22,*) gamma_oc1(NU),gamma_oc1(NA),gamma_oc1(AI),gamma_oc1(AS),gamma_oc1(CS)
+       read(22,*) gamma_oc2(NU),gamma_oc2(NA),gamma_oc2(AI),gamma_oc2(AS),gamma_oc2(CS)
+       read(22,*) gamma_oc3(NU),gamma_oc3(NA),gamma_oc3(AI),gamma_oc3(AS),gamma_oc3(CS)
+       read(22,*) gamma_oc4(NU),gamma_oc4(NA),gamma_oc4(AI),gamma_oc4(AS),gamma_oc4(CS)
+       read(22,*) gamma_oc5(NU),gamma_oc5(NA),gamma_oc5(AI),gamma_oc5(AS),gamma_oc5(CS)
+       read(22,*) gamma_oc6(NU),gamma_oc6(NA),gamma_oc6(AI),gamma_oc6(AS),gamma_oc6(CS)
+       read(22,*) gamma_oc7(NU),gamma_oc7(NA),gamma_oc7(AI),gamma_oc7(AS),gamma_oc7(CS)
+       read(22,*) gamma_oc8(NU),gamma_oc8(NA),gamma_oc8(AI),gamma_oc8(AS),gamma_oc8(CS)
+       read(22,*) gamma_oc9(NU),gamma_oc9(NA),gamma_oc9(AI),gamma_oc9(AS),gamma_oc9(CS)
 
 ! other stuff related to organic chemistry
        read(22,*) fch3so2

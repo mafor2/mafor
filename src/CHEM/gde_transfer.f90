@@ -261,10 +261,11 @@ contains
       ! calculate temperature dependent Henry's law constants:
       if (henry_T0(jn) > 0.) then
         henry = henry_T0(jn) * exp(henry_Tdep(jn)*((1._dp/temp)-T0_INV))
+  ! debug Henry coefficient
+  !     write(6,*) 'transfer',jn,vmean,alpha,henry
       else
         henry=0.
       endif
-      !write(6,*) 'transfer',jn,vmean,alpha,henry
       if (alpha > 0.) then
         DO jb = 1, APN ! loop over modes
           if (radius(jb) >= zrc_t) then
@@ -282,7 +283,7 @@ contains
                 / (R_gas * 1.E3_dp * temp * henry) ! backward
             endif
             
-            !write(6,*) 'kexf',jb,radius(jb),kmtrans,kmtmecca,lwc(jb),k_exf(jb,jn)
+           ! if (jb==3) write(6,*) 'kexf',jb,radius(jb),kmtrans,lwc(jb),k_exf(jb,jn)
 
           endif
         END DO
