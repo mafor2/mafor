@@ -47,7 +47,7 @@
 !***      FITAERO
 !***      Aerosol size distribution fit tool
 !***      for MAFOR's inaero.dat
-!***      Version: 1.2
+!***      Version: 1.3
 !***
 !***      FITAERO treats three sets of aerosols
 !***      dpmax <  2.0E-6 [m]            (FINE)
@@ -99,7 +99,12 @@
 !***  13 Jan 2024 M. Karl      FINE subgroup exhaust
 !***  20 Jan 2024 M. Karl      reset mode diameter lower limits after
 !***                           call to findmodes
+!***  06 Dec 2024 M. Karl      extend FITAERO to 5 mode-distribution
+!***  19 Dec 2024 M. Karl      recalculate output sizedis with lognormal
+!***                           mass concentration distribution
 !***
+!*** TO DO: remove shrmode adjustments in module_fitaero_exe.for
+!***        unless necessary to distinguish cases
 !***
 !***********************************************************************
       program prog_fitaero
@@ -142,7 +147,7 @@
 
 ! Simplex
       integer                     :: nsim
-      integer                     :: i,j,k,m,o,b
+      integer                     :: i,j,k,m,o,b,n
       integer                     :: ilo, ihi, nhi
       integer                     :: mstart
       real                        :: erfr, ex
@@ -164,8 +169,15 @@
       real                        :: masswmode
       real                        :: shrf
       real                        :: swfmode
+      real                        :: napmax
       real                        :: aitmax
       real                        :: accmax
+
+! Output size distribution (inaero.dat)
+      real, dimension(nm)         :: gmdout
+      real, dimension(nm)         :: sigout
+      real                        :: massout
+      real                        :: volcout
 
 
 !***********************************************************************
@@ -182,11 +194,13 @@
       if (.not. allocated(in_array_dp))   allocate(in_array_dp(n_obins))
       if (.not. allocated(in_array_dn))   allocate(in_array_dn(n_obins))
       if (.not. allocated(in_array_nuf))  allocate(in_array_nuf(nc))
+      if (.not. allocated(in_array_naf))  allocate(in_array_naf(nc))
       if (.not. allocated(in_array_aif))  allocate(in_array_aif(nc))
       if (.not. allocated(in_array_acf))  allocate(in_array_acf(nc))
       if (.not. allocated(in_array_cof))  allocate(in_array_cof(nc))
       if (.not. allocated(dataa))         allocate(dataa(n_obins,nv))
       if (.not. allocated(nest))          allocate(nest(nm,n_obins))
+      if (.not. allocated(numout))        allocate(numout(nm,n_obins))
       if (.not. allocated(dense))         allocate(dense(nm,nc-1))
 
 
@@ -194,12 +208,15 @@
       in_array_dp(:)    = 0.0
       in_array_dn(:)    = 0.0
       in_array_nuf(:)   = 0.0
+      in_array_naf(:)   = 0.0
       in_array_aif(:)   = 0.0
       in_array_acf(:)   = 0.0
       in_array_cof(:)   = 0.0
       dataa(:,:)        = 0.0
       dense(:,:)        = 0.0
       wamass(:)         = 0.0
+      gmdout(:)         = 0.0
+      sigout(:)         = 0.0
 
       kount=0
 
@@ -221,6 +238,7 @@
            form="formatted",iostat=res2)
       read(funit_in_massfra, fmt='(A)', iostat=resin2) header2
       call read_csv_file(funit_in_massfra, nc, in_array_nuf)
+      call read_csv_file(funit_in_massfra, nc, in_array_naf)
       call read_csv_file(funit_in_massfra, nc, in_array_aif)
       call read_csv_file(funit_in_massfra, nc, in_array_acf)
       call read_csv_file(funit_in_massfra, nc, in_array_cof)
@@ -248,9 +266,10 @@
 !     Fill mass frac matrix
       do o = 1, nc-1
          dense(1,o) = in_array_nuf(o)
-         dense(2,o) = in_array_aif(o)
-         dense(3,o) = in_array_acf(o)
-         dense(4,o) = in_array_cof(o)
+         dense(2,o) = in_array_naf(o)
+         dense(3,o) = in_array_aif(o)
+         dense(4,o) = in_array_acf(o)
+         dense(5,o) = in_array_cof(o)
       end do
 
 !     Fill parameter estimates
@@ -300,7 +319,9 @@
 
 
 !     Nucleation mode yes/no
-      if ( dataa(1,1).lt.9.0 ) then
+!     Include fitted NU mode if lowest
+!     measured particle diameter is <7 nm
+      if ( dataa(1,1).lt.7.0 ) then
          mstart=1
       else
          mstart=2
@@ -313,48 +334,54 @@
       print *,'start mode',mstart
       print *,'bin low',binlo(:)
       print *,'bin  up',binup(:)
-
+      !stop
 
 !     Update the lower and upper limit for gmd
-      do m = 2, 3
+      do m = NA, AS
         betamax(m,1) = dataa(binup(m),1)
         betamin(m,1) = dataa(binlo(m),1)
       enddo
-      betamax(4,1) = dataa(binup(4),1)
+      betamax(CS,1) = dataa(binup(CS),1)
 
 
 !     Reset Mode diameter lower limits
-      !AIT
+      !NAP,AIT
       if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
-         betamin(2,1) = min1_gmd(2)
+         betamin(NA,1) = min1_gmd(2)
+         betamin(AI,1) = min1_gmd(3)
       endif
       !ACC,COA
       if (dpmax<2.0E-6) then
-        betamin(3,1) = min2_gmd(3)
-        betamin(4,1) = min2_gmd(4)
+        betamin(AS,1) = min2_gmd(4)
+        betamin(CS,1) = min2_gmd(5)
       else if ( (dpmax>=2.0E-6).and.(dpmax<1.0E-5) ) then
-        betamin(3,1) = min1_gmd(3)  
-        betamin(4,1) = min1_gmd(4)         
+        betamin(AS,1) = min1_gmd(4)  
+        betamin(CS,1) = min1_gmd(5)
       else
-        betamin(3,1) = min3_gmd(3)
-        betamin(4,1) = min3_gmd(4)
+        betamin(AS,1) = min3_gmd(4)
+        betamin(CS,1) = min3_gmd(5)
       endif
 
 
-!     Find Aitken and Acc mode maximum
-      aitmax = maxval( dataa(binlo(2):binup(2),2) )
-      accmax = maxval( dataa(binlo(3):binup(3),2) )
+!     Find Nanoparticle, Aitken and Acc mode maximum
+      napmax = maxval( dataa(binlo(NA):binup(NA),2) )
+      aitmax = maxval( dataa(binlo(AI):binup(AI),2) )
+      accmax = maxval( dataa(binlo(AS):binup(AS),2) )
 
      
       do i = 1, n_obins
+        if (dataa(i,2).eq.napmax) then
+           beta(NA,1) = dataa(i,1)
+        endif
         if (dataa(i,2).eq.aitmax) then
-           beta(2,1) = dataa(i,1)
+           beta(AI,1) = dataa(i,1)
         endif
         if (dataa(i,2).eq.accmax) then
-           beta(3,1) = dataa(i,1)
+           beta(AS,1) = dataa(i,1)
         endif
       enddo
 
+      print *,'beta GMD',beta(:,1)
 
 !     Estimate of mass based on observed dN and GMD_es
 !     MASS[ng/m3] = N[1/cm3]*VPT(gmd)[m3]*CONV[ng/kg]*DENS[kg/m3]*1.E6
@@ -383,103 +410,176 @@
          print *,'FINE set'
 
          print *,'mstart ',mstart
-         print *,'beta(2,3) ',beta(2,3)
-         print *,'beta(3,3) ',beta(3,3)
 
-         ! update GMD estimate for Ait and Acc
-         beta(2,1) = beta(2,1) * 1.2
-         beta(3,1) = beta(3,1) * 1.2
+         print *,'Mtot(AS)',beta(AS,3)
 
 ! ** Division in exhaust / urban backgr / coastal backgr
 
-        if (beta(3,3)<500.0) then
+        if (beta(AS,3)<500.0) then
         !bkgr2_test
 
            print *,'MARINE'
-           !mass min
-           betamin(:,3)  = betamin(:,3)*0.1
-           !mass max
-           betamax(:,3)  = betamax(:,3)/100.
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.85
+           betamin(NA,1)  = betamin(NA,1)*0.85
+           betamax(NA,1)  = betamax(NA,1)*0.85
            !AIT
-           beta(2,1)     = beta(2,1)*1.5
-           betamin(2,1)  = betamin(2,1)*1.5
-           betamax(2,1)  = betamax(2,1)*1.5
+           beta(AI,1)     = beta(AI,1)   *1.20
+           betamin(AI,1)  = betamin(AI,1)*1.20           
+           betamax(AI,1)  = betamax(AI,1)*1.20
+           beta(AI,3)     = beta(AI,3)   *0.73
            !ACC
-           beta(3,1)     = beta(3,1)*0.7
+           beta(AS,1)     = beta(AS,1)   *1.2
+           betamin(AS,1)  = betamin(AS,1)*1.2
+           betamax(AS,1)  = betamax(AS,1)*1.2
 
-        else if (beta(3,3)<2000.0) then
+           ! change mode width
+           betamin(AI,2)  = 1.87
+           betamax(AI,2)  = 1.99
+           !update mass min & max
+           betamin(NU:NA,3)=betamin(NU:NA,3)/25.
+           betamin(AI,3)  = betamin(AI,3)   *0.15
+           betamin(AS:CS,3)=betamin(AS:CS,3)*0.3
+           betamax(:,3)   = betamax(:,3)/100.
+
+        else if (beta(AS,3)<3000.0) then
         !bktr1_test
 
            print *,'COASTAL'
-           !mass min
-           betamin(:,3)  = betamin(:,3)*0.5
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.90
+           betamin(NA,1)  = betamin(NA,1)*0.90
+           betamax(NA,1)  = betamax(NA,1)*0.90
+           beta(NA,3)     = beta(NA,3)   *0.50
            !AIT
-           beta(2,1)     = beta(2,1)*1.25
-           betamax(2,1)  = betamax(2,1)*1.25
-           beta(2,3)     = beta(2,3)*2.7
-           !COA
-           betamax(4,1)  = betamax(4,1)*0.97
-           beta(4,3)     = beta(4,3)*2.5
+           beta(AI,1)     = beta(AI,1)   *0.90
+           betamin(AI,1)  = betamin(AI,1)*0.90
+           betamax(AI,1)  = betamax(AI,1)*0.90
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.40
+           betamin(AS,1)  = betamin(AS,1)*1.40
+           betamax(AS,1)  = betamax(AS,1)*1.40
 
-        else if ( beta(3,3) < 10000.0) then
-        !traff1_test
-        !init1_test: do not change here
+           ! change mode width
+           betamin(NA,2)  = 1.55
+           betamax(NA,2)  = 1.65
+           betamin(AI,2)  = 1.82
+           betamax(AI,2)  = 1.98
+           betamin(AS,2)  = 1.85
+           betamax(AS,2)  = 1.95
+           !update mass min & max
+           betamin(NA,3)  = betamin(NA,3)*0.50
+           betamax(NA,3)  = betamax(NA,3)*0.50
+           beta(AI:CS,3)  = beta(AI:CS,3)*10.0
+           betamin(AI,3)  = beta(AI,3)   *0.17
+           betamin(AS,3)  = beta(AS,3)   *0.16
+           betamin(CS,3)  = beta(CS,3)   *0.25
+           betamax(CS,1)  = max2_gmd(CS) *0.5
+
+        else if ( beta(AS,3) < 11000.0) then
+        !traff1_test: do not change parameters
+        !init1_test:  do not change here but in output_fitaero
 
            print *,'URBAN'
-           !gmd
-           beta(2,1)     = beta(2,1)   *1.80
-           betamax(2,1)  = betamax(2,1)*1.80
-           beta(3,1)     = beta(3,1)   *1.80
-           betamax(3,1)  = betamax(3,1)*1.80
-           !mass
-           beta(4,3)     = beta(4,3)*1.5
-           betamin(:,3)  = beta(:,3)*0.20
-           betamax(:,3)  = betamax(:,3)*1.5
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.94
+           betamin(NA,1)  = betamin(NA,1)*0.94
+           betamax(NA,1)  = betamax(NA,1)*0.94
+           beta(NA,3)     = beta(NA,3)   *2.5
+           !AIT
+           beta(AI,1)     = beta(AI,1)   *1.04
+           betamin(AI,1)  = betamin(AI,1)*1.04
+           betamax(AI,1)  = betamax(AI,1)*1.04
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.3
+           betamin(AS,1)  = betamin(AS,1)*1.3
+           betamax(AS,1)  = betamax(AS,1)*1.3
+           !COA
+           betamin(CS,1)  = betamin(CS,1)*1.2
 
-        else if ( beta(3,3) < 25000.0) then
+           ! change mode width
+           betamin(NA,2)  = 1.60
+           betamax(NA,2)  = 1.70
+           betamin(AI,2)  = 1.82
+           betamax(AI,2)  = 1.90
+           !update mass min & max
+           betamin(NA,3)  = betamin(NA,3)*2.0
+           betamax(NA,3)  = betamax(NA,3)*2.0
+           beta(AI:CS,3)  = beta(AI:CS,3)*3.0
+           betamax(AI:CS,3) = beta(AI:CS,3)*4.0
+           betamin(AI,3)  = beta(AI,3)   *0.77
+           betamin(AS,3)  = beta(AS,3)   *0.49
+           betamin(CS,3)  = beta(CS,3)   *0.45
+
+        else if ( beta(AS,3) < 35000.0) then
         !aces_test
 
            print *,'BIOBURN'
-           ! change GMD
-           beta(2,1)     = beta(2,1)   *1.70
-           betamax(2,1)  = betamax(2,1)*1.70
-           beta(3,1)     = beta(3,1)   *1.45
-           betamin(3,1)  = betamin(3,1)*1.45
-           betamax(3,1)  = betamax(3,1)*1.45
-           beta(4,1)     = beta(4,1)   *1.50
-           betamin(4,1)  = betamin(4,1)*1.50
-           betamax(4,1)  = betamax(4,1)*1.50
-           !sigma
-           betamin(3,2)  = 1.67
-           beta(3,2)     = 1.77
-           !mass
-           beta(2,3)     = beta(2,3)*9.0
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *1.05
+           betamin(NA,1)  = betamin(NA,1)*1.05
+           betamax(NA,1)  = betamax(NA,1)*1.05
+           !AIT
+           beta(AI,1)     = beta(AI,1)   *0.80
+           betamin(AI,1)  = betamin(AI,1)*0.80
+           betamax(AI,1)  = betamax(AI,1)*0.80
+           beta(AI,3)     = beta(AI,3)   *5.50
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.06
+           betamin(AS,1)  = betamin(AS,1)*1.06
+           betamax(AS,1)  = betamax(AS,1)*1.06
+           beta(AS,3)     = beta(AS,3)   *2.00
+
+           ! change mode width
+           betamin(NA,2)  = 1.45
+           betamax(NA,2)  = 1.55
+           betamin(AS,2)  = 1.60
+           betamax(AS,2)  = 1.66
+           !update mass min & max
+           betamin(NA,3)  = betamin(NA,3)*0.75
+           betamin(AI,3)  = betamin(AI,3)*50.
+           betamin(AS:CS,3)  = betamin(AS:CS,3)*290.
 
         else
         !stena_test
 
            print *,'EXHAUST'
-           ! set NUC mode diameter
-           betamax(1,1) = 10.0   ! nm
-           ! change GMD
-           beta(2,1)     = beta(2,1)   *0.65
-           betamin(2,1)  = betamin(2,1)*0.65
-           betamax(2,1)  = betamax(2,1)*0.65
-           beta(3,1)     = beta(3,1)   *1.25
-           betamin(3,1)  = betamin(3,1)*1.25
-           betamax(3,1)  = betamax(3,1)*1.25
+           !NUC
+           beta(NU,1)     = beta(NU,1)   *1.13
+           betamax(NU,1)  = betamax(NU,1)*1.13
+           betamin(NU,1)  = betamin(NU,1)*1.13
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.98
+           betamax(NA,1)  = betamax(NA,1)*0.98
+           betamin(NA,1)  = betamin(NA,1)*0.98
+           !AIT
+           beta(AI,3)     = beta(AI,3)   *2.1
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.50
+           betamin(AS,1)  = betamin(AS,1)*1.50
+           betamax(AS,1)  = betamax(AS,1)*1.50
+           !COA
+           beta(CS,1)     = beta(CS,1)   *1.40
+           betamin(CS,1)  = betamin(CS,1)*1.40
+           betamax(CS,1)  = betamax(CS,1)*1.40
+           beta(CS,3)     = beta(CS,3)   *0.21
 
            ! change mode width
-           betamax(1,2)  = 1.45
-           betamin(2,2)  = 1.44
-           betamax(2,2)  = 1.64
-           betamin(3,2)  = 1.75
-           betamax(3,2)  = 2.00
+           betamax(NU,2)  = 1.38
+           betamin(NA,2)  = 1.43
+           betamax(NA,2)  = 1.58
+           betamin(AI,2)  = 1.62
+           betamax(AI,2)  = 1.80
+           betamin(AS,2)  = 1.58
+           betamax(AS,2)  = 1.68
+           betamin(CS,2)  = 1.70
+           betamax(CS,2)  = 1.90
            !update mass min & max
-           betamax(:,3)  = betamax(:,3)*300.0
-           betamin(:,3)  = beta(:,3)*0.08
-           !mass estimate AIT
-           beta(2,3)     = beta(2,3)*7.0
+           betamax(NA:CS,3)  = betamax(NA:CS,3)*300.
+           betamin(NA,3)  = beta(NA,3)*0.62
+           betamin(AI,3)  = beta(AI,3)*0.65
+           betamin(AS,3)  = beta(AS,3)*1.08
+           betamin(CS,3)  = beta(CS,3)*0.45
 
         endif
 
@@ -490,8 +590,7 @@
         print *,'FINE + COARSE set'
 
         print *,'mstart ',mstart
-        print *,'beta(2,3) ',beta(2,3)
-        print *,'beta(3,3) ',beta(3,3)
+        print *,'Mtot(AI) ',beta(AI,3)
 
         ! update MASS min & max
         betamin(:,3) = betamin(:,3)*0.08
@@ -500,67 +599,127 @@
            betamax(m,3) = beta(m,3)*300.0
         enddo
 
-        if(beta(2,3)<100.0) then
+        if(beta(AI,3)<600.0) then
         !amar2_test
         ! ("coastal marine")
            print *,'MARINE'
-           !NUC
-           beta(1,3)     = beta(1,3)*35.0
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *1.17
+           betamax(NA,1)  = betamax(NA,1)*1.17
+           betamin(NA,1)  = betamin(NA,1)*1.17
+           beta(NA,3)     = beta(NA,3)*4.7
            !AIT
-           beta(2,1)     = beta(2,1)   *0.95
-           betamin(2,1)  = 25.0
-           betamax(2,1)  = betamax(2,1)*0.95
-           beta(2,3)     = beta(2,3)*3.5
+           beta(AI,1)     = beta(AI,1)   *1.07
+           betamin(AI,1)  = betamin(AI,1)*1.07
+           betamax(AI,1)  = betamax(AI,1)*1.07
+           beta(AI,3)     = beta(AI,3)*2.1
            !ACC
-           beta(3,1)     = beta(3,1)   *0.7
-           betamin(3,1)  = betamin(3,1)*0.7
-           betamax(3,1)  = betamax(3,1)*0.7
+           beta(AS,1)     = beta(AS,1)   *0.9
+           betamin(AS,1)  = betamin(AS,1)*0.9
+           betamax(AS,1)  = betamax(AS,1)*0.9
+           beta(AS,3)     = beta(AS,3)*0.6
+           !COA
+           beta(CS,1)     = beta(CS,1)   *1.6
+           betamax(CS,1)  = betamax(CS,1)*1.6
+           betamin(CS,1)  = betamin(CS,1)*1.6
+           beta(CS,3)     = beta(CS,3)*9.0
 
-           betamin(:,3)  = beta(:,3)*0.40
+           ! change mode width
+           betamin(AI,2)  = 1.75
+           betamax(AI,2)  = 1.90
+           !update mass min & max
+           betamin(:,3)  = beta(:,3)*0.90
 
-        else if (beta(2,3)<200.0) then
+        else if (beta(AI,3)<2000.0) then
         !acont_test
         ! ("coastal continental")
            print *,'COASTAL'
-           !NUC
-           beta(1,3)     = beta(1,3)*7.0
-           betamin(1,3)  = beta(1,3)*0.5
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *1.2
+           betamax(NA,1)  = betamax(NA,1)*1.2
+           betamin(NA,1)  = betamin(NA,1)*1.2
+           beta(NA,3)     = beta(NA,3)*7.0
            !AIT
-           beta(2,1)     = beta(2,1)*1.43
-           betamax(2,1)  = betamax(2,1)*1.43
-           beta(2,3)     = beta(2,3)*9.5
+           beta(AI,1)     = beta(AI,1)   *2.0
+           betamin(AI,1)  = betamin(AI,1)*2.0
+           betamax(AI,1)  = betamax(AI,1)*2.0
+           beta(AI,3)     = beta(AI,3)*9.4
            !ACC
-           betamax(3,2)  = 1.60
-           beta(3,1)     = beta(3,1)*0.91
-           betamax(3,1)  = betamax(3,1)*0.91
+           beta(AS,3)     = beta(AS,3)*1.0
+           !COA
+           beta(CS,1)     = beta(CS,1)   *1.6
+           betamax(CS,1)  = betamax(CS,1)*1.6
+           betamin(CS,1)  = betamin(CS,1)*1.6
+           beta(CS,3)     = beta(CS,3)*9.0
 
-        else if (beta(2,3)<10000.0) then
+           ! change mode width
+           betamin(AI,2)  = 1.90
+           betamax(AI,2)  = 2.15
+           !update mass min & max
+           betamin(:,3)  = beta(:,3)*0.90
+
+        else if (beta(AI,3)<10000.0) then
         !bkgr1_test
            print *,'URBAN'
-           beta(2,1)     = beta(2,1)*1.60
-           betamin(2,1)  = betamin(2,1)*1.60
-           
-           beta(2,3)     = beta(2,3) * 0.23
-           betamax(2,3)  = beta(2,3) * 1.20
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.75
+           betamax(NA,1)  = betamax(NA,1)*0.75
+           betamin(NA,1)  = betamin(NA,1)*0.75
+           beta(NA,3)     = beta(NA,3)*0.35
+           !AIT
+           beta(AI,1)     = beta(AI,1)   *1.15
+           betamin(AI,1)  = betamin(AI,1)*1.15
+           betamax(AI,1)  = betamax(AI,1)*1.15
+           beta(AI,3)     = beta(AI,3)*0.60
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.5
+           betamin(AS,1)  = betamin(AS,1)*1.5
+           betamax(AS,1)  = betamax(AS,1)*1.5
+           beta(AS,3)     = beta(AS,3)*0.37
+           !COA
+           beta(CS,3)     = beta(CS,3)*0.80
+
+           ! change mode width
+           betamin(AI,2)  = 1.90
+           betamax(AI,2)  = 2.15
+           !update mass min & max
+           betamin(:,3)  = beta(:,3)*0.90
 
         else
         !xprs1,2_test
            print *,'EXHAUST'
            !NUC
-           betamax(1,1)  = 7.0 ! nm
-           betamax(1,2)  = 1.35
-           beta(1,3)     = beta(1,3) * 0.70
-           betamin(1,3)  = beta(1,3) * 0.20
-           betamax(1,3)  = beta(1,3) * 2.00
-           !AIT  
-           betamin(2,2)  = 1.62
-           betamax(2,2)  = 1.85
+           betamax(NU,1)  = 7.6 ! nm
+           betamax(NU,2)  = 1.30
+           betamin(NU,3)  = beta(NU,3)*0.45
+           betamax(NU,3)  = beta(NU,3)*2.00
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.95
+           betamax(NA,1)  = betamax(NA,1)*0.95
+           betamin(NA,1)  = betamin(NA,1)*0.95
+           beta(NA,3)     = beta(NA,3)*0.68
+           !AIT
+           beta(AI,1)     = beta(AI,1)   *0.77
+           betamin(AI,1)  = betamin(AI,1)*0.77
+           betamax(AI,1)  = betamax(AI,1)*0.77
+           beta(AI,3)     = beta(AI,3)*0.80
            !ACC
-           betamin(3,2)  = 1.45
-           betamax(3,2)  = 1.60
+           beta(AS,1)     = beta(AS,1)   *1.05
+           betamin(AS,1)  = betamin(AS,1)*1.05
+           betamax(AS,1)  = betamax(AS,1)*1.05
+           beta(AS,3)     = beta(AS,3)*0.75
            !COA
-           betamin(4,2)  = 1.85
-           betamax(4,2)  = 2.20
+           beta(CS,3)     = beta(CS,3)*0.80
+
+           ! change mode width
+           betamin(AI,2)  = 1.85
+           betamax(AI,2)  = 2.10
+           betamin(AS,2)  = 1.80
+           betamax(AS,2)  = 1.95
+           betamin(CS,2)  = 1.85
+           betamax(CS,2)  = 2.20
+           !update mass min & max
+           betamin(:,3)  = beta(:,3)*0.90
 
         endif
 
@@ -570,14 +729,7 @@
         print *,'PM10 set'
 
         print *,'mstart ',mstart
-        print *,'beta(2,3) ',beta(2,3)
-        print *,'beta(3,3) ',beta(3,3)
-
-        ! update GMD estimate
-        beta(3,1) = beta(3,1) * 1.3
-        beta(4,1) = beta(4,1) * 1.2
-        betamin(3,1) = betamin(3,1)*1.3
-        betamin(4,1) = betamin(4,1)*1.2
+        print *,'Mtot(AI) ',beta(AI,3)
 
         ! update MASS min & max
         betamin(:,3) = betamin(:,3)*0.08
@@ -586,36 +738,79 @@
            betamax(m,3) = beta(m,3)*300.0
         enddo
 
-        if(beta(2,3)<200.0) then
+        if(beta(AI,3)<600.0) then
         !arctic_test
         ! ("arctic example")
            print *,'MARINE'
            !NUC
-           beta(1,3)     = beta(1,3)*6.5
+           beta(NU,1)     = beta(NU,1)   *0.62
+           betamax(NU,1)  = betamax(NU,1)*0.62
+           betamin(NU,1)  = betamin(NU,1)*0.62
+           beta(NU,3)     = beta(NU,3)*16.0
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.87
+           betamax(NA,1)  = betamax(NA,1)*0.87
+           betamin(NA,1)  = betamin(NA,1)*0.87
+           beta(NA,3)     = beta(NA,3)*3.0
            !AIT
-           betamax(2,1)  = betamax(2,1)*0.49
-           beta(2,2)     = 1.55
-           betamin(2,2)  = 1.50
-           betamax(2,2)  = 1.60
-           beta(2,3)     = beta(2,3)*7.0
+           beta(AI,1)     = beta(AI,1)   *1.09
+           betamin(AI,1)  = betamin(AI,1)*1.09
+           betamax(AI,1)  = betamax(AI,1)*1.09
+           beta(AI,3)     = beta(AI,3)*4.0
            !ACC
-           beta(3,3)     = beta(3,3)*1.4
+           beta(AS,1)     = beta(AS,1)   *0.9
+           betamin(AS,1)  = betamin(AS,1)*0.9
+           betamax(AS,1)  = betamax(AS,1)*0.9
+           beta(AS,3)     = beta(AS,3)*6.5
 
+           ! change mode width
+           betamin(AI,2)  = 1.55
+           betamax(AI,2)  = 1.75
+           !update mass min & max
            betamin(:,3)  = beta(:,3)*0.20
 
-        else if (beta(2,3)<10000.0) then
+        else if (beta(AI,3)<10000.0) then
         !
            print *,'URBAN'
            !nothing special
 
+
+
         else
+        !xprs3_test (same as xprs2_test)
            print *,'EXHAUST'
-           betamax(1,1)  = 7.0 ! nm
-           betamax(1,2)  = 1.35 
-           betamin(2,2)  = 1.62
-           betamax(2,2)  = 1.85
-           betamin(3,2)  = 1.45
-           betamax(3,2)  = 1.65
+           !NUC
+           betamax(NU,1)  = 7.2 ! nm
+           betamax(NU,2)  = 1.30
+           beta(NU,3)     = beta(NU,3)*0.90
+           betamin(NU,3)  = beta(NU,3)*0.40
+           betamax(NU,3)  = beta(NU,3)*2.40
+           !NAP
+           beta(NA,1)     = beta(NA,1)   *0.76
+           betamax(NA,1)  = betamax(NA,1)*0.76
+           betamin(NA,1)  = betamin(NA,1)*0.76
+           beta(NA,3)     = beta(NA,3)*0.63
+           !AIT
+           beta(AI,1)     = beta(AI,1)   *1.23
+           betamin(AI,1)  = betamin(AI,1)*1.23
+           betamax(AI,1)  = betamax(AI,1)*1.23
+           beta(AI,3)     = beta(AI,3)*0.86
+           !ACC
+           beta(AS,1)     = beta(AS,1)   *1.05
+           betamin(AS,1)  = betamin(AS,1)*1.05
+           betamax(AS,1)  = betamax(AS,1)*1.05
+           beta(AS,3)     = beta(AS,3)*1.45
+
+           ! change mode width
+           betamin(AI,2)  = 1.95
+           betamax(AI,2)  = 2.10
+           betamin(AS,2)  = 1.80
+           betamax(AS,2)  = 1.95
+           betamin(CS,2)  = 1.85
+           betamax(CS,2)  = 2.20
+           !update mass min & max
+           betamin(:,3)  = beta(:,3)*0.90
+
         endif
 
       endif
@@ -627,11 +822,11 @@
 
 !     Generic Nucleation Mode (mstart=2)
 !     Add small mass in nucleation mode if zero
-      if (mstart==2) then
-         beta(1,1) =  9.6  ! nm
-         beta(1,2) =  1.30
-         beta(1,3) =  0.45 * dataa(2,2)/3000.0
-      endif
+!      if (mstart==2) then
+!         beta(NU,1) =  9.6  ! nm
+!         beta(NU,2) =  1.30
+!         beta(NU,3) =  0.45 * dataa(2,2)/3000.0
+!      endif
 
 
 ! ** Check here the parameter overview
@@ -647,7 +842,7 @@
       print *,'mm  max',betamax(:,3)
       print *,'mm  est',beta(:,3)
 
-     !! stop
+   !   stop
 
 
 ! **************************
@@ -840,6 +1035,7 @@
            masswmode=masswmode+masswbin
 
            nest(m,i)=yhat
+        ! print particle number estimate of Simplex
            !print *,'dNest ',m,i,dataa(i,1),dataa(i,2),nest(m,i)
         enddo
         ! fraction of water in mode
@@ -858,8 +1054,21 @@
            print *,'beta before output m', m,beta(m,j)
         enddo
 
-        call output_fitaero(beta,dataa,dense,ntot,wamass,shrmode,  &
-                            binlo,binup,m,mstart,nest)
+! ***
+! *** WRITE MODE DATA TO INAERO.DAT
+! ***
+        call output_fitaero(beta,dense,ntot,wamass,shrmode,  &
+                            binlo,binup,m,mstart,            &
+                            gmdout,sigout)  ! GMD and SIGMA as inaero.dat
+
+        if(m.eq.nm) then
+           print *,'-----------------------------------------------------------'
+           do n=1,nm
+             print *,'GMD(nm) SIGMA in',n,gmdout(n)*1.e9,sigout(n)
+           enddo
+           print *,'-----------------------------------------------------------'
+        endif
+
 
        if (m.le.nm) then
           go to 140
@@ -1022,11 +1231,60 @@
 
  140   print *,'end mode',m
 
-!     End of loop over aerosol modes
+
+! MUST RECALCULATE NUMBER SIZE DISTRIBUTION
+! WITH FINAL GMD AND SIGMA
+! GMD AND SIGMA ARE ONLY KNOWN AFTER THE LAST MODE !!!
+
+       if(m.eq.nm) then
+        do n=mstart,nm
+         do i= binlo(n),binup(n)
+
+! *** 1_ Mass size distribution (dm*dlindp)
+          !  massout = ( (beta(n,3)-wamass(n))                                &
+            massout = ( beta(n,3)                                & 
+                         /(SQRT(2.*pi)*dataa(i,1)*1.e-9*LOG10(sigout(n))))   &
+                         *EXP(-0.5*(LOG(dataa(i,1)*1.e-9/gmdout(n))/LOG(sigout(n)))**2.)
+
+
+            if (i.eq.binup(nm)) then
+              massout = massout * (dataa(i,1)-dataa(i-1,1))*1.e-9
+            else 
+              massout = massout * (dataa(i+1,1)-dataa(i,1))*1.e-9
+              if (n.eq.NA) massout = massout*0.7   ! correction for NAP 
+            endif
+
+! *** 2_ Volume concentration (dim.less) 
+            volcout = massout  / (conv*dens(n))
+
+! *** 3_ Number concentration
+            numout(n,i)  = volcout / ( (pi/6.)*((dataa(i,1)*1.e-9))**3.0 ) ! #/m^3
+
+! *** Normalize to mean mode diameter
+            numout(n,i)  = numout(n,i) * (dataa(i,1)*1.e-9) / gmdout(n)
+
+            numout(n,i)  = numout(n,i) * 1.e-6                             ! #/cm^3
+
+            numout(n,i)  = max(numout(n,i),0.0) 
+
+        !    if (i.eq.binup(nm)) then
+        !      print *,'bin out',n,i,dataa(i,1),dataa(i,1)-dataa(i-1,1),massout,numout(n,i)
+        !    else 
+        !      print *,'bin out',n,i,dataa(i,1),dataa(i+1,1)-dataa(i,1),massout,numout(n,i)
+        !    endif
+
+! *** 4_ Write number to output file
+            write (funit_out_sizedis, 1000) tab,tab,dataa(i,1),tab,tab,dataa(i,2),tab,tab,numout(n,i)
+
+         enddo
+        enddo
+       endif
+
+
+!     End of loop over aerosol modes (m)
       end do
 
 
-! NOW WE SHOULD WRITE THE OUTPUT FILE
 
 !     Close all i/o files
       close(funit_in_sizedis)
@@ -1043,6 +1301,7 @@
       deallocate(in_array_cof)
       deallocate(dataa)
       deallocate(nest)
+      deallocate(numout)
       deallocate(dense)
 
       if (fe_log) then
@@ -1061,5 +1320,6 @@
  65   format(' reflection vertex', 4f12.3)
  106  format(' expansion  vertex', 4f12.3)
  124  format(' contracton vertex', 4f12.3)
+ 1000 format(3(2A,F0.2))
 
       end program prog_fitaero

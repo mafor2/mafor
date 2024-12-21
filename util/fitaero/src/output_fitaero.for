@@ -48,8 +48,8 @@
 !***      for MAFOR's inaero.dat
 !***********************************************************************
 
-      subroutine output_fitaero(para,ndata,ndens,num,wamass,shrf,  &
-                                binlo,binup,m,mstart,nout)
+      subroutine output_fitaero(para,ndens,num,wamass,shrf,  &
+                                binlo,binup,m,mstart,gmdout,sigout)
 
 !***********************************************************************
 !***  Subroutine output_fitdis writes output of the estimated size
@@ -66,28 +66,29 @@
 
 !***********************************************************************
 
+!     Input
       integer,dimension(nm), intent(in)       :: binlo,binup
-      real, dimension(n_obins,nv), intent(in) :: ndata
       real, dimension(nm,np), intent(in)      :: para
       real, dimension(nm,nc-1), intent(in)    :: ndens
       real, dimension(nm), intent(in)         :: num
       real, dimension(nm), intent(in)         :: wamass
       real, dimension(nm), intent(in)         :: shrf
-      real, dimension(nm,n_obins), intent(in) :: nout
       integer, intent(in)                     :: m
       integer, intent(in)                     :: mstart
+
+!     Output
+      real, dimension(nm), intent(out)        :: gmdout
+      real, dimension(nm), intent(out)        :: sigout
+
 
 !     Local declarations:
 
       integer                           :: i,n,j
 
-      real, dimension(nm)               :: gmdout
-      real, dimension(nm)               :: sigout
       real, dimension(nm)               :: msulf, morgc, mammo
       real, dimension(nm)               :: mnitr, mmsap, msalt
       real, dimension(nm)               :: mxxxx, mecbc, mdust
 
-      character(len=1)                  :: tab = ACHAR(9)  ! TAB delimiter
 
 !***********************************************************************
 !     Content of subroutine:
@@ -109,25 +110,15 @@
          open (funit_out_inaero, file = fname_out_inaero,     &
               status = 'unknown', form  = 'formatted', action = 'write')
 
-! ***   Write a header line
-         write (funit_out_sizedis,'(A42)')    '*   Dp[nm]   dN_obs[cm-3]     dN_est[cm-3]'
+! ***   Write a header line to out_sizedis.dat
+         write (funit_out_sizedis,'(A42)')    '*      Dp[nm]    dN_obs[cm-3] dN_est[cm-3]'
+
        endif
 
-! ***   Write data to file
-
-       do i= binlo(m),binup(m)
-
-         write (funit_out_sizedis, 1000) ndata(i,1),ndata(i,2),nout(m,i)
-
-       enddo
 
 ! ***  Calculate mid bin of AI mode
-!       j = INT(binup(2)-binlo(2))-1
+! ***      j = INT(binup(2)-binlo(2))-1
 
-
-       do n= 1,nm
-         print *,'Dp in n',n,para(n,1)
-       enddo
 
 ! ***   Write inaero.dat
 ! ***   ndis GMD SIGMA NTOT H2SO4 ORG NH4 NO3 MSAp SALT BPAB BC DUST
@@ -135,13 +126,20 @@
 
          write (funit_out_inaero, 2000) dpmax,imax
 
+         print *,'-----------------------------------------------------------'
+         print *,'Simplex final:'
+         do n= 1,nm
+           print *,'Mode diameter Dp',n,para(n,1)
+         enddo
+         print *,'-----------------------------------------------------------'
+
 
          do n= 1,nm
 
            print *,'mass - watermass',n,para(n,3)*(1.0-wamass(n))
 
 
-           if (n<4) then
+           if (n<CS) then
              msulf(n) = ndens(n,SU)*para(n,3)
              morgc(n) = ndens(n,OC)*para(n,3)
              mammo(n) = ndens(n,AM)*para(n,3)
@@ -170,13 +168,49 @@
 ! ***   Function to reduce the wet diameter giving higher dN/dlogDp 
 ! ***   in MAFOR. This applies only to mode 2 and 3
 
-           if (n==1) then
+           if (n==NU) then
              if (rhi>0.89) then
                gmdout(n) = gmdout(n)*0.85
              endif
            endif
+! NAP MODE
+           if (n==NA) then
+
+             if (dpmax==1.0E-5) then
+             !PM10
+               gmdout(n) = gmdout(n) * 1.00
+             else if (dpmax<2.0E-6) then
+             !FINE
+             !init1_test
+               if (rhi>0.75) then
+                 gmdout(n) = gmdout(n) * 1.15     ! RH=80%
+                 sigout(n) = sigout(n) * 0.90
+             !xbkgr2_test, RH=74%
+               else if (rhi>0.60) then
+                 gmdout(n) = gmdout(n) * 0.95
+               else if (rhi>0.30) then
+                  if (ndens(n,EC)>0.15) then
+             !traff1_test
+                    gmdout(n) = gmdout(n) * 1.00
+                    sigout(n) = sigout(n) * 0.85
+                  else
+             !init1_test RH=50%, aces_test
+                    gmdout(n) = gmdout(n) * 1.15
+                    sigout(n) = sigout(n) * 0.90
+                  endif 
+               else
+                 gmdout(n) = gmdout(n) * 1.15     ! RH=10%
+                 sigout(n) = sigout(n) * 0.90
+               endif
+             else
+             !FINE + COARSE
+               gmdout(n) = gmdout(n) * 1.00
+               sigout(n) = sigout(n) * 1.00
+             endif
+
+           endif
 ! AIT MODE
-           if (n==2) then
+           if (n==AI) then
 
              if (dpmax==1.0E-5) then
              !PM10
@@ -188,12 +222,30 @@
                 endif
              else if (dpmax<2.0E-6) then
              !FINE
-             !init1_test, RH=80%
+             !init1_test
                 if (rhi>0.75) then
-                  gmdout(n) = gmdout(n) * (shrf(n)*1.10)
-             !nkgr2_test, RH=74%
+                  gmdout(n) = gmdout(n) * 4.55     ! RH=80%
+                  sigout(n) = sigout(n) * 1.01
+             !xbkgr2_test, RH=74%
                 else if (rhi>0.60) then
-                  gmdout(n) = gmdout(n) * (shrf(n)*1.20)
+                  gmdout(n) = gmdout(n) * 1.10
+                else if (rhi>0.30) then
+                  if (ndens(n,EC)>0.15) then
+             !traff1_test
+                    gmdout(n) = gmdout(n) * 1.35
+                    sigout(n) = sigout(n) * 1.02
+                  else if (ndens(n,EC)>0.10) then
+             !init1_test RH=50%
+                    gmdout(n) = gmdout(n) * 4.70
+                    sigout(n) = sigout(n) * 1.02
+                  else
+             !aces, stena
+                    gmdout(n) = gmdout(n) * 2.05
+                    sigout(n) = sigout(n) * 1.06
+                  endif   
+                else
+                  gmdout(n) = gmdout(n) * 4.90     ! RH=10%
+                  sigout(n) = sigout(n) * 1.04
                 endif
              else
              !FINE + COARSE
@@ -209,9 +261,9 @@
                 endif
              endif
              
-           endif  !n==2
+           endif  !n==AI
 ! ACC MODE
-           if (n==3) then
+           if (n==AS) then
 
              if (dpmax==1.0E-5) then
              !PM10
@@ -220,14 +272,26 @@
              !FINE
              !xinit1
                 if (rhi>0.65) then
-                  gmdout(n) = gmdout(n)*0.70
-                  sigout(n) = sigout(n)*0.92
-                else if (rhi>0.45) then
-                  gmdout(n) = gmdout(n)*0.96
+                  gmdout(n) = gmdout(n)*0.68     ! RH=80%
                   sigout(n) = sigout(n)*1.00
+                else if (rhi>0.30) then
+                  if (ndens(n,EC)>0.15) then
+             !traff1_test
+                    gmdout(n) = gmdout(n) * 0.80
+                    sigout(n) = sigout(n) * 1.02
+                  else
+                    if (ndens(n,SU)>0.15) then
+             !init1_test RH=50%
+                      gmdout(n) = gmdout(n) * 0.63
+                      sigout(n) = sigout(n)*0.97
+                    else
+             !aces, stena
+                      gmdout(n) = gmdout(n) * 0.80
+                    endif
+                  endif      
                 else
-                  gmdout(n) = gmdout(n)*0.92
-                  sigout(n) = sigout(n)*1.00 
+                  gmdout(n) = gmdout(n)*0.63     ! RH=10%
+                  sigout(n) = sigout(n)*0.96 
                 endif
 
              else
@@ -247,7 +311,7 @@
              ! DU > 0.1 [EXHAUST]
                else if (ndens(3,DU)>0.1) then
                print *,'n=3, du>0.1'
-                   gmdout(n) = gmdout(n)*0.90
+                   gmdout(n) = gmdout(n)*0.85
                    sigout(n) = sigout(n)*1.00
                else
                print *,'n=3, other'
@@ -257,25 +321,27 @@
                endif
              endif
 
-           endif  !n==3
+           endif  !n==AS
 ! CS MODE
-           if (n==4) then
+           if (n==CS) then
 
              if (dpmax==1.0E-5) then
              !PM10
-                gmdout(n) = gmdout(n)*1.00
+                gmdout(n) = min(gmdout(n),max3_gmd(n)*1.e-9)
              else if (dpmax<2.0E-6) then
              !FINE
-                gmdout(n) = gmdout(n)*0.90
+                gmdout(n) = min(gmdout(n),max2_gmd(n)*1.e-9)
+              !  sigout(n) = sigout(n)*1.05  ! max
+                sigout(n) = sigout(n)*0.85
              else
              !FINE + COARSE
-                gmdout(n) = gmdout(n)*max(shrf(n),0.90)
+                gmdout(n) = min(gmdout(n),max1_gmd(n)*1.e-9)
              endif
 
-           endif  !n==4
+           endif  !n==CS
 
-           print *,'out',n,gmdout(n)*1.e9
 
+! ***   Write mode record to inaero.dat
 
            write (funit_out_inaero, 2100) mcorr,tab,                   &
                 gmdout(n),tab,sigout(n),tab,                          &
@@ -286,11 +352,11 @@
          enddo  !loop over modes
 
        endif    !if (m.eq.nm)
+      
 
       return
 
 
- 1000 format(F11.2, 4X, F11.2, 4X, F11.2)
  2000 format(E9.2, 2X, I3)
  2100 format(1L1,A,E9.3,A,F0.3,A,E8.2,A, 9(F0.3,A))
 

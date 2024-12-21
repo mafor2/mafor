@@ -16,7 +16,7 @@
                                          FITDIS after input
 
 
-                                          start error valu    413.5     mode  2
+                                          start error valu   0.5733E+07 mode  2
 
 
                                    FITDIS after init, mode  2
@@ -25,32 +25,25 @@
                                      FITDIS initial simplex
 
  ********************************* 
-    vertex 1 eror and paramerters:     413.526      39.744       1.900      95.820
-    vertex 2 eror and paramerters:     514.815      43.718       1.900      95.820
-    vertex 3 eror and paramerters:     546.773      39.744       2.090      95.820
-    vertex 4 eror and paramerters:     366.851      39.744       1.900     105.402
+    vertex 1 eror and paramerters: 5733248.000      17.296       1.600      29.424
+    vertex 2 eror and paramerters: 5733248.000      19.026       1.600      29.424
+    vertex 3 eror and paramerters: 5203460.000      17.296       1.760      29.424
+    vertex 4 eror and paramerters: 6953049.500      17.296       1.600      32.366
  ********************************* 
 
                                  FITDIS current best vertex
 
  after    4 error evaluations and    1 simplexes
-  parameterm estimates:          39.744       1.900     105.402
- reflection vertex     517.452      42.392       1.750     102.203
+  parameterm estimates:          17.296       1.760      29.424
+ reflection vertex 4204157.000      17.296       1.700      26.486
  ********************************* 
 
                                  FITDIS current best vertex
 
- after    5 error evaluations and    2 simplexes
-  parameterm estimates:          39.744       1.900     105.402
- reflection vertex     509.442      39.748       2.050      95.829
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after    6 error evaluations and    3 simplexes
-  parameterm estimates:          39.744       1.900     105.402
- reflection vertex     644.040      35.778       2.000     102.209
- contracton vertex     441.386      41.726       1.925      97.423
+ after    6 error evaluations and    2 simplexes
+  parameterm estimates:          17.296       1.700      26.486
+ reflection vertex 5742017.500      15.569       1.700      27.467
+ contracton vertex 5318758.000      17.296       1.643      28.933
 
                             FITDIS contraction vortex done.
 
@@ -58,17 +51,17 @@
 
                                  FITDIS current best vertex
 
- after    8 error evaluations and    4 simplexes
-  parameterm estimates:          39.744       1.900     105.402
- reflection vertex     423.818      41.060       1.767     103.262
+ after    8 error evaluations and    3 simplexes
+  parameterm estimates:          17.296       1.700      26.486
+ reflection vertex 4417266.500      17.296       1.700      27.139
  ********************************* 
 
                                  FITDIS current best vertex
 
- after    9 error evaluations and    5 simplexes
-  parameterm estimates:          39.744       1.900     105.402
- reflection vertex     312.255      38.642       1.786     105.560
- expansion  vertex     258.961      37.178       1.750     109.421
+ after    9 error evaluations and    4 simplexes
+  parameterm estimates:          17.296       1.700      26.486
+ reflection vertex 4187885.250      17.296       1.700      26.435
+ expansion  vertex 4127221.000      17.296       1.681      26.000
 
                               FITDIS expansion vortex done.
 
@@ -76,39 +69,52 @@
 
                                  FITDIS current best vertex
 
- after   11 error evaluations and    6 simplexes
-  parameterm estimates:          37.178       1.750     109.421
- reflection vertex     472.812      36.720       1.933     103.833
- contracton vertex     360.045      39.971       1.809     103.405
+ after   11 error evaluations and    5 simplexes
+  parameterm estimates:          17.296       1.681      26.000
+ reflection vertex 4349142.000      17.296       1.627      26.000
+ ********************************* 
 
-                            FITDIS contraction vortex done.
+                                 FITDIS current best vertex
 
+ after   12 error evaluations and    6 simplexes
+  parameterm estimates:          17.296       1.681      26.000
+ reflection vertex 4301219.500      17.296       1.639      26.000
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   13 error evaluations and    7 simplexes
-  parameterm estimates:          37.178       1.750     109.421
- reflection vertex     241.276      38.186       1.750     116.317
- expansion  vertex     206.953      37.447       1.750     126.046
-
-                              FITDIS expansion vortex done.
-
+  parameterm estimates:          17.296       1.681      26.000
+ reflection vertex 4152100.250      17.296       1.700      26.324
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   15 error evaluations and    8 simplexes
-  parameterm estimates:          37.447       1.750     126.046
- reflection vertex     226.147      36.656       1.750     120.502
+ after   14 error evaluations and    8 simplexes
+  parameterm estimates:          17.296       1.681      26.000
+ reflection vertex 4221371.500      17.296       1.700      26.539
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   16 error evaluations and    9 simplexes
-  parameterm estimates:          37.447       1.750     126.046
- reflection vertex     445.851      34.220       1.750     133.885
- contracton vertex     278.158      38.528       1.779     111.054
+ after   15 error evaluations and    9 simplexes
+  parameterm estimates:          17.296       1.681      26.000
+ reflection vertex 4101356.250      17.296       1.687      26.001
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   17 error evaluations and   10 simplexes
+  parameterm estimates:          17.296       1.687      26.001
+ reflection vertex 4135839.750      17.296       1.679      26.000
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   18 error evaluations and   11 simplexes
+  parameterm estimates:          17.296       1.687      26.001
+ reflection vertex 4193941.500      17.296       1.665      26.000
+ contracton vertex 4136953.000      17.296       1.691      26.161
 
                             FITDIS contraction vortex done.
 
@@ -116,17 +122,10 @@
 
                                  FITDIS current best vertex
 
- after   18 error evaluations and   10 simplexes
-  parameterm estimates:          37.447       1.750     126.046
- reflection vertex     264.303      35.661       1.750     126.248
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   19 error evaluations and   11 simplexes
-  parameterm estimates:          37.447       1.750     126.046
- reflection vertex     277.001      38.524       1.750     111.076
- contracton vertex     230.630      36.379       1.750     122.441
+ after   20 error evaluations and   12 simplexes
+  parameterm estimates:          17.296       1.687      26.001
+ reflection vertex 4157501.750      17.296       1.674      26.000
+ contracton vertex 4129239.750      17.296       1.687      26.081
 
                             FITDIS contraction vortex done.
 
@@ -134,18 +133,18 @@
 
                                  FITDIS current best vertex
 
- after   21 error evaluations and   12 simplexes
-  parameterm estimates:          37.447       1.750     126.046
+ after   22 error evaluations and   13 simplexes
+  parameterm estimates:          17.296       1.687      26.001
  ********************************* 
 
                            FITDIS max.number of simulations
 
-  parameterm estimates:          37.447       1.750     126.046
+  parameterm estimates:          17.296       1.687      26.001
 
                            FITDIS error criterion fulfilled
 
 
-                                          start error valu    225.3     mode  3
+                                          start error valu   0.5371E+09 mode  3
 
 
                                    FITDIS after init, mode  3
@@ -154,36 +153,71 @@
                                      FITDIS initial simplex
 
  ********************************* 
-    vertex 1 eror and paramerters:     225.302     117.072       1.550    5916.969
-    vertex 2 eror and paramerters:     169.024     128.779       1.550    5916.969
-    vertex 3 eror and paramerters:     538.843     117.072       1.705    5916.969
-    vertex 4 eror and paramerters:     366.065     117.072       1.550    6508.667
+    vertex 1 eror and paramerters:************      20.592       1.800    2192.503
+    vertex 2 eror and paramerters:************      22.651       1.800    2192.503
+    vertex 3 eror and paramerters:************      20.592       1.980    2192.503
+    vertex 4 eror and paramerters:************      20.592       1.800    2411.754
  ********************************* 
 
                                  FITDIS current best vertex
 
  after    4 error evaluations and    1 simplexes
-  parameterm estimates:         128.779       1.550    5916.969
- reflection vertex     552.673     124.871       1.450    6311.139
- contracton vertex     240.353     119.029       1.627    6015.881
+  parameterm estimates:          20.592       1.980    2192.503
+ reflection vertex************      21.964       1.900    1973.582
+ expansion  vertex************      22.615       1.900    1765.607
 
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
  after    6 error evaluations and    2 simplexes
-  parameterm estimates:         128.779       1.550    5916.969
- reflection vertex      73.299     126.175       1.601    5392.052
+  parameterm estimates:          22.615       1.900    1765.607
+ reflection vertex************      20.592       1.900    1908.119
  ********************************* 
 
                                  FITDIS current best vertex
 
- after    8 error evaluations and    3 simplexes
-  parameterm estimates:         126.175       1.601    5392.052
- reflection vertex     292.543     128.981       1.507    5468.522
- contracton vertex     128.363     121.526       1.597    5878.528
+ after    7 error evaluations and    3 simplexes
+  parameterm estimates:          22.615       1.900    1765.607
+ reflection vertex************      21.940       1.900    1718.672
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after    9 error evaluations and    4 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      22.837       1.820    1688.228
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   10 error evaluations and    5 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      24.333       1.847    1688.228
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   11 error evaluations and    6 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      23.088       1.900    1760.057
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   12 error evaluations and    7 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      23.624       1.865    1688.228
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   13 error evaluations and    8 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      23.510       1.841    1688.228
+ contracton vertex************      23.194       1.885    1729.124
 
                             FITDIS contraction vortex done.
 
@@ -191,150 +225,17 @@
 
                                  FITDIS current best vertex
 
- after   10 error evaluations and    4 simplexes
-  parameterm estimates:         126.175       1.601    5392.052
- reflection vertex      87.475     133.902       1.616    5541.680
+ after   15 error evaluations and    9 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      21.507       1.900    1735.752
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   11 error evaluations and    5 simplexes
-  parameterm estimates:         126.175       1.601    5392.052
- reflection vertex      64.474     125.625       1.659    5291.673
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   13 error evaluations and    6 simplexes
-  parameterm estimates:         125.625       1.659    5291.673
- reflection vertex     122.007     135.598       1.654    4939.114
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   14 error evaluations and    7 simplexes
-  parameterm estimates:         125.625       1.659    5291.673
- reflection vertex     127.866     121.547       1.597    5877.119
- contracton vertex      76.490     132.072       1.640    5174.495
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   16 error evaluations and    8 simplexes
-  parameterm estimates:         125.625       1.659    5291.673
- reflection vertex      92.528     122.021       1.651    5030.851
- contracton vertex      64.980     130.921       1.625    5413.493
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   18 error evaluations and    9 simplexes
-  parameterm estimates:         125.625       1.659    5291.673
- reflection vertex      81.810     123.082       1.617    5556.696
- contracton vertex      61.593     129.816       1.634    5270.404
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   21 error evaluations and   10 simplexes
-  parameterm estimates:         129.816       1.634    5270.404
- reflection vertex      49.555     131.396       1.677    5258.428
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   23 error evaluations and   11 simplexes
-  parameterm estimates:         131.396       1.677    5258.428
- reflection vertex      73.340     126.974       1.689    5133.720
- contracton vertex      53.304     129.930       1.641    5343.287
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   25 error evaluations and   12 simplexes
-  parameterm estimates:         131.396       1.677    5258.428
- reflection vertex      85.288     135.129       1.642    5289.741
- contracton vertex      51.867     128.010       1.655    5291.188
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   27 error evaluations and   13 simplexes
-  parameterm estimates:         131.396       1.677    5258.428
- reflection vertex      49.113     129.742       1.681    5324.824
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   29 error evaluations and   14 simplexes
-  parameterm estimates:         129.742       1.681    5324.824
- reflection vertex      61.994     129.502       1.702    5239.750
- contracton vertex      48.710     129.823       1.656    5317.306
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   32 error evaluations and   15 simplexes
-  parameterm estimates:         129.823       1.656    5317.306
- reflection vertex      46.309     132.627       1.688    5309.169
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   34 error evaluations and   16 simplexes
-  parameterm estimates:         132.627       1.688    5309.169
- reflection vertex      44.829     130.066       1.673    5375.684
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   36 error evaluations and   17 simplexes
-  parameterm estimates:         130.066       1.673    5375.684
- reflection vertex      47.503     131.934       1.663    5343.268
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   37 error evaluations and   18 simplexes
-  parameterm estimates:         130.066       1.673    5375.684
- reflection vertex      42.837     133.259       1.693    5368.071
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   39 error evaluations and   19 simplexes
-  parameterm estimates:         133.259       1.693    5368.071
- reflection vertex      48.518     132.034       1.706    5358.670
- contracton vertex      44.639     131.959       1.674    5347.133
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   41 error evaluations and   20 simplexes
-  parameterm estimates:         133.259       1.693    5368.071
- reflection vertex      41.662     130.897       1.672    5418.006
- expansion  vertex      41.571     130.076       1.665    5469.665
+ after   16 error evaluations and   10 simplexes
+  parameterm estimates:          21.940       1.900    1718.672
+ reflection vertex************      21.522       1.891    1699.333
+ expansion  vertex************      20.729       1.894    1688.228
 
                               FITDIS expansion vortex done.
 
@@ -342,152 +243,80 @@
 
                                  FITDIS current best vertex
 
- after   43 error evaluations and   21 simplexes
-  parameterm estimates:         130.076       1.665    5469.665
- reflection vertex      40.787     133.460       1.682    5414.200
+ after   18 error evaluations and   11 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.592       1.900    1740.168
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   45 error evaluations and   22 simplexes
-  parameterm estimates:         133.460       1.682    5414.200
- reflection vertex      37.126     132.571       1.686    5487.386
- expansion  vertex      35.112     132.861       1.692    5553.957
-
-                              FITDIS expansion vortex done.
-
+ after   19 error evaluations and   12 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.667       1.896    1695.657
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   47 error evaluations and   23 simplexes
-  parameterm estimates:         132.861       1.692    5553.957
- reflection vertex      36.894     131.007       1.666    5590.311
+ after   20 error evaluations and   13 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      21.630       1.893    1688.228
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   48 error evaluations and   24 simplexes
-  parameterm estimates:         132.861       1.692    5553.957
- reflection vertex      32.248     134.807       1.695    5569.240
- expansion  vertex      30.333     137.052       1.709    5616.502
-
-                              FITDIS expansion vortex done.
-
+ after   21 error evaluations and   14 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.592       1.889    1688.228
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   50 error evaluations and   25 simplexes
-  parameterm estimates:         137.052       1.709    5616.502
- reflection vertex      29.603     133.820       1.696    5759.387
+ after   22 error evaluations and   15 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.592       1.893    1693.177
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   52 error evaluations and   26 simplexes
-  parameterm estimates:         133.820       1.696    5759.387
- reflection vertex      29.387     138.143       1.732    5696.174
+ after   23 error evaluations and   16 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.733       1.893    1688.235
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   54 error evaluations and   27 simplexes
-  parameterm estimates:         138.143       1.732    5696.174
- reflection vertex      22.826     139.810       1.733    5827.213
- expansion  vertex      19.907     143.109       1.753    5956.913
-
-                              FITDIS expansion vortex done.
-
+ after   24 error evaluations and   17 simplexes
+  parameterm estimates:          20.729       1.894    1688.228
+ reflection vertex************      20.826       1.900    1693.182
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   56 error evaluations and   28 simplexes
-  parameterm estimates:         143.109       1.753    5956.913
- reflection vertex      23.508     139.660       1.745    5991.532
+ after   26 error evaluations and   18 simplexes
+  parameterm estimates:          20.826       1.900    1693.182
+ reflection vertex************      20.858       1.896    1688.228
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   57 error evaluations and   29 simplexes
-  parameterm estimates:         143.109       1.753    5956.913
- reflection vertex      26.562     146.778       1.790    6003.508
+ after   27 error evaluations and   19 simplexes
+  parameterm estimates:          20.826       1.900    1693.182
+ reflection vertex************      20.876       1.900    1691.520
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   58 error evaluations and   30 simplexes
-  parameterm estimates:         143.109       1.753    5956.913
- reflection vertex      17.016     148.214       1.793    6271.364
- expansion  vertex      15.561     152.995       1.821    6544.374
-
-                              FITDIS expansion vortex done.
-
+ after   29 error evaluations and   20 simplexes
+  parameterm estimates:          20.876       1.900    1691.520
+ reflection vertex************      20.762       1.900    1693.722
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   60 error evaluations and   31 simplexes
-  parameterm estimates:         152.995       1.821    6544.374
- reflection vertex      13.309     143.733       1.756    6324.797
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   62 error evaluations and   32 simplexes
-  parameterm estimates:         143.733       1.756    6324.797
- reflection vertex      10.753     153.554       1.808    6558.765
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   64 error evaluations and   33 simplexes
-  parameterm estimates:         153.554       1.808    6558.765
- reflection vertex      12.026     157.069       1.837    6994.266
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   65 error evaluations and   34 simplexes
-  parameterm estimates:         153.554       1.808    6558.765
- reflection vertex       6.855     149.912       1.780    6707.389
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   67 error evaluations and   35 simplexes
-  parameterm estimates:         149.912       1.780    6707.389
- reflection vertex       9.813     163.276       1.861    7181.506
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   68 error evaluations and   36 simplexes
-  parameterm estimates:         149.912       1.780    6707.389
- reflection vertex       8.105     154.094       1.795    6637.775
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   69 error evaluations and   37 simplexes
-  parameterm estimates:         149.912       1.780    6707.389
- reflection vertex       4.954     157.964       1.816    7125.256
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   71 error evaluations and   38 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex       9.492     144.718       1.733    6465.977
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   72 error evaluations and   39 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex       9.789     163.248       1.861    7180.433
- contracton vertex       5.945     149.368       1.765    6645.262
+ after   31 error evaluations and   21 simplexes
+  parameterm estimates:          20.762       1.900    1693.722
+ reflection vertex************      20.915       1.900    1697.381
+ contracton vertex************      20.775       1.897    1690.525
 
                             FITDIS contraction vortex done.
 
@@ -495,10 +324,10 @@
 
                                  FITDIS current best vertex
 
- after   74 error evaluations and   40 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex      10.635     150.737       1.778    7013.879
- contracton vertex       5.616     153.252       1.791    6732.154
+ after   33 error evaluations and   22 simplexes
+  parameterm estimates:          20.762       1.900    1693.722
+ reflection vertex************      20.868       1.900    1695.087
+ contracton vertex************      20.799       1.898    1691.670
 
                             FITDIS contraction vortex done.
 
@@ -506,185 +335,14 @@
 
                                  FITDIS current best vertex
 
- after   76 error evaluations and   41 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex       5.416     157.139       1.801    6960.870
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   77 error evaluations and   42 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex       6.099     162.858       1.841    7233.149
- contracton vertex       4.957     152.753       1.784    6792.785
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   79 error evaluations and   43 simplexes
-  parameterm estimates:         157.964       1.816    7125.256
- reflection vertex       4.863     158.648       1.810    7186.778
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   81 error evaluations and   44 simplexes
-  parameterm estimates:         158.648       1.810    7186.778
- reflection vertex       5.838     155.772       1.805    7108.898
- contracton vertex       4.718     156.796       1.802    6998.016
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   84 error evaluations and   45 simplexes
-  parameterm estimates:         156.796       1.802    6998.016
- reflection vertex       5.719     162.844       1.835    7413.448
- contracton vertex       4.571     155.285       1.797    6948.533
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   87 error evaluations and   46 simplexes
-  parameterm estimates:         155.285       1.797    6948.533
- reflection vertex       5.473     155.857       1.790    6963.750
- contracton vertex       4.615     157.435       1.809    7084.728
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   89 error evaluations and   47 simplexes
-  parameterm estimates:         155.285       1.797    6948.533
- reflection vertex       4.991     154.366       1.796    6834.338
- contracton vertex       4.621     157.573       1.806    7098.337
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   91 error evaluations and   48 simplexes
-  parameterm estimates:         155.285       1.797    6948.533
- reflection vertex       4.741     156.734       1.806    7089.647
- contracton vertex       4.586     156.780       1.803    7021.010
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   93 error evaluations and   49 simplexes
-  parameterm estimates:         155.285       1.797    6948.533
- reflection vertex       4.630     155.429       1.800    6937.963
- contracton vertex       4.562     157.035       1.805    7058.093
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   96 error evaluations and   50 simplexes
-  parameterm estimates:         157.035       1.805    7058.093
- reflection vertex       4.729     155.300       1.794    6933.811
- contracton vertex       4.552     156.899       1.805    7046.856
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   99 error evaluations and   51 simplexes
-  parameterm estimates:         156.899       1.805    7046.856
- reflection vertex       4.551     156.034       1.801    7014.651
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  101 error evaluations and   52 simplexes
-  parameterm estimates:         156.034       1.801    7014.651
- reflection vertex       4.662     158.025       1.811    7131.063
- contracton vertex       4.539     155.973       1.800    6994.337
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  104 error evaluations and   53 simplexes
-  parameterm estimates:         155.973       1.800    6994.337
- reflection vertex       4.573     155.570       1.800    6979.196
- contracton vertex       4.543     156.667       1.803    7038.295
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  106 error evaluations and   54 simplexes
-  parameterm estimates:         155.973       1.800    6994.337
- reflection vertex       4.546     155.551       1.798    6984.711
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  107 error evaluations and   55 simplexes
-  parameterm estimates:         155.973       1.800    6994.337
- reflection vertex       4.553     156.094       1.800    6996.925
- contracton vertex       4.540     156.049       1.801    7010.203
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  109 error evaluations and   56 simplexes
-  parameterm estimates:         155.973       1.800    6994.337
- reflection vertex       4.551     156.907       1.805    7043.802
- contracton vertex       4.538     155.891       1.800    6999.539
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  112 error evaluations and   57 simplexes
-  parameterm estimates:         155.891       1.800    6999.539
- reflection vertex       4.557     155.275       1.797    6964.479
- contracton vertex       4.537     156.318       1.802    7019.771
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after  115 error evaluations and   58 simplexes
-  parameterm estimates:         156.318       1.802    7019.771
-  parameterm estimates:         156.318       1.802    7019.771
+ after   35 error evaluations and   23 simplexes
+  parameterm estimates:          20.762       1.900    1693.722
+  parameterm estimates:          20.762       1.900    1693.722
 
                            FITDIS error criterion fulfilled
 
 
-                                          start error valu    310.3     mode  4
+                                          start error valu   0.6092E+09 mode  4
 
 
                                    FITDIS after init, mode  4
@@ -693,18 +351,18 @@
                                      FITDIS initial simplex
 
  ********************************* 
-    vertex 1 eror and paramerters:     310.269     270.000       1.550    7876.345
-    vertex 2 eror and paramerters:     573.556     297.000       1.550    7876.345
-    vertex 3 eror and paramerters:     167.459     270.000       1.705    7876.345
-    vertex 4 eror and paramerters:     534.690     270.000       1.550    8663.979
+    vertex 1 eror and paramerters:************      93.990       1.550   21739.891
+    vertex 2 eror and paramerters:************     103.389       1.550   21739.891
+    vertex 3 eror and paramerters:************      93.990       1.705   21739.891
+    vertex 4 eror and paramerters:************      93.990       1.550   23913.881
  ********************************* 
 
                                  FITDIS current best vertex
 
  after    4 error evaluations and    1 simplexes
-  parameterm estimates:         270.000       1.705    7876.345
- reflection vertex     144.588     243.040       1.653    8401.040
- expansion  vertex      66.856     217.429       1.702    8650.084
+  parameterm estimates:          93.990       1.705   21739.891
+ reflection vertex************     100.251       1.653   19569.162
+ expansion  vertex************     103.223       1.702   17506.971
 
                               FITDIS expansion vortex done.
 
@@ -713,290 +371,255 @@
                                  FITDIS current best vertex
 
  after    6 error evaluations and    2 simplexes
-  parameterm estimates:         217.429       1.702    8650.084
- reflection vertex      13.924     234.979       1.755    7605.331
+  parameterm estimates:         103.223       1.702   17506.971
+ reflection vertex************     106.402       1.755   18920.059
  ********************************* 
 
                                  FITDIS current best vertex
 
- after    8 error evaluations and    3 simplexes
-  parameterm estimates:         234.979       1.755    7605.331
- reflection vertex       3.767     211.649       1.891    8211.244
+ after    7 error evaluations and    3 simplexes
+  parameterm estimates:         103.223       1.702   17506.971
+ reflection vertex************      99.024       1.891   17041.586
+ expansion  vertex************      97.500       2.050   14811.568
+
+                              FITDIS expansion vortex done.
+
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   10 error evaluations and    4 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      34.876     190.000       1.860    8434.343
+ after    9 error evaluations and    4 simplexes
+  parameterm estimates:          97.500       2.050   14811.568
+ reflection vertex************     110.748       1.966   12426.160
+ expansion  vertex67098268.000     118.702       2.050   10652.547
+
+                              FITDIS expansion vortex done.
+
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   11 error evaluations and    5 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      25.927     206.997       1.968    7518.044
+  parameterm estimates:         118.702       2.050   10652.547
+ reflection vertex68483560.000     106.548       2.050   10652.547
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   12 error evaluations and    6 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      11.219     245.708       1.882    7123.055
+  parameterm estimates:         118.702       2.050   10652.547
+ reflection vertex68057536.000     111.936       2.050   10652.547
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   13 error evaluations and    7 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      79.557     254.524       1.717    7774.850
- contracton vertex       6.019     218.924       1.905    7582.486
+  parameterm estimates:         118.702       2.050   10652.547
+ reflection vertex65378484.000     127.268       2.050   10652.547
+ expansion  vertex61764100.000     141.397       2.050   10652.548
 
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   15 error evaluations and    8 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      16.618     215.890       2.031    7672.476
- contracton vertex       4.316     230.189       1.824    7622.180
+  parameterm estimates:         141.397       2.050   10652.548
+ reflection vertex61749480.000     141.450       2.050   10652.547
+ expansion  vertex56924144.000     158.016       2.050   10652.548
 
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   17 error evaluations and    9 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      21.917     194.837       1.865    8486.528
- contracton vertex       4.403     232.943       1.878    7465.202
+  parameterm estimates:         158.016       2.050   10652.548
+ reflection vertex54300128.000     166.765       2.050   10652.549
+ expansion  vertex46683048.000     192.790       2.050   10652.551
 
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
  after   19 error evaluations and   10 simplexes
-  parameterm estimates:         211.649       1.891    8211.244
- reflection vertex      12.932     230.921       1.823    7949.656
- contracton vertex       2.905     221.934       1.885    7674.623
+  parameterm estimates:         192.790       2.050   10652.551
+ reflection vertex42161852.000     209.365       2.050   10652.551
+ expansion  vertex31979860.000     252.398       2.050   10652.554
 
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   22 error evaluations and   11 simplexes
-  parameterm estimates:         221.934       1.885    7674.623
- reflection vertex       6.952     209.589       1.855    8206.273
- contracton vertex       2.832     227.083       1.872    7651.165
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   25 error evaluations and   12 simplexes
-  parameterm estimates:         227.083       1.872    7651.165
- reflection vertex       4.873     210.270       1.941    8068.840
- contracton vertex       2.839     225.190       1.853    7734.264
+ after   21 error evaluations and   11 simplexes
+  parameterm estimates:         252.398       2.050   10652.554
+ reflection vertex30286282.000     260.649       2.050   10652.554
+ expansion  vertex20683532.000     317.251       2.050   10652.558
 
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   27 error evaluations and   13 simplexes
-  parameterm estimates:         227.083       1.872    7651.165
- reflection vertex       4.973     237.803       1.849    7162.911
- contracton vertex       2.673     218.212       1.881    7948.177
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   30 error evaluations and   14 simplexes
-  parameterm estimates:         218.212       1.881    7948.177
- reflection vertex       4.324     225.053       1.853    7880.959
- contracton vertex       2.482     222.717       1.877    7726.401
+ after   23 error evaluations and   12 simplexes
+  parameterm estimates:         317.251       2.050   10652.558
+ reflection vertex20362354.000     319.540       2.050   10652.560
+ ********************************* 
 
-                            FITDIS contraction vortex done.
+                                 FITDIS current best vertex
+
+ after   25 error evaluations and   13 simplexes
+  parameterm estimates:         319.540       2.050   10652.560
+ reflection vertex20362388.000     319.540       2.050   10652.564
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   26 error evaluations and   14 simplexes
+  parameterm estimates:         319.540       2.050   10652.560
+ reflection vertex20362384.000     319.540       2.050   10652.567
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   27 error evaluations and   15 simplexes
+  parameterm estimates:         319.540       2.050   10652.560
+ reflection vertex20362400.000     319.540       2.050   10652.569
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after   28 error evaluations and   16 simplexes
+  parameterm estimates:         319.540       2.050   10652.560
+  parameterm estimates:         319.540       2.050   10652.560
+
+                           FITDIS error criterion fulfilled
+
+
+                                          start error valu   0.2921E+08 mode  5
+
+
+                                   FITDIS after init, mode  5
+
+
+                                     FITDIS initial simplex
+
+ ********************************* 
+    vertex 1 eror and paramerters:29210008.000     340.000       1.550    9927.766
+    vertex 2 eror and paramerters:33099408.000     374.000       1.550    9927.766
+    vertex 3 eror and paramerters:21679546.000     340.000       1.705    9927.766
+    vertex 4 eror and paramerters:35383440.000     340.000       1.550   10920.542
+ ********************************* 
+
+                                 FITDIS current best vertex
+
+ after    4 error evaluations and    1 simplexes
+  parameterm estimates:         340.000       1.705    9927.766
+ reflection vertex20706258.000     362.650       1.653    8936.478
+ expansion  vertex15363128.000     373.400       1.702    7994.754
+
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   33 error evaluations and   15 simplexes
-  parameterm estimates:         222.717       1.877    7726.401
- reflection vertex       2.714     220.155       1.900    7816.169
- ********************************* 
+ after    6 error evaluations and    2 simplexes
+  parameterm estimates:         373.400       1.702    7994.754
+ reflection vertex14447437.000     328.301       1.755    8640.058
+ expansion  vertex10605814.000     324.000       1.852    8028.856
 
-                                 FITDIS current best vertex
-
- after   34 error evaluations and   16 simplexes
-  parameterm estimates:         222.717       1.877    7726.401
- reflection vertex       3.403     213.650       1.899    8009.066
- contracton vertex       2.519     223.712       1.879    7740.976
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   36 error evaluations and   17 simplexes
-  parameterm estimates:         222.717       1.877    7726.401
- reflection vertex       2.722     222.937       1.858    7794.217
- contracton vertex       2.524     220.853       1.889    7810.661
+ after    8 error evaluations and    3 simplexes
+  parameterm estimates:         324.000       1.852    8028.856
+ reflection vertex 8307110.000     351.592       1.956    7375.065
+ expansion  vertex 4582395.000     357.094       2.148    6163.443
 
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   38 error evaluations and   18 simplexes
-  parameterm estimates:         222.717       1.877    7726.401
- reflection vertex       3.064     226.636       1.883    7570.798
- contracton vertex       2.485     220.326       1.881    7853.479
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   40 error evaluations and   19 simplexes
-  parameterm estimates:         222.717       1.877    7726.401
- reflection vertex       2.474     223.648       1.869    7736.633
- ********************************* 
+ after   10 error evaluations and    4 simplexes
+  parameterm estimates:         357.094       2.148    6163.443
+ reflection vertex 3035690.000     362.979       2.096    4867.402
+ expansion  vertex 2285662.500     373.885       2.200    4467.495
 
-                                 FITDIS current best vertex
-
- after   42 error evaluations and   20 simplexes
-  parameterm estimates:         223.648       1.869    7736.633
- reflection vertex       2.515     220.751       1.872    7803.318
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   43 error evaluations and   21 simplexes
-  parameterm estimates:         223.648       1.869    7736.633
- reflection vertex       2.519     223.707       1.879    7741.069
- contracton vertex       2.466     221.493       1.874    7787.698
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   46 error evaluations and   22 simplexes
-  parameterm estimates:         221.493       1.874    7787.698
- reflection vertex       2.468     224.910       1.865    7647.164
- ********************************* 
+ after   12 error evaluations and    5 simplexes
+  parameterm estimates:         373.885       2.200    4467.495
+ reflection vertex 2149338.500     329.952       2.200    4467.495
+ expansion  vertex 2121952.000     324.000       2.200    4467.495
 
-                                 FITDIS current best vertex
-
- after   47 error evaluations and   23 simplexes
-  parameterm estimates:         221.493       1.874    7787.698
- reflection vertex       2.497     223.983       1.862    7721.266
- contracton vertex       2.454     223.035       1.873    7725.112
-
-                            FITDIS contraction vortex done.
+                              FITDIS expansion vortex done.
 
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   50 error evaluations and   24 simplexes
-  parameterm estimates:         223.035       1.873    7725.112
- reflection vertex       2.497     222.644       1.872    7703.375
- contracton vertex       2.450     223.396       1.870    7728.287
-
-                            FITDIS contraction vortex done.
-
+ after   14 error evaluations and    6 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2295001.250     379.278       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   53 error evaluations and   25 simplexes
-  parameterm estimates:         223.396       1.870    7728.287
- reflection vertex       2.491     220.377       1.879    7846.751
- contracton vertex       2.449     223.772       1.869    7697.248
-
-                            FITDIS contraction vortex done.
-
+ after   15 error evaluations and    7 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2257153.500     361.012       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   56 error evaluations and   26 simplexes
-  parameterm estimates:         223.772       1.869    7697.248
- reflection vertex       2.505     225.306       1.867    7646.174
- contracton vertex       2.448     222.450       1.872    7752.184
-
-                            FITDIS contraction vortex done.
-
+ after   16 error evaluations and    8 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2134625.500     326.694       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   59 error evaluations and   27 simplexes
-  parameterm estimates:         222.450       1.872    7752.184
- reflection vertex       2.449     223.377       1.867    7726.699
+ after   17 error evaluations and    9 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2121953.750     324.000       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   60 error evaluations and   28 simplexes
-  parameterm estimates:         222.450       1.872    7752.184
- reflection vertex       2.444     223.003       1.869    7722.471
+ after   18 error evaluations and   10 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2121953.750     324.000       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   62 error evaluations and   29 simplexes
-  parameterm estimates:         223.003       1.869    7722.471
- reflection vertex       2.460     222.773       1.872    7721.240
- contracton vertex       2.444     223.226       1.869    7725.329
-
-                            FITDIS contraction vortex done.
-
+ after   19 error evaluations and   11 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+ reflection vertex 2121955.000     324.000       2.200    4467.495
  ********************************* 
 
                                  FITDIS current best vertex
 
- after   64 error evaluations and   30 simplexes
-  parameterm estimates:         223.003       1.869    7722.471
- reflection vertex       2.457     222.015       1.871    7769.354
- contracton vertex       2.444     223.331       1.869    7715.342
-
-                            FITDIS contraction vortex done.
-
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   66 error evaluations and   31 simplexes
-  parameterm estimates:         223.003       1.869    7722.471
- reflection vertex       2.443     223.923       1.866    7689.957
- ********************************* 
-
-                                 FITDIS current best vertex
-
- after   68 error evaluations and   32 simplexes
-  parameterm estimates:         223.923       1.866    7689.957
-  parameterm estimates:         223.923       1.866    7689.957
+ after   20 error evaluations and   12 simplexes
+  parameterm estimates:         324.000       2.200    4467.495
+  parameterm estimates:         324.000       2.200    4467.495
 
                            FITDIS error criterion fulfilled
 

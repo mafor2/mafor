@@ -90,7 +90,8 @@
       logical             :: fe_in_massfra
 
 ! file formatted read
-!      character (len=256) :: format_pse
+
+      character(len=1)    :: tab = ACHAR(9)  ! TAB delimiter
 
 
 !     Routines and Functions:

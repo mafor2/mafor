@@ -90,6 +90,7 @@
        logical :: upli1=.false.
        logical :: upli2=.false.
        logical :: upli3=.false.
+       logical :: upli4=.false.
 
 !***********************************************************************
 !     Content of subroutine:
@@ -118,19 +119,22 @@
 ! *** First guess initialisation of diameter limits
 
           ! Nucleation mode
-          dplo(1) = dpmin*1.e9
-          dpup(1) = 12.0
-          binlo(1)= 1
+          dplo(NU) = dpmin*1.e9
+          dpup(NU) = 8.0
+          binlo(NU)= 1
+          ! Nanoparticle mode
+          dplo(NA) =  9.0
+          dpup(NA) = 30.0   !min
           ! Aitken mode
-          dplo(2) =  9.0
-          dpup(2) = 20.0   !min
+          dplo(AI) = 25.0
+          dpup(AI) = 50.0   !min
           ! Accumulation mode (guess)
-          dplo(3) = 19.0 
-          dpup(3) = 70.0   !min
+          dplo(AS) = 30.0 
+          dpup(AS) = 80.0   !min
           ! Coarse mode
-          dplo(4) = 150.0
-          dpup(4) = ndata(nobs,1)
-          binup(4)= nobs
+          dplo(CS) = 150.0
+          dpup(CS) = ndata(nobs,1)
+          binup(CS)= nobs
 
 
 ! *** Initialise bin size distribution with one lognormal mode
@@ -150,19 +154,22 @@
           end do
 
           print *,'dpmod',dpmod(1,imax),dpmod(2,imax),dpmod(3,imax), &
-                          dpmod(4,imax)
+                          dpmod(4,imax),dpmod(5,imax)
 
           ! Nucleation mode
-          dplo(1) = dpmod(1,1)
-          dpup(1) = dpmod(1,imax)
+          dplo(NU) = dpmod(1,1)
+          dpup(NU) = dpmod(1,imax)
+          ! Nanoparticle mode
+          dplo(NA) = dpmod(2,1)
+          dpup(NA) = dpmod(2,imax)
           ! Aitken mode
-          dplo(2) = dpmod(2,1)
-          dpup(2) = dpmod(2,imax)
+          dplo(AI) = dpmod(3,1)
+          dpup(AI) = dpmod(3,imax)
           ! Accumulation mode
-          dplo(3) = dpmod(3,1)
-          dpup(3) = dpmod(3,imax)
+          dplo(AS) = dpmod(4,1)
+          dpup(AS) = dpmod(4,imax)
           ! Coarse mode
-          dplo(4) = dpmod(4,1)
+          dplo(CS) = dpmod(5,1)
           
 
 
@@ -174,7 +181,7 @@
 
               ! determine dpup nucleation mode
               if ((.not.upli1).and.(mstart.eq.1)) then
-                if ( obsdp .gt. dpup(1) ) then
+                if ( obsdp .gt. dpup(NU) ) then
                    dpup(1)=ndata(j-1,1)
                    binup(1)=j-1
                    binlo(2)=j
@@ -183,7 +190,7 @@
                 endif
               endif
 
-              ! determine dplo Aitken mode
+              ! determine dplo Nanoparticle mode
               if ((.not.loli2).and.(mstart.eq.2)) then
                 if ( obsdp .gt. dpup(1) ) then
                    dplo(2)=ndata(j-1,1)
@@ -192,8 +199,8 @@
                 endif
               endif
 
-              ! determine dpup Aitken mode
-              ! and dplo Accum mode
+              ! determine dpup Nanoparticle mode
+              ! and dplo Aitken mode
               if (.not.upli2) then
                 if ( obsdp .gt. dpup(2) ) then
                    dpup(2)=ndata(j-1,1)
@@ -204,8 +211,8 @@
                 endif
               endif
 
-              ! determine dpup Accum mode
-              ! and dplo Coarse mode
+              ! determine dpup Aitken mode
+              ! and dplo Accum mode
               if (.not.upli3) then
                 if ( obsdp .gt. dpup(3) ) then
                    dpup(3)=ndata(j-1,1)
@@ -216,13 +223,26 @@
                 endif
               endif
 
+              ! determine dpup Accum mode
+              ! and dplo Coarse mode
+              if (.not.upli4) then
+                if ( obsdp .gt. dpup(4) ) then
+                   dpup(4)=ndata(j-2,1)
+                   dplo(5)=ndata(j-1,1)
+                   binup(4)=j-2
+                   binlo(5)=j-1
+                   upli4=.true.
+                endif
+              endif
+
          enddo
 
+         print *,'findmodes mstart',mstart
          print *,'dplim(1)',dplo(1),dpup(1)
          print *,'dplim(2)',dplo(2),dpup(2)
          print *,'dplim(3)',dplo(3),dpup(3)
          print *,'dplim(4)',dplo(4),dpup(4)
-
+         print *,'dplim(5)',dplo(5),dpup(5)
 
 
       end subroutine findmodes

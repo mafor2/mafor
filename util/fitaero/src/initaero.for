@@ -112,6 +112,7 @@
         ! initialisation
           vrat=1. 
           yhat=1.
+          vrat=0.
 
         ! Volume ratio per aerosol mode
         ! VRAT(M)=(DPA(M,IMAX)/DPA(M,1))**(3./(IMAX-1))
@@ -128,7 +129,7 @@
               dpmini = dpmin*1.e9
               nobs = 2
           endif
-
+       
           vrat=(dpmaxi/dpmini)**(3./(nobs-1));
 
 
@@ -182,8 +183,8 @@
         ! and calcALWC.xls: lw(%)=87.7705*RH**2.2677
         !  watfr = 0.01*87.7705*rhi**(2.2677)
         ! it shows that LWC is less sensitive to RH
-          watfr = 0.01*87.77*rhi**(2.8)
-
+        !  watfr = 0.01*87.77*rhi**(2.8)
+          watfr = 0.01*87.77*rhi**(3.2)
 
           massdry=masswbin*(1.-watfr)
 
