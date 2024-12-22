@@ -32,7 +32,7 @@ bga16_0_nm=[ 2.5945500e-09   2.6896000e-09   2.7881300e-09   2.8902600e-09   2.9
 bga16_0_nm=bga16_0_nm*1.e9;
 bga16_0_dndlogdp=[  0.0000000e+00   0.0000000e+00   0.0000000e+00   0.0000000e+00   0.0000000e+00   0.0000000e+00   7.3000000e+05   0.0000000e+00   0.0000000e+00   0.0000000e+00   0.0000000e+00   0.0000000e+00   6.8333333e+05   0.0000000e+00   0.0000000e+00   2.0166667e+05   3.3833333e+05   3.4250000e+05   2.0166667e+05   9.0833333e+04   4.8666667e+05   5.2250000e+05   9.5833333e+05   7.4916667e+05   9.2500000e+05   1.4083333e+06   1.2583333e+06   2.0916667e+06   3.3083333e+06   2.7000000e+06   4.2250000e+06   4.8250000e+06   5.3250000e+06   6.7250000e+06   7.5750000e+06   8.4166667e+06   9.6666667e+06   1.0250000e+07   1.1750000e+07   1.4250000e+07   1.6250000e+07   1.7583333e+07   1.9250000e+07   2.0500000e+07   2.2416667e+07   2.3416667e+07   2.3750000e+07   2.2500000e+07   2.2750000e+07   2.1583333e+07   2.0583333e+07   1.8666667e+07   1.7583333e+07   1.4916667e+07   1.4083333e+07   1.2083333e+07   1.0416667e+07   8.9166667e+06   8.9166667e+06   8.8333333e+06   8.9166667e+06   8.4166667e+06   8.1000000e+06   7.1333333e+06   5.7583333e+06   4.8166667e+06   3.9250000e+06   3.1500000e+06   2.3250000e+06   1.8250000e+06   1.3333333e+06   1.1750000e+06   8.5000000e+05   7.3583333e+05   6.0166667e+05   6.3916667e+05   6.0583333e+05   7.0500000e+05   8.2916667e+05   7.5500000e+05   8.5833333e+05   7.9250000e+05   8.9166667e+05   9.0833333e+05   9.9166667e+05   1.0583333e+06   9.5833333e+05   9.0000000e+05   9.0000000e+05   7.2083333e+05   7.0916667e+05   7.1500000e+05   6.8583333e+05   6.8166667e+05   6.2916667e+05   5.7750000e+05   5.6666667e+05   5.2083333e+05   5.0583333e+05   4.8833333e+05   4.8083333e+05   4.2166667e+05   4.0416667e+05   3.6416667e+05   3.4083333e+05   3.3500000e+05   2.9416667e+05   2.8583333e+05   2.4583333e+05   2.3000000e+05   2.1166667e+05   1.9083333e+05   1.8250000e+05   1.6416667e+05   1.5250000e+05   1.4583333e+05   1.3500000e+05   1.2250000e+05   1.1583333e+05   1.0000000e+05   9.2500000e+04   9.3333333e+04   7.1583333e+04   6.8750000e+04   6.0000000e+04   6.6250000e+04   5.2333333e+04   5.4500000e+04   3.9250000e+04   4.7500000e+04   3.3750000e+04   2.5833333e+04   2.7916667e+04   2.7000000e+04   2.2000000e+04   1.9166667e+04   1.7166667e+04   1.4416667e+04   1.5166667e+04   1.1333333e+04   9.0000000e+03 ];
 
-% SMPS meas dN/dlogDp [# cm-3]   
+% SMPS meas dN/dlogDp [# cm-3]
 bg_number_dmps=bga16_0_dndlogdp(1:141);
 bg_dndlogdp_dmps=bg_number_dmps;
 bg_diameter_dmps(1:141)=0.;
@@ -53,7 +53,7 @@ ma9_dndlogdp_dmps=ma9_number_dmps;
 
 for i=1:141
   bg_diameter_dmps(i)=bga16_0_nm(i);
-end 
+end
 % emission diamter_smps %[nm]
 for i=1:100
   ma0_diameter_dmps(i)=ma16_0_nm(i);
@@ -62,7 +62,7 @@ for i=1:100
   ma9_diameter_dmps(i)=ma16_9_nm(i);
   %ma0_diameter_dmps(i)=ma16_0_nm_dry(i);
   %ma1_diameter_dmps(i)=ma16_0_nm_dry(i);
-  %ma6_diameter_dmps(i)=ma16_0_n '../afigs_aging/diesel-sizedisnum.eps'm_dry(i);
+  %ma6_diameter_dmps(i)=ma16_0_nm_dry(i);
   %ma9_diameter_dmps(i)=ma16_0_nm_dry(i);
 end
 
@@ -77,7 +77,7 @@ end
 infile='size_dis.res';
 in=strrep(infile,'.res','');
 y=eval(in);
-[row,col]=size(y);               '../afigs_aging/diesel-sizedisnum.eps'      %row=xxx col=61
+[row,col]=size(y);         %row=xxx col=61
 
 infiledp='wetdp.res';
 indp=strrep(infiledp,'.res','');
@@ -87,51 +87,60 @@ dp=eval(indp);
 %dndlogdp_binbg=y(3,2:col)   *1e-6  *2.303;
 % 0.0s
 dndlogdp_bin01=y(4,2:col)   *1e-6 *2.303;      % #/m3-->#/cm3
-diameter_bin01=y(1,2:col)*1e9; 
-diameter_bin01=dp(1,2:coldp)*1e9; 
+diameter_bin01=y(1,2:col)*1e9;
+diameter_bin01=dp(1,2:coldp)*1e9;
 % 0.1s
 dndlogdp_bin02=y(4+1,2:col)   *1e-6 *2.303;    % #/m3-->#/cm3
-diameter_bin02=y(1,2:col)*1e9; 
-diameter_bin02=dp(1,2:coldp)*1e9; 
+diameter_bin02=y(1,2:col)*1e9;
+diameter_bin02=dp(1,2:coldp)*1e9;
 % 0.9s
 dndlogdp_bin03=y(4+9,2:col)   *1e-6 *2.303;    % #/m3-->#/cm3
-diameter_bin03=y(1,2:col)*1e9; 
+diameter_bin03=y(1,2:col)*1e9;
 diameter_bin03=dp(1+9,2:coldp)*1e9;
 % 2.7s
 dndlogdp_bin04=y(4+27,2:col)   *1e-6 *2.303;   % #/m3-->#/cm3
-diameter_bin04=y(1,2:col)*1e9; 
-diameter_bin04=dp(1+27,2:coldp)*1e9; 
+diameter_bin04=y(1,2:col)*1e9;
+diameter_bin04=dp(1+27,2:coldp)*1e9;
 
+
+fsize=11;
+fsizel=9;
 
 %loglog
-% first 8h: hourly. then every 8h 
+% first 8h: hourly. then every 8h
 %1 hour= 1*60*6 = 360
 % TIME UTC HERE AND ABOVE
 figure(1)
-axes('linewidth',2,'fontsize',13)
+clf
+axes('linewidth',1,'fontsize',fsize)
 %AEROFOR 0.0s
 loglog(ma0_diameter_dmps,ma16_0_dndlogdp,'ks-','MarkerSize',4.0,'LineWidth',1.1)
 hold
 ax=gca;
-set(ax,'linewidth',2,'fontsize',11)
+set(ax,'linewidth',1,'fontsize',fsize,'tickdir','out')
 %MAFOR   0.0s
-loglog(diameter_bin01,dndlogdp_bin01,      '--k' ,'LineWidth',2.4)
+loglog(diameter_bin01,dndlogdp_bin01,'LineStyle','-','Color',[.4 .4 .4],'LineWidth',2.5)
 %AEROFOR, MAFOR 0.1s
 loglog(ma1_diameter_dmps,ma16_1_dndlogdp,  'rs-','MarkerSize',4.0,'LineWidth',1.1)
-loglog(diameter_bin02,dndlogdp_bin02,      '--r' ,'LineWidth',2.4)
-%loglog(ma1_diameter_dmps,ma16_2_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
-%loglog(ma1_diameter_dmps,ma16_3_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
-%loglog(ma1_diameter_dmps,ma16_4_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
-%loglog(ma1_diameter_dmps,ma16_5_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
+loglog(diameter_bin02,dndlogdp_bin02,'LineStyle','-','Color',[.6 .1 .1],'LineWidth',2.5)
+
+%%%loglog(ma1_diameter_dmps,ma16_2_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
+%%%loglog(ma1_diameter_dmps,ma16_3_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
+%%%loglog(ma1_diameter_dmps,ma16_4_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
+%%%loglog(ma1_diameter_dmps,ma16_5_dndlogdp,'ko-','MarkerSize',5.,'LineWidth',1.4)
+
 %AEROFOR, MAFOR 0.9s
 loglog(ma1_diameter_dmps,ma16_6_dndlogdp,  'gs-','MarkerSize',4.0,'LineWidth',1.1)
-loglog(diameter_bin03,dndlogdp_bin03,      '--g' ,'LineWidth',2.43)
-%loglog(ma1_diameter_dmps,ma16_7_dndlogdp,'ko:','MarkerSize',5.,'LineWidth',1.4)
+loglog(diameter_bin03,dndlogdp_bin03,'LineStyle','-','Color',[.1 .6 .1],'LineWidth',2.5)
+%%%loglog(ma1_diameter_dmps,ma16_7_dndlogdp,'ko:','MarkerSize',5.,'LineWidth',1.4)
+
 %AEROFOR, MAFOR 2.7s
 loglog(ma9_diameter_dmps,ma16_9_dndlogdp,  'bs-','MarkerSize',4.0,'LineWidth',1.1)
-loglog(diameter_bin04,dndlogdp_bin04,      '--b' ,'LineWidth',2.4)
+loglog(diameter_bin04,dndlogdp_bin04,'LineStyle','-','Color',[.1 .1 .6],'LineWidth',2.5)
+
 %SMPS 2.7s
-loglog(bg_diameter_dmps,bga16_0_dndlogdp,'bd','MarkerSize',5.0,'LineWidth',1.1)
+loglog(bg_diameter_dmps,bga16_0_dndlogdp,'d','Color',[.1 .1 .6],'MarkerSize',5.0,'LineWidth',1.1)
+
 %modelled background size distribution
 %loglog(diameter_bin,dndlogdp_binbg,      '-k' ,'LineWidth',2.1)
 
@@ -143,14 +152,17 @@ loglog(bg_diameter_dmps,bga16_0_dndlogdp,'bd','MarkerSize',5.0,'LineWidth',1.1)
 %loglog(diameter_bin,dndlogdp_bin06,      '--b' ,'LineWidth',2.1)
 %loglog(diameter_bin,dndlogdp_bin07,      '--k' ,'LineWidth',2.1)
 %LEGEND
-legend('AEROF 0.0s','MAFOR 0.0s','AEROF 0.1s','MAFOR 0.1s','AEROF 0.9s','MAFOR 0.9s','AEROF 2.7s','MAFOR 2.7s','SMPS   2.7s','Location','NorthEastOutside')  
+h=legend('AEROFOR 0.0s','MAFOR 0.0s','AEROFOR 0.1s','MAFOR 0.1s','AEROFOR 0.9s', ...
+       'MAFOR 0.9s','AEROFOR 2.7s','MAFOR 2.7s','SMPS   2.7s', ...
+       'Location','NorthEastOutside')
+set(h,'FontSize',fsizel)
 
-xlabel('Wet diameter D_p (nm)','FontSize',16)
-ylabel('dN/dlogDp (particles/cm^3)','FontSize',16)
+xlabel('Wet diameter D_p (nm)','FontSize',fsize)
+ylabel('dN/dlogDp (particles/cm^3)','FontSize',fsize)
 %loglog
 set(gca,'xtick',[1,10,50,100,500,1000]);
 set(gca, 'xticklabel', [1,10,50,100,500,1000]);
-set(gca,'XLim',[1. 600.],'Ylim',[5.e2 1.e8]); 
+set(gca,'XLim',[1. 600.],'Ylim',[5.e2 1.e8]);
 
 %print -dbmp '../afigs_aging/diesel-sizedisnum.bmp'
 %print -depsc '../afigs_aging/diesel-sizedisnum.eps'
