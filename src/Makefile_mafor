@@ -1,10 +1,10 @@
 #
 #  MAKEFILE FOR:
 #  Multicomponent Aerosol FORmation model MAFOR
-#  Version 2.0 (Community Model)
+#  Version 2.2 (Community Model)
 #.........................................................................
 # COPYRIGHT
-#    (C) 2011-2022 Dr. Matthias Karl
+#    (C) 2011-2024 Dr. Matthias Karl
 #
 #    Contact Information:
 #          Dr. Matthias Karl
@@ -65,11 +65,12 @@
 ######################################################################
 .SUFFIXES: .f90
 
-BASEDIR  = /home/matthias/MAFOR_GIT/mafor_v210/src
+BASEDIR  = /home/matthias/MAFOR_GIT/mafor/src
 
 GDEDIR   = ${BASEDIR}/GDE/
 CHEDIR   = ${BASEDIR}/CHEM/
 DISDIR   = ${BASEDIR}/DISP/
+CLDDIR   = ${BASEDIR}/CLD/
 INCDIR   = ${BASEDIR}/INCS/
 
 OBJDIR    = ${BASEDIR}/OBJS
@@ -77,7 +78,7 @@ TARGETDIR = ${BASEDIR}/../bin/
 
 
 # SEARCH PATH FOR SOURCES #
-VPATH    = ${GDEDIR}:${CHEDIR}:${DISDIR}
+VPATH    = ${GDEDIR}:${CHEDIR}:${DISDIR}:${CLDDIR}
 
 
 # COMPILER #
@@ -95,7 +96,7 @@ INFLAGS  = -I$(INCDIR)
 LIBS     = -L${INCDIR} -lmessy -lmtem
 
 
-TARGET   = maforv210.exe
+TARGET   = maforv220.exe
 
 # SOURCES #
 
@@ -117,10 +118,10 @@ ESRC = 	gde_sensitiv.f90         \
 		gde_condensation.f90     \
 		gde_deposition.f90       \
 		gde_transfer.f90         \
+		gde_cloud_activation.f90 \
 		gde_aerosol_solver.f90   \
 		mafor.f90           
 
-# excluding gde_koehler.f90 (after gde_transfer.f90)
 
 
 OBJS=$(join $(addsuffix ./OBJS/, $(dir $(ESRC))), $(notdir $(ESRC:.f90=.o)))
