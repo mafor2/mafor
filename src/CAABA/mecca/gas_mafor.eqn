@@ -41,6 +41,8 @@
   REAL(dp) :: k_MMA_OH, k_DMA_OH
   REAL(dp) :: k_TMA_OH, k_DEA_OH, k_TEA_OH
   REAL(dp) :: k_AMP_OH, k_AMP_NO3
+  REAL(dp) :: k_MTMP_isom
+  REAL(dp) :: k_IO_OIO, k_OIO_OIO, k_I2O2a, k_I2O4
 
   !MSK: YIELD DEFINITIONS FOR KPP
   !     lines go to messy_mecca_kpp_global.f90
@@ -132,13 +134,34 @@
   k_DMS_Cl     = 3.3E-10{§}
   k_DMSO2_OH   = 1.5E-13{§}
   ! k_CH3SO2_dec = 10.{§}
-  k_CH3SO3_dec = 1.2E-3{§}
+  ! k_CH3SO3_dec = 1.2E-3{§}
+  k_CH3SO3_dec = 5.0E13*EXP(-9946./temp){§}                           ! Cala et al., 2023
   k_MSIA_OH    = 9.0E-11{§}
   k_DMSO_OH    = 6.15E-12{§}*EXP(800./temp)
   k_B1         = 8.46E-13{§}*EXP(944./temp)
   k_B2         = 1.60E-14{§}*EXP(1628./temp)
   k_DMSO_OH_B1 = k_DMSO_OH*(k_B1/(k_B1+k_B2))
   k_DMSO_OH_B2 = k_DMSO_OH*(k_B2/(k_B1+k_B2))
+  k_MTMP_isom  = 2.24E+11{§}*EXP(-9800./temp)*EXP(1.03E8/(temp**3))   ! Veres et al., 2020
+  
+  !MSK: IODINE RELATED RATE CONSTANTS (Ruhl & Sander, Sept. 2024)
+  !     reference: Saiz-Lopez et al., 2014
+  k_IO_OIO     = (4.687E-10 - 1.3855E-5*exp(-0.75*press/162.265)     + &
+                  5.51868E-10*exp(-0.75*press/19932.8))              * &
+                  exp((-3.31E-3 - 5.14E-3*exp(-0.75*press/32568.711) - &
+                  4.44E-3*exp(-0.75*press/4081.609)) *temp)
+  k_OIO_OIO    = (1.1659E-9 - 7.79644E-10*exp(-0.75*press/2209.281)  + &
+                  1.03779E-9*exp(-0.75*press/56815.381))             * &
+                  exp((-8.13E-3 - 3.82E-3*exp(-0.75*press/4557.591)  - &
+                  6.43E-3*exp(-0.75*press/41795.061)) *temp)
+  k_I2O2a      = (2.55335E11 - 4.41888E7*0.75*press + 8561.86*(0.75*press)**2     + &
+                  1.421881E-2*(0.75*press)**3)                                    * &
+                  exp((-11466.82304 + 597.01334*exp(-0.75*press/138262.325)       - &
+                  167.3391*exp(-0.75*press/4375.089)) *temp)
+  k_I2O4       = (-1.92626E14 + 4.67414E11*0.75*press - 3.68651E4*(0.75*press)**2 - &
+                  3.09109*(0.75*press)**3)                                        * &
+                  exp((-12302.15294 + 252.78367*exp(-0.75*press/4612.733)         + &
+                  437.62868*exp(-0.75*press/42844.13)) *temp)
 
   ! end of maforchem block
   ! --------------------------------------------------------------------------

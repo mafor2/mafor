@@ -42,7 +42,9 @@ NH2C2H4NH2_a## =  2C +  8H  +        2N ; {@NH_2CH_2CH_2NH_2}  {ethylenediamine}
 NH2CH2CHOH_a## =  2C +  6H  +   O  +  N ; {@NH_2CH_2CHOH}    {ethanolamine radical} 
 H2NCOCH2OH_a## =  2C +  5H  +  2O  +  N ; {@H2NCOCH2OH}      {2-hydroxy acetamide} 
 CH3NHCHO_a##   =  2C +  5H  +   O  +  N ; {@CH_3NHCHO}       {N-methyl formamide} 
-CH3NCO_a##     =  2C +  3H  +   O  +  N ; {@CH_3NCO}         {methyl isocyanic acid} 
+CH3NCO_a##     =  2C +  3H  +   O  +  N ; {@CH_3NCO}         {methyl isocyanic acid}
+HPMTF_a##      =  2C +  4H  +  3O  +  S ; {@HPMTF}           {hydroperoxyl methyl thioformate}
+HOOCH2SCO_a##  =  2C +  3H  +  3O  +  S ; {@HOOCH2SCO}       {}
  
 {3C}
 MGLYOX_a##     =  3C +  4H  +  2O       ; {@MGLYOX}          {methylglyoxal}

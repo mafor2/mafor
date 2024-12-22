@@ -983,6 +983,12 @@ LET/D TEAO            = 0 ; DEF SYMBOL TEAO            = TEAO
 LET/D DEANCOCH2OH     = 0 ; DEF SYMBOL DEANCOCH2OH     = DEANCOCH2OH
 LET/D DEANCH2CHO      = 0 ; DEF SYMBOL DEANCH2CHO      = DEANCH2CHO
 LET/D DEANCH2COO2     = 0 ; DEF SYMBOL DEANCH2COO2     = DEANCH2COO2
+LET/D OBrO            = 0 ; DEF SYMBOL OBrO            = OBrO
+LET/D I2O3            = 0 ; DEF SYMBOL I2O3            = I_2O_3
+LET/D I2O4            = 0 ; DEF SYMBOL I2O4            = I_2O_4
+LET/D INO             = 0 ; DEF SYMBOL INO             = INO
+LET/D I2O             = 0 ; DEF SYMBOL I2O             = I_2O
+LET/D I2O5            = 0 ; DEF SYMBOL I2O5            = I_2O_5
 LET/D HSO3            = 0 ; DEF SYMBOL HSO3            = HSO_3
 LET/D CH3SOH          = 0 ; DEF SYMBOL CH3SOH          = CH_3SOH
 LET/D CH3SOOH         = 0 ; DEF SYMBOL CH3SOOH         = CH_3SOOH
@@ -991,6 +997,7 @@ LET/D CH3SO4H         = 0 ; DEF SYMBOL CH3SO4H         = CH_3SO_4H
 LET/D CH3SCH2         = 0 ; DEF SYMBOL CH3SCH2         = CH_3SCH_2
 LET/D DMSOO           = 0 ; DEF SYMBOL DMSOO           = CH_3SCH_2OO
 LET/D DMSOOH          = 0 ; DEF SYMBOL DMSOOH          = CH_3SCH_2OOH
+LET/D CH3SCHO         = 0 ; DEF SYMBOL CH3SCHO         = CH_3SCHO
 LET/D DMSOH           = 0 ; DEF SYMBOL DMSOH           = DMSOH
 LET/D DMSOHO          = 0 ; DEF SYMBOL DMSOHO          = DMSOHO
 LET/D DMSOHOO         = 0 ; DEF SYMBOL DMSOHOO         = DMSOHOO
@@ -1000,6 +1007,11 @@ LET/D DMSO2           = 0 ; DEF SYMBOL DMSO2           = DMSO_2
 LET/D DMSO2O          = 0 ; DEF SYMBOL DMSO2O          = DMSO_2O
 LET/D DMSO2OO         = 0 ; DEF SYMBOL DMSO2OO         = DMSO_2OO
 LET/D DMSO2OOH        = 0 ; DEF SYMBOL DMSO2OOH        = DMSO_2OOH
+LET/D HPMTF           = 0 ; DEF SYMBOL HPMTF           = HPMTF
+LET/D HOOCH2SCO       = 0 ; DEF SYMBOL HOOCH2SCO       = HOOCH2SCO
+LET/D HOOCH2S         = 0 ; DEF SYMBOL HOOCH2S         = HOOCH_2S
+LET/D HOOCH2SO        = 0 ; DEF SYMBOL HOOCH2SO        = HOOCH_2SO
+LET/D HOOCH2SOO       = 0 ; DEF SYMBOL HOOCH2SOO       = HOOCH_2SOO
 LET/D CH3S            = 0 ; DEF SYMBOL CH3S            = CH_3S
 LET/D CH3SO           = 0 ; DEF SYMBOL CH3SO           = CH_3SO
 LET/D CH3SOO          = 0 ; DEF SYMBOL CH3SOO          = CH_3SOO
@@ -1162,6 +1174,8 @@ LET/D NH2CH2CHOH_($ax) = 0 ; DEF SYMBOL NH2CH2CHOH_($ax) = NH_2CH_2CHOH
 LET/D H2NCOCH2OH_($ax) = 0 ; DEF SYMBOL H2NCOCH2OH_($ax) = H2NCOCH2OH
 LET/D CH3NHCHO_($ax)  = 0 ; DEF SYMBOL CH3NHCHO_($ax)  = CH_3NHCHO
 LET/D CH3NCO_($ax)    = 0 ; DEF SYMBOL CH3NCO_($ax)    = CH_3NCO
+LET/D HPMTF_($ax)     = 0 ; DEF SYMBOL HPMTF_($ax)     = HPMTF
+LET/D HOOCH2SCO_($ax) = 0 ; DEF SYMBOL HOOCH2SCO_($ax) = HOOCH2SCO
 LET/D MGLYOX_($ax)    = 0 ; DEF SYMBOL MGLYOX_($ax)    = MGLYOX
 LET/D MGLYOAC_($ax)   = 0 ; DEF SYMBOL MGLYOAC_($ax)   = MGLYOAC
 LET/D DOC_($ax)       = 0 ; DEF SYMBOL DOC_($ax)       = DOC

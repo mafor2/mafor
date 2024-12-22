@@ -255,10 +255,11 @@ if ($apn>99) then
   echo;echo "ERROR: Number of aerosol phases is to large."
   exit 1
 endif
-if ( ("$apn" == "3") && ("$user" != "sander") ) then
-  echo;echo "ERROR: do not use APN=3 which is still under construction."
-  exit 1
-endif
+#MSK 2023-01-14 commented for mafor v2.1.2
+#if ( ("$apn" == "3") && ("$user" != "sander") ) then
+#  echo;echo "ERROR: do not use APN=3 which is still under construction."
+#  exit 1
+#endif
 echo "Selected number of aerosol phases = $apn" |& tee -a $logfile
 
 if ( "$apn" == "0" ) then

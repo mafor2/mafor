@@ -2,72 +2,73 @@ This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: meccanism_mafor.aux
 The style file: egu.bst
-Reallocated field_info (elt_size=4) to 11318 items from 5000.
+Reallocated field_info (elt_size=4) to 11396 items from 5000.
 Database file #1: meccalit_mafor.bib
 Warning--string name "d15304" is undefined
---line 4257 of file meccalit_mafor.bib
+--line 4282 of file meccalit_mafor.bib
 Warning--string name "ccm" is undefined
---line 4312 of file meccalit_mafor.bib
-Repeated entry---line 4425 of file meccalit_mafor.bib
+--line 4337 of file meccalit_mafor.bib
+Repeated entry---line 4450 of file meccalit_mafor.bib
  : @article{2615
  :              ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 4437 of file meccalit_mafor.bib
+Repeated entry---line 4462 of file meccalit_mafor.bib
  : @article{2616
  :              ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 4463 of file meccalit_mafor.bib
+Repeated entry---line 4488 of file meccalit_mafor.bib
  : @article{2618
  :              ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 4478 of file meccalit_mafor.bib
+Repeated entry---line 4503 of file meccalit_mafor.bib
  : @article{2619
  :              ,
 I'm skipping whatever remains of this entry
 Warning--string name "ccm" is undefined
---line 4587 of file meccalit_mafor.bib
+--line 4612 of file meccalit_mafor.bib
+Reallocated str_pool (elt_size=1) to 130000 items from 65000.
 Warning--empty journal in 26220
 Warning--empty journal in 2635
 Warning--can't use both author and editor fields in 2582
-You've used 243 entries,
+You've used 246 entries,
             2811 wiz_defined-function locations,
-            2867 strings with 63245 characters,
-and the built_in function-call counts, 261209 in all, are:
-= -- 30006
-> -- 9603
-< -- 92
-+ -- 4750
-- -- 2972
-* -- 16241
-:= -- 25304
-add.period$ -- 243
-call.type$ -- 243
-change.case$ -- 1476
-chr.to.int$ -- 236
-cite$ -- 732
-duplicate$ -- 26570
-empty$ -- 13146
-format.name$ -- 3770
-if$ -- 52095
+            2886 strings with 64676 characters,
+and the built_in function-call counts, 267454 in all, are:
+= -- 30571
+> -- 10125
+< -- 93
++ -- 4946
+- -- 3143
+* -- 16726
+:= -- 26039
+add.period$ -- 246
+call.type$ -- 246
+change.case$ -- 1539
+chr.to.int$ -- 239
+cite$ -- 741
+duplicate$ -- 27034
+empty$ -- 13369
+format.name$ -- 3950
+if$ -- 53321
 int.to.chr$ -- 8
 int.to.str$ -- 1
-missing$ -- 2671
-newline$ -- 738
-num.names$ -- 977
-pop$ -- 11641
+missing$ -- 2748
+newline$ -- 747
+num.names$ -- 989
+pop$ -- 11925
 preamble$ -- 1
-purify$ -- 1474
+purify$ -- 1537
 quote$ -- 0
-skip$ -- 14984
+skip$ -- 15256
 stack$ -- 0
-substring$ -- 11446
-swap$ -- 23555
-text.length$ -- 13
+substring$ -- 11616
+swap$ -- 23983
+text.length$ -- 14
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 2172
+type$ -- 2199
 warning$ -- 3
-while$ -- 1166
+while$ -- 1182
 width$ -- 0
-write$ -- 2880
+write$ -- 2917
 (There were 4 error messages)

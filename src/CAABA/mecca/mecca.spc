@@ -1,5 +1,5 @@
 {created automatically by xmecca, DO NOT EDIT!}
-{xmecca was run on 2022-11-14 at 13:30:58 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI}
+{xmecca was run on 2024-11-30 at 15:26:02 by matthias on machine matthias-Z390-I-AORUS-PRO-WIFI}
 {***** START: gas-phase species from gas.spc *****}
 {Time-stamp: <2019-01-09 16:19:59 sander>}
 
@@ -1157,6 +1157,17 @@ DEANCH2CHO    = 6C + 13H + 3O + N     ; {@DEANCH2CHO}        {N,N-diethanol acet
 DEANCH2COO2   = 6C + 12H + 5O + N     ; {@DEANCH2COO2}       {N,N-diethanol acetamide peroxyradical}
 
 
+{------------------------------------- Br -----------------------------------}
+OBrO          =            2O    + Br ; {@OBrO}              {bromine oxide}
+
+
+{------------------------------------- I ------------------------------------}
+I2O3          =            3O    + 2I ; {@I_2O_3}            {}
+I2O4          =            4O    + 2I ; {@I_2O_4}            {}
+INO           =            O + N +  I ; {@INO}               {nitrosyl iodide}
+I2O           =            O     + 2I ; {@I_2O}              {}
+I2O5          =            5O    + 2I ; {@I_2O_5}            {}
+
 
 {------------------------------------- S ------------------------------------}
 
@@ -1168,6 +1179,7 @@ CH3SO4H       = C + 4H + S + 4O       ; {@CH_3SO_4H}         {}
 CH3SCH2       = 2C + 5H + S           ; {@CH_3SCH_2}         {dimethyl sulfide radical}
 DMSOO         = 2C + 5H + S + 2O      ; {@CH_3SCH_2OO}       {dimethyl sulfide peroxyradical}
 DMSOOH        = 2C + 6H + S + 2O      ; {@CH_3SCH_2OOH}      {dimethyl sulfide hydroperoxide}
+CH3SCHO       = 2C + 4H + S + O       ; {@CH_3SCHO}          {methylthiolformate}
 DMSOH         = 2C + 7H + S + O       ; {@DMSOH}             {dimethyl sulfhydroxide: CH3SOHCH3}
 DMSOHO        = 2C + 7H + S + 2O      ; {@DMSOHO}            {}
 DMSOHOO       = 2C + 7H + S + 3O      ; {@DMSOHOO}           {}
@@ -1177,6 +1189,11 @@ DMSO2         = 2C + 6H + S + 2O      ; {@DMSO_2}            {dimethyl sulfone: 
 DMSO2O        = 2C + 6H + S + 3O      ; {@DMSO_2O}           {dimethyl sulfone oxyradical}
 DMSO2OO       = 2C + 6H + S + 4O      ; {@DMSO_2OO}          {dimethyl sulfone peroxyradical}
 DMSO2OOH      = 2C + 6H + S + 4O      ; {@DMSO_2OOH}         {dimethyl sulfone hydroperoxide}
+HPMTF         = 2C + 4H + S + 3O      ; {@HPMTF}             {hydroperoxyl methyl thioformate}
+HOOCH2SCO     = 2C + 3H + S + 3O      ; {@HOOCH2SCO}         {}
+HOOCH2S       = C + 3H + S + 2O       ; {@HOOCH_2S}          {}
+HOOCH2SO      = C + 3H + S + 3O       ; {@HOOCH_2SO}         {}
+HOOCH2SOO     = C + 3H + S + 4O       ; {@HOOCH_2SOO}        {}
 CH3S          = C + 3H + S            ; {@CH_3S}             {}
 CH3SO         = C + 3H + S + O        ; {@CH_3SO}            {}
 CH3SOO        = C + 3H + S + 2O       ; {@CH_3SOO}           {}
@@ -1190,7 +1207,6 @@ MSADMAH2O     = 3C+ 14H+ S + 4O + N   ; {@MSA(DMA)(H_2O)}    {[MSA*DMA*H2O]: met
 MSADMA        = 3C+ 11H+ S + 3O + N   ; {@MSA(DMA)}          {[MSA*DMA]: methane sulfonic acid - DMA cluster} 
 MSATMAH2O     = 4C+ 16H+ S + 4O + N   ; {@MSA(TMA)(H_2O)}    {[MSA*TMA*H2O]: methane sulfonic acid - TMA - water cluster}
 MSATMA        = 4C+ 13H+ S + 3O + N   ; {@MSA(TMA)}          {[MSA*TMA]: methane sulfonic acid - TMA cluster} 
-
 {***** END:   gas-phase species from gas.spc *****}
 {**** START: aerosol species (phase 1) from aqueous.spc ****}
 {-----------------------------------------------------------------------------}
@@ -1438,7 +1454,9 @@ NH2C2H4NH2_a01 =  2C +  8H  +        2N ; {@\FormatAq<NH_2CH_2CH_2NH_2><01>}  {e
 NH2CH2CHOH_a01 =  2C +  6H  +   O  +  N ; {@\FormatAq<NH_2CH_2CHOH><01>}    {ethanolamine radical} 
 H2NCOCH2OH_a01 =  2C +  5H  +  2O  +  N ; {@\FormatAq<H2NCOCH2OH><01>}      {2-hydroxy acetamide} 
 CH3NHCHO_a01   =  2C +  5H  +   O  +  N ; {@\FormatAq<CH_3NHCHO><01>}       {N-methyl formamide} 
-CH3NCO_a01     =  2C +  3H  +   O  +  N ; {@\FormatAq<CH_3NCO><01>}         {methyl isocyanic acid} 
+CH3NCO_a01     =  2C +  3H  +   O  +  N ; {@\FormatAq<CH_3NCO><01>}         {methyl isocyanic acid}
+HPMTF_a01      =  2C +  4H  +  3O  +  S ; {@\FormatAq<HPMTF><01>}           {hydroperoxyl methyl thioformate}
+HOOCH2SCO_a01  =  2C +  3H  +  3O  +  S ; {@\FormatAq<HOOCH2SCO><01>}       {}
  
 {3C}
 MGLYOX_a01     =  3C +  4H  +  2O       ; {@\FormatAq<MGLYOX><01>}          {methylglyoxal}
@@ -1519,5 +1537,665 @@ TENHp_a01      =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_2NH^+CH_2CHO
 
 {------------------------------------M----------------------------------------}
 {**** END:   aerosol species (phase 1) from aqueous.spc ****}
+{**** START: aerosol species (phase 2) from aqueous.spc ****}
+{-----------------------------------------------------------------------------}
+{------------------------------ aerosol mode: 02 -----------------------------}
+{-----------------------------------------------------------------------------}
+
+{------------------------------- neutral species -----------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+O2_a02         = 2O                   ; {@\FormatAq<O_2><02>}          {oxygen}
+O3_a02         = 3O                   ; {@\FormatAq<O_3><02>}          {ozone}
+
+{------------------------------------- H -------------------------------------}
+
+OH_a02         =  H +  O              ; {@\FormatAq<OH><02>}           {hydroxyl radical}
+HO2_a02        =  H + 2O              ; {@\FormatAq<HO_2><02>}         {perhydroxyl radical}
+H2O_a02        = 2H +  O              ; {@\FormatAq<H_2O><02>}         {water}
+H2O2_a02       = 2H + 2O              ; {@\FormatAq<H_2O_2><02>}       {hydrogen peroxide}
+
+{------------------------------------- N -------------------------------------}
+
+NH3_a02        = 3H      +  N         ; {@\FormatAq<NH_3><02>}         {ammonia}
+NO_a02         =       O +  N         ; {@\FormatAq<NO><02>}           {nitric oxide}
+NO2_a02        =      2O +  N         ; {@\FormatAq<NO_2><02>}         {nitrogen dioxide}
+NO3_a02        =      3O +  N         ; {@\FormatAq<NO_3><02>}         {nitrogen trioxide}
+HONO_a02       =  H + 2O +  N         ; {@\FormatAq<HONO><02>}         {nitrous acid}
+HNO3_a02       =  H + 3O +  N         ; {@\FormatAq<HNO_3><02>}        {nitric acid}
+HNO4_a02       =  H + 4O +  N         ; {@\FormatAq<HNO_4><02>}        {pernitric acid}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CH3OH_a02      =   C +  4H +   O      ; {@\FormatAq<CH_3OH><02>}       {methanol}
+HCOOH_a02      =   C +  2H +  2O      ; {@\FormatAq<HCOOH><02>}        {formic acid}
+HCHO_a02       =   C +  2H +   O      ; {@\FormatAq<HCHO><02>}         {methanal (formaldehyde)}
+CH3O2_a02      =   C +  3H +  2O      ; {@\FormatAq<CH_3OO><02>}       {methylperoxy radical}
+CH3OOH_a02     =   C +  4H +  2O      ; {@\FormatAq<CH_3OOH><02>}      {}
+CO2_a02        =   C       +  2O      ; {@\FormatAq<CO_2><02>}         {carbon dioxide}
+
+{2C}
+CH3CO2H_a02    =  2C +  4H +  2O      ; {@\FormatAq<CH_3COOH><02>}     {acetic acid}
+PAN_a02        =  2C +  3H +  5O +  N ; {@\FormatAq<PAN><02>}          {peroxyacetylnitrate}
+CH3CHO_a02     =  2C +  4H +   O      ; {@\FormatAq<CH_3CHO><02>}      {acetaldehyde}
+
+{3C}
+CH3COCH3_a02   =  3C +  6H +   O      ; {@\FormatAq<CH_3COCH_3><02>}   {acetone}
+
+{------------------------------------- Cl ------------------------------------}
+
+Cl_a02         = Cl                   ; {@\FormatAq<Cl><02>}           {chlorine atom}
+Cl2_a02        = 2Cl                  ; {@\FormatAq<Cl_2><02>}         {molecular chlorine}
+HCl_a02        = H + Cl               ; {@\FormatAq<HCl><02>}          {hydrogen chloride}
+HOCl_a02       = H + O + Cl           ; {@\FormatAq<HOCl><02>}         {hypochlorous acid}
+
+{------------------------------------- Br ------------------------------------}
+
+Br_a02         = Br                   ; {@\FormatAq<Br><02>}           {bromine atom}
+Br2_a02        = 2Br                  ; {@\FormatAq<Br_2><02>}         {molecular bromine}
+HBr_a02        = H + Br               ; {@\FormatAq<HBr><02>}          {hydrogen bromide}
+HOBr_a02       = H + O + Br           ; {@\FormatAq<HOBr><02>}         {hypobromous acid}
+BrCl_a02       = Br + Cl              ; {@\FormatAq<BrCl><02>}         {bromine chloride}
+
+{------------------------------------- I -------------------------------------}
+
+I2_a02         = 2I                   ; {@\FormatAq<I_2><02>}          {molecular iodine}
+IO_a02         = I + O                ; {@\FormatAq<IO><02>}           {iodine monoxide radical}
+HOI_a02        = H + O + I            ; {@\FormatAq<HOI><02>}          {hypoiodous acid}
+ICl_a02        = I + Cl               ; {@\FormatAq<ICl><02>}          {iodine chloride}
+IBr_a02        = I + Br               ; {@\FormatAq<IBr><02>}          {iodine bromide}
+
+{------------------------------------- S -------------------------------------}
+
+SO2_a02        = S + 2O               ; {@\FormatAq<SO_2><02>}         {sulfur dioxide}
+H2SO4_a02      = 2H + S + 4O          ; {@\FormatAq<H_2SO_4><02>}      {sulfuric acid}
+DMS_a02        = 2C + 6H + S          ; {@\FormatAq<DMS><02>}          {dimethyl sulfide: CH3SCH3}
+DMSO_a02       = 2C + 6H + S + O      ; {@\FormatAq<DMSO><02>}         {dimethyl sulfoxide: CH3SOCH3}
+
+{------------------------------------- Hg ------------------------------------}
+
+Hg_a02         = Hg                   ; {@\FormatAq<Hg><02>}           {mercury}
+HgO_a02        = Hg + O               ; {@\FormatAq<HgO><02>}          {} 
+HgOHOH_a02     = Hg + 2O + 2H         ; {@\FormatAq<Hg(OH)_2><02>}     {}
+HgOHCl_a02     = Hg + O + H + Cl      ; {@\FormatAq<Hg(OH)Cl><02>}     {}
+HgCl2_a02      = Hg + 2Cl             ; {@\FormatAq<HgCl_2><02>}       {}
+HgBr2_a02      = Hg + 2Br             ; {@\FormatAq<HgBr_2><02>}       {}
+HgSO3_a02      = Hg + S + 3O          ; {@\FormatAq<HgSO_3><02>}       {}
+ClHgBr_a02     = Hg + Cl + Br         ; {@\FormatAq<ClHgBr><02>}       {}
+BrHgOBr_a02    = Hg + O + 2Br         ; {@\FormatAq<BrHgOBr><02>}      {}
+ClHgOBr_a02    = Hg + O + Cl + Br     ; {@\FormatAq<ClHgOBr><02>}      {}
+
+{------------------------------------Fe---------------------------------------}
+
+FeOH3_a02      = Fe + 3O + 3H         ; {@\FormatAq<FeOH3><02>}        {}
+FeCl3_a02      = Fe + 3Cl             ; {@\FormatAq<FeCl3><02>}        {}
+FeF3_a02       = Fe + 3F              ; {@\FormatAq<FeF3><02>}         {}
+
+{----------------------------------- ions ------------------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+O2m_a02        = 2O            + Min  ; {@\FormatAq<O_2^-><02>}        {}
+OHm_a02        = H +  O        + Min  ; {@\FormatAq<OH^-><02>}         {}
+HO2m_a02       = H + 2O        + Min  ; {@\FormatAq<HO2^-><02>}        {}
+O2mm_a02       = 2O            + 2Min ; {@\FormatAq<O2^<2->><02>}      {}
+
+{------------------------------------- H -------------------------------------}
+
+Hp_a02         =  H             + Pls ; {@\FormatAq<H^+><02>}          {}
+
+{------------------------------------- N -------------------------------------}
+
+NH4p_a02       = N + 4H         + Pls ; {@\FormatAq<NH_4^+><02>}       {ammonium}
+NO2m_a02       =      2O +  N   + Min ; {@\FormatAq<NO_2^-><02>}       {nitrite}
+NO3m_a02       =      3O +  N   + Min ; {@\FormatAq<NO_3^-><02>}       {nitrate}
+NO4m_a02       =      4O +  N   + Min ; {@\FormatAq<NO_4^-><02>}       {peroxy nitrate}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CO3m_a02       = C + 3O         + Min ; {@\FormatAq<CO_3^-><02>}       {}
+HCOOm_a02      = H + C + 2O     + Min ; {@\FormatAq<HCOO^-><02>}       {formate}
+HCO3m_a02      = H + C + 3O     + Min ; {@\FormatAq<HCO_3^-><02>}      {hydrogen carbonate}
+
+{2C}
+CH3COOm_a02    = 2C + 3H + 2O   + Min ; {@\FormatAq<CH_3COO^-><02>}    {acetate}
+
+{------------------------------------- Cl ------------------------------------}
+
+Clm_a02        = Cl             + Min ; {@\FormatAq<Cl^-><02>}         {chloride}
+Cl2m_a02       = 2Cl            + Min ; {@\FormatAq<Cl_2^-><02>}       {}
+ClOm_a02       = Cl + O         + Min ; {@\FormatAq<ClO^-><02>}        {}
+ClOHm_a02      = H + O + Cl     + Min ; {@\FormatAq<ClOH^-><02>}       {}
+
+{------------------------------------- Br ------------------------------------}
+
+Brm_a02        = Br             + Min ; {@\FormatAq<Br^-><02>}         {bromide}
+Br2m_a02       = 2Br            + Min ; {@\FormatAq<Br_2^-><02>}       {}
+BrOm_a02       = Br + O         + Min ; {@\FormatAq<BrO^-><02>}        {}
+BrOHm_a02      = H + O + Br     + Min ; {@\FormatAq<BrOH^-><02>}       {}
+BrCl2m_a02     = Br + 2Cl       + Min ; {@\FormatAq<BrCl_2^-><02>}     {}
+Br2Clm_a02     = 2Br + Cl       + Min ; {@\FormatAq<Br_2Cl^-><02>}     {}
+
+{------------------------------------- I -------------------------------------}
+
+Im_a02         = I              + Min ; {@\FormatAq<I^-><02>}          {iodide}
+IO2m_a02       = I + 2O         + Min ; {@\FormatAq<IO_2^-><02>}       {}
+IO3m_a02       = I + 3O         + Min ; {@\FormatAq<IO_3^-><02>}       {iodate}
+ICl2m_a02      = I + 2Cl        + Min ; {@\FormatAq<ICl_2^-><02>}      {}
+IBr2m_a02      = I + 2Br        + Min ; {@\FormatAq<IBr_2^-><02>}      {}
+
+{------------------------------------- S -------------------------------------}
+
+SO3m_a02       = S + 3O          + Min ; {@\FormatAq<SO_3^-><02>}       {}
+SO3mm_a02      = S + 3O         + 2Min ; {@\FormatAq<SO_3^<2->><02>}    {sulfite}
+SO4m_a02       = S + 4O          + Min ; {@\FormatAq<SO_4^-><02>}       {}
+SO4mm_a02      = S + 4O         + 2Min ; {@\FormatAq<SO_4^<2->><02>}    {sulfate}
+SO5m_a02       = S + 5O          + Min ; {@\FormatAq<SO_5^-><02>}       {}
+HSO3m_a02      = H + S + 3O      + Min ; {@\FormatAq<HSO_3^-><02>}      {hydrogen sulfite}
+HSO4m_a02      = H + S + 4O      + Min ; {@\FormatAq<HSO_4^-><02>}      {hydrogen sulfate}
+HSO5m_a02      = H + S + 5O      + Min ; {@\FormatAq<HSO_5^-><02>}      {}
+CH3SO3m_a02    = C + 3H + S + 3O + Min ; {@\FormatAq<CH_3SO_3^-><02>}   {MSA anion}
+CH2OHSO3m_a02  = C + 3H + S + 4O + Min ; {@\FormatAq<CH_2OHSO_3^-><02>} {}
+
+{------------------------------------Hg---------------------------------------}
+
+Hgp_a02        = Hg                +  Pls ; {@\FormatAq<Hg^+><02>}              {}
+Hgpp_a02       = Hg                + 2Pls ; {@\FormatAq<Hg^<2+>><02>}           {}
+HgOHp_a02      = Hg + O + H        +  Pls ; {@\FormatAq<HgOH^+><02>}            {}
+HgClp_a02      = Hg + Cl           +  Pls ; {@\FormatAq<HgCl^+><02>}            {}
+HgBrp_a02      = Hg + Br           +  Pls ; {@\FormatAq<HgBr^+><02>}            {}
+HgSO32mm_a02   = Hg + 2S + 6O      + 2Min ; {@\FormatAq<Hg(SO_3)_2^<2->><02>}   {}
+
+{------------------------------------Fe---------------------------------------}
+
+Fepp_a02        = Fe             + 2Pls ; {@\FormatAq<Fe^<2+>><02>}         {Fe(II)}
+FeOpp_a02       = Fe + O         + 2Pls ; {@\FormatAq<FeO^<2+>><02>}        {Fe(II)}
+FeOHp_a02       = Fe + O + H     + Pls  ; {@\FormatAq<FeOH^+><02>}          {Fe(II)}
+FeOH2p_a02      = Fe + 2O + 2H   + Pls  ; {@\FormatAq<Fe(OH)_2^+><02>}      {Fe(II)}
+FeClp_a02       = Fe + Cl        + Pls  ; {@\FormatAq<FeCl^+><02>}          {Fe(II)}
+Feppp_a02       = Fe             + 3Pls ; {@\FormatAq<Fe^<3+>><02>}         {Fe(III)}
+FeHOpp_a02      = Fe + O + H     + 2Pls ; {@\FormatAq<FeHO^<2+>><02>}       {Fe(III)}
+FeHO2pp_a02     = Fe + 2O + H    + 2Pls ; {@\FormatAq<FeHO_2^<2+>><02>}     {Fe(III)}
+FeOHpp_a02      = Fe + O + H     + 2Pls ; {@\FormatAq<FeOH^<2+>><02>}       {Fe(III)}
+FeOH4m_a02      = Fe + 4O + 4H   + Min  ; {@\FormatAq<Fe(OH)_4^-><02>}      {Fe(III)}
+FeOHHO2p_a02    = Fe + 3O + 2H   + Pls  ; {@\FormatAq<Fe(OH)(HO_2)^+><02>}  {Fe(III)}
+FeClpp_a02      = Fe + Cl        + 2Pls ; {@\FormatAq<FeCl^<2+>><02>}       {Fe(III)}
+FeCl2p_a02      = Fe + 2Cl       + Pls  ; {@\FormatAq<FeCl_2^+><02>}        {Fe(III)}
+FeBrpp_a02      = Fe + Br        + 2Pls ; {@\FormatAq<FeBr^<2+>><02>}       {Fe(III)}
+FeBr2p_a02      = Fe + 2Br       + Pls  ; {@\FormatAq<FeBr_2^+><02>}        {Fe(III)}
+FeFpp_a02       = Fe + F         + 2Pls ; {@\FormatAq<FeF^<2+>><02>}        {Fe(III)}
+FeF2p_a02       = Fe + 2F        + 2Pls ; {@\FormatAq<FeF_2^+><02>}         {Fe(III)}
+FeSO3p_a02      = Fe + 3O + S    + Pls  ; {@\FormatAq<FeSO_3^+><02>}        {Fe(III)}
+FeSO4p_a02      = Fe + 4O + S    + Pls  ; {@\FormatAq<FeSO_4^+><02>}        {Fe(III)}
+FeSO42m_a02     = Fe + 8O + 2S   + Min  ; {@\FormatAq<Fe(SO_4)_2^-><02>}    {Fe(III)}
+FeOH2Fepppp_a02 = 2 Fe + O + H   + 4Pls ; {@\FormatAq<Fe(OH)_2Fe^<4+>><02>} {Fe(III)}
+
+{-----------------------------------------------------------------------------}
+{------------------------------------ dummies --------------------------------}
+{-----------------------------------------------------------------------------}
+
+D1O_a02        = Ignore              ; {@\FormatAq<D_1O><02>}         {}
+Nap_a02        = Ignore              ; {@\FormatAq<Na^+><02>}         {dummy cation}
+{-----------------------------------------------------------------------------}
+{------------------------------ aerosol mode: 02 -----------------------------}
+{-----------------------------------------------------------------------------}
+
+{------------------------------- neutral species -----------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+{------------------------------------- H -------------------------------------}
+
+{------------------------------------- N -------------------------------------}
+N2O3_a02       =              3O  + 2N  ; {@\FormatAq<N_2O_3><02>}          {dinitrogen trioxide}
+N2O4_a02       =              4O  + 2N  ; {@\FormatAq<N_2O_4><02>}          {dinitrogen tetraoxide}
+ 
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CH2O2H2_a02    =   C +  4H +  2O        ; {@\FormatAq<CH_2(OH)_2><02>}      {}
+MMA_a02        =   C +  5H        +  N  ; {@\FormatAq<MMA><02>}             {methylamine}
+NH2CH2_a02     =   C +  4H        +  N  ; {@\FormatAq<CH_2NH_2><02>}        {methylamine radical}
+HNCO_a02       =   C +   H +   O  +  N  ; {@\FormatAq<HNCO><02>}            {ioscyanic acid} 
+H2NCHO_a02     =   C +  3H +   O  +  N  ; {@\FormatAq<H2NCHO><02>}          {formamide}
+MMNNO2_a02     =   C +  2H +  2O  + 2N  ; {@\FormatAq<MMNNO2><02>}          {methylnitramine}
+MSIA_a02       =   C +  4H +  S + 2O    ; {@\FormatAq<MSIA><02>}            {methyl sulfinic acid}
+
+{2C}
+OXALAC_a02     =  IGNORE                ; {@\FormatAq<OXALAC><02>}          {oxalic acid, 2C +  2H  +  4O}
+HCOCO2H_a02    =  2C +  2H  +  3O       ; {@\FormatAq<HCOCO_2H><02>}        {oxoethanoic acid}
+HOCH2CHO_a02   =  2C +  4H  +  2O       ; {@\FormatAq<HOCH_2CHO><02>}       {glycolaldehyde}
+HOCH2CO2H_a02  =  2C +  4H  +  3O       ; {@\FormatAq<HOCH_2CO_2H><02>}     {hydroxyethanoic acid}
+CH3CO3_a02     =  2C +  3H  +  3O       ; {@\FormatAq<CH_3COO_2><02>}       {peroxyacetyl radical}
+GLYOX_a02      =  2C +  2H  +  2O       ; {@\FormatAq<GLYOX><02>}           {CHOCHO = glyoxal} 
+DMA_a02        =  2C +  7H         +  N ; {@\FormatAq<DMA><02>}             {dimethylamine}
+MEA_a02        =  2C +  7H  +   O  +  N ; {@\FormatAq<MEA><02>}             {ethanolamine}
+MEANNO_a02     =  2C +  6H  +  2O  + 2N ; {@\FormatAq<MEANNO><02>}          {N-nitroso ethanolamine} 
+MEANNO2_a02    =  2C +  6H  +  3O  + 2N ; {@\FormatAq<MEANNO2><02>}         {N-nitro ethanolamine}
+NDMA_a02       =  2C +  6H  +   O  + 2N ; {@\FormatAq<NDMA><02>}            {N-nitroso dimethylamine}
+DMNNO2_a02     =  2C +  6H  +  2O  + 2N ; {@\FormatAq<DMNNO2><02>}          {dimethylnitramine}
+CH3NHCH2_a02   =  2C +  6H  +         N ; {@\FormatAq<CH_3NHCH_2><02>}      {methylamine methyl radical} 
+CH3NHNHCH3_a02 =  2C +  8H  +        2N ; {@\FormatAq<CH_3NHNHCH_3><02>}    {dimethylhydrazine} 
+NH2C2H4NH2_a02 =  2C +  8H  +        2N ; {@\FormatAq<NH_2CH_2CH_2NH_2><02>}  {ethylenediamine} 
+NH2CH2CHOH_a02 =  2C +  6H  +   O  +  N ; {@\FormatAq<NH_2CH_2CHOH><02>}    {ethanolamine radical} 
+H2NCOCH2OH_a02 =  2C +  5H  +  2O  +  N ; {@\FormatAq<H2NCOCH2OH><02>}      {2-hydroxy acetamide} 
+CH3NHCHO_a02   =  2C +  5H  +   O  +  N ; {@\FormatAq<CH_3NHCHO><02>}       {N-methyl formamide} 
+CH3NCO_a02     =  2C +  3H  +   O  +  N ; {@\FormatAq<CH_3NCO><02>}         {methyl isocyanic acid}
+HPMTF_a02      =  2C +  4H  +  3O  +  S ; {@\FormatAq<HPMTF><02>}           {hydroperoxyl methyl thioformate}
+HOOCH2SCO_a02  =  2C +  3H  +  3O  +  S ; {@\FormatAq<HOOCH2SCO><02>}       {}
+ 
+{3C}
+MGLYOX_a02     =  3C +  4H  +  2O       ; {@\FormatAq<MGLYOX><02>}          {methylglyoxal}
+MGLYOAC_a02    =  3C +  4H  +  3O       ; {@\FormatAq<MGLYOAC><02>}         {methylglyoxylic acid}
+DOC_a02        =  IGNORE                ; {@\FormatAq<DOC><02>}             {dissolved organic carbon DOC}
+DOCO_a02       =  IGNORE                ; {@\FormatAq<DOCO><02>}            {oxidized DOC}
+TMA_a02        =  3C +  9H         +  N ; {@\FormatAq<TMA><02>}             {trimethylamine}
+DMNCH2_a02     =  3C +  8H         +  N ; {@\FormatAq<(CH_3)_2NCH_2><02>}   {dimethylamine methyl radical} 
+DMNCHO_a02     =  3C +  7H  +   O  +  N ; {@\FormatAq<DMNCHO><02>}          {N,N-dimethyl formamide} 
+MALONAC_a02    =  IGNORE                ; {@\FormatAq<MALONAC><02>}         {malonic acid, 3C +  4H  +  4O}
+ 
+{4C}
+DEA_a02        =  4C + 11H  +  2O  +  N ; {@\FormatAq<DEA><02>}             {diethanolamine} 
+NDELA_a02      =  4C + 10H  +  3O  + 2N ; {@\FormatAq<NDELA><02>}           {N-nitroso diethanolamine}
+DEANNO2_a02    =  4C + 10H  +  4O  + 2N ; {@\FormatAq<DEANNO2><02>}         {N-nitro diethanolamine}
+DEAN_a02       =  4C + 10H  +  2O  +  N ; {@\FormatAq<HOETNHCH_2CHOH><02>}  {diethanolamine radical} 
+SUCCAC_a02     =  IGNORE                ; {@\FormatAq<SUCCAC><02>}          {succinic acid, 4C +  6H  +  4O}
+
+{5C}
+GLUTARAC_a02   =  IGNORE                ; {@\FormatAq<GLUTARAC><02>}        {glutaric acid, 5C +  8H  +  4O}
+
+{6C}
+TEA_a02        =  6C + 15H  +  3O  +  N ; {@\FormatAq<TEA><02>}             {triethanolamine} 
+DENCH2CHOH_a02 =  6C + 14H  +  3O  +  N ; {@\FormatAq<DENCH_2CHOH><02>}     {triethanolamine radical}  
+ADIPAC_a02     =  IGNORE                ; {@\FormatAq<ADIPAC><02>}          {adipic acid, 6C + 10H  +  4O}
+
+
+{----------------------------------- ions ------------------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+{------------------------------------- H -------------------------------------}
+
+{------------------------------------- N -------------------------------------}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+MMAp_a02       =   C +  6H         +  N  + Pls  ; {@\FormatAq<MMA^+><02>}           {methylaminium}
+MMNp_a02       =   C +  5H         +  N  + Pls  ; {@\FormatAq<CH_3NH_2^+><02>}      {methylamine N-radical cation} 
+NH2CH2p_a02    =   C +  4H         +  N  + Pls  ; {@\FormatAq<CH_2NH_2^+><02>}      {iminium}
+NH3CH2p_a02    =   C +  5H         +  N  + Pls  ; {@\FormatAq<CH_2NH_3^+><02>}      {methylaminium radical} 
+NCOm_a02       =   C        +   O  +  N  + Min  ; {@\FormatAq<NCO^-><02>}           {isocyanate}
+
+
+{2C}
+HC2O4m_a02     =  IGNORE                 + Min  ; {@\FormatAq<HC_2O_4^-><02>}       {hydrogen oxalate,2C +   H  +  4O}
+C2O4mm_a02     =  IGNORE                 + 2Min ; {@\FormatAq<C_2O_4^<2->><02>}     {oxalate, 2C        +  4O}
+HCOCOOm_a02    =  2C +   H  +  3O        + Min  ; {@\FormatAq<HCOCOO^-><02>}        {}
+MEAp_a02       =  2C +  8H  +   O  +  N  + Pls  ; {@\FormatAq<MEA^+><02>}           {ethanolaminium} 
+DMAp_a02       =  2C +  8H         +  N  + Pls  ; {@\FormatAq<DMA^+><02>}           {dimethylaminium}
+DMNp_a02       =  2C +  7H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2NH^+><02>}    {dimethylamine N-radical cation} 
+CH3NHCH2p_a02  =  2C +  6H         +  N  + Pls  ; {@\FormatAq<CH_3NH^+CH_2><02>}    {methyl iminium}
+CH3NH2CH2p_a02 =  2C +  7H         +  N  + Pls  ; {@\FormatAq<CH_3NH_2^+CH_2><02>}    {dimethylaminium radical} 
+MENp_a02       =  2C +  7H  +   O  +  N  + Pls  ; {@\FormatAq<HOCH_2CH_2NH_2^+><02>}  {ethanolamine N-radical cation} 
+NH3CH2CHOHp_a02 = 2C +  7H  +   O  +  N  + Pls  ; {@\FormatAq<HOCHCH_2NH_3^+><02>}  {ethanolaminium radical} 
+ 
+{3C}
+CH3COCOOm_a02  =  3C +  3H   + 3O        + Min  ; {@\FormatAq<CH_3COCOO^-><02>}     {methylglyoxalate}
+TMAp_a02       =  3C + 10H         +  N  + Pls  ; {@\FormatAq<TMA^+><02>}           {trimethylaminium}
+TMNp_a02       =  3C +  9H         +  N  + Pls  ; {@\FormatAq<(CH_3)_3N^+><02>}     {trimethylamine N-radical cation} 
+DMNCH2p_a02    =  3C +  8H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2N^+CH_2><02>}  {dimethyl iminium}
+DMNHCH2p_a02   =  3C +  9H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2NH^+CH_2><02>} {trimethylaminium radical} 
+ 
+{4C}
+DEAp_a02       =  4C + 12H  +  2O  +  N  + Pls  ; {@\FormatAq<DEA^+><02>}                {diethanolaminium}
+DENp_a02       =  4C + 13H  +  2O  +  N  + Pls  ; {@\FormatAq<(HOET)_2NH^+><02>}         {diethanolamine N-radical cation} 
+DENHp_a02      =  4C + 12H  +  2O  +  N  + Pls  ; {@\FormatAq<HOETNH_2CH_2CHOH^+><02>}   {diethanolaminium radical} 
+C2H5C2O4m_a02  =  IGNORE                 + Min  ; {@\FormatAq<CH_2CH_2HC_2O_4^-><02>}    {hydrogen succinate, 4C +  5H  +  4O}
+C2H4C2O4mm_a02 =  IGNORE                 + 2Min ; {@\FormatAq<CH_2CH_2C_2O_4^<2->><02>}  {succinate, 4C +  4H  +  4O}
+
+{6C} 
+TEAp_a02       =  6C + 16H  +  3O  +  N  + Pls ; {@\FormatAq<TEA^+><02>}                 {triethanolaminium}
+TENp_a02       =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_3N^+><02>}           {triethanolamine N-radical cation} 
+DENIMp_a02     =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_2N^+CH_2CH_2OH><02>} {diethanol iminium}
+TENHp_a02      =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_2NH^+CH_2CHOH><02>}  {triethanolaminium radical} 
+ 
+
+{------------------------------------M----------------------------------------}
+{**** END:   aerosol species (phase 2) from aqueous.spc ****}
+{**** START: aerosol species (phase 3) from aqueous.spc ****}
+{-----------------------------------------------------------------------------}
+{------------------------------ aerosol mode: 03 -----------------------------}
+{-----------------------------------------------------------------------------}
+
+{------------------------------- neutral species -----------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+O2_a03         = 2O                   ; {@\FormatAq<O_2><03>}          {oxygen}
+O3_a03         = 3O                   ; {@\FormatAq<O_3><03>}          {ozone}
+
+{------------------------------------- H -------------------------------------}
+
+OH_a03         =  H +  O              ; {@\FormatAq<OH><03>}           {hydroxyl radical}
+HO2_a03        =  H + 2O              ; {@\FormatAq<HO_2><03>}         {perhydroxyl radical}
+H2O_a03        = 2H +  O              ; {@\FormatAq<H_2O><03>}         {water}
+H2O2_a03       = 2H + 2O              ; {@\FormatAq<H_2O_2><03>}       {hydrogen peroxide}
+
+{------------------------------------- N -------------------------------------}
+
+NH3_a03        = 3H      +  N         ; {@\FormatAq<NH_3><03>}         {ammonia}
+NO_a03         =       O +  N         ; {@\FormatAq<NO><03>}           {nitric oxide}
+NO2_a03        =      2O +  N         ; {@\FormatAq<NO_2><03>}         {nitrogen dioxide}
+NO3_a03        =      3O +  N         ; {@\FormatAq<NO_3><03>}         {nitrogen trioxide}
+HONO_a03       =  H + 2O +  N         ; {@\FormatAq<HONO><03>}         {nitrous acid}
+HNO3_a03       =  H + 3O +  N         ; {@\FormatAq<HNO_3><03>}        {nitric acid}
+HNO4_a03       =  H + 4O +  N         ; {@\FormatAq<HNO_4><03>}        {pernitric acid}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CH3OH_a03      =   C +  4H +   O      ; {@\FormatAq<CH_3OH><03>}       {methanol}
+HCOOH_a03      =   C +  2H +  2O      ; {@\FormatAq<HCOOH><03>}        {formic acid}
+HCHO_a03       =   C +  2H +   O      ; {@\FormatAq<HCHO><03>}         {methanal (formaldehyde)}
+CH3O2_a03      =   C +  3H +  2O      ; {@\FormatAq<CH_3OO><03>}       {methylperoxy radical}
+CH3OOH_a03     =   C +  4H +  2O      ; {@\FormatAq<CH_3OOH><03>}      {}
+CO2_a03        =   C       +  2O      ; {@\FormatAq<CO_2><03>}         {carbon dioxide}
+
+{2C}
+CH3CO2H_a03    =  2C +  4H +  2O      ; {@\FormatAq<CH_3COOH><03>}     {acetic acid}
+PAN_a03        =  2C +  3H +  5O +  N ; {@\FormatAq<PAN><03>}          {peroxyacetylnitrate}
+CH3CHO_a03     =  2C +  4H +   O      ; {@\FormatAq<CH_3CHO><03>}      {acetaldehyde}
+
+{3C}
+CH3COCH3_a03   =  3C +  6H +   O      ; {@\FormatAq<CH_3COCH_3><03>}   {acetone}
+
+{------------------------------------- Cl ------------------------------------}
+
+Cl_a03         = Cl                   ; {@\FormatAq<Cl><03>}           {chlorine atom}
+Cl2_a03        = 2Cl                  ; {@\FormatAq<Cl_2><03>}         {molecular chlorine}
+HCl_a03        = H + Cl               ; {@\FormatAq<HCl><03>}          {hydrogen chloride}
+HOCl_a03       = H + O + Cl           ; {@\FormatAq<HOCl><03>}         {hypochlorous acid}
+
+{------------------------------------- Br ------------------------------------}
+
+Br_a03         = Br                   ; {@\FormatAq<Br><03>}           {bromine atom}
+Br2_a03        = 2Br                  ; {@\FormatAq<Br_2><03>}         {molecular bromine}
+HBr_a03        = H + Br               ; {@\FormatAq<HBr><03>}          {hydrogen bromide}
+HOBr_a03       = H + O + Br           ; {@\FormatAq<HOBr><03>}         {hypobromous acid}
+BrCl_a03       = Br + Cl              ; {@\FormatAq<BrCl><03>}         {bromine chloride}
+
+{------------------------------------- I -------------------------------------}
+
+I2_a03         = 2I                   ; {@\FormatAq<I_2><03>}          {molecular iodine}
+IO_a03         = I + O                ; {@\FormatAq<IO><03>}           {iodine monoxide radical}
+HOI_a03        = H + O + I            ; {@\FormatAq<HOI><03>}          {hypoiodous acid}
+ICl_a03        = I + Cl               ; {@\FormatAq<ICl><03>}          {iodine chloride}
+IBr_a03        = I + Br               ; {@\FormatAq<IBr><03>}          {iodine bromide}
+
+{------------------------------------- S -------------------------------------}
+
+SO2_a03        = S + 2O               ; {@\FormatAq<SO_2><03>}         {sulfur dioxide}
+H2SO4_a03      = 2H + S + 4O          ; {@\FormatAq<H_2SO_4><03>}      {sulfuric acid}
+DMS_a03        = 2C + 6H + S          ; {@\FormatAq<DMS><03>}          {dimethyl sulfide: CH3SCH3}
+DMSO_a03       = 2C + 6H + S + O      ; {@\FormatAq<DMSO><03>}         {dimethyl sulfoxide: CH3SOCH3}
+
+{------------------------------------- Hg ------------------------------------}
+
+Hg_a03         = Hg                   ; {@\FormatAq<Hg><03>}           {mercury}
+HgO_a03        = Hg + O               ; {@\FormatAq<HgO><03>}          {} 
+HgOHOH_a03     = Hg + 2O + 2H         ; {@\FormatAq<Hg(OH)_2><03>}     {}
+HgOHCl_a03     = Hg + O + H + Cl      ; {@\FormatAq<Hg(OH)Cl><03>}     {}
+HgCl2_a03      = Hg + 2Cl             ; {@\FormatAq<HgCl_2><03>}       {}
+HgBr2_a03      = Hg + 2Br             ; {@\FormatAq<HgBr_2><03>}       {}
+HgSO3_a03      = Hg + S + 3O          ; {@\FormatAq<HgSO_3><03>}       {}
+ClHgBr_a03     = Hg + Cl + Br         ; {@\FormatAq<ClHgBr><03>}       {}
+BrHgOBr_a03    = Hg + O + 2Br         ; {@\FormatAq<BrHgOBr><03>}      {}
+ClHgOBr_a03    = Hg + O + Cl + Br     ; {@\FormatAq<ClHgOBr><03>}      {}
+
+{------------------------------------Fe---------------------------------------}
+
+FeOH3_a03      = Fe + 3O + 3H         ; {@\FormatAq<FeOH3><03>}        {}
+FeCl3_a03      = Fe + 3Cl             ; {@\FormatAq<FeCl3><03>}        {}
+FeF3_a03       = Fe + 3F              ; {@\FormatAq<FeF3><03>}         {}
+
+{----------------------------------- ions ------------------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+O2m_a03        = 2O            + Min  ; {@\FormatAq<O_2^-><03>}        {}
+OHm_a03        = H +  O        + Min  ; {@\FormatAq<OH^-><03>}         {}
+HO2m_a03       = H + 2O        + Min  ; {@\FormatAq<HO2^-><03>}        {}
+O2mm_a03       = 2O            + 2Min ; {@\FormatAq<O2^<2->><03>}      {}
+
+{------------------------------------- H -------------------------------------}
+
+Hp_a03         =  H             + Pls ; {@\FormatAq<H^+><03>}          {}
+
+{------------------------------------- N -------------------------------------}
+
+NH4p_a03       = N + 4H         + Pls ; {@\FormatAq<NH_4^+><03>}       {ammonium}
+NO2m_a03       =      2O +  N   + Min ; {@\FormatAq<NO_2^-><03>}       {nitrite}
+NO3m_a03       =      3O +  N   + Min ; {@\FormatAq<NO_3^-><03>}       {nitrate}
+NO4m_a03       =      4O +  N   + Min ; {@\FormatAq<NO_4^-><03>}       {peroxy nitrate}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CO3m_a03       = C + 3O         + Min ; {@\FormatAq<CO_3^-><03>}       {}
+HCOOm_a03      = H + C + 2O     + Min ; {@\FormatAq<HCOO^-><03>}       {formate}
+HCO3m_a03      = H + C + 3O     + Min ; {@\FormatAq<HCO_3^-><03>}      {hydrogen carbonate}
+
+{2C}
+CH3COOm_a03    = 2C + 3H + 2O   + Min ; {@\FormatAq<CH_3COO^-><03>}    {acetate}
+
+{------------------------------------- Cl ------------------------------------}
+
+Clm_a03        = Cl             + Min ; {@\FormatAq<Cl^-><03>}         {chloride}
+Cl2m_a03       = 2Cl            + Min ; {@\FormatAq<Cl_2^-><03>}       {}
+ClOm_a03       = Cl + O         + Min ; {@\FormatAq<ClO^-><03>}        {}
+ClOHm_a03      = H + O + Cl     + Min ; {@\FormatAq<ClOH^-><03>}       {}
+
+{------------------------------------- Br ------------------------------------}
+
+Brm_a03        = Br             + Min ; {@\FormatAq<Br^-><03>}         {bromide}
+Br2m_a03       = 2Br            + Min ; {@\FormatAq<Br_2^-><03>}       {}
+BrOm_a03       = Br + O         + Min ; {@\FormatAq<BrO^-><03>}        {}
+BrOHm_a03      = H + O + Br     + Min ; {@\FormatAq<BrOH^-><03>}       {}
+BrCl2m_a03     = Br + 2Cl       + Min ; {@\FormatAq<BrCl_2^-><03>}     {}
+Br2Clm_a03     = 2Br + Cl       + Min ; {@\FormatAq<Br_2Cl^-><03>}     {}
+
+{------------------------------------- I -------------------------------------}
+
+Im_a03         = I              + Min ; {@\FormatAq<I^-><03>}          {iodide}
+IO2m_a03       = I + 2O         + Min ; {@\FormatAq<IO_2^-><03>}       {}
+IO3m_a03       = I + 3O         + Min ; {@\FormatAq<IO_3^-><03>}       {iodate}
+ICl2m_a03      = I + 2Cl        + Min ; {@\FormatAq<ICl_2^-><03>}      {}
+IBr2m_a03      = I + 2Br        + Min ; {@\FormatAq<IBr_2^-><03>}      {}
+
+{------------------------------------- S -------------------------------------}
+
+SO3m_a03       = S + 3O          + Min ; {@\FormatAq<SO_3^-><03>}       {}
+SO3mm_a03      = S + 3O         + 2Min ; {@\FormatAq<SO_3^<2->><03>}    {sulfite}
+SO4m_a03       = S + 4O          + Min ; {@\FormatAq<SO_4^-><03>}       {}
+SO4mm_a03      = S + 4O         + 2Min ; {@\FormatAq<SO_4^<2->><03>}    {sulfate}
+SO5m_a03       = S + 5O          + Min ; {@\FormatAq<SO_5^-><03>}       {}
+HSO3m_a03      = H + S + 3O      + Min ; {@\FormatAq<HSO_3^-><03>}      {hydrogen sulfite}
+HSO4m_a03      = H + S + 4O      + Min ; {@\FormatAq<HSO_4^-><03>}      {hydrogen sulfate}
+HSO5m_a03      = H + S + 5O      + Min ; {@\FormatAq<HSO_5^-><03>}      {}
+CH3SO3m_a03    = C + 3H + S + 3O + Min ; {@\FormatAq<CH_3SO_3^-><03>}   {MSA anion}
+CH2OHSO3m_a03  = C + 3H + S + 4O + Min ; {@\FormatAq<CH_2OHSO_3^-><03>} {}
+
+{------------------------------------Hg---------------------------------------}
+
+Hgp_a03        = Hg                +  Pls ; {@\FormatAq<Hg^+><03>}              {}
+Hgpp_a03       = Hg                + 2Pls ; {@\FormatAq<Hg^<2+>><03>}           {}
+HgOHp_a03      = Hg + O + H        +  Pls ; {@\FormatAq<HgOH^+><03>}            {}
+HgClp_a03      = Hg + Cl           +  Pls ; {@\FormatAq<HgCl^+><03>}            {}
+HgBrp_a03      = Hg + Br           +  Pls ; {@\FormatAq<HgBr^+><03>}            {}
+HgSO32mm_a03   = Hg + 2S + 6O      + 2Min ; {@\FormatAq<Hg(SO_3)_2^<2->><03>}   {}
+
+{------------------------------------Fe---------------------------------------}
+
+Fepp_a03        = Fe             + 2Pls ; {@\FormatAq<Fe^<2+>><03>}         {Fe(II)}
+FeOpp_a03       = Fe + O         + 2Pls ; {@\FormatAq<FeO^<2+>><03>}        {Fe(II)}
+FeOHp_a03       = Fe + O + H     + Pls  ; {@\FormatAq<FeOH^+><03>}          {Fe(II)}
+FeOH2p_a03      = Fe + 2O + 2H   + Pls  ; {@\FormatAq<Fe(OH)_2^+><03>}      {Fe(II)}
+FeClp_a03       = Fe + Cl        + Pls  ; {@\FormatAq<FeCl^+><03>}          {Fe(II)}
+Feppp_a03       = Fe             + 3Pls ; {@\FormatAq<Fe^<3+>><03>}         {Fe(III)}
+FeHOpp_a03      = Fe + O + H     + 2Pls ; {@\FormatAq<FeHO^<2+>><03>}       {Fe(III)}
+FeHO2pp_a03     = Fe + 2O + H    + 2Pls ; {@\FormatAq<FeHO_2^<2+>><03>}     {Fe(III)}
+FeOHpp_a03      = Fe + O + H     + 2Pls ; {@\FormatAq<FeOH^<2+>><03>}       {Fe(III)}
+FeOH4m_a03      = Fe + 4O + 4H   + Min  ; {@\FormatAq<Fe(OH)_4^-><03>}      {Fe(III)}
+FeOHHO2p_a03    = Fe + 3O + 2H   + Pls  ; {@\FormatAq<Fe(OH)(HO_2)^+><03>}  {Fe(III)}
+FeClpp_a03      = Fe + Cl        + 2Pls ; {@\FormatAq<FeCl^<2+>><03>}       {Fe(III)}
+FeCl2p_a03      = Fe + 2Cl       + Pls  ; {@\FormatAq<FeCl_2^+><03>}        {Fe(III)}
+FeBrpp_a03      = Fe + Br        + 2Pls ; {@\FormatAq<FeBr^<2+>><03>}       {Fe(III)}
+FeBr2p_a03      = Fe + 2Br       + Pls  ; {@\FormatAq<FeBr_2^+><03>}        {Fe(III)}
+FeFpp_a03       = Fe + F         + 2Pls ; {@\FormatAq<FeF^<2+>><03>}        {Fe(III)}
+FeF2p_a03       = Fe + 2F        + 2Pls ; {@\FormatAq<FeF_2^+><03>}         {Fe(III)}
+FeSO3p_a03      = Fe + 3O + S    + Pls  ; {@\FormatAq<FeSO_3^+><03>}        {Fe(III)}
+FeSO4p_a03      = Fe + 4O + S    + Pls  ; {@\FormatAq<FeSO_4^+><03>}        {Fe(III)}
+FeSO42m_a03     = Fe + 8O + 2S   + Min  ; {@\FormatAq<Fe(SO_4)_2^-><03>}    {Fe(III)}
+FeOH2Fepppp_a03 = 2 Fe + O + H   + 4Pls ; {@\FormatAq<Fe(OH)_2Fe^<4+>><03>} {Fe(III)}
+
+{-----------------------------------------------------------------------------}
+{------------------------------------ dummies --------------------------------}
+{-----------------------------------------------------------------------------}
+
+D1O_a03        = Ignore              ; {@\FormatAq<D_1O><03>}         {}
+Nap_a03        = Ignore              ; {@\FormatAq<Na^+><03>}         {dummy cation}
+{-----------------------------------------------------------------------------}
+{------------------------------ aerosol mode: 03 -----------------------------}
+{-----------------------------------------------------------------------------}
+
+{------------------------------- neutral species -----------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+{------------------------------------- H -------------------------------------}
+
+{------------------------------------- N -------------------------------------}
+N2O3_a03       =              3O  + 2N  ; {@\FormatAq<N_2O_3><03>}          {dinitrogen trioxide}
+N2O4_a03       =              4O  + 2N  ; {@\FormatAq<N_2O_4><03>}          {dinitrogen tetraoxide}
+ 
+{------------------------------------- C -------------------------------------}
+
+{1C}
+CH2O2H2_a03    =   C +  4H +  2O        ; {@\FormatAq<CH_2(OH)_2><03>}      {}
+MMA_a03        =   C +  5H        +  N  ; {@\FormatAq<MMA><03>}             {methylamine}
+NH2CH2_a03     =   C +  4H        +  N  ; {@\FormatAq<CH_2NH_2><03>}        {methylamine radical}
+HNCO_a03       =   C +   H +   O  +  N  ; {@\FormatAq<HNCO><03>}            {ioscyanic acid} 
+H2NCHO_a03     =   C +  3H +   O  +  N  ; {@\FormatAq<H2NCHO><03>}          {formamide}
+MMNNO2_a03     =   C +  2H +  2O  + 2N  ; {@\FormatAq<MMNNO2><03>}          {methylnitramine}
+MSIA_a03       =   C +  4H +  S + 2O    ; {@\FormatAq<MSIA><03>}            {methyl sulfinic acid}
+
+{2C}
+OXALAC_a03     =  IGNORE                ; {@\FormatAq<OXALAC><03>}          {oxalic acid, 2C +  2H  +  4O}
+HCOCO2H_a03    =  2C +  2H  +  3O       ; {@\FormatAq<HCOCO_2H><03>}        {oxoethanoic acid}
+HOCH2CHO_a03   =  2C +  4H  +  2O       ; {@\FormatAq<HOCH_2CHO><03>}       {glycolaldehyde}
+HOCH2CO2H_a03  =  2C +  4H  +  3O       ; {@\FormatAq<HOCH_2CO_2H><03>}     {hydroxyethanoic acid}
+CH3CO3_a03     =  2C +  3H  +  3O       ; {@\FormatAq<CH_3COO_2><03>}       {peroxyacetyl radical}
+GLYOX_a03      =  2C +  2H  +  2O       ; {@\FormatAq<GLYOX><03>}           {CHOCHO = glyoxal} 
+DMA_a03        =  2C +  7H         +  N ; {@\FormatAq<DMA><03>}             {dimethylamine}
+MEA_a03        =  2C +  7H  +   O  +  N ; {@\FormatAq<MEA><03>}             {ethanolamine}
+MEANNO_a03     =  2C +  6H  +  2O  + 2N ; {@\FormatAq<MEANNO><03>}          {N-nitroso ethanolamine} 
+MEANNO2_a03    =  2C +  6H  +  3O  + 2N ; {@\FormatAq<MEANNO2><03>}         {N-nitro ethanolamine}
+NDMA_a03       =  2C +  6H  +   O  + 2N ; {@\FormatAq<NDMA><03>}            {N-nitroso dimethylamine}
+DMNNO2_a03     =  2C +  6H  +  2O  + 2N ; {@\FormatAq<DMNNO2><03>}          {dimethylnitramine}
+CH3NHCH2_a03   =  2C +  6H  +         N ; {@\FormatAq<CH_3NHCH_2><03>}      {methylamine methyl radical} 
+CH3NHNHCH3_a03 =  2C +  8H  +        2N ; {@\FormatAq<CH_3NHNHCH_3><03>}    {dimethylhydrazine} 
+NH2C2H4NH2_a03 =  2C +  8H  +        2N ; {@\FormatAq<NH_2CH_2CH_2NH_2><03>}  {ethylenediamine} 
+NH2CH2CHOH_a03 =  2C +  6H  +   O  +  N ; {@\FormatAq<NH_2CH_2CHOH><03>}    {ethanolamine radical} 
+H2NCOCH2OH_a03 =  2C +  5H  +  2O  +  N ; {@\FormatAq<H2NCOCH2OH><03>}      {2-hydroxy acetamide} 
+CH3NHCHO_a03   =  2C +  5H  +   O  +  N ; {@\FormatAq<CH_3NHCHO><03>}       {N-methyl formamide} 
+CH3NCO_a03     =  2C +  3H  +   O  +  N ; {@\FormatAq<CH_3NCO><03>}         {methyl isocyanic acid}
+HPMTF_a03      =  2C +  4H  +  3O  +  S ; {@\FormatAq<HPMTF><03>}           {hydroperoxyl methyl thioformate}
+HOOCH2SCO_a03  =  2C +  3H  +  3O  +  S ; {@\FormatAq<HOOCH2SCO><03>}       {}
+ 
+{3C}
+MGLYOX_a03     =  3C +  4H  +  2O       ; {@\FormatAq<MGLYOX><03>}          {methylglyoxal}
+MGLYOAC_a03    =  3C +  4H  +  3O       ; {@\FormatAq<MGLYOAC><03>}         {methylglyoxylic acid}
+DOC_a03        =  IGNORE                ; {@\FormatAq<DOC><03>}             {dissolved organic carbon DOC}
+DOCO_a03       =  IGNORE                ; {@\FormatAq<DOCO><03>}            {oxidized DOC}
+TMA_a03        =  3C +  9H         +  N ; {@\FormatAq<TMA><03>}             {trimethylamine}
+DMNCH2_a03     =  3C +  8H         +  N ; {@\FormatAq<(CH_3)_2NCH_2><03>}   {dimethylamine methyl radical} 
+DMNCHO_a03     =  3C +  7H  +   O  +  N ; {@\FormatAq<DMNCHO><03>}          {N,N-dimethyl formamide} 
+MALONAC_a03    =  IGNORE                ; {@\FormatAq<MALONAC><03>}         {malonic acid, 3C +  4H  +  4O}
+ 
+{4C}
+DEA_a03        =  4C + 11H  +  2O  +  N ; {@\FormatAq<DEA><03>}             {diethanolamine} 
+NDELA_a03      =  4C + 10H  +  3O  + 2N ; {@\FormatAq<NDELA><03>}           {N-nitroso diethanolamine}
+DEANNO2_a03    =  4C + 10H  +  4O  + 2N ; {@\FormatAq<DEANNO2><03>}         {N-nitro diethanolamine}
+DEAN_a03       =  4C + 10H  +  2O  +  N ; {@\FormatAq<HOETNHCH_2CHOH><03>}  {diethanolamine radical} 
+SUCCAC_a03     =  IGNORE                ; {@\FormatAq<SUCCAC><03>}          {succinic acid, 4C +  6H  +  4O}
+
+{5C}
+GLUTARAC_a03   =  IGNORE                ; {@\FormatAq<GLUTARAC><03>}        {glutaric acid, 5C +  8H  +  4O}
+
+{6C}
+TEA_a03        =  6C + 15H  +  3O  +  N ; {@\FormatAq<TEA><03>}             {triethanolamine} 
+DENCH2CHOH_a03 =  6C + 14H  +  3O  +  N ; {@\FormatAq<DENCH_2CHOH><03>}     {triethanolamine radical}  
+ADIPAC_a03     =  IGNORE                ; {@\FormatAq<ADIPAC><03>}          {adipic acid, 6C + 10H  +  4O}
+
+
+{----------------------------------- ions ------------------------------------}
+
+{------------------------------------- O -------------------------------------}
+
+{------------------------------------- H -------------------------------------}
+
+{------------------------------------- N -------------------------------------}
+
+{------------------------------------- C -------------------------------------}
+
+{1C}
+MMAp_a03       =   C +  6H         +  N  + Pls  ; {@\FormatAq<MMA^+><03>}           {methylaminium}
+MMNp_a03       =   C +  5H         +  N  + Pls  ; {@\FormatAq<CH_3NH_2^+><03>}      {methylamine N-radical cation} 
+NH2CH2p_a03    =   C +  4H         +  N  + Pls  ; {@\FormatAq<CH_2NH_2^+><03>}      {iminium}
+NH3CH2p_a03    =   C +  5H         +  N  + Pls  ; {@\FormatAq<CH_2NH_3^+><03>}      {methylaminium radical} 
+NCOm_a03       =   C        +   O  +  N  + Min  ; {@\FormatAq<NCO^-><03>}           {isocyanate}
+
+
+{2C}
+HC2O4m_a03     =  IGNORE                 + Min  ; {@\FormatAq<HC_2O_4^-><03>}       {hydrogen oxalate,2C +   H  +  4O}
+C2O4mm_a03     =  IGNORE                 + 2Min ; {@\FormatAq<C_2O_4^<2->><03>}     {oxalate, 2C        +  4O}
+HCOCOOm_a03    =  2C +   H  +  3O        + Min  ; {@\FormatAq<HCOCOO^-><03>}        {}
+MEAp_a03       =  2C +  8H  +   O  +  N  + Pls  ; {@\FormatAq<MEA^+><03>}           {ethanolaminium} 
+DMAp_a03       =  2C +  8H         +  N  + Pls  ; {@\FormatAq<DMA^+><03>}           {dimethylaminium}
+DMNp_a03       =  2C +  7H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2NH^+><03>}    {dimethylamine N-radical cation} 
+CH3NHCH2p_a03  =  2C +  6H         +  N  + Pls  ; {@\FormatAq<CH_3NH^+CH_2><03>}    {methyl iminium}
+CH3NH2CH2p_a03 =  2C +  7H         +  N  + Pls  ; {@\FormatAq<CH_3NH_2^+CH_2><03>}    {dimethylaminium radical} 
+MENp_a03       =  2C +  7H  +   O  +  N  + Pls  ; {@\FormatAq<HOCH_2CH_2NH_2^+><03>}  {ethanolamine N-radical cation} 
+NH3CH2CHOHp_a03 = 2C +  7H  +   O  +  N  + Pls  ; {@\FormatAq<HOCHCH_2NH_3^+><03>}  {ethanolaminium radical} 
+ 
+{3C}
+CH3COCOOm_a03  =  3C +  3H   + 3O        + Min  ; {@\FormatAq<CH_3COCOO^-><03>}     {methylglyoxalate}
+TMAp_a03       =  3C + 10H         +  N  + Pls  ; {@\FormatAq<TMA^+><03>}           {trimethylaminium}
+TMNp_a03       =  3C +  9H         +  N  + Pls  ; {@\FormatAq<(CH_3)_3N^+><03>}     {trimethylamine N-radical cation} 
+DMNCH2p_a03    =  3C +  8H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2N^+CH_2><03>}  {dimethyl iminium}
+DMNHCH2p_a03   =  3C +  9H         +  N  + Pls  ; {@\FormatAq<(CH_3)_2NH^+CH_2><03>} {trimethylaminium radical} 
+ 
+{4C}
+DEAp_a03       =  4C + 12H  +  2O  +  N  + Pls  ; {@\FormatAq<DEA^+><03>}                {diethanolaminium}
+DENp_a03       =  4C + 13H  +  2O  +  N  + Pls  ; {@\FormatAq<(HOET)_2NH^+><03>}         {diethanolamine N-radical cation} 
+DENHp_a03      =  4C + 12H  +  2O  +  N  + Pls  ; {@\FormatAq<HOETNH_2CH_2CHOH^+><03>}   {diethanolaminium radical} 
+C2H5C2O4m_a03  =  IGNORE                 + Min  ; {@\FormatAq<CH_2CH_2HC_2O_4^-><03>}    {hydrogen succinate, 4C +  5H  +  4O}
+C2H4C2O4mm_a03 =  IGNORE                 + 2Min ; {@\FormatAq<CH_2CH_2C_2O_4^<2->><03>}  {succinate, 4C +  4H  +  4O}
+
+{6C} 
+TEAp_a03       =  6C + 16H  +  3O  +  N  + Pls ; {@\FormatAq<TEA^+><03>}                 {triethanolaminium}
+TENp_a03       =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_3N^+><03>}           {triethanolamine N-radical cation} 
+DENIMp_a03     =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_2N^+CH_2CH_2OH><03>} {diethanol iminium}
+TENHp_a03      =  6C + 15H  +  3O  +  N  + Pls ; {@\FormatAq<(HOET)_2NH^+CH_2CHOH><03>}  {triethanolaminium radical} 
+ 
+
+{------------------------------------M----------------------------------------}
+{**** END:   aerosol species (phase 3) from aqueous.spc ****}
 {SETFIX H2O_a* is done via xmecca}
 #SETFIX H2O_a01;
+#SETFIX H2O_a02;
+#SETFIX H2O_a03;

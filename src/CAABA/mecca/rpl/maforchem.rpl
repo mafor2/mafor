@@ -307,7 +307,7 @@
 
 // APINENE + O3
 #REPLACE <G40232>
-<>  APINENE + O3          = .09 APINBOO + .08 PINONIC + .77 OH + .33 NORPINAL + .33 CO + .33 HO2 + .06 APINAOO + .44 C109O2 + 0.07 BELV + 0.23 BLOV : {%TrGTer} 8.05E-16{§§0.15}*EXP(-640./TEMP); {&1745, 2638} // Products from \citet{3028}. BELV from \citet{2638}
+<>  APINENE + O3          = .09 APINBOO + .08 PINONIC + .77 OH + .33 NORPINAL + .33 CO + .33 HO2 + .06 APINAOO + .44 C109O2 + 0.07 BELV + 0.13 BLOV : {%TrGTer} 8.05E-16{§§0.15}*EXP(-640./TEMP); {&1745, 2638} // Products from \citet{3028}. BELV from \citet{2638}. BLOV guess
 #ENDREPLACE
 
 #REPLACE <G40235>
@@ -365,7 +365,7 @@
 
 // BPINENE + O3
 #REPLACE <G40267a>
-<> BPINENE + O3          = NOPINONE + .63 CO + .37 CH2OO + .16 OH + .16 HO2  + 0.07 BELV + 0.23 BLOV  : {%TrGTer} 1.35E-15{§§0.25}*EXP(-1270./TEMP)*.051/(1-.027); {&1745} // Products from \citet{3018}.
+<> BPINENE + O3          = NOPINONE + .63 CO + .37 CH2OO + .16 OH + .16 HO2  + 0.07 BELV + 0.13 BLOV  : {%TrGTer} 1.35E-15{§§0.25}*EXP(-1270./TEMP)*.051/(1-.027); {&1745} // Products from \citet{3018}. BELV from \citet{2638}. BLOV guess
 #ENDREPLACE
 
 
@@ -377,93 +377,109 @@
 
 // biogenics-related (G40600...G40699):
 #REPLACE <>
-<G40600>  BSOV + OH      = BLOV         : {%TrGTer} 4.0E-11; {&2637}
+<G40600>  BSOV + OH       = BLOV         : {%TrGTer} 4.0E-11; {&2637}
 #ENDREPLACE
 #REPLACE <>
-<G40601>  BLOV + OH      = BELV         : {%TrGTer} 4.0E-11; {&2637}
+<G40601>  BLOV + OH       = BELV         : {%TrGTer} 4.0E-11; {&2637}
 #ENDREPLACE
 #REPLACE <>
-<G40602>  BSOV           = BELV         : {%TrGTer} 9.6E-06; {&2639}
+<G40602>  BSOV            = BELV         : {%TrGTer} 9.6E-06; {&2639}
 #ENDREPLACE
 #REPLACE <>
-<G40603>  BLOV           = BELV         : {%TrGTer} 9.6E-06; {&2639}
+<G40603>  BLOV            = BELV         : {%TrGTer} 9.6E-06; {&2639}
 #ENDREPLACE
 
 // aromatics-related (G40700...G40799):
 #REPLACE <>
-<G40700>  ASOV + OH      = ALOV         : {%TrGTer} 4.0E-11; {&2637}
+<G40700>  ASOV + OH       = ALOV         : {%TrGTer} 4.0E-11; {&2637}
 #ENDREPLACE
 #REPLACE <>
-<G40701>  ALOV + OH      = AELV         : {%TrGTer} 4.0E-11; {&2637}
+<G40701>  ALOV + OH       = AELV         : {%TrGTer} 4.0E-11; {&2637}
 #ENDREPLACE
 #REPLACE <>
-<G40702>  ASOV           = AELV         : {%TrGTer} 9.6E-06; {&2639}
+<G40702>  ASOV            = AELV         : {%TrGTer} 9.6E-06; {&2639}
 #ENDREPLACE
 #REPLACE <>
-<G40703>  ALOV           = AELV         : {%TrGTer} 9.6E-06; {&2639}
+<G40703>  ALOV            = AELV         : {%TrGTer} 9.6E-06; {&2639}
 #ENDREPLACE
 #REPLACE <>
-<G40704>  PIOV + OH      = PSOV         : {%TrGTer} 2.0E-11; {&2636}
+<G40704>  PIOV + OH       = PSOV         : {%TrGTer} 2.0E-11; {&2636}
 #ENDREPLACE
 #REPLACE <>
-<G40705>  PSOV + OH      = PELV         : {%TrGTer} 2.0E-11; {&2636}
+<G40705>  PSOV + OH       = PELV         : {%TrGTer} 2.0E-11; {&2636}
 #ENDREPLACE
 #REPLACE <>
-<G40706>  PELV           = PSOV         : {%TrGTer} 5.0E-04; {&2640}
+<G40706>  PELV            = PSOV         : {%TrGTer} 5.0E-04; {&2640}
 #ENDREPLACE
+
 
 
 // ------------------------------- S -------------------------
 
 // MAFOR DMS CHEMISTRY
-// S + C (#G94nn)
 
-#REPLACE <G9200>
-<> SO2 + OH     = HSO3                  : {%StTrG} k_3rd(temp,cair,3.E-31,-3.3,1.5E-12,0.,0.6); {&3245}
-#ENDREPLACE
-
+// How to add a new reaction
 // To add a new reaction, specify an empty equation tag
 // in the "#REPLACE" command ("<>"), and give a complete
 // equation tag in the replacement ("<G9876>"):
 //#REPLACE <>
 //<G9876JD> Dummy + OH = CH3O2 + H2O : {%StG} 1.57E-13; {&&}
 //#ENDREPLACE
-
-#REPLACE <>
-<G9201MK>  HSO3 + O2    = HO2 + SO3     : {%StTrG} 1.3E-12*exp(-330/temp); {&3245}
-#ENDREPLACE
-#REPLACE <>
-<G9202MK>  SO3 + H2O    = H2SO4         : {%StTrG} 2.4E-15;  {&2634}
-#ENDREPLACE
-
-#REPLACE <G9400a>
-<> DMS     + OH     = CH3SCH2 + H2O     : {%TrG} 1.13E-11{§§0.10}*EXP(-253./temp); {&746}
-#ENDREPLACE
-#REPLACE <G9400b>
-<> DMS     + OH     = DMSOH + HO2       : {%TrG} k_DMS_OH; {&746}
-#ENDREPLACE
-#REPLACE <G9401>
-<> DMS     + NO3    = CH3SCH2 + HNO3    : {%TrG} 1.9E-13{§§0.15}*EXP(520./temp); {&2591}
-#ENDREPLACE
+// Replace exisiting reaction
+//#REPLACE <G9405>
+//<>  CH3SO3  + HO2  = CH3SO3H + O2 : {%TrG} k_CH3SO3_HO2; {&2591}
+//#ENDREPLACE
 // It is possible to create several branches of the reaction:
-// Equation tags in the replacement (<a>, <b>, ...) will be added as a suffix
-// to the original equation tag, i.e.:
+// Equation tags in the replacement (<a>, <b>, ...) will be 
+// added as a suffix to the original equation tag, i.e.:
 // <a> --> <G4110a>
-#REPLACE <G9402>
-<a> DMSO    + OH     = DMSOHO           : {%TrG} k_DMSO_OH_B1; {&2591}
-<b> DMSO    + OH     = CH3SOCH2 + H2O   : {%TrG} k_DMSO_OH_B2; {&2591}
-#ENDREPLACE
-#REPLACE <G9403>
-<>  CH3SO2           = SO2 + CH3O2      : {%TrG} 1.0E13*EXP((-16500.*fch3so2/1.98635)/temp); {&2591}
-#ENDREPLACE
-#REPLACE <G9404>
-<>  CH3SO2  + O3     = CH3SO3 + O2      : {%TrG} k_CH3SO2_O3; {&2591}
-#ENDREPLACE
-#REPLACE <G9405>
-<>  CH3SO3  + HO2    = CH3SO3H + O2     : {%TrG} k_CH3SO3_HO2; {&2591}
+//
+// ----------------------------------------------------------
+
+// S + H (#G92nn)
+#REPLACE <G92*>
+
+<G9200>  SO2 + OH         = HSO3         : {%StTrG} k_3rd(temp,cair,3.E-31,-3.3,1.5E-12,0.,0.6); {&3245}
+
+<G9201>  HSO3 + O2        = HO2 + SO3    : {%StTrG} 1.3E-12*exp(-330/temp); {&3245}
+
+<G9202>  SO3 + H2O        = H2SO4        : {%StTrG} 2.4E-15;  {&2634}
+
 #ENDREPLACE
 
-#REPLACE <>
+// S + C (#G94nn)
+// replaces all <G94*> reactions
+
+#REPLACE <G94*>
+
+<G9400a> DMS     + OH     = CH3SCH2 + H2O     : {%TrG} 1.13E-11{§§0.10}*EXP(-253./temp); {&746}
+
+<G9400b> DMS     + OH     = DMSOH + HO2       : {%TrG} k_DMS_OH; {&746}
+
+<G9401>  DMS     + NO3    = CH3SCH2 + HNO3    : {%TrG} 1.9E-13{§§0.15}*EXP(520./temp); {&2591}
+
+<G9402a> DMSO    + OH     = DMSOHO            : {%TrG} k_DMSO_OH_B1; {&2591}
+
+<G9402b> DMSO    + OH     = CH3SOCH2 + H2O    : {%TrG} k_DMSO_OH_B2; {&2591}
+
+<G9403>  CH3SO2           = SO2 + CH3O2       : {%TrG} 1.0E13*EXP((-16500.*fch3so2/1.98635)/temp); {&2591}
+
+<G9404>  CH3SO2  + O3     = CH3SO3 + O2       : {%TrG} k_CH3SO2_O3; {&2591}
+
+<G9405>  CH3SO3  + HO2    = CH3SO3H + O2      : {%TrG} k_CH3SO3_HO2; {&2591}
+
+// unchanged reactions
+<G9408>  CH2OO + SO2 {+H2O} = H2SO4 + HCHO    : {%StTrG} k_CH2OO_SO2; {&3041, 3049} // Average of 3.9E-11 and 3.42E-11.
+<G9409>  NOPINOO + SO2 = NOPINONE + H2SO4     : {%TrGTer} 7.E-14{§}; {&2419}
+<G9410>  APINAOO + SO2 = PINAL + H2SO4        : {%TrGTer} 7.00E-14{§}; {&2419}
+<G9411>  APINBOO + SO2 = PINAL + H2SO4        : {%TrGTer} 7.00E-14{§}; {&2419}
+<G9412>  MBOOO + SO2   = IBUTALOH + H2SO4     : {%TrGTer} 7.00E-14; {&2419}
+
+
+// DMS reaction scheme of Karl et al. (2007), ref 2591
+// DMS reactions with tag "MK" are displayed on the last pages on Gas phase reactions
+// in the mecchanism_mafor.pdf
+
 <G9420aMK> DMSOH   + O2     = DMSO + HO2           : {%TrG} 5.0E-13; {&2591}
 <G9420bMK> DMSOH   + O2     = DMSOHOO              : {%TrG} 3.0E-14; {&2591}
 <G9421MK>  DMSOH            = CH3SOH + CH3O2       : {%TrG} 5.0E+5;  {&2591}
@@ -482,8 +498,11 @@
 <G9433bMK> CH3S    + O2     = CH3O2 + SO2          : {%TrG} 3.0E-18; {&2591}
 <G9434MK>  CH3S    + CH3O2  = CH3SO + HCHO + HO2   : {%TrG} 6.1E-11; {&2591}
 <G9435MK>  CH3SO   + O3     = 0.5 CH3SO2 + 0.5 O2 + 0.5 CH3O2 + 0.5 SO2  : {%TrG} 3.2E-13; {&2591}
-<G9436aMK> CH3SO   + NO2    = CH3SO2 + NO          : {%TrG} 1.2E-11; {&2591}
-<G9436bMK> CH3SO   + NO2    = CH3O2 + SO2 + NO     : {%TrG} 3.5E-12; {&2591}
+// Updated rate constants [Cala et al., ACP, 2023]
+//<G9436aMK> CH3SO   + NO2    = CH3SO2 + NO          : {%TrG} 1.2E-11; {&2591}
+//<G9436bMK> CH3SO   + NO2    = CH3O2 + SO2 + NO     : {%TrG} 3.5E-12; {&2591}
+<G9436aMK> CH3SO   + NO2    = CH3SO2 + NO          : {%TrG} 1.2E-11*0.75; {&2644}
+<G9436bMK> CH3SO   + NO2    = CH3O2 + SO2 + NO     : {%TrG} 1.2E-11*0.25; {&2644}
 <G9437MK>  CH3SO   + O2     = CH3SOO2              : {%TrG} 7.7E-18; {&2591}
 <G9438MK>  CH3SO   + CH3O2  = CH3SO2 + HCHO + HO2  : {%TrG} 3.0E-12; {&2591}
 <G9439MK>  CH3SOH  + OH     = CH3SO + H2O          : {%TrG} 1.10E-10;{&2591}
@@ -493,8 +512,11 @@
 <G9443MK>  CH3SOO  + O3     = CH3SO + 2O2          : {%TrG} 8.0E-13; {&2591}
 <G9444MK>  CH3SOO  + NO     = CH3SO + NO2          : {%TrG} 1.1E-11; {&2591}
 <G9445MK>  CH3SOO  + O2     = CH3O2 + SO2          : {%TrG} 2.0E-17; {&2591}
-<G9446aMK> CH3SOO           = CH3S + O2            : {%TrG} 1.0E+5;  {&2591}
-<G9446bMK> CH3SOO           = CH3SO2               : {%TrG} 8.0;     {&2591}
+// Updated rate constants [Cala et al., ACP, 2023]
+//<G9446aMK> CH3SOO           = CH3S + O2            : {%TrG} 1.0E+5;  {&2591}
+//<G9446bMK> CH3SOO           = CH3SO2               : {%TrG} 8.0;     {&2591}
+<G9446aMK> CH3SOO           = CH3S + O2            : {%TrG} 3.50E+10*EXP(-3560./temp);  {&2644}
+<G9446bMK> CH3SOO           = CH3O2 + SO2          : {%TrG} 5.60E+16*EXP(-10870./temp); {&2644}
 <G9447MK>  CH3SOO + CH3O2   = CH3SO + HCHO + HO2   : {%TrG} 5.5E-12; {&2591}
 <G9448MK>  CH3SOOH + OH     = CH3SO2 + H2O         : {%TrG} k_MSIA_OH; {&2591}
 <G9449MK>  CH3SOOH + NO3    = CH3SO2 + HNO3        : {%TrG} 1.0E-13; {&2591}
@@ -504,7 +526,8 @@
 <G9453MK>  CH3SO2  + NO2    = CH3SO3 + NO          : {%TrG} 2.2E-11; {&2591}
 <G9454MK>  CH3SO2 + CH3O2   = CH3SO3 + HCHO + HO2  : {%TrG} 2.5E-13; {&2591}
 <G9455MK>  CH3SO3  + NO2    = MSOON                : {%TrG} 3.0E-15; {&2591}
-<G9456MK>  CH3SO3           = SO3   + CH3O2        : {%TrG} k_CH3SO3_dec; {&2591}
+// Updated rate constant k_CH3SO3_dec [Cala et al., ACP, 2023]
+<G9456MK>  CH3SO3           = SO3   + CH3O2        : {%TrG} k_CH3SO3_dec; {&2644}
 <G9457MK>  CH3SOO2 + NO     = CH3SO2 + NO2         : {%TrG} 1.0E-11; {&2591}
 <G9458MK>  CH3SOO2 + HO2    = CH3SOO2H + O2        : {%TrG} 3.0E-12; {&2591}
 <G9459MK>  CH3SOO2          = CH3SO + O2           : {%TrG} 170.;    {&2591}
@@ -520,8 +543,25 @@
 <G9469MK>  DMSO2OO + NO     = DMSO2O + NO2         : {%TrG} 5.0E-12;    {&2591}
 <G9470MK>  DMSO2OO + HO2    = DMSO2OOH + O2        : {%TrG} 1.5E-12;    {&2591}
 <G9471MK>  DMSO2O           = CH3SO2 + HCHO        : {%TrG} 1.0E+1;     {&2591}
-<G9472MK>  CH3SO3H + H2O    = MSAH2O               : {%TrG} 6.58E-10;   {&2633}
-<G9473MK>  MSAH2O           = CH3SO3H + H2O        : {%TrG} 5.53E08*EXP(-669.71/temp); {&2633}
+// Updates of DMS oxidation
+//<G9472MK>  CH3SO3H + H2O    = MSAH2O               : {%TrG} 6.58E-10;   {&2633}
+//<G9473MK>  MSAH2O           = CH3SO3H + H2O        : {%TrG} 5.53E08*EXP(-669.71/temp); {&2633}
+<G9474MK>  CH3SO3H + OH     = CH3SO3               : {%TrG} 2.24E-14;                  {&2644}
+<G9475MK>  DMSOOH + OH      = CH3SCHO              : {%TrG} 7.03E-11;                  {&2644}
+<G9476MK>  CH3SCHO + OH     = CH3S + CO            : {%TrG} 1.11E-11;                  {&2644}
+// HPMTF oxidation [Cala et al., ACP, 2023]
+<G9477MK>  DMSOO            = HPMTF + OH           : {%TrG} k_MTMP_isom;               {&2642}
+<G9478MK>  HPMTF + OH       = HOOCH2SCO            : {%TrG} 1.4E-12;                   {&2645}
+<G9479MK>  HOOCH2SCO        = HOOCH2S + H2O + CO   : {%TrG} 9.2E9*EXP(-505.4/temp);    {&2645}
+<G9480MK>  HOOCH2SCO        = OCS + HCHO + OH + H2O: {%TrG} 1.6E7*EXP(-1468.6/temp);   {&2645}
+<G9481MK>  HOOCH2S + O3     = HOOCH2SO             : {%TrG} 1.15E-12*EXP(430./temp);   {&2643}
+<G9482MK>  HOOCH2S + NO2    = HOOCH2SO + NO        : {%TrG} 6.00E-11*EXP(240./temp);   {&2643}
+<G9483MK>  HOOCH2S + O2     = HOOCH2SOO            : {%TrG} 1.20E-16*EXP(1580./temp);  {&2644}
+<G9484aMK> HOOCH2SOO        = HOOCH2S + O2         : {%TrG} 3.50E+10*EXP(-3560./temp); {&2644}
+<G9484bMK> HOOCH2SOO        = HCHO + OH + SO2      : {%TrG} 5.60E-16*EXP(-10870./temp);{&2644}
+<G9485MK>  HOOCH2SO + O3    = HCHO + OH + SO2      : {%TrG} 4.0E-13;                   {&2643}
+<G9486MK>  HOOCH2SO + NO2   = HCHO + OH + NO + SO2 : {%TrG} 1.2E-11;                   {&2643}
+
 #ENDREPLACE
 
 
@@ -529,27 +569,43 @@
 // MSADMA, MSADMAH2O, MSATMA, MSATMAH2O are nucleation precursors
 // of MSA-DMA-(H2O) or of MSA-TMA-(H2O) ternary nucleation 
 // S + N (#G99nn)
-
-#REPLACE <>
-<G9900MK>  DMA + MSAH2O     = MSADMAH2O            : {%TrGAmi} 1.32E-09;   {&2633}
-<G9901MK>  MSADMAH2O        = DMA + MSAH2O         : {%TrGAmi} 30.9   *EXP(-4118.74/temp);   {&2633}
-<G9902MK>  MSADMAH2O        = MSADMA + H2O         : {%TrGAmi} 9.96E08*EXP(-736.69/temp);    {&2633}
-<G9903MK>  MSADMA + H2O     = MSADMAH2O            : {%TrGAmi} 1.66E-09;   {&2633}
-#ENDREPLACE
-
-#REPLACE <>
-<G9910MK>  TMA + MSAH2O     = MSATMAH2O            : {%TrGAmi} 1.44E-09;   {&2633}
-<G9911MK>  MSATMAH2O        = TMA + MSAH2O         : {%TrGAmi} 5.29   *EXP(-4487.08/temp);    {&2633}
-<G9912MK>  MSATMAH2O        = MSATMA + H2O         : {%TrGAmi} 7.91E06*EXP(-1674.28/temp);    {&2633}
-<G9913MK>  MSATMA + H2O     = MSATMAH2O            : {%TrGAmi} 1.49E-09;   {&2633}
-#ENDREPLACE
-
+//
+//#REPLACE <>
+//<G9900MK>  DMA + MSAH2O     = MSADMAH2O            : {%TrGAmi} 1.32E-09;   {&2633}
+//<G9901MK>  MSADMAH2O        = DMA + MSAH2O         : {%TrGAmi} 30.9   *EXP(-4118.74/temp);   {&2633}
+//<G9902MK>  MSADMAH2O        = MSADMA + H2O         : {%TrGAmi} 9.96E08*EXP(-736.69/temp);    {&2633}
+//<G9903MK>  MSADMA + H2O     = MSADMAH2O            : {%TrGAmi} 1.66E-09;   {&2633}
+//#ENDREPLACE
+//
+//#REPLACE <>
+//<G9910MK>  TMA + MSAH2O     = MSATMAH2O            : {%TrGAmi} 1.44E-09;   {&2633}
+//<G9911MK>  MSATMAH2O        = TMA + MSAH2O         : {%TrGAmi} 5.29   *EXP(-4487.08/temp);    {&2633}
+//<G9912MK>  MSATMAH2O        = MSATMA + H2O         : {%TrGAmi} 7.91E06*EXP(-1674.28/temp);    {&2633}
+//<G9913MK>  MSATMA + H2O     = MSATMAH2O            : {%TrGAmi} 1.49E-09;   {&2633}
+//#ENDREPLACE
 
 
 
 // ------------------------------- hv ------------------------
 
 // MAFOR PHOTOLYSIS REACTIONS
+
+// UPDATED IODINE CHEMISTRY, RUHL AND SANDER, SEP. 2024
+//                           ruhl-iodine.rpl
+
+// I + O (#J81nn)
+#REPLACE <>
+<J8101SR>  OIO       + hv = I + O2                 : {%TrGJ}  jx(ip_OIO){§};      {&2342}
+// cross sections for IxOy are taken from INO3 as in Bloss et al. (2010)
+<J8102SR>  I2O2      + hv = I + OIO                : {%TrGJ}  jx(ip_I2O2){§};     {&2342}
+<J8103SR>  I2O4      + hv = 2 OIO                  : {%TrGJ}  jx(ip_I2O4){§};     {&2342}
+<J8104SR>  I2O3      + hv = OIO + IO               : {%TrGJ}  jx(ip_I2O3){§};     {&2342}
+#ENDREPLACE
+
+// I + N (#J83nn)
+#REPLACE <>
+<J8302SR>  INO       + hv = I + NO                 : {%TrGJ}  jx(ip_INO){§};      {&2342}
+#ENDREPLACE
 
 // 2C (#J42nn)
 #REPLACE <>

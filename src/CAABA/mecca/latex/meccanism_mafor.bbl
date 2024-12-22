@@ -1,4 +1,4 @@
-\begin{thebibliography}{243}
+\begin{thebibliography}{246}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{{\tt #1}}
 \providecommand{\urlprefix}{}
@@ -242,6 +242,14 @@ Buxton, G.~V., Salmon, G.~A., and Wang, J.~Q.: The equilibrium \chem{NO_3^.} +
   in aqueous solution, Phys. Chem. Chem. Phys., 1, 3589--3593,
   \doi{10.1039/A903286J}, 1999{\natexlab{b}}.
 
+\bibitem[{Cala et~al.(2023)Cala, Archer-Nicholls, Weber, Abraham, Griffiths,
+  Jacob, Shin, Revell, Woodhouse, and Archibald}]{2644}
+Cala, B.~A., Archer-Nicholls, S., Weber, J., Abraham, N.~L., Griffiths, P.~T.,
+  Jacob, L., Shin, Y.~M., Revell, L.~E., Woodhouse, M., and Archibald, A.~T.:
+  Development, intercomparison, and evaluation of an improved mechanism for the
+  oxidation of dimethyl sulfide in the UKCA model, Atmos. Chem. Phys., pp.
+  14\,735--14\,760, \doi{10.5194/acp-23-14735-2023}, 2023.
+
 \bibitem[{Canosa-Mas et~al.(1996)Canosa-Mas, King, Lopez, Percival, Wayne,
   Shallcross, Pyle, and Daele}]{1617}
 Canosa-Mas, C.~E., King, M.~D., Lopez, R., Percival, C.~J., Wayne, R.~P.,
@@ -373,13 +381,6 @@ Davis, D., Chen, G., Kasibhatla, P., Jefferson, A., Tanner, D., Eisele, F.,
 Davis, Jr., W. and {de Bruin}, H.~J.: New activity coefficients of 0-100 per
   cent aqueous nitric acid, J. Inorg. Nucl. Chem., 26, 1069--1083,
   \doi{10.1016/0022-1902(64)80268-2}, 1964.
-
-\bibitem[{Dawson et~al.(2012)Dawson, Varner, Perraud, Ezell, Gerber, and
-  Finlayson-Pitts}]{2633}
-Dawson, M.~L., Varner, M.~E., Perraud, V., Ezell, M.~J., Gerber, R.~B., and
-  Finlayson-Pitts, B.~J.: Simplified mechanism for new particle formation from
-  methanesulfonic acid, amines, and water via experiments and ab initio
-  calculations, Proc. Natl. Acad. Sci. USA, 109(46), 18\,719--18\,724, 2012.
 
 \bibitem[{{de Laat} and Le(2006)}]{3266}
 {de Laat}, J. and Le, T.~G.: Effects of chloride ions on the
@@ -1327,6 +1328,24 @@ Vereecken, L., Harder, H., and Novelli, A.: The reactions of Criegee
   intermediates with alkenes, ozone, and carbonyl oxides, Phys. Chem. Chem.
   Phys., 16, 4039--4049, \doi{10.1039/c3cp54514h}, 2014.
 
+\bibitem[{Veres et~al.(2020)Veres, Neuman, Bertram, Assaf, Wolfe, Williamson,
+  Weinzierl, Tilmes, Thompson, Thames, Schroder, Saiz-Lopez, Rollins, Roberts,
+  Price, Peischl, Nault, M\'oller, Miller, Meinardi, Li, Lamarque, Kupc,
+  Kjaergaard, Kinnison, Jimenez, Jernigan, Hornbrook, Hills, Dollner, Day,
+  Cuevas, Campuzano-Jost, Burkholder, Bui, Brune, Brown, Brock, Bourgeois,
+  Blake, Apel, and Ryerson}]{2642}
+Veres, P.~R., Neuman, J.~A., Bertram, T.~H., Assaf, E., Wolfe, G.~M.,
+  Williamson, C.~J., Weinzierl, B., Tilmes, S., Thompson, C.~R., Thames, A.~B.,
+  Schroder, J.~C., Saiz-Lopez, A., Rollins, A.~W., Roberts, J.~M., Price, D.,
+  Peischl, J., Nault, B.~A., M\'oller, K.~H., Miller, D.~O., Meinardi, S., Li,
+  Q., Lamarque, J.~F., Kupc, A., Kjaergaard, H.~G., Kinnison, D., Jimenez,
+  J.~L., Jernigan, C.~M., Hornbrook, R.~S., Hills, A., Dollner, M., Day, D.~A.,
+  Cuevas, C.~A., Campuzano-Jost, P., Burkholder, J., Bui, T.~P., Brune, W.~H.,
+  Brown, S.~S., Brock, C.~A., Bourgeois, I., Blake, D.~R., Apel, E.~C., and
+  Ryerson, T.~B.: Global airborne sampling reveals a previously unobserved
+  dimethyl sulfide oxidation mechanism in the marine atmosphere, Proc. Natl.
+  Acad. Sci. USA, 117, 4505--4510, \doi{10.1073/pnas.1919344117}, 2020.
+
 \bibitem[{{von Glasow} et~al.(2002){von Glasow}, Sander, Bott, and
   Crutzen}]{1456}
 {von Glasow}, R., Sander, R., Bott, A., and Crutzen, P.~J.: Modeling halogen
@@ -1421,10 +1440,24 @@ Wingenter, O.~W., Sive, B.~C., Blake, N.~J., and Rowland, F.~S.: Atomic
   over the Central Pacific Ocean, Eos, Trans. AGU (Abstract Supplement), 80,
   F149--F150, 1999.
 
+\bibitem[{{Wollesen de Jonge} et~al.(2021){Wollesen de Jonge}, Elm, Rosati,
+  Christiansen, Hyttinen, L\"udemann, Bilde, and Roldin}]{2645}
+{Wollesen de Jonge}, R., Elm, J., Rosati, B., Christiansen, S., Hyttinen, N.,
+  L\"udemann, Bilde, M., and Roldin, P.: Secondary aerosol formation from
+  dimethyl sulfide - improved mechanistic understanding based on smog chamber
+  experiments and modelling, Atmos. Chem. Phys., 21, 9955--9976,
+  \doi{10.5194/acp-21-9955-2021}, 2021.
+
 \bibitem[{Wu et~al.(1980)Wu, Wong, and {Di Bartolo}}]{987}
 Wu, D., Wong, D., and {Di Bartolo}, B.: Evolution of \chem{Cl_2^-} in aqueous
   \chem{NaCl} solutions, J. Photochem., 14, 303--310,
   \doi{10.1016/0047-2670(80)85102-1}, 1980.
+
+\bibitem[{Wu et~al.(2015)Wu, Wang, and Wang}]{2643}
+Wu, R., Wang, S., and Wang, L.: New Mechanism for the Atmospheric Oxidation of
+  Dimethyl Sulfide. The Importance of Intramolecular Hydrogen Shift in a
+  \chem{CH_3SCH_2OO} Radical, J. Phys. Chem. A, 119, 112--117,
+  \doi{10.1021/jp511616j}, 2015.
 
 \bibitem[{Yiin and Margerum(1990)}]{2164}
 Yiin, B.~S. and Margerum, D.~W.: Nonmetal redox kinetics: reactions of iodine

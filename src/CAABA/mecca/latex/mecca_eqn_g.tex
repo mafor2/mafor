@@ -1675,6 +1675,8 @@
 \code{G8600} & TrGClI &  \kpp{IO} + \kpp{ClO} $\rightarrow$ .2 \kpp{ICl} + .25 \kpp{Cl} + .55 \kpp{OClO} + .8 \kpp{I} + .45 \kpp{O2} & \code{4.7E-12*EXP(280./temp)} & \citet{1845}\\
 \myhline
 \rowcolor[gray]{0.95}\code{G9200} & StTrGS &  \kpp{SO2} + \kpp{OH} $\rightarrow$ \kpp{HSO3} & \code{k_3rd(temp,cair,3.E-31,-3.3,1.5E-12,0.,0.6)} & \citet{3245}\\
+\code{G9201} & StTrGS &  \kpp{HSO3} + \kpp{O2} $\rightarrow$ \kpp{HO2} + \kpp{SO3} & \code{1.3E-12*exp(-330/temp)} & \citet{3245}\\
+\rowcolor[gray]{0.95}\code{G9202} & StTrGS &  \kpp{SO3} + \kpp{H2O} $\rightarrow$ \kpp{H2SO4} & \code{2.4E-15} & \citet{2634}\\
 \code{G9400a} & TrGCS &  \kpp{DMS} + \kpp{OH} $\rightarrow$ \kpp{CH3SCH2} + \kpp{H2O} & \code{1.13E-11*EXP(-253./temp)} & \citet{746}\\
 \rowcolor[gray]{0.95}\code{G9400b} & TrGCS &  \kpp{DMS} + \kpp{OH} $\rightarrow$ \kpp{DMSOH} + \kpp{HO2} & \code{k_DMS_OH} & \citet{746}\\
 \code{G9401} & TrGCNS &  \kpp{DMS} + \kpp{NO3} $\rightarrow$ \kpp{CH3SCH2} + \kpp{HNO3} & \code{1.9E-13*EXP(520./temp)} & \citet{2591}\\
@@ -1688,6 +1690,76 @@
 \code{G9410} & TrGTerCS &  \kpp{APINAOO} + \kpp{SO2} $\rightarrow$ \kpp{PINAL} + \kpp{H2SO4} & \code{7.00E-14} & \citet{2419}\\
 \rowcolor[gray]{0.95}\code{G9411} & TrGTerCS &  \kpp{APINBOO} + \kpp{SO2} $\rightarrow$ \kpp{PINAL} + \kpp{H2SO4} & \code{7.00E-14} & \citet{2419}\\
 \code{G9412} & TrGTerCS &  \kpp{MBOOO} + \kpp{SO2} $\rightarrow$ \kpp{IBUTALOH} + \kpp{H2SO4} & \code{7.00E-14} & \citet{2419}\\
+\rowcolor[gray]{0.95}\code{G9420aMK} & TrGCS &  \kpp{DMSOH} + \kpp{O2} $\rightarrow$ \kpp{DMSO} + \kpp{HO2} & \code{5.0E-13} & \citet{2591}\\
+\code{G9420bMK} & TrGCS &  \kpp{DMSOH} + \kpp{O2} $\rightarrow$ \kpp{DMSOHOO} & \code{3.0E-14} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9421MK} & TrGCS &  \kpp{DMSOH} $\rightarrow$ \kpp{CH3SOH} + \kpp{CH3O2} & \code{5.0E+5} & \citet{2591}\\
+\code{G9422MK} & TrGCNS &  \kpp{DMSOHOO} + \kpp{NO} $\rightarrow$ \kpp{DMSOHO} + \kpp{NO2} & \code{5.0E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9423MK} & TrGCS &  \kpp{DMSOHO} + \kpp{O2} $\rightarrow$ \kpp{DMSO2} + \kpp{HO2} & \code{1.0E-13} & \citet{2591}\\
+\code{G9424MK} & TrGCS &  \kpp{DMSOHO} $\rightarrow$ \kpp{CH3SOOH} + \kpp{CH3O2} & \code{6.0E+5} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9425MK} & TrGCS &  \kpp{CH3SOCH2} + \kpp{O2} $\rightarrow$ \kpp{DMSOOO} & \code{0.5E-13} & \citet{2591}\\
+\code{G9426MK} & TrGCNS &  \kpp{DMSOOO} + \kpp{NO} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9427MK} & TrGCS &  \kpp{CH3SCH2} + \kpp{O2} $\rightarrow$ \kpp{DMSOO} & \code{5.7E-12} & \citet{2591}\\
+\code{G9428MK} & TrGCNS &  \kpp{DMSOO} + \kpp{NO} $\rightarrow$ \kpp{HCHO} + \kpp{CH3S} + \kpp{NO2} & \code{1.9E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9429MK} & TrGCS &  \kpp{DMSOO} + \kpp{HO2} $\rightarrow$ \kpp{DMSOOH} + \kpp{O2} & \code{1.5E-12} & \citet{2591}\\
+\code{G9430MK} & TrGCS &  \kpp{DMSOO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3S} + 2 \kpp{HCHO} + \kpp{HO2} & \code{1.8E-13} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9431MK} & TrGS &  \kpp{CH3S} + \kpp{O3} $\rightarrow$ \kpp{CH3SO} + \kpp{O2} & \code{1.36E-12*EXP(374./temp)} & \citet{2591}\\
+\code{G9432MK} & TrGNS &  \kpp{CH3S} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO} + \kpp{NO} & \code{2.8E-11*EXP(240./temp)} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9433aMK} & TrGS &  \kpp{CH3S} + \kpp{O2} $\rightarrow$ \kpp{CH3SOO} & \code{1.5E-14} & \citet{2591}\\
+\code{G9433bMK} & TrGS &  \kpp{CH3S} + \kpp{O2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} & \code{3.0E-18} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9434MK} & TrGS &  \kpp{CH3S} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{HO2} & \code{6.1E-11} & \citet{2591}\\
+\code{G9435MK} & TrGS &  \kpp{CH3SO} + \kpp{O3} $\rightarrow$ 0.5 \kpp{CH3SO2} + 0.5 \kpp{O2} + 0.5 \kpp{CH3O2} + 0.5 \kpp{SO2} & \code{3.2E-13} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9436aMK} & TrGNS &  \kpp{CH3SO} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO2} + \kpp{NO} & \code{1.2E-11*0.75} & \citet{2644}\\
+\code{G9436bMK} & TrGNS &  \kpp{CH3SO} + \kpp{NO2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} + \kpp{NO} & \code{1.2E-11*0.25} & \citet{2644}\\
+\rowcolor[gray]{0.95}\code{G9437MK} & TrGS &  \kpp{CH3SO} + \kpp{O2} $\rightarrow$ \kpp{CH3SOO2} & \code{7.7E-18} & \citet{2591}\\
+\code{G9438MK} & TrGS &  \kpp{CH3SO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} + \kpp{HO2} & \code{3.0E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9439MK} & TrGS &  \kpp{CH3SOH} + \kpp{OH} $\rightarrow$ \kpp{CH3SO} + \kpp{H2O} & \code{1.10E-10} & \citet{2591}\\
+\code{G9440MK} & TrGNS &  \kpp{CH3SOH} + \kpp{NO3} $\rightarrow$ \kpp{CH3SO} + \kpp{HNO3} & \code{3.4E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9441MK} & TrGS &  \kpp{CH3SOH} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO} + \kpp{H2O2} & \code{8.5E-13} & \citet{2591}\\
+\code{G9442MK} & TrGS &  \kpp{CH3SOH} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{CH3OOH} & \code{8.5E-13} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9443MK} & TrGS &  \kpp{CH3SOO} + \kpp{O3} $\rightarrow$ \kpp{CH3SO} + 2\kpp{O2} & \code{8.0E-13} & \citet{2591}\\
+\code{G9444MK} & TrGNS &  \kpp{CH3SOO} + \kpp{NO} $\rightarrow$ \kpp{CH3SO} + \kpp{NO2} & \code{1.1E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9445MK} & TrGS &  \kpp{CH3SOO} + \kpp{O2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} & \code{2.0E-17} & \citet{2591}\\
+\code{G9446aMK} & TrGS &  \kpp{CH3SOO} $\rightarrow$ \kpp{CH3S} + \kpp{O2} & \code{3.50E+10*EXP(-3560./temp)} & \citet{2644}\\
+\rowcolor[gray]{0.95}\code{G9446bMK} & TrGS &  \kpp{CH3SOO} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} & \code{5.60E+16*EXP(-10870./temp)} & \citet{2644}\\
+\code{G9447MK} & TrGS &  \kpp{CH3SOO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9448MK} & TrGS &  \kpp{CH3SOOH} + \kpp{OH} $\rightarrow$ \kpp{CH3SO2} + \kpp{H2O} & \code{k_MSIA_OH} & \citet{2591}\\
+\code{G9449MK} & TrGNS &  \kpp{CH3SOOH} + \kpp{NO3} $\rightarrow$ \kpp{CH3SO2} + \kpp{HNO3} & \code{1.0E-13} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9450MK} & TrGS &  \kpp{CH3SOOH} + \kpp{HO2} $\rightarrow$ \kpp{CH3SOO} + \kpp{H2O2} & \code{1.0E-15} & \citet{2591}\\
+\code{G9451MK} & TrGS &  \kpp{CH3SOOH} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{CH3OOH} & \code{1.0E-15} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9452MK} & TrGS &  \kpp{CH3SO2} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO3} + \kpp{OH} & \code{2.5E-13} & \citet{2591}\\
+\code{G9453MK} & TrGNS &  \kpp{CH3SO2} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO} & \code{2.2E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9454MK} & TrGS &  \kpp{CH3SO2} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO3} + \kpp{HCHO} + \kpp{HO2} & \code{2.5E-13} & \citet{2591}\\
+\code{G9455MK} & TrGNS &  \kpp{CH3SO3} + \kpp{NO2} $\rightarrow$ \kpp{MSOON} & \code{3.0E-15} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9456MK} & TrGS &  \kpp{CH3SO3} $\rightarrow$ \kpp{SO3} + \kpp{CH3O2} & \code{k_CH3SO3_dec} & \citet{2644}\\
+\code{G9457MK} & TrGNS &  \kpp{CH3SOO2} + \kpp{NO} $\rightarrow$ \kpp{CH3SO2} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9458MK} & TrGS &  \kpp{CH3SOO2} + \kpp{HO2} $\rightarrow$ \kpp{CH3SOO2H} + \kpp{O2} & \code{3.0E-12} & \citet{2591}\\
+\code{G9459MK} & TrGS &  \kpp{CH3SOO2} $\rightarrow$ \kpp{CH3SO} + \kpp{O2} & \code{170.} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9460MK} & TrGS &  \kpp{CH3SOO2} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
+\code{G9461MK} & TrGNS &  \kpp{CH3SO4} + \kpp{NO} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9462MK} & TrGS &  \kpp{CH3SO4} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO4H} & \code{2.0E-12} & \citet{2591}\\
+\code{G9463MK} & TrGS &  \kpp{CH3SO4} $\rightarrow$ \kpp{CH3SO2} + \kpp{O2} & \code{170.} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9464MK} & TrGS &  \kpp{CH3SO4} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO3} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
+\code{G9465MK} & TrGNS &  \kpp{CH3SO4} + \kpp{NO2} $\rightarrow$ \kpp{MSPN} & \code{5.89E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9466MK} & TrGNS &  \kpp{MSOON} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO2} & \code{1.15E-2} & \citet{2591}\\
+\code{G9467MK} & TrGNS &  \kpp{MSPN} $\rightarrow$ \kpp{CH3SO4} + \kpp{NO2} & \code{1.15E-2} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9468MK} & TrGCS &  \kpp{DMSO2} + \kpp{OH} $\rightarrow$ \kpp{DMSO2OO} & \code{k_DMSO2_OH} & \citet{2591}\\
+\code{G9469MK} & TrGCNS &  \kpp{DMSO2OO} + \kpp{NO} $\rightarrow$ \kpp{DMSO2O} + \kpp{NO2} & \code{5.0E-12} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9470MK} & TrGCS &  \kpp{DMSO2OO} + \kpp{HO2} $\rightarrow$ \kpp{DMSO2OOH} + \kpp{O2} & \code{1.5E-12} & \citet{2591}\\
+\code{G9471MK} & TrGCS &  \kpp{DMSO2O} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} & \code{1.0E+1} & \citet{2591}\\
+\rowcolor[gray]{0.95}\code{G9474MK} & TrGS &  \kpp{CH3SO3H} + \kpp{OH} $\rightarrow$ \kpp{CH3SO3} & \code{2.24E-14} & \citet{2644}\\
+\code{G9475MK} & TrGCS &  \kpp{DMSOOH} + \kpp{OH} $\rightarrow$ \kpp{CH3SCHO} & \code{7.03E-11} & \citet{2644}\\
+\rowcolor[gray]{0.95}\code{G9476MK} & TrGCS &  \kpp{CH3SCHO} + \kpp{OH} $\rightarrow$ \kpp{CH3S} + \kpp{CO} & \code{1.11E-11} & \citet{2644}\\
+\code{G9477MK} & TrGCS &  \kpp{DMSOO} $\rightarrow$ \kpp{HPMTF} + \kpp{OH} & \code{k_MTMP_isom} & \citet{2642}\\
+\rowcolor[gray]{0.95}\code{G9478MK} & TrGCS &  \kpp{HPMTF} + \kpp{OH} $\rightarrow$ \kpp{HOOCH2SCO} & \code{1.4E-12} & \citet{2645}\\
+\code{G9479MK} & TrGCS &  \kpp{HOOCH2SCO} $\rightarrow$ \kpp{HOOCH2S} + \kpp{H2O} + \kpp{CO} & \code{9.2E9*EXP(-505.4/temp)} & \citet{2645}\\
+\rowcolor[gray]{0.95}\code{G9480MK} & TrGCS &  \kpp{HOOCH2SCO} $\rightarrow$ \kpp{OCS} + \kpp{HCHO} + \kpp{OH} + \kpp{H2O} & \code{1.6E7*EXP(-1468.6/temp)} & \citet{2645}\\
+\code{G9481MK} & TrGS &  \kpp{HOOCH2S} + \kpp{O3} $\rightarrow$ \kpp{HOOCH2SO} & \code{1.15E-12*EXP(430./temp)} & \citet{2643}\\
+\rowcolor[gray]{0.95}\code{G9482MK} & TrGNS &  \kpp{HOOCH2S} + \kpp{NO2} $\rightarrow$ \kpp{HOOCH2SO} + \kpp{NO} & \code{6.00E-11*EXP(240./temp)} & \citet{2643}\\
+\code{G9483MK} & TrGS &  \kpp{HOOCH2S} + \kpp{O2} $\rightarrow$ \kpp{HOOCH2SOO} & \code{1.20E-16*EXP(1580./temp)} & \citet{2644}\\
+\rowcolor[gray]{0.95}\code{G9484aMK} & TrGS &  \kpp{HOOCH2SOO} $\rightarrow$ \kpp{HOOCH2S} + \kpp{O2} & \code{3.50E+10*EXP(-3560./temp)} & \citet{2644}\\
+\code{G9484bMK} & TrGS &  \kpp{HOOCH2SOO} $\rightarrow$ \kpp{HCHO} + \kpp{OH} + \kpp{SO2} & \code{5.60E-16*EXP(-10870./temp)} & \citet{2644}\\
+\rowcolor[gray]{0.95}\code{G9485MK} & TrGS &  \kpp{HOOCH2SO} + \kpp{O3} $\rightarrow$ \kpp{HCHO} + \kpp{OH} + \kpp{SO2} & \code{4.0E-13} & \citet{2643}\\
+\code{G9486MK} & TrGNS &  \kpp{HOOCH2SO} + \kpp{NO2} $\rightarrow$ \kpp{HCHO} + \kpp{OH} + \kpp{NO} + \kpp{SO2} & \code{1.2E-11} & \citet{2643}\\
 \rowcolor[gray]{0.95}\code{G9600} & TrGCClS &  \kpp{DMS} + \kpp{Cl} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCl} + \kpp{HCHO} & \code{3.3E-10} & \citet{1610}\\
 \code{G9800} & TrGCIS &  \kpp{DMS} + \kpp{IO} $\rightarrow$ \kpp{DMSO} + \kpp{I} & \code{3.2E-13*EXP(-925./temp)} & \citet{2080}\\
 \myhline
@@ -1810,71 +1882,3 @@
 \rowcolor[gray]{0.95}\code{G40704} & TrGTer &  \kpp{PIOV} + \kpp{OH} $\rightarrow$ \kpp{PSOV} & \code{2.0E-11} & \citet{2636}\\
 \code{G40705} & TrGTer &  \kpp{PSOV} + \kpp{OH} $\rightarrow$ \kpp{PELV} & \code{2.0E-11} & \citet{2636}\\
 \rowcolor[gray]{0.95}\code{G40706} & TrGTer &  \kpp{PELV} $\rightarrow$ \kpp{PSOV} & \code{5.0E-04} & \citet{2640}\\
-\code{G9201MK} & StTrGS &  \kpp{HSO3} + \kpp{O2} $\rightarrow$ \kpp{HO2} + \kpp{SO3} & \code{1.3E-12*exp(-330/temp)} & \citet{3245}\\
-\rowcolor[gray]{0.95}\code{G9202MK} & StTrGS &  \kpp{SO3} + \kpp{H2O} $\rightarrow$ \kpp{H2SO4} & \code{2.4E-15} & \citet{2634}\\
-\code{G9420aMK} & TrGCS &  \kpp{DMSOH} + \kpp{O2} $\rightarrow$ \kpp{DMSO} + \kpp{HO2} & \code{5.0E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9420bMK} & TrGCS &  \kpp{DMSOH} + \kpp{O2} $\rightarrow$ \kpp{DMSOHOO} & \code{3.0E-14} & \citet{2591}\\
-\code{G9421MK} & TrGCS &  \kpp{DMSOH} $\rightarrow$ \kpp{CH3SOH} + \kpp{CH3O2} & \code{5.0E+5} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9422MK} & TrGCNS &  \kpp{DMSOHOO} + \kpp{NO} $\rightarrow$ \kpp{DMSOHO} + \kpp{NO2} & \code{5.0E-12} & \citet{2591}\\
-\code{G9423MK} & TrGCS &  \kpp{DMSOHO} + \kpp{O2} $\rightarrow$ \kpp{DMSO2} + \kpp{HO2} & \code{1.0E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9424MK} & TrGCS &  \kpp{DMSOHO} $\rightarrow$ \kpp{CH3SOOH} + \kpp{CH3O2} & \code{6.0E+5} & \citet{2591}\\
-\code{G9425MK} & TrGCS &  \kpp{CH3SOCH2} + \kpp{O2} $\rightarrow$ \kpp{DMSOOO} & \code{0.5E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9426MK} & TrGCNS &  \kpp{DMSOOO} + \kpp{NO} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
-\code{G9427MK} & TrGCS &  \kpp{CH3SCH2} + \kpp{O2} $\rightarrow$ \kpp{DMSOO} & \code{5.7E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9428MK} & TrGCNS &  \kpp{DMSOO} + \kpp{NO} $\rightarrow$ \kpp{HCHO} + \kpp{CH3S} + \kpp{NO2} & \code{1.9E-11} & \citet{2591}\\
-\code{G9429MK} & TrGCS &  \kpp{DMSOO} + \kpp{HO2} $\rightarrow$ \kpp{DMSOOH} + \kpp{O2} & \code{1.5E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9430MK} & TrGCS &  \kpp{DMSOO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3S} + 2 \kpp{HCHO} + \kpp{HO2} & \code{1.8E-13} & \citet{2591}\\
-\code{G9431MK} & TrGS &  \kpp{CH3S} + \kpp{O3} $\rightarrow$ \kpp{CH3SO} + \kpp{O2} & \code{1.36E-12*EXP(374./temp)} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9432MK} & TrGNS &  \kpp{CH3S} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO} + \kpp{NO} & \code{2.8E-11*EXP(240./temp)} & \citet{2591}\\
-\code{G9433aMK} & TrGS &  \kpp{CH3S} + \kpp{O2} $\rightarrow$ \kpp{CH3SOO} & \code{1.5E-14} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9433bMK} & TrGS &  \kpp{CH3S} + \kpp{O2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} & \code{3.0E-18} & \citet{2591}\\
-\code{G9434MK} & TrGS &  \kpp{CH3S} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{HO2} & \code{6.1E-11} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9435MK} & TrGS &  \kpp{CH3SO} + \kpp{O3} $\rightarrow$ 0.5 \kpp{CH3SO2} + 0.5 \kpp{O2} + 0.5 \kpp{CH3O2} + 0.5 \kpp{SO2} & \code{3.2E-13} & \citet{2591}\\
-\code{G9436aMK} & TrGNS &  \kpp{CH3SO} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO2} + \kpp{NO} & \code{1.2E-11} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9436bMK} & TrGNS &  \kpp{CH3SO} + \kpp{NO2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} + \kpp{NO} & \code{3.5E-12} & \citet{2591}\\
-\code{G9437MK} & TrGS &  \kpp{CH3SO} + \kpp{O2} $\rightarrow$ \kpp{CH3SOO2} & \code{7.7E-18} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9438MK} & TrGS &  \kpp{CH3SO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} + \kpp{HO2} & \code{3.0E-12} & \citet{2591}\\
-\code{G9439MK} & TrGS &  \kpp{CH3SOH} + \kpp{OH} $\rightarrow$ \kpp{CH3SO} + \kpp{H2O} & \code{1.10E-10} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9440MK} & TrGNS &  \kpp{CH3SOH} + \kpp{NO3} $\rightarrow$ \kpp{CH3SO} + \kpp{HNO3} & \code{3.4E-12} & \citet{2591}\\
-\code{G9441MK} & TrGS &  \kpp{CH3SOH} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO} + \kpp{H2O2} & \code{8.5E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9442MK} & TrGS &  \kpp{CH3SOH} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{CH3OOH} & \code{8.5E-13} & \citet{2591}\\
-\code{G9443MK} & TrGS &  \kpp{CH3SOO} + \kpp{O3} $\rightarrow$ \kpp{CH3SO} + 2\kpp{O2} & \code{8.0E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9444MK} & TrGNS &  \kpp{CH3SOO} + \kpp{NO} $\rightarrow$ \kpp{CH3SO} + \kpp{NO2} & \code{1.1E-11} & \citet{2591}\\
-\code{G9445MK} & TrGS &  \kpp{CH3SOO} + \kpp{O2} $\rightarrow$ \kpp{CH3O2} + \kpp{SO2} & \code{2.0E-17} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9446aMK} & TrGS &  \kpp{CH3SOO} $\rightarrow$ \kpp{CH3S} + \kpp{O2} & \code{1.0E+5} & \citet{2591}\\
-\code{G9446bMK} & TrGS &  \kpp{CH3SOO} $\rightarrow$ \kpp{CH3SO2} & \code{8.0} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9447MK} & TrGS &  \kpp{CH3SOO} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
-\code{G9448MK} & TrGS &  \kpp{CH3SOOH} + \kpp{OH} $\rightarrow$ \kpp{CH3SO2} + \kpp{H2O} & \code{k_MSIA_OH} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9449MK} & TrGNS &  \kpp{CH3SOOH} + \kpp{NO3} $\rightarrow$ \kpp{CH3SO2} + \kpp{HNO3} & \code{1.0E-13} & \citet{2591}\\
-\code{G9450MK} & TrGS &  \kpp{CH3SOOH} + \kpp{HO2} $\rightarrow$ \kpp{CH3SOO} + \kpp{H2O2} & \code{1.0E-15} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9451MK} & TrGS &  \kpp{CH3SOOH} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{CH3OOH} & \code{1.0E-15} & \citet{2591}\\
-\code{G9452MK} & TrGS &  \kpp{CH3SO2} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO3} + \kpp{OH} & \code{2.5E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9453MK} & TrGNS &  \kpp{CH3SO2} + \kpp{NO2} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO} & \code{2.2E-11} & \citet{2591}\\
-\code{G9454MK} & TrGS &  \kpp{CH3SO2} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO3} + \kpp{HCHO} + \kpp{HO2} & \code{2.5E-13} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9455MK} & TrGNS &  \kpp{CH3SO3} + \kpp{NO2} $\rightarrow$ \kpp{MSOON} & \code{3.0E-15} & \citet{2591}\\
-\code{G9456MK} & TrGS &  \kpp{CH3SO3} $\rightarrow$ \kpp{SO3} + \kpp{CH3O2} & \code{k_CH3SO3_dec} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9457MK} & TrGNS &  \kpp{CH3SOO2} + \kpp{NO} $\rightarrow$ \kpp{CH3SO2} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
-\code{G9458MK} & TrGS &  \kpp{CH3SOO2} + \kpp{HO2} $\rightarrow$ \kpp{CH3SOO2H} + \kpp{O2} & \code{3.0E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9459MK} & TrGS &  \kpp{CH3SOO2} $\rightarrow$ \kpp{CH3SO} + \kpp{O2} & \code{170.} & \citet{2591}\\
-\code{G9460MK} & TrGS &  \kpp{CH3SOO2} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9461MK} & TrGNS &  \kpp{CH3SO4} + \kpp{NO} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO2} & \code{1.0E-11} & \citet{2591}\\
-\code{G9462MK} & TrGS &  \kpp{CH3SO4} + \kpp{HO2} $\rightarrow$ \kpp{CH3SO4H} & \code{2.0E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9463MK} & TrGS &  \kpp{CH3SO4} $\rightarrow$ \kpp{CH3SO2} + \kpp{O2} & \code{170.} & \citet{2591}\\
-\code{G9464MK} & TrGS &  \kpp{CH3SO4} + \kpp{CH3O2} $\rightarrow$ \kpp{CH3SO3} + \kpp{HCHO} + \kpp{HO2} & \code{5.5E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9465MK} & TrGNS &  \kpp{CH3SO4} + \kpp{NO2} $\rightarrow$ \kpp{MSPN} & \code{5.89E-12} & \citet{2591}\\
-\code{G9466MK} & TrGNS &  \kpp{MSOON} $\rightarrow$ \kpp{CH3SO3} + \kpp{NO2} & \code{1.15E-2} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9467MK} & TrGNS &  \kpp{MSPN} $\rightarrow$ \kpp{CH3SO4} + \kpp{NO2} & \code{1.15E-2} & \citet{2591}\\
-\code{G9468MK} & TrGCS &  \kpp{DMSO2} + \kpp{OH} $\rightarrow$ \kpp{DMSO2OO} & \code{k_DMSO2_OH} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9469MK} & TrGCNS &  \kpp{DMSO2OO} + \kpp{NO} $\rightarrow$ \kpp{DMSO2O} + \kpp{NO2} & \code{5.0E-12} & \citet{2591}\\
-\code{G9470MK} & TrGCS &  \kpp{DMSO2OO} + \kpp{HO2} $\rightarrow$ \kpp{DMSO2OOH} + \kpp{O2} & \code{1.5E-12} & \citet{2591}\\
-\rowcolor[gray]{0.95}\code{G9471MK} & TrGCS &  \kpp{DMSO2O} $\rightarrow$ \kpp{CH3SO2} + \kpp{HCHO} & \code{1.0E+1} & \citet{2591}\\
-\code{G9472MK} & TrGS &  \kpp{CH3SO3H} + \kpp{H2O} $\rightarrow$ \kpp{MSAH2O} & \code{6.58E-10} & \citet{2633}\\
-\rowcolor[gray]{0.95}\code{G9473MK} & TrGS &  \kpp{MSAH2O} $\rightarrow$ \kpp{CH3SO3H} + \kpp{H2O} & \code{5.53E08*EXP(-669.71/temp)} & \citet{2633}\\
-\code{G9900MK} & TrGAmiCNS &  \kpp{DMA} + \kpp{MSAH2O} $\rightarrow$ \kpp{MSADMAH2O} & \code{1.32E-09} & \citet{2633}\\
-\rowcolor[gray]{0.95}\code{G9901MK} & TrGAmiCNS &  \kpp{MSADMAH2O} $\rightarrow$ \kpp{DMA} + \kpp{MSAH2O} & \code{30.9 *EXP(-4118.74/temp)} & \citet{2633}\\
-\code{G9902MK} & TrGAmiCNS &  \kpp{MSADMAH2O} $\rightarrow$ \kpp{MSADMA} + \kpp{H2O} & \code{9.96E08*EXP(-736.69/temp)} & \citet{2633}\\
-\rowcolor[gray]{0.95}\code{G9903MK} & TrGAmiCNS &  \kpp{MSADMA} + \kpp{H2O} $\rightarrow$ \kpp{MSADMAH2O} & \code{1.66E-09} & \citet{2633}\\
-\code{G9910MK} & TrGAmiCNS &  \kpp{TMA} + \kpp{MSAH2O} $\rightarrow$ \kpp{MSATMAH2O} & \code{1.44E-09} & \citet{2633}\\
-\rowcolor[gray]{0.95}\code{G9911MK} & TrGAmiCNS &  \kpp{MSATMAH2O} $\rightarrow$ \kpp{TMA} + \kpp{MSAH2O} & \code{5.29 *EXP(-4487.08/temp)} & \citet{2633}\\
-\code{G9912MK} & TrGAmiCNS &  \kpp{MSATMAH2O} $\rightarrow$ \kpp{MSATMA} + \kpp{H2O} & \code{7.91E06*EXP(-1674.28/temp)} & \citet{2633}\\
-\rowcolor[gray]{0.95}\code{G9913MK} & TrGAmiCNS &  \kpp{MSATMA} + \kpp{H2O} $\rightarrow$ \kpp{MSATMAH2O} & \code{1.49E-09} & \citet{2633}\\

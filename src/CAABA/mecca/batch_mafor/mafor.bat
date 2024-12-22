@@ -3,7 +3,7 @@
 # The shell variables defined here will be used by xmecca 
 # when it is run in batch mode (i.e. not interactive).
 
- set apn          = 1                 # number of aerosol phases [0...99, default=0]
+ set apn          = 3                 # number of aerosol phases [0...99, default=0]
  set gaseqnfile   = gas.eqn
  set rplfile      = maforchem         # replacements and additional reactions
  set wanted       = "Tr && (G || Aa) && \!Br && \!Hg"

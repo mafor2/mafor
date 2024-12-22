@@ -247,6 +247,7 @@
 <A9411_a##MK>  DMSO_a## + OH_a##          = MSIA_a## + HO2_a## + CO2_a##     : {%TrAa##MblSc}  xaer(##){§}*k_arr(6.65E9,-1270.,temp) *cvfac(##); {@6.65E9}{$-1270}{&2641}
 <A9412_a##MK>  MSIA_a## + O3_a##          = CH3SO3m_a## + Hp_a##             : {%TrAa##MblSc}  xaer(##){§}*3.5E7 *cvfac(##); {@3.5E7}{&2641}
 <A9413_a##MK>  MSIA_a## + OH_a##          = CH3SO3m_a## + Hp_a## + HO2_a##   : {%TrAa##MblSc}  xaer(##){§}*6.0E9 *cvfac(##); {@6.0E9}{&2641}
+<A9414_a##MK>  HPMTF_a## + OH_a##         = HOOCH2SCO_a##                    : {%TrAa##MblSc}  xaer(##){§}*1.0E10 *cvfac(##); {@1.0E10}{&2645}
 
 // S + F (#A95nn)
 
@@ -430,8 +431,13 @@
 
 
 // S + C (#H9400-#H94nn)
-<H9403f_a##MK> CH3SOOH         = MSIA_a##            : {%TrAa##}         xnom7dmso*k_exf(##,ind_CH3SOOH){§}; {&SGN}
-<H9403b_a##MK> MSIA_a##        = CH3SOOH             : {%TrAa##}         xnom7dmso*k_exb(##,ind_CH3SOOH){§}; {&SGN}
+<H9403f_a##MK> CH3SOOH         = MSIA_a##            : {%TrAa##}         xnom7dmso*k_exf(##,ind_CH3SOOH){§}; {&2641}
+<H9403b_a##MK> MSIA_a##        = CH3SOOH             : {%TrAa##}         xnom7dmso*k_exb(##,ind_CH3SOOH){§}; {&2641}
+<H9404f_a##MK> HPMTF           = HPMTF_a##           : {%TrAa##}         xnom7dmso*k_exf(##,ind_HPMTF){§}; {&2645}
+<H9404b_a##MK> HPMTF_a##       = HPMTF               : {%TrAa##}         xnom7dmso*k_exb(##,ind_HPMTF){§}; {&2645}
+<H9405f_a##MK> HOOCH2SCO       = HOOCH2SCO_a##       : {%TrAa##}         xnom7dmso*k_exf(##,ind_HOOCH2SCO){§}; {&2645}
+<H9405b_a##MK> HOOCH2SCO_a##   = HOOCH2SCO           : {%TrAa##}         xnom7dmso*k_exb(##,ind_HOOCH2SCO){§}; {&2645}
+
 
 {<H10nnn_a##> ----------------------- Hg ------------------------}{@\myhline}
 

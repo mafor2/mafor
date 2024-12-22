@@ -134,6 +134,17 @@ DEANCH2CHO    = 6C + 13H + 3O + N     ; {@DEANCH2CHO}        {N,N-diethanol acet
 DEANCH2COO2   = 6C + 12H + 5O + N     ; {@DEANCH2COO2}       {N,N-diethanol acetamide peroxyradical}
 
 
+{------------------------------------- Br -----------------------------------}
+OBrO          =            2O    + Br ; {@OBrO}              {bromine oxide}
+
+
+{------------------------------------- I ------------------------------------}
+I2O3          =            3O    + 2I ; {@I_2O_3}            {}
+I2O4          =            4O    + 2I ; {@I_2O_4}            {}
+INO           =            O + N +  I ; {@INO}               {nitrosyl iodide}
+I2O           =            O     + 2I ; {@I_2O}              {}
+I2O5          =            5O    + 2I ; {@I_2O_5}            {}
+
 
 {------------------------------------- S ------------------------------------}
 
@@ -145,6 +156,7 @@ CH3SO4H       = C + 4H + S + 4O       ; {@CH_3SO_4H}         {}
 CH3SCH2       = 2C + 5H + S           ; {@CH_3SCH_2}         {dimethyl sulfide radical}
 DMSOO         = 2C + 5H + S + 2O      ; {@CH_3SCH_2OO}       {dimethyl sulfide peroxyradical}
 DMSOOH        = 2C + 6H + S + 2O      ; {@CH_3SCH_2OOH}      {dimethyl sulfide hydroperoxide}
+CH3SCHO       = 2C + 4H + S + O       ; {@CH_3SCHO}          {methylthiolformate}
 DMSOH         = 2C + 7H + S + O       ; {@DMSOH}             {dimethyl sulfhydroxide: CH3SOHCH3}
 DMSOHO        = 2C + 7H + S + 2O      ; {@DMSOHO}            {}
 DMSOHOO       = 2C + 7H + S + 3O      ; {@DMSOHOO}           {}
@@ -154,6 +166,11 @@ DMSO2         = 2C + 6H + S + 2O      ; {@DMSO_2}            {dimethyl sulfone: 
 DMSO2O        = 2C + 6H + S + 3O      ; {@DMSO_2O}           {dimethyl sulfone oxyradical}
 DMSO2OO       = 2C + 6H + S + 4O      ; {@DMSO_2OO}          {dimethyl sulfone peroxyradical}
 DMSO2OOH      = 2C + 6H + S + 4O      ; {@DMSO_2OOH}         {dimethyl sulfone hydroperoxide}
+HPMTF         = 2C + 4H + S + 3O      ; {@HPMTF}             {hydroperoxyl methyl thioformate}
+HOOCH2SCO     = 2C + 3H + S + 3O      ; {@HOOCH2SCO}         {}
+HOOCH2S       = C + 3H + S + 2O       ; {@HOOCH_2S}          {}
+HOOCH2SO      = C + 3H + S + 3O       ; {@HOOCH_2SO}         {}
+HOOCH2SOO     = C + 3H + S + 4O       ; {@HOOCH_2SOO}        {}
 CH3S          = C + 3H + S            ; {@CH_3S}             {}
 CH3SO         = C + 3H + S + O        ; {@CH_3SO}            {}
 CH3SOO        = C + 3H + S + 2O       ; {@CH_3SOO}           {}
@@ -167,4 +184,3 @@ MSADMAH2O     = 3C+ 14H+ S + 4O + N   ; {@MSA(DMA)(H_2O)}    {[MSA*DMA*H2O]: met
 MSADMA        = 3C+ 11H+ S + 3O + N   ; {@MSA(DMA)}          {[MSA*DMA]: methane sulfonic acid - DMA cluster} 
 MSATMAH2O     = 4C+ 16H+ S + 4O + N   ; {@MSA(TMA)(H_2O)}    {[MSA*TMA*H2O]: methane sulfonic acid - TMA - water cluster}
 MSATMA        = 4C+ 13H+ S + 3O + N   ; {@MSA(TMA)}          {[MSA*TMA]: methane sulfonic acid - TMA cluster} 
-

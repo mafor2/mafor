@@ -1,11 +1,15 @@
 !****************************************************************************
-!                Time-stamp: <2018-07-03 19:13:56 joec_pa>
+!                Time-stamp: <2023-12-11 21:10:48 sander>
 !****************************************************************************
 
 ! Definitions that all photolysis submodels have in common
 
 ! Author:
-! Rolf Sander, MPICH, 2008-2017: original code
+! Rolf Sander, MPICH, 2008-2020
+
+! NOTES:
+! - The index ip_BrNO3 refers to the total photolysis of BrNO3. The
+!   index ip_BrONO2 is only for the branch BrNO3 + hv -> BrO + NO2
 
 MODULE messy_cmn_photol_mem
 
@@ -49,8 +53,8 @@ MODULE messy_cmn_photol_mem
     ip_O2_aurq      = 100, ip_N2_aurq      = 101, ip_H2SO4        = 102, &
     ip_C3O2         = 103, ip_CH3NO3       = 104, ip_CH3O2NO2     = 105, &
     ip_CH3ONO       = 106, ip_CH3O2        = 107, ip_HCOOH        = 108, &
-    ip_HO2NO2       = 109, ip_OHNO3        = 110, ip_qqqdummy     = 111, &
-    ip_CH3OCl       = 112, ip_MEO2NO2      = 113, ip_CHF2Cl       = 114, &
+    ip_HO2NO2       = 109, ip_OHNO3        = 110, ip_BrONO2       = 111, &
+    ip_CH3OCl       = 112, ip_MEO2NO2dummy = 113, ip_CHF2Cl       = 114, &
     ip_F113         = 115, ip_C2H5NO3      = 116, ip_NOA          = 117, &
     ip_MEKNO3       = 118, ip_BENZAL       = 119, ip_HOPh3Me2NO2  = 120, &
     ip_HOC6H4NO2    = 121, ip_CH3CHO2VINY  = 122, ip_CH3COCO2H    = 123, &
@@ -59,12 +63,17 @@ MODULE messy_cmn_photol_mem
     ip_PINAL2HCO    = 130, ip_PINAL2ENOL   = 131, ip_CF2ClCFCl2   = 132, &
     ip_CH3CFCl2     = 133, ip_CF3CF2Cl     = 134, ip_CF2ClCF2Cl   = 135, &
     ip_CHCl3        = 136, ip_CH2Cl2       = 137, ip_HO2          = 138, &
-    ip_ClO          = 139
-  ! ip_qqqdummy results from an obsolete value that has been removed.
+    ip_ClO          = 139, ip_HOOCCOOH     = 140, ip_CBrF2CBrF2   = 141, &
+    ip_CH3CF2Cl     = 142, ip_MEK          = 143, ip_ACETOL       = 144, &
+    ip_IC3H7NO3     = 145, ip_HI           = 146, ip_OIO          = 147, &
+    ip_I2O2         = 148, ip_I2O3         = 149, ip_I2O4         = 150, &
+    ip_INO          = 151, ip_Cl2O         = 152, ip_Cl2O3        = 153, &
+    ip_ClNO         = 154, ip_ClONO        = 155
+
   ! The next time a new photolysis is added, it can be inserted here.
 
   ! IP_MAX must be set to the highest ip_* value from the definitions above:
-  INTEGER, PUBLIC, PARAMETER :: IP_MAX = 139
+  INTEGER, PUBLIC, PARAMETER :: IP_MAX = 155
 
   CHARACTER(LEN=12), PUBLIC, PARAMETER, DIMENSION(IP_MAX) :: jname = (/ &
     'O2          ', 'O3P         ', 'O1D         ', &
@@ -103,8 +112,8 @@ MODULE messy_cmn_photol_mem
     'O2_aurq     ', 'N2_aurq     ', 'H2SO4       ', &
     'C3O2        ', 'CH3NO3      ', 'CH3O2NO2    ', &
     'CH3ONO      ', 'CH3O2       ', 'HCOOH       ', &
-    'HO2NO2      ', 'OHNO3       ', 'qqqdummy    ', &
-    'CH3OCl      ', 'MEO2NO2     ', 'CHF2Cl      ', &
+    'HO2NO2      ', 'OHNO3       ', 'BrONO2      ', &
+    'CH3OCl      ', 'MEO2NO2dummy', 'CHF2Cl      ', &
     'F113        ', 'C2H5NO3     ', 'NOA         ', &
     'MEKNO3      ', 'BENZAL      ', 'HOPh3Me2NO2 ', &
     'HOC6H4NO2   ', 'CH3CHO2VINY ', 'CH3COCO2H   ', &
@@ -113,7 +122,12 @@ MODULE messy_cmn_photol_mem
     'PINAL2HCO   ', 'PINAL2ENOL  ', 'CF2ClCFCl2  ', &
     'CH3CFCl2    ', 'CF3CF2Cl    ', 'CF2ClCF2Cl  ', &
     'CHCl3       ', 'CH2Cl2      ', 'HO2         ', &
-    'ClO         ' /)
+    'ClO         ', 'HOOCCOOH    ', 'CBrF2CBrF2  ', &
+    'CH3CF2Cl    ', 'MEK         ', 'ACETOL      ', &
+    'IC3H7NO3    ', 'HI          ', 'OIO         ', &
+    'I2O2        ', 'I2O3        ', 'I2O4        ', &
+    'INO         ', 'Cl2O        ', 'Cl2O3       ', &
+    'ClNO        ', 'ClONO       ' /)
 
 END MODULE messy_cmn_photol_mem
 
