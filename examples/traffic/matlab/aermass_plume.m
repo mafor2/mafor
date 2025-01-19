@@ -55,7 +55,7 @@ pmtotal=(pmorgct+pmecbct+pmsulct+pmxxxct+pmamoct+pmnitct)*1e-3;
 % TOTAL number conc in #/cm3
 pnctotal=1.e-6*(total_n(:,3)+total_n(:,4)+total_n(:,5)+total_n(:,6)+total_n(:,7));
 % 10-25nm
-pncnucl =1.e-6*(total_n(:,8)-total_n(:,3));
+pncnucl =1.e-6*(total_n(:,8) -total_n(:,3));
 % 25-100nm
 pncaitk =1.e-6*total_n(:,9);
 % >100nm (AS+CS)

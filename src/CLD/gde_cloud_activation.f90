@@ -373,6 +373,7 @@ subroutine cloud_driver(vupdra,temp,press,supersat,dwldtsum,hour_time, &
 
 
       !print *,'driver dSdt', dSdt, dir, dir*alphav*vupdra, gammaw*dwldtsum
+      !print *,'hour_time',hour_time
 
       !!! TEST STOP
       !!! Stop after 5 min
@@ -699,15 +700,15 @@ subroutine cloud_solver(caq,DTIME,IMAX,press,temp,mbh,DPcrit,    &
                                 DPcrit,kcoag*1._dp,   kcoll)
 
       ! collection equation -> number and mass fluxes
-      !   if (DPcrit.lt.2.e-6_dp) then
+         if (DPcrit.lt.2.e-6_dp) then
+      ! droplet-particle collection
            call coagulation(temp,DTIME,ROOPW,DPAW,VPT,N,MASS,     &
-                         IMAX,IAG,kcoll*1._dp, coags,fluxm,flux)
-      !   else
+                         IMAX,IAG,kcoll, coags,fluxm,flux)
+         else
       ! particle coagulation
-      !     clflag=0
-      !     call coagulation(temp,DTIME,ROOPW,DPAW,VPT,N,MASS,     &
-      !                   IMAX,IAG,kcoag, coags,fluxm,flux)
-      !   endif
+           call coagulation(temp,DTIME,ROOPW,DPAW,VPT,N,MASS,     &
+                         IMAX,IAG,kcoag, coags,fluxm,flux)
+         endif
 
       ! compute updated coagulation target classes
          call coagulation_target(VPT,IMAX, IAG)

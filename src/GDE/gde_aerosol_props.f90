@@ -307,6 +307,39 @@ contains
             LINDISM(M,I,DU)=(MDUSTTOT(M)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M)))) &
                            *EXP(-0.5_dp*(LOG(DPA(M,I)/GMD(M))/LOG(SIG(M)))**2._dp)
 
+
+! Add contribution of next lower mode
+            if ((M.gt.1).and.(M.lt.MMAX)) then           
+              LINDISM(M,I,SU)=LINDISM(M,I,SU) +                                 &
+                      (MSULFTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,OC)=LINDISM(M,I,OC) +                                 &
+                      (MORGCTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,AM)=LINDISM(M,I,AM) +                                 &
+                      (MAMMOTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,NI)=LINDISM(M,I,NI)  +                                &
+                      (MNITRTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,MS)=LINDISM(M,I,MS)  +                                &
+                      (MMSAPTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,SA)=LINDISM(M,I,SA)  +                                &
+                      (MSALTTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,XX)=LINDISM(M,I,XX)  +                                &
+                      (MXXXXTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,EC)=LINDISM(M,I,EC)  +                                &
+                      (MECBCTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+              LINDISM(M,I,DU)=LINDISM(M,I,DU)  +                                &
+                      (MDUSTTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+            endif
+
+
 ! Mass concentrations in ng/m3
             MASS(M,I,A_SUL)=LINDISM(M,I,SU)*DLINDP(M,I)
 
@@ -477,6 +510,15 @@ contains
               BGLINDISM(M,I,K)=( BGMCTOT(M,K) /(SQRT(2.*pi)*DPA(M,I)*LOG(BGSIG(M)))) &
                                *EXP(-0.5*(LOG(DPA(M,I)/BGMD(M))/LOG(BGSIG(M)))**2.)
             enddo
+
+! Add contribution of next lower mode
+            if ((M.gt.1).and.(M.lt.MMAX)) then
+              do K=1,iamax-1
+                BGLINDISM(M,I,K)=BGLINDISM(M,I,K)  +                           & 
+                     ( BGMCTOT(M-1,K) /(SQRT(2.*pi)*DPA(M,I)*LOG(BGSIG(M-1)))) &
+                     *EXP(-0.5*(LOG(DPA(M,I)/(0.3*BGMD(M-1)))/LOG(BGSIG(M-1)))**2.)
+              enddo
+            endif
 
 
 ! Mass concentrations in ng/m3

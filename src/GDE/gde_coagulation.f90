@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2025  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -43,7 +43,7 @@ module gde_coagulation
     use gde_constants,  only            : pi,N_A,k_B
     use gde_constants,  only            : dp
     use gde_constants,  only            : cp_air
-    use gde_input_data, only            : NU,AI,AS,CS
+    use gde_input_data, only            : NU,NA,AI,AS,CS
     use gde_input_data, only            : MMAX,AMAX  
     use gde_input_data, only            : LAM,VIS
     use gde_init_gas,   only            : rp0,Dfrac
@@ -198,8 +198,8 @@ module gde_coagulation
              L=INT(IAG(M,O,I,J))
 
 
-!MSK 01.04.2021 new definition of HALF
-!        HALF = v_k/VTOTB = VPT(O,L)/VTOTB
+! New definition of HALF
+!        HALF = v_k/VTOTB = VPT(M,I)/VTOTB
 !        except for the first bin where HALF=0
 !        and last bin where HALF=1
              IF ((M.EQ.NU).AND.(I.EQ.1)) THEN
@@ -235,15 +235,14 @@ module gde_coagulation
           stop
         endif
 
-!MSK 18.11.2024: The condition for FIJK is critical
-!        for transfer to the next higher mode
-!        changes here must also be done for mass
-!MSK 18.11.2024: FIJK not >1.1
+! ***    The condition for FIJK is critical
+! ***    for the transfer to the next higher mode
+! ***    changes here must also be done for mass
+!MSK 19.01.2025: no upper limit to FIJK
 !MSK 16.03.2021: FIJK not >2
                  FIJK=vtotb-vpt(o,l-1)
                  FIJK=FIJK/(vpt(o,l)-vpt(o,l-1))
                  !!!FIJK=min(FIJK,2.0)
-                 FIJK=min(FIJK,1.1)
                  flux(o+1,1)=flux(o+1,1)+half*b(m,o,i,j)*n(m,i)*n(o,j)*FIJK
 
         !write(6,'(5I3,6ES12.4)') M,I,O,J,L,FIJK,HALF
@@ -302,12 +301,11 @@ module gde_coagulation
                    fluxm(o,l,a)=fluxm(o,l,a)+half*b(m,o,i,j)            * &
                         mass(m,i,a)*n(o,j)*FIJK
 
-!MSK 18.11.2024: FIJK not >1.1
+!MSK 19.01.2025: no upper limit to FIJK
 !MSK 16.03.2021: FIJK not >2
                    FIJK=vtotb-vpt(o,l-1)
                    FIJK=FIJK/(vpt(o,l)-vpt(o,l-1))
                    !!!FIJK=min(FIJK,2.0)
-                   FIJK=min(FIJK,1.1)
                    fluxm(o+1,1,a)=fluxm(o+1,1,a)+half*b(m,o,i,j)        * &
                         mass(m,i,a)*n(o,j)*FIJK
 
@@ -340,6 +338,8 @@ module gde_coagulation
 
 ! Source terms are updated by removal of particles by coagulation.
     !------------------------------------------------------------------
+    ! The coagulational loss happens between particles of mode M
+    ! and particles of the same mode or larger mode.
     ! The size-splitting operator for collisional loss is (1 - f_kjk)
     ! Here, f_kjk for the collisional loss is:
     !    f_kjk = [v_k+1 - VTOTB) / (v_k+1 - vk)] * HALF 
@@ -349,8 +349,12 @@ module gde_coagulation
     !      v_k: VPT(M,I)
     !------------------------------------------------------------------
           do I=1,IMAX
-           do O=M,MM
-            do J=1,IMAX
+
+!MSK 2025-01-16 Loss to particles of all size bins
+!MSK 2025-01-16          ! do O=M,MM
+          do O=1,MMAX
+
+             do J=1,IMAX
 
               VTOTB=VPT(M,I)+VPT(O,J)
               IF ((M.EQ.CS).AND.(I.EQ.IMAX)) THEN 
@@ -385,7 +389,8 @@ module gde_coagulation
                IF ((abs(FLUXM(M,I,A)*DTIME).GT.MASS(M,I,A)).AND.(FLUXM(M,I,A).LT.0.)) THEN
                  FLUXM(M,I,A)=MASS(M,I,A)/DTIME
                ENDIF
-              end do               
+              end do
+           
             end do
           end do
            ! coagulation sink 
@@ -554,14 +559,15 @@ module gde_coagulation
      do I=1,IMAX
 
        if ( (ICOAG.eq.2).or.(ICOAG.eq.5) ) then
-       ! Collision radius becomes fractal radius rc rf
+       ! Collision radius becomes fractal radius rc = rf
           nspher = ( 4*pi*(DPA(M,I)*0.5)**3./3 ) /            &
                    ( 4*pi*rp0m**3./3 )
           DPAC(M,I) = 2.* rp0m * nspher**(1./Dfrac)
           DPAC(M,I) = (1.0-sootfrac)*DPA(M,I)                 &
                     + sootfrac* DPAC(M,I)
-          !write(6,*) 'dp_corr',m,i,DPA(M,I),DPAC(M,I)
+         ! write(6,*) 'dp_corr',m,i,DPA(M,I),DPAC(M,I)
        ! Mobility radius rm for Knudsen number and diffusion coeff
+       ! Jacobson and Seinfeld (2004), Equation (3)
           ra1   = min( (1.0+0.67_dp*(nspher-1.0_dp) ),   &
                        (Dfrac*nspher**(2.0_dp/Dfrac)/3) )
           rarea = rp0m * sqrt( max( (nspher**(2.0_dp/3)),ra1 ) )
@@ -571,6 +577,7 @@ module gde_coagulation
           if ( DPA(M,I)*0.5_dp .lt. rp0m ) then
             DPAM(M,I) = DPAC(M,I)
           endif
+!MSK 2025-01-19        DPAM(M,I) =max(DPAM(M,I), DPAC(M,I))
         !write(6,*) 'dp_mobi',m,i,rp0m,Dfrac,DPA(M,I),DPAC(M,I),DPAM(M,I)
        else
           DPAC(M,I) = DPA(M,I)
@@ -578,10 +585,10 @@ module gde_coagulation
        endif
 
        !!! MP(M,I) from dens*vol  (does not work:)
-       AA=(1./6.)*ROOP(M,I)*pi*(DPAM(M,I))**3.  ! AA in [kg] 
-       !!! THIS IS AN IMPORTANT CONSTRAINT   
-       !AA=max(MP(M,I),1.e-22) 
-       !!! DO NOT CHANGE
+       !!! AA does not depend on fractal geometry
+       AA=(1./6.)*ROOP(M,I)*pi*(DPA(M,I))**3.  ! AA in [kg]
+!MSK 2025-01-19    AA=(1./6.)*ROOP(M,I)*pi*(DPAM(M,I))**3.  ! AA in [kg] 
+
        
        ! Thermal velocity C [m s^-1]
        ! Boltzmann constant here in [J/K] == [kg m^2 s^-2 K^-1]
@@ -941,7 +948,7 @@ module gde_coagulation
       ! for Brownian Diffusion DIF
       ! and Ventilation coefficient VEN
 
-      do M=AI,CS
+      do M=1,MMAX
         do I=1,IMAX
 
           ! Cunnningham slip-flow correction [-]
@@ -1063,9 +1070,12 @@ module gde_coagulation
               ! if critcial radius is below 1 um
               ! upper radius limit rlim (= 200 nm)
                 if ((rs.le.rlim).and.(rc.lt.1.e-6_dp)) then
-                  if (rs.lt.2e-8_dp) then
+                  if (rs.lt.2.e-8_dp) then
+              ! rs < 20 nm
                     KCOL(M,O,I,J) = KCOA(M,O,I,J)
-                  else   ! 20 nm < rs < 400 nm
+
+                  else  
+              ! 20 nm < rs < 400 nm
                     !KCOL(M,O,I,J) = KCOA(M,O,I,J)*(7.25e8*rs-12.5_dp)  ! factor 60
                     !KCOL(M,O,I,J) = KCOA(M,O,I,J)*(9.75e8*rs-17.5_dp)  ! factor 80
                     KCOL(M,O,I,J) = KCOA(M,O,I,J)*(1.23e9*rs-22.5_dp)  ! factor 100

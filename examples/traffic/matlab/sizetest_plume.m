@@ -103,6 +103,7 @@ dmdlogdp_bin06=yam(2+80,2:col) *1e12 *2.303;
 dmdlogdp_bin07=yam(2+120,2:col) *1e12 *2.303;
 
 fsize=11;
+fsizel=9;
 
 % first 8h: hourly. then every 8h
 %1 hour= 1*60*6 = 360
@@ -121,16 +122,17 @@ loglog(bg_diameter_dmps,bga16_0_dndlogdp,'kd-','MarkerSize',3.5,'LineWidth',0.9)
 %modelled at 25m
 loglog(diameter_bin,dndlogdp_bin01,'Color',[.6 .6 .6],'LineStyle','-','LineWidth',2.5)
 %modelled at xxx m
-loglog(diameter_bin,dndlogdp_bin02,      '--r' ,'LineWidth',1.8)
-loglog(diameter_bin,dndlogdp_bin03,      '--g' ,'LineWidth',1.8)
-loglog(diameter_bin,dndlogdp_bin04,      '--y' ,'LineWidth',1.8)
-loglog(diameter_bin,dndlogdp_bin05,      '--c' ,'LineWidth',1.8)
-loglog(diameter_bin,dndlogdp_bin06,      '--m' ,'LineWidth',1.8)
-loglog(diameter_bin,dndlogdp_bin07,      '--b' ,'LineWidth',1.8)
+loglog(diameter_bin,dndlogdp_bin02,      '--r' ,'LineWidth',1.2)
+loglog(diameter_bin,dndlogdp_bin03,      '--g' ,'LineWidth',1.2)
+loglog(diameter_bin,dndlogdp_bin04,      '--y' ,'LineWidth',1.2)
+loglog(diameter_bin,dndlogdp_bin05,      '--c' ,'LineWidth',1.2)
+loglog(diameter_bin,dndlogdp_bin06,      '--m' ,'LineWidth',1.2)
+loglog(diameter_bin,dndlogdp_bin07,      '--b' ,'LineWidth',1.2)
 
 grid
 
-legend('A16dw,25m','backgr,25m','25m model','500m model','1000m model','2000m model','3000m model','4000m model','6000m model','Location','NorthEastOutside')
+g=legend('A16dw,25m','backgr,25m','25m model','500m model','1000m model','2000m model','3000m model','4000m model','6000m model','Location','NorthEastOutside')
+set(g,'FontSize',fsizel);
 xlabel('Diameter D_p (nm)','FontSize',fsize)
 ylabel('dN/dlog_{10}Dp (particles/cm^3)','FontSize',fsize)
 %loglog
@@ -152,12 +154,12 @@ hold
 ax=gca;
 set(ax,'linewidth',1.5,'fontsize',fsize,'tickdir','out')
 %modelled at xxx m
-loglog(diameter_bin,dmdlogdp_bin02,      '--r' ,'LineWidth',1.8)
-loglog(diameter_bin,dmdlogdp_bin03,      '--g' ,'LineWidth',1.8)
-loglog(diameter_bin,dmdlogdp_bin04,      '--y' ,'LineWidth',1.8)
-loglog(diameter_bin,dmdlogdp_bin05,      '--c' ,'LineWidth',1.8)
-loglog(diameter_bin,dmdlogdp_bin06,      '--m' ,'LineWidth',1.8)
-loglog(diameter_bin,dmdlogdp_bin07,      '--b' ,'LineWidth',1.8)
+loglog(diameter_bin,dmdlogdp_bin02,      '--r' ,'LineWidth',1.2)
+loglog(diameter_bin,dmdlogdp_bin03,      '--g' ,'LineWidth',1.2)
+loglog(diameter_bin,dmdlogdp_bin04,      '--y' ,'LineWidth',1.2)
+loglog(diameter_bin,dmdlogdp_bin05,      '--c' ,'LineWidth',1.2)
+loglog(diameter_bin,dmdlogdp_bin06,      '--m' ,'LineWidth',1.2)
+loglog(diameter_bin,dmdlogdp_bin07,      '--b' ,'LineWidth',1.2)
 grid
 legend('25m model','500m model','1000m model','2000m model','3000m model','4000m model','6000m model','Location','NorthWest')
 xlabel('Diameter D_p (nm)','FontSize',fsize)

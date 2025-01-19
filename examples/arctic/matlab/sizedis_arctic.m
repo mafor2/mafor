@@ -73,9 +73,15 @@ dndlogdp_bin02=y(854,2:col)  *1.e-6 *2.303;
 dndlogdp_bin03=y(1684,2:col) *1.e-6 *2.303;
 dndlogdp_bin04=y(3424,2:col) *1.e-6 *2.303;
 
-diameter_bin02=dp(852,2:coldp)*1e9;
+%smooth dn/dlogDp lines
+windowSize=4;
+dndlogdp_bin01s=filter(ones(1,windowSize)/windowSize,1,dndlogdp_bin01);
+dndlogdp_bin02s=filter(ones(1,windowSize)/windowSize,1,dndlogdp_bin02);
+dndlogdp_bin03s=filter(ones(1,windowSize)/windowSize,1,dndlogdp_bin03);
+dndlogdp_bin04s=filter(ones(1,windowSize)/windowSize,1,dndlogdp_bin04);
 
-% 5 modes with 15 sections = 75 bins
+
+% 5 modes with 18 sections = 90 bins
 imax=15;
 nmodes=5;
 bmax=nmodes*imax;
@@ -87,16 +93,16 @@ semilogx(diameter_dmps(1:30),dndlogdp_dmps_00(1:30),'ks','LineWidth',1.0)
 hold
 ax=gca;
 set(ax,'linewidth',1.5,'fontsize',fsize,'tickdir','out')
-semilogx(diameter_bin,dndlogdp_bin01,      '-k' ,'LineWidth',2.0)
+semilogx(diameter_bin,dndlogdp_bin01s,      '-k' ,'LineWidth',2.0)
 %209.504  (= 2hr 20min)
 semilogx(diameter_dmps(1:30),dndlogdp_dmps_10(1:30),'gs','LineWidth',1.0)
-semilogx(diameter_bin,dndlogdp_bin02,      '-g' ,'LineWidth',2.0)
+semilogx(diameter_bin,dndlogdp_bin02s,      '-g' ,'LineWidth',2.0)
 %209.601  (= 4hr 40min)
 semilogx(diameter_dmps(1:30),dndlogdp_dmps_20(1:30),'bs','LineWidth',1.0)
-semilogx(diameter_bin,dndlogdp_bin03,      '-b' ,'LineWidth',2.0)
+semilogx(diameter_bin,dndlogdp_bin03s,      '-b' ,'LineWidth',2.0)
 %209.802  (= 9hr 30min)
 semilogx(diameter_dmps(1:30),dndlogdp_dmps_70(1:30),'rs','LineWidth',1.0)
-semilogx(diameter_bin,dndlogdp_bin04,      '-r' ,'LineWidth',2.0)
+semilogx(diameter_bin,dndlogdp_bin04s,      '-r' ,'LineWidth',2.0)
 
 legend('209.406 DMPS','209.406 model','209.504 DMPS','209.504 model','209.601 DMPS','209.601 model','209.802 DMPS','209.802 model','Location','NorthEast')
 xlabel('D_p (nm)','FontSize',fsize,'FontName','Arial')
