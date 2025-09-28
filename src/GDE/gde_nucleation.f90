@@ -671,19 +671,19 @@ contains
 
 
         ! Prevent nucleation rate exceeding sulfuric acid kinetic limit
-!        if(SA_SCALE .gt. 0.0) then
-!
-!          KINLIM = (49.19_dp*SA_SCALE**2.016_dp) /                     &
-!                    (1+3.126_dp*SA_SCALE**(-3.594_dp))
-!
-!          IF(j_neu .GT. KINLIM) THEN
-!             j_neu = KINLIM
-!          ENDIF
-!          IF(j_ion .GT. KINLIM) THEN
-!             j_ion = KINLIM
-!          ENDIF
-!
-!        endif
+        if(SA_SCALE .gt. 0.0) then
+
+          KINLIM = (49.19_dp*SA_SCALE**2.016_dp) /                     &
+                    (1+3.126_dp*SA_SCALE**(-3.594_dp))
+
+          IF(j_neu .GT. KINLIM) THEN
+             j_neu = KINLIM
+          ENDIF
+          IF(j_ion .GT. KINLIM) THEN
+             j_ion = KINLIM
+          ENDIF
+
+        endif
 
         ! Set the neutral nucleation rate to 0.0 if less than 1.0e-8      
         if(j_neu.lt.1.e-8) then
