@@ -179,29 +179,36 @@
              if (dpmax==1.0E-5) then
              !PM10
                gmdout(n) = gmdout(n) * 1.00
+
              else if (dpmax<2.0E-6) then
              !FINE
-             !init1_test
+             !init1_test RH=80%
                if (rhi>0.75) then
-                 gmdout(n) = gmdout(n) * 1.15     ! RH=80%
+                 gmdout(n) = gmdout(n) * 1.15
                  sigout(n) = sigout(n) * 0.90
-             !xbkgr2_test, RH=74%
+             !bkgr2_test, RH=74%, and
+             !stena_test, RH=74%
                else if (rhi>0.60) then
-                 gmdout(n) = gmdout(n) * 0.95
+                 gmdout(n) = gmdout(n) *1.05
+                 sigout(n) = sigout(n) *1.00
                else if (rhi>0.30) then
                   if (ndens(n,EC)>0.15) then
-             !traff1_test
-                    gmdout(n) = gmdout(n) * 1.00
-                    sigout(n) = sigout(n) * 0.85
+             !traf1_test, RH=50%, and
+             !bktr1_test, RH=50%
+                    gmdout(n) = gmdout(n) * 1.40 !1.30
+                    sigout(n) = sigout(n) * 0.97
                   else
-             !init1_test RH=50%, aces_test
+             !init1_test, RH=50%, and
+             !aces_test,  RH=50%
                     gmdout(n) = gmdout(n) * 1.15
                     sigout(n) = sigout(n) * 0.90
                   endif 
                else
-                 gmdout(n) = gmdout(n) * 1.15     ! RH=10%
-                 sigout(n) = sigout(n) * 0.90
+             !init1_test RH=10%
+                 gmdout(n) = gmdout(n) * 1.25
+                 sigout(n) = sigout(n) * 0.95
                endif
+
              else
              !FINE + COARSE
                gmdout(n) = gmdout(n) * 1.00
@@ -214,50 +221,56 @@
 
              if (dpmax==1.0E-5) then
              !PM10
-                if (rhi>0.85) then
-                !arctic
-                  gmdout(n) = gmdout(n)*0.98
+                if (rhi < 0.75) then
+             ! xprs3_test
+                  gmdout(n) = gmdout(n)*3.50
                 else
+             ! arctic_test
                   gmdout(n) = gmdout(n)*1.00
                 endif
              else if (dpmax<2.0E-6) then
              !FINE
-             !init1_test
+             !init1_test RH=80%
                 if (rhi>0.75) then
-                  gmdout(n) = gmdout(n) * 4.55     ! RH=80%
-                  sigout(n) = sigout(n) * 1.01
+                  gmdout(n) = gmdout(n) * 1.70
+                  sigout(n) = sigout(n) * 0.98  ! max: 1.00
              !xbkgr2_test, RH=74%
                 else if (rhi>0.60) then
                   gmdout(n) = gmdout(n) * 1.10
                 else if (rhi>0.30) then
                   if (ndens(n,EC)>0.15) then
-             !traff1_test
-                    gmdout(n) = gmdout(n) * 1.35
+             !traf1_test
+                    gmdout(n) = gmdout(n) * 1.75
                     sigout(n) = sigout(n) * 1.02
                   else if (ndens(n,EC)>0.10) then
              !init1_test RH=50%
-                    gmdout(n) = gmdout(n) * 4.70
-                    sigout(n) = sigout(n) * 1.02
+                    print *,'n=3, RH=50%'
+                  gmdout(n) = gmdout(n) * 1.70
+                  sigout(n) = sigout(n) * 0.98  ! max: 1.00
                   else
              !aces, stena
-                    gmdout(n) = gmdout(n) * 2.05
-                    sigout(n) = sigout(n) * 1.06
+                    gmdout(n) = gmdout(n) * 1.00
+                    sigout(n) = sigout(n) * 1.00
                   endif   
                 else
-                  gmdout(n) = gmdout(n) * 4.90     ! RH=10%
-                  sigout(n) = sigout(n) * 1.04
+             !init1_test RH=10%
+                  print *,'n=3, RH=10%'
+                  gmdout(n) = gmdout(n) * 1.70
+                  sigout(n) = sigout(n) * 0.98  ! max: 1.00
                 endif
              else
-             !FINE + COARSE
-                if ((ndens(2,DU)<0.1).and.(ndens(2,EC)>0.20)) then
+             !FINE + COARSE AIT
+                if ((ndens(n,DU)<0.1).and.(ndens(n,EC)>0.20)) then
              !EXHAUST AIT: DU<0.1, EC>0.20
              !xprs1, xprs2
-                  print *,'n=2, du<0.1, ec>0.2'
-                  gmdout(n) = gmdout(n)*0.85
+                  print *,'n=3, du<0.1, ec>0.2'
+                  gmdout(n) = gmdout(n)*0.90
                 else
              !ALL OTHER
-                  print *,'n=2, other'
-                  gmdout(n) = gmdout(n)*max(shrf(n),0.96)                
+             !amar2
+                  print *,'n=3, other'
+                  gmdout(n) = gmdout(n)*max(shrf(n),0.96)
+                  sigout(n) = sigout(n) * 0.96              
                 endif
              endif
              
@@ -267,54 +280,62 @@
 
              if (dpmax==1.0E-5) then
              !PM10
-                gmdout(n) = gmdout(n)*1.00
+                gmdout(n) = gmdout(n)*0.90
              else if (dpmax<2.0E-6) then
              !FINE
-             !xinit1
-                if (rhi>0.65) then
-                  gmdout(n) = gmdout(n)*0.68     ! RH=80%
+             !init1_test RH=80%
+                if (rhi>0.75) then
+                  gmdout(n) = gmdout(n)*0.82
+                  sigout(n) = sigout(n)*1.10
+             !xbkgr2_test, RH=74%
+                else if (rhi>0.60) then
+                  gmdout(n) = gmdout(n)*1.00
                   sigout(n) = sigout(n)*1.00
                 else if (rhi>0.30) then
                   if (ndens(n,EC)>0.15) then
-             !traff1_test
-                    gmdout(n) = gmdout(n) * 0.80
+             !traf1_test
+                    gmdout(n) = gmdout(n) * 0.97
                     sigout(n) = sigout(n) * 1.02
                   else
                     if (ndens(n,SU)>0.15) then
              !init1_test RH=50%
-                      gmdout(n) = gmdout(n) * 0.63
-                      sigout(n) = sigout(n)*0.97
+                      print *,'n=4, RH=50%'
+                  gmdout(n) = gmdout(n)*0.90
+                  sigout(n) = sigout(n)*1.10
                     else
              !aces, stena
-                      gmdout(n) = gmdout(n) * 0.80
+                      gmdout(n) = gmdout(n) * 1.00
                     endif
                   endif      
                 else
-                  gmdout(n) = gmdout(n)*0.63     ! RH=10%
-                  sigout(n) = sigout(n)*0.96 
+             !init1_test RH=10%
+                  print *,'n=4, RH=10%'
+                  gmdout(n) = gmdout(n)*0.90
+                  sigout(n) = sigout(n)*1.10
                 endif
 
              else
              !FINE + COARSE
              ! MSK 26.11.2020 MARINE & COASTAL
              ! SALT > 0.1 [marine case]
-               if (ndens(3,SA)>0.1) then
-               print *,'n=3, sa>0.1'
+             ! amar2
+               if (ndens(n,SA)>0.1) then
+               print *,'n=4, sa>0.1'
                    gmdout(n) = max(gmdout(n)*0.66, 1.80E-7)
-                   sigout(n) = sigout(n)*0.85
+                   sigout(n) = sigout(n)*1.00
              ! SULF > 0.2 [coastal case]
              ! mfhels
-               else if (ndens(3,SU)>0.2) then
-               print *,'n=3, su>0.2'
+               else if (ndens(n,SU)>0.2) then
+               print *,'n=4, su>0.2'
                    gmdout(n) = gmdout(n)*0.95
-                   sigout(n) = sigout(n)*1.08
+                   sigout(n) = sigout(n)*1.00
              ! DU > 0.1 [EXHAUST]
-               else if (ndens(3,DU)>0.1) then
-               print *,'n=3, du>0.1'
-                   gmdout(n) = gmdout(n)*0.85
+               else if (ndens(n,DU)>0.1) then
+               print *,'n=4, du>0.1'
+                   gmdout(n) = gmdout(n)*0.95
                    sigout(n) = sigout(n)*1.00
                else
-               print *,'n=3, other'
+               print *,'n=4, other'
                !!! do not change !!!
                    gmdout(n) = gmdout(n)*max(shrf(n),0.92)
                    sigout(n) = sigout(n)*1.00
@@ -330,9 +351,18 @@
                 gmdout(n) = min(gmdout(n),max3_gmd(n)*1.e-9)
              else if (dpmax<2.0E-6) then
              !FINE
-                gmdout(n) = min(gmdout(n),max2_gmd(n)*1.e-9)
-              !  sigout(n) = sigout(n)*1.05  ! max
-                sigout(n) = sigout(n)*0.85
+                if (rhi>0.30) then
+             !traf1_test
+                  gmdout(n) = gmdout(n)*1.90
+                  gmdout(n) = min(gmdout(n),max2_gmd(n)*1.e-9)
+                  sigout(n) = sigout(n)*0.85
+                       ! sigout(n) = sigout(n)*1.05  ! max
+                else
+             !init1_test RH=10%
+                  print *,'n=5, RH=10%'
+                  gmdout(n) = gmdout(n)*1.40
+                  sigout(n) = sigout(n)*1.00
+                endif
              else
              !FINE + COARSE
                 gmdout(n) = min(gmdout(n),max1_gmd(n)*1.e-9)

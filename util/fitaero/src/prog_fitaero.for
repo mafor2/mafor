@@ -5,7 +5,7 @@
 !*
 !**********************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -47,7 +47,7 @@
 !***      FITAERO
 !***      Aerosol size distribution fit tool
 !***      for MAFOR's inaero.dat
-!***      Version: 1.3
+!***      Version: 1.4
 !***
 !***      FITAERO treats three sets of aerosols
 !***      dpmax <  2.0E-6 [m]            (FINE)
@@ -102,9 +102,10 @@
 !***  06 Dec 2024 M. Karl      extend FITAERO to 5 mode-distribution
 !***  19 Dec 2024 M. Karl      recalculate output sizedis with lognormal
 !***                           mass concentration distribution
-!***
-!*** TO DO: remove shrmode adjustments in module_fitaero_exe.for
-!***        unless necessary to distinguish cases
+!***  19 Apr 2026 M. Karl      V1.4: dpmin = 1.5e-9 confirmed
+!***  25 Apr 2026 M. Karl      removed all shrmode adjustments in 
+!***                           module_fitaero_exe.for because they are
+!***                           not needed to distinguish cases
 !***
 !***********************************************************************
       program prog_fitaero
@@ -424,10 +425,9 @@
            betamin(NA,1)  = betamin(NA,1)*0.85
            betamax(NA,1)  = betamax(NA,1)*0.85
            !AIT
-           beta(AI,1)     = beta(AI,1)   *1.20
-           betamin(AI,1)  = betamin(AI,1)*1.20           
-           betamax(AI,1)  = betamax(AI,1)*1.20
-           beta(AI,3)     = beta(AI,3)   *0.73
+           beta(AI,1)     = beta(AI,1)   *1.40
+           betamin(AI,1)  = betamin(AI,1)*1.40           
+           betamax(AI,1)  = betamax(AI,1)*1.40
            !ACC
            beta(AS,1)     = beta(AS,1)   *1.2
            betamin(AS,1)  = betamin(AS,1)*1.2
@@ -437,9 +437,11 @@
            betamin(AI,2)  = 1.87
            betamax(AI,2)  = 1.99
            !update mass min & max
-           betamin(NU:NA,3)=betamin(NU:NA,3)/25.
-           betamin(AI,3)  = betamin(AI,3)   *0.15
-           betamin(AS:CS,3)=betamin(AS:CS,3)*0.3
+           beta(AI,3)     = beta(AI,3)   *0.73
+           beta(AS,3)     = beta(AS,3)   *0.40
+           betamin(NU:NA,3)=betamin(NU:NA,3) /18.5
+           betamin(AI,3)  = betamin(AI,3)   *0.11
+           betamin(AS:CS,3)=betamin(AS:CS,3)*0.30
            betamax(:,3)   = betamax(:,3)/100.
 
         else if (beta(AS,3)<3000.0) then
@@ -447,69 +449,76 @@
 
            print *,'COASTAL'
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.90
-           betamin(NA,1)  = betamin(NA,1)*0.90
-           betamax(NA,1)  = betamax(NA,1)*0.90
-           beta(NA,3)     = beta(NA,3)   *0.50
+           beta(NA,1)     = beta(NA,1)   *1.20
+           betamin(NA,1)  = betamin(NA,1)*1.20
+           betamax(NA,1)  = betamax(NA,1)*1.20
            !AIT
-           beta(AI,1)     = beta(AI,1)   *0.90
-           betamin(AI,1)  = betamin(AI,1)*0.90
-           betamax(AI,1)  = betamax(AI,1)*0.90
+           beta(AI,1)     = beta(AI,1)   *1.50
+           betamin(AI,1)  = betamin(AI,1)*1.50
+           betamax(AI,1)  = betamax(AI,1)*1.50
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.40
-           betamin(AS,1)  = betamin(AS,1)*1.40
-           betamax(AS,1)  = betamax(AS,1)*1.40
-
-           ! change mode width
-           betamin(NA,2)  = 1.55
-           betamax(NA,2)  = 1.65
-           betamin(AI,2)  = 1.82
-           betamax(AI,2)  = 1.98
-           betamin(AS,2)  = 1.85
-           betamax(AS,2)  = 1.95
-           !update mass min & max
-           betamin(NA,3)  = betamin(NA,3)*0.50
-           betamax(NA,3)  = betamax(NA,3)*0.50
-           beta(AI:CS,3)  = beta(AI:CS,3)*10.0
-           betamin(AI,3)  = beta(AI,3)   *0.17
-           betamin(AS,3)  = beta(AS,3)   *0.16
-           betamin(CS,3)  = beta(CS,3)   *0.25
+           beta(AS,1)     = beta(AS,1)   *3.00
+           betamin(AS,1)  = betamin(AS,1)*3.00
+           betamax(AS,1)  = betamax(AS,1)*3.00
+           !COA
            betamax(CS,1)  = max2_gmd(CS) *0.5
 
+           ! change mode width
+           betamin(NA,2)  = 1.65
+           betamax(NA,2)  = 1.75
+           betamin(AI,2)  = 1.95
+           betamax(AI,2)  = 2.10
+           betamin(AS,2)  = 1.50
+           betamax(AS,2)  = 1.60
+           !update mass min & max
+           beta(NA,3)     = beta(NA,3)   *25.0
+           beta(AI,3)     = beta(AI,3)   *12.0
+           beta(AS,3)     = beta(AS,3)   *4.00
+           beta(CS,3)     = beta(CS,3)   *10.0
+           betamin(NA,3)  = betamin(NA,3)*1.40
+           betamax(NA,3)  = betamax(NA,3)*1.60
+           betamin(AI,3)  = beta(AI,3)   *0.40
+           betamin(AS,3)  = beta(AS,3)   *0.08
+           betamin(CS,3)  = beta(CS,3)   *0.25
+
+
         else if ( beta(AS,3) < 11000.0) then
-        !traff1_test: do not change parameters
+        !DO FIRST INIT1 AT 10% RH AND ADJUST HERE
+        !IN SECOND ROUND:
         !init1_test:  do not change here but in output_fitaero
+        !traff1_test: do not change parameters after changing init1 !!!
 
            print *,'URBAN'
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.94
-           betamin(NA,1)  = betamin(NA,1)*0.94
-           betamax(NA,1)  = betamax(NA,1)*0.94
-           beta(NA,3)     = beta(NA,3)   *2.5
+           beta(NA,1)     = beta(NA,1)   *1.3
+           betamin(NA,1)  = betamin(NA,1)*1.3
+           betamax(NA,1)  = betamax(NA,1)*1.3
+           beta(NA,3)     = beta(NA,3)   *8.5
            !AIT
-           beta(AI,1)     = beta(AI,1)   *1.04
-           betamin(AI,1)  = betamin(AI,1)*1.04
-           betamax(AI,1)  = betamax(AI,1)*1.04
+           beta(AI,1)     = beta(AI,1)   *1.4
+           betamin(AI,1)  = betamin(AI,1)*1.4
+           betamax(AI,1)  = betamax(AI,1)*1.4
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.3
-           betamin(AS,1)  = betamin(AS,1)*1.3
-           betamax(AS,1)  = betamax(AS,1)*1.3
+           beta(AS,1)     = beta(AS,1)   *2.1
+           betamin(AS,1)  = betamin(AS,1)*2.1
+           betamax(AS,1)  = betamax(AS,1)*2.1
            !COA
            betamin(CS,1)  = betamin(CS,1)*1.2
 
            ! change mode width
            betamin(NA,2)  = 1.60
            betamax(NA,2)  = 1.70
-           betamin(AI,2)  = 1.82
-           betamax(AI,2)  = 1.90
+           betamin(AI,2)  = 2.00
+           betamax(AI,2)  = 2.10
+           betamin(AS,2)  = 1.85
+           betamax(AS,2)  = 1.95
            !update mass min & max
-           betamin(NA,3)  = betamin(NA,3)*2.0
-           betamax(NA,3)  = betamax(NA,3)*2.0
-           beta(AI:CS,3)  = beta(AI:CS,3)*3.0
-           betamax(AI:CS,3) = beta(AI:CS,3)*4.0
-           betamin(AI,3)  = beta(AI,3)   *0.77
-           betamin(AS,3)  = beta(AS,3)   *0.49
-           betamin(CS,3)  = beta(CS,3)   *0.45
+           beta(NA,3)     = beta(NA,3)*1.00  !init
+           beta(AI,3)     = beta(AI,3)*25.0  !init
+           beta(AS,3)     = beta(AS,3)*5.00  !init
+           beta(CS,3)     = beta(CS,3)*14.0  !init
+           betamax(:,3)   = beta(:,3)*0.5    !init
+           betamin(:,3)   = beta(:,3)*0.3    !init
 
         else if ( beta(AS,3) < 35000.0) then
         !aces_test
@@ -520,65 +529,81 @@
            betamin(NA,1)  = betamin(NA,1)*1.05
            betamax(NA,1)  = betamax(NA,1)*1.05
            !AIT
-           beta(AI,1)     = beta(AI,1)   *0.80
-           betamin(AI,1)  = betamin(AI,1)*0.80
-           betamax(AI,1)  = betamax(AI,1)*0.80
-           beta(AI,3)     = beta(AI,3)   *5.50
+           beta(AI,1)     = beta(AI,1)   *1.7
+           betamin(AI,1)  = betamin(AI,1)*1.7
+           betamax(AI,1)  = betamax(AI,1)*1.7
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.06
-           betamin(AS,1)  = betamin(AS,1)*1.06
-           betamax(AS,1)  = betamax(AS,1)*1.06
-           beta(AS,3)     = beta(AS,3)   *2.00
+           beta(AS,1)     = beta(AS,1)   *0.8
+           betamin(AS,1)  = betamin(AS,1)*0.8
+           betamax(AS,1)  = betamax(AS,1)*0.8
+           !COA
+           betamin(CS,1)  = betamin(CS,1)*1.5
 
            ! change mode width
            betamin(NA,2)  = 1.45
            betamax(NA,2)  = 1.55
-           betamin(AS,2)  = 1.60
-           betamax(AS,2)  = 1.66
+           betamin(AI,2)  = 1.76
+           betamax(AI,2)  = 1.85
+           betamin(AS,2)  = 1.40
+           betamax(AS,2)  = 1.50
            !update mass min & max
-           betamin(NA,3)  = betamin(NA,3)*0.75
-           betamin(AI,3)  = betamin(AI,3)*50.
-           betamin(AS:CS,3)  = betamin(AS:CS,3)*290.
+           !NAP
+           beta(NA,3)     = beta(NA,3)*1.70
+           !AIT
+           beta(AI,3)     = beta(AI,3)*73.0
+           betamin(AI,3)=betamin(AI,3)*73.0
+           !ACC
+           beta(AS,3)     = beta(AS,3)*1.10
+           betamin(AS,3)  = beta(AS,3)*1.10
+           betamax(AS,3)  = beta(AS,3)*0.50
+           !COA
+           beta(CS,3)     = beta(CS,3)*1.9
+           betamin(CS,3)  = beta(CS,3)*1.9
 
         else
         !stena_test
 
            print *,'EXHAUST'
            !NUC
-           beta(NU,1)     = beta(NU,1)   *1.13
-           betamax(NU,1)  = betamax(NU,1)*1.13
-           betamin(NU,1)  = betamin(NU,1)*1.13
+           beta(NU,1)     = beta(NU,1)   *1.10
+           betamax(NU,1)  = betamax(NU,1)*1.10
+           betamin(NU,1)  = betamin(NU,1)*1.10
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.98
-           betamax(NA,1)  = betamax(NA,1)*0.98
-           betamin(NA,1)  = betamin(NA,1)*0.98
+           beta(NA,1)     = beta(NA,1)   *0.85
+           betamax(NA,1)  = betamax(NA,1)*0.85
+           betamin(NA,1)  = betamin(NA,1)*0.85
            !AIT
-           beta(AI,3)     = beta(AI,3)   *2.1
+           beta(AI,1)     = beta(AI,1)   *1.15
+           betamax(AI,1)  = betamax(AI,1)*1.15
+           betamin(AI,1)  = betamin(AI,1)*1.15
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.50
-           betamin(AS,1)  = betamin(AS,1)*1.50
-           betamax(AS,1)  = betamax(AS,1)*1.50
+           beta(AS,1)     = beta(AS,1)   *1.45
+           betamin(AS,1)  = betamin(AS,1)*1.45
+           betamax(AS,1)  = betamax(AS,1)*1.45
            !COA
-           beta(CS,1)     = beta(CS,1)   *1.40
-           betamin(CS,1)  = betamin(CS,1)*1.40
-           betamax(CS,1)  = betamax(CS,1)*1.40
-           beta(CS,3)     = beta(CS,3)   *0.21
+           beta(CS,1)     = beta(CS,1)   *1.70
+           betamin(CS,1)  = betamin(CS,1)*1.70
+           betamax(CS,1)  = betamax(CS,1)*1.70
 
            ! change mode width
-           betamax(NU,2)  = 1.38
-           betamin(NA,2)  = 1.43
-           betamax(NA,2)  = 1.58
-           betamin(AI,2)  = 1.62
-           betamax(AI,2)  = 1.80
+           betamax(NU,2)  = 1.36
+           betamin(NA,2)  = 1.36
+           betamax(NA,2)  = 1.50
+           betamin(AI,2)  = 1.78
+           betamax(AI,2)  = 1.92
            betamin(AS,2)  = 1.58
            betamax(AS,2)  = 1.68
            betamin(CS,2)  = 1.70
-           betamax(CS,2)  = 1.90
+           betamax(CS,2)  = 1.80
            !update mass min & max
+           beta(NU,3)     = beta(NU,3)   *1.00
+           beta(AI,3)     = beta(AI,3)   *1.00
+           beta(AS,3)     = beta(AS,3)   *1.10
+           beta(CS,3)     = beta(CS,3)   *0.17
            betamax(NA:CS,3)  = betamax(NA:CS,3)*300.
-           betamin(NA,3)  = beta(NA,3)*0.62
-           betamin(AI,3)  = beta(AI,3)*0.65
-           betamin(AS,3)  = beta(AS,3)*1.08
+           betamin(NA,3)  = beta(NA,3)*1.05
+           betamin(AI,3)  = beta(AI,3)*1.18
+           betamin(AS,3)  = beta(AS,3)*1.00
            betamin(CS,3)  = beta(CS,3)*0.45
 
         endif
@@ -604,122 +629,138 @@
         ! ("coastal marine")
            print *,'MARINE'
            !NAP
-           beta(NA,1)     = beta(NA,1)   *1.17
-           betamax(NA,1)  = betamax(NA,1)*1.17
-           betamin(NA,1)  = betamin(NA,1)*1.17
-           beta(NA,3)     = beta(NA,3)*4.7
+           beta(NA,1)     = beta(NA,1)   *1.50
+           betamax(NA,1)  = betamax(NA,1)*1.50
+           betamin(NA,1)  = betamin(NA,1)*1.50
            !AIT
-           beta(AI,1)     = beta(AI,1)   *1.07
-           betamin(AI,1)  = betamin(AI,1)*1.07
-           betamax(AI,1)  = betamax(AI,1)*1.07
-           beta(AI,3)     = beta(AI,3)*2.1
+           beta(AI,1)     = beta(AI,1)   *4.60 !
+           betamin(AI,1)  = betamin(AI,1)*4.60
+           betamax(AI,1)  = betamax(AI,1)*4.60
            !ACC
-           beta(AS,1)     = beta(AS,1)   *0.9
-           betamin(AS,1)  = betamin(AS,1)*0.9
-           betamax(AS,1)  = betamax(AS,1)*0.9
-           beta(AS,3)     = beta(AS,3)*0.6
+           beta(AS,1)     = beta(AS,1)   *2.40
+           betamin(AS,1)  = betamin(AS,1)*2.40
+           betamax(AS,1)  = betamax(AS,1)*2.40
            !COA
-           beta(CS,1)     = beta(CS,1)   *1.6
-           betamax(CS,1)  = betamax(CS,1)*1.6
-           betamin(CS,1)  = betamin(CS,1)*1.6
-           beta(CS,3)     = beta(CS,3)*9.0
+           beta(CS,1)     = beta(CS,1)   *1.60
+           betamax(CS,1)  = betamax(CS,1)*1.60
+           betamin(CS,1)  = betamin(CS,1)*1.60
 
            ! change mode width
-           betamin(AI,2)  = 1.75
-           betamax(AI,2)  = 1.90
+           betamin(NA,2)  = 1.48
+           betamax(NA,2)  = 1.54
+           betamin(AI,2)  = 1.65
+           betamax(AI,2)  = 1.75
+           betamin(AS,2)  = 2.00
+           betamax(AS,2)  = 2.10
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.90
+           beta(NA,3)     = beta(NA,3)*7.8
+           beta(AI,3)     = beta(AI,3)*1.8 !
+           beta(AS,3)     = beta(AS,3)*0.4
+           beta(CS,3)     = beta(CS,3)*5.0
+           betamax(:,3)   = beta(:,3)*0.6
+           betamin(:,3)   = beta(:,3)*0.4
 
         else if (beta(AI,3)<2000.0) then
         !acont_test
         ! ("coastal continental")
            print *,'COASTAL'
            !NAP
-           beta(NA,1)     = beta(NA,1)   *1.2
-           betamax(NA,1)  = betamax(NA,1)*1.2
-           betamin(NA,1)  = betamin(NA,1)*1.2
-           beta(NA,3)     = beta(NA,3)*7.0
+           beta(NA,1)     = beta(NA,1)   *1.6
+           betamax(NA,1)  = betamax(NA,1)*1.6
+           betamin(NA,1)  = betamin(NA,1)*1.6
            !AIT
-           beta(AI,1)     = beta(AI,1)   *2.0
-           betamin(AI,1)  = betamin(AI,1)*2.0
-           betamax(AI,1)  = betamax(AI,1)*2.0
-           beta(AI,3)     = beta(AI,3)*9.4
+           beta(AI,1)     = beta(AI,1)   *1.7
+           betamin(AI,1)  = betamin(AI,1)*1.7
+           betamax(AI,1)  = betamax(AI,1)*1.7
            !ACC
-           beta(AS,3)     = beta(AS,3)*1.0
+           beta(AS,1)     = beta(AS,1)   *1.9
+           betamin(AS,1)  = betamin(AS,1)*1.9
+           betamax(AS,1)  = betamax(AS,1)*1.9
            !COA
            beta(CS,1)     = beta(CS,1)   *1.6
            betamax(CS,1)  = betamax(CS,1)*1.6
            betamin(CS,1)  = betamin(CS,1)*1.6
-           beta(CS,3)     = beta(CS,3)*9.0
 
            ! change mode width
-           betamin(AI,2)  = 1.90
+           betamin(NA,2)  = 1.52
+           betamax(NA,2)  = 1.58
+           betamin(AI,2)  = 1.95
            betamax(AI,2)  = 2.15
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.90
+           beta(NA,3)     = beta(NA,3)*22.0
+           beta(AI,3)     = beta(AI,3)*5.50
+           beta(AS,3)     = beta(AS,3)*0.50
+           beta(CS,3)     = beta(CS,3)*0.50
+           betamin(:,3)   = beta(:, 3)*0.90
 
         else if (beta(AI,3)<10000.0) then
         !bkgr1_test
            print *,'URBAN'
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.75
-           betamax(NA,1)  = betamax(NA,1)*0.75
-           betamin(NA,1)  = betamin(NA,1)*0.75
-           beta(NA,3)     = beta(NA,3)*0.35
+           beta(NA,1)     = beta(NA,1)   *3.20 !
+           betamax(NA,1)  = betamax(NA,1)*3.20
+           betamin(NA,1)  = betamin(NA,1)*3.20
            !AIT
-           beta(AI,1)     = beta(AI,1)   *1.15
-           betamin(AI,1)  = betamin(AI,1)*1.15
-           betamax(AI,1)  = betamax(AI,1)*1.15
-           beta(AI,3)     = beta(AI,3)*0.60
+           beta(AI,1)     = beta(AI,1)   *3.30
+           betamin(AI,1)  = betamin(AI,1)*3.30
+           betamax(AI,1)  = betamax(AI,1)*3.30
            !ACC
            beta(AS,1)     = beta(AS,1)   *1.5
            betamin(AS,1)  = betamin(AS,1)*1.5
            betamax(AS,1)  = betamax(AS,1)*1.5
-           beta(AS,3)     = beta(AS,3)*0.37
-           !COA
-           beta(CS,3)     = beta(CS,3)*0.80
+           !COA --
 
            ! change mode width
+           betamin(NA,2)  = 1.46
+           betamax(NA,2)  = 1.56
            betamin(AI,2)  = 1.90
            betamax(AI,2)  = 2.15
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.90
+           beta(NA,3)     = beta(NA,3)*1.00
+           beta(AI,3)     = beta(AI,3)*1.50
+           beta(AS,3)     = beta(AS,3)*1.00
+           beta(CS,3)     = beta(CS,3)*1.00
+           betamax(:,3)   = beta(:,3)*0.5
+           betamin(:,3)   = beta(:,3)*0.2
 
         else
-        !xprs1,2_test
+        !xprs1_test & xprs2_test
            print *,'EXHAUST'
-           !NUC
-           betamax(NU,1)  = 7.6 ! nm
-           betamax(NU,2)  = 1.30
-           betamin(NU,3)  = beta(NU,3)*0.45
-           betamax(NU,3)  = beta(NU,3)*2.00
+           !NUC define <10nm mode
+           betamin(NU,1)  = 5.8 ! nm
+           betamax(NU,1)  = 7.2 ! nm
+           betamax(NU,2)  = 1.32
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.95
-           betamax(NA,1)  = betamax(NA,1)*0.95
-           betamin(NA,1)  = betamin(NA,1)*0.95
-           beta(NA,3)     = beta(NA,3)*0.68
-           !AIT
-           beta(AI,1)     = beta(AI,1)   *0.77
-           betamin(AI,1)  = betamin(AI,1)*0.77
-           betamax(AI,1)  = betamax(AI,1)*0.77
-           beta(AI,3)     = beta(AI,3)*0.80
+           beta(NA,1)     = beta(NA,1)   *0.90
+           betamax(NA,1)  = betamax(NA,1)*0.90
+
+           betamin(NA,1)  = betamin(NA,1)*0.90
+           !AIT control diameter in output_fitaero.for
+           beta(AI,1)     = beta(AI,1)   *1.00
+           betamin(AI,1)  = betamin(AI,1)*1.00
+           betamax(AI,1)  = betamax(AI,1)*1.00
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.05
-           betamin(AS,1)  = betamin(AS,1)*1.05
-           betamax(AS,1)  = betamax(AS,1)*1.05
-           beta(AS,3)     = beta(AS,3)*0.75
-           !COA
-           beta(CS,3)     = beta(CS,3)*0.80
+           beta(AS,1)     = beta(AS,1)   *1.60
+           betamin(AS,1)  = betamin(AS,1)*1.60
+           betamax(AS,1)  = betamax(AS,1)*1.60
 
            ! change mode width
-           betamin(AI,2)  = 1.85
-           betamax(AI,2)  = 2.10
+           betamin(NA,2)  = 1.39
+           betamax(NA,2)  = 1.50
+           betamin(AI,2)  = 1.60
+           betamax(AI,2)  = 1.70
            betamin(AS,2)  = 1.80
            betamax(AS,2)  = 1.95
            betamin(CS,2)  = 1.85
            betamax(CS,2)  = 2.20
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.90
+           beta(NU,3)     = beta(NU,3)*1.65
+           betamin(NU,3)  = beta(NU,3)*0.50
+           betamax(NU,3)  = beta(NU,3)*2.60
+           beta(NA,3)     = beta(NA,3)*0.97
+           beta(AI,3)     = beta(AI,3)*0.65 !0.68
+           beta(AS,3)     = beta(AS,3)*0.70
+           betamin(:,3)   = beta(:,3)*0.90
 
         endif
 
@@ -746,28 +787,30 @@
            beta(NU,1)     = beta(NU,1)   *0.62
            betamax(NU,1)  = betamax(NU,1)*0.62
            betamin(NU,1)  = betamin(NU,1)*0.62
-           beta(NU,3)     = beta(NU,3)*16.0
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.87
-           betamax(NA,1)  = betamax(NA,1)*0.87
-           betamin(NA,1)  = betamin(NA,1)*0.87
-           beta(NA,3)     = beta(NA,3)*3.0
+           beta(NA,1)     = beta(NA,1)   *0.89
+           betamax(NA,1)  = betamax(NA,1)*0.89
+           betamin(NA,1)  = betamin(NA,1)*0.89
            !AIT
-           beta(AI,1)     = beta(AI,1)   *1.09
-           betamin(AI,1)  = betamin(AI,1)*1.09
-           betamax(AI,1)  = betamax(AI,1)*1.09
-           beta(AI,3)     = beta(AI,3)*4.0
+           beta(AI,1)     = beta(AI,1)   *1.46
+           betamin(AI,1)  = betamin(AI,1)*1.46
+           betamax(AI,1)  = betamax(AI,1)*1.46
            !ACC
-           beta(AS,1)     = beta(AS,1)   *0.9
-           betamin(AS,1)  = betamin(AS,1)*0.9
-           betamax(AS,1)  = betamax(AS,1)*0.9
-           beta(AS,3)     = beta(AS,3)*6.5
+           beta(AS,1)     = beta(AS,1)   *0.80
+           betamin(AS,1)  = betamin(AS,1)*0.80
+           betamax(AS,1)  = betamax(AS,1)*0.80
 
            ! change mode width
-           betamin(AI,2)  = 1.55
-           betamax(AI,2)  = 1.75
+           betamin(AI,2)  = 1.70
+           betamax(AI,2)  = 1.88 ! do not change
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.20
+           beta(NU,3)     = beta(NU,3)*18.0
+           beta(NA,3)     = beta(NA,3)*8.00
+           beta(AI,3)     = beta(AI,3)*1.01
+           beta(AS,3)     = beta(AS,3)*4.00
+           beta(CS,3)     = beta(CS,3)*1.00
+           betamax(:,3)   = beta(:,3)*0.5
+           betamin(:,3)   = beta(:,3)*0.2
 
         else if (beta(AI,3)<10000.0) then
         !
@@ -779,37 +822,41 @@
         else
         !xprs3_test (same as xprs2_test)
            print *,'EXHAUST'
-           !NUC
+           !NUC define <10nm mode
+           betamin(NU,1)  = 5.8 ! nm
            betamax(NU,1)  = 7.2 ! nm
-           betamax(NU,2)  = 1.30
-           beta(NU,3)     = beta(NU,3)*0.90
-           betamin(NU,3)  = beta(NU,3)*0.40
-           betamax(NU,3)  = beta(NU,3)*2.40
+           betamax(NU,2)  = 1.32
            !NAP
-           beta(NA,1)     = beta(NA,1)   *0.76
-           betamax(NA,1)  = betamax(NA,1)*0.76
-           betamin(NA,1)  = betamin(NA,1)*0.76
-           beta(NA,3)     = beta(NA,3)*0.63
-           !AIT
-           beta(AI,1)     = beta(AI,1)   *1.23
-           betamin(AI,1)  = betamin(AI,1)*1.23
-           betamax(AI,1)  = betamax(AI,1)*1.23
-           beta(AI,3)     = beta(AI,3)*0.86
+           beta(NA,1)     = beta(NA,1)   *0.90
+           betamax(NA,1)  = betamax(NA,1)*0.90
+           betamin(NA,1)  = betamin(NA,1)*0.90
+           !AIT control diameter in output_fitaero.for
+           beta(AI,1)     = beta(AI,1)   *1.00
+           betamin(AI,1)  = betamin(AI,1)*1.00
+           betamax(AI,1)  = betamax(AI,1)*1.00
            !ACC
-           beta(AS,1)     = beta(AS,1)   *1.05
-           betamin(AS,1)  = betamin(AS,1)*1.05
-           betamax(AS,1)  = betamax(AS,1)*1.05
-           beta(AS,3)     = beta(AS,3)*1.45
+           beta(AS,1)     = beta(AS,1)   *1.60
+           betamin(AS,1)  = betamin(AS,1)*1.60
+           betamax(AS,1)  = betamax(AS,1)*1.60
 
            ! change mode width
-           betamin(AI,2)  = 1.95
-           betamax(AI,2)  = 2.10
+           betamin(NA,2)  = 1.48
+           betamax(NA,2)  = 1.52
+           betamin(AI,2)  = 1.60
+           betamax(AI,2)  = 1.70
            betamin(AS,2)  = 1.80
            betamax(AS,2)  = 1.95
            betamin(CS,2)  = 1.85
            betamax(CS,2)  = 2.20
            !update mass min & max
-           betamin(:,3)  = beta(:,3)*0.90
+           beta(NU,3)     = beta(NU,3)*1.10
+           betamin(NU,3)  = beta(NU,3)*0.50
+           betamax(NU,3)  = beta(NU,3)*2.40
+           beta(NA,3)     = beta(NA,3)*1.00
+           beta(AI,3)     = beta(AI,3)*0.72
+           beta(AS,3)     = beta(AS,3)*0.50
+           beta(CS,3)     = beta(CS,3)*0.50
+           betamin(:,3)   = beta(:,3)*0.88
 
         endif
 

@@ -198,23 +198,23 @@
 
 ! *** Parameter (beta) estimates
       real, dimension(nm), parameter :: es2_gmd   = (/             &
-                                        9.8, 20.0, 60.0, 120.0, 340.0 /)
+                                        9.8, 20.0, 60.0, 140.0, 340.0 /)
       real, dimension(nm), parameter :: es2_sigma = (/             &
                                         1.35, 1.60,1.80, 1.55, 1.55 /)
       real, dimension(nm), parameter :: es2_mm    = (/             &
-                                        0.004, 16.0, 250.0, 5.e3, 7.e3 /)
+                                        0.004, 20.0, 250.0, 5.e3, 7.e3 /)
 
 ! *** Parameter (beta) upper limits
       real, dimension(nm), parameter :: max2_gmd   = (/             &
-                                        11.0, 80.0, 140.0, 230.0, 600.0 /)
+                                        11.0, 80.0, 140.0, 270.0, 600.0 /)
       real, dimension(nm), parameter :: max2_sigma = (/             &
                                         1.45, 1.80, 2.00, 2.05, 2.20 /)
       real, dimension(nm), parameter :: max2_mm    = (/             &
-              100.*es2_mm(1),30.*es2_mm(2),60.*es2_mm(3),60.*es2_mm(4),10.*es2_mm(5) /) 
+              100.*es2_mm(1),50.*es2_mm(2),60.*es2_mm(3),60.*es2_mm(4),10.*es2_mm(5) /) 
 
 ! *** Parameter (beta) lower limits
       real, dimension(nm), parameter :: min2_gmd   = (/             &
-                                        6.0, 12.0, 55.0, 75.0, 270.0 /) 
+                                        6.0, 15.0, 55.0, 75.0, 270.0 /) 
       real, dimension(nm), parameter :: min2_sigma = (/             &
                                         1.30, 1.35, 1.70, 1.45, 1.45 /)
       real, dimension(nm), parameter :: min2_mm    = (/             &
@@ -328,207 +328,11 @@
         swfmode=max(swfmode,1.0)
         shrmode=1./swfmode
 
+
 !*** Function to reduce the mass in mode 2 and 3
 !*** correction of the shrinking factor for Aitken mode and Acc mode
 !*** Changing shrmode has actually an effect on the mode width and mass
-!*** MAybe correction depends on mass composition (fraction so4).
-!*** If mf(SO4) < 0.15 increase, if larger decrease
-!*** The sum of non-hygroscopic mass (=EC+DU) may also have an effect
-
-        if ((m==NU).and.(rhi > 0.90)) then
-          shrmode=shrmode*1.4
-        else
-        ! stena
-          shrmode=shrmode*0.2
-        endif
-
-        if (m==NA) then
-            ! init1_test
-            if (ndens(NA,EC)>0.10) then
-              if (rhi > 0.90) then
-                shrmode=shrmode*0.70
-              else if (rhi > 0.75) then
-                shrmode=shrmode*1.50         ! RH=80%
-              else if (rhi > 0.65) then
-                shrmode=shrmode*1.50         ! bkgr2_test
-              else if (rhi > 0.45) then
-                shrmode=shrmode*1.40         ! RH=50%
-              else
-                shrmode=shrmode*1.50         ! RH=10%
-              endif
-            else if (ndens(NA,SU)==0.15) then
-              if (rhi > 0.65) then
-              ! stena
-                shrmode=shrmode*1.46
-              else
-              ! aces_test
-                shrmode=shrmode*1.50
-              endif
-            endif
-        endif
-
-        if (m==AI) then
-
-            if (ndens(AI,SU)==0.15) then
-              if (rhi > 0.65) then
-              ! stena
-                shrmode=shrmode*3.0
-              else
-              ! aces_test
-                shrmode=shrmode*1.50
-              endif
-            endif
-
-            if (ndens(AI,SU)<0.15) then
-              if (rhi > 0.65) then
-                shrmode=shrmode*1.08
-              else if (rhi > 0.45) then
-              ! traff1_test, bktr1_test
-                shrmode=shrmode*0.97
-              else
-                shrmode=shrmode*0.97
-              endif
-            else
-             !use DU in AI mode to divide between exhaust and background
-             !exhaust AI: DU<0.1, EC>0.15
-             ! EXHAUST
-             ! bkgr1_test, 
-             ! xprs1, xprs2
-              if (ndens(AI,EC)>0.15) then
-                if (rhi > 0.90) then
-                  shrmode=shrmode*1.40
-                else if (rhi > 0.85) then
-                  shrmode=shrmode*1.20
-                else if (rhi > 0.60) then
-                  shrmode=shrmode*0.50       ! bkgr2_test
-                else if (rhi > 0.45) then
-                  shrmode=shrmode*1.10
-                else
-                  shrmode=shrmode*0.90
-                endif
-              ! BACKGROUND
-              else if (ndens(AI,EC)>0.10) then
-              ! init1_test
-                if (rhi > 0.90) then
-                  shrmode=shrmode*0.70
-                else if (rhi > 0.75) then
-                  shrmode=shrmode*1.45       ! RH=80%
-                else if (rhi > 0.65) then
-                  shrmode=shrmode*1.40
-                else if (rhi > 0.45) then
-                  shrmode=shrmode*1.45       ! RH=50%
-                else
-                  shrmode=shrmode*1.45       ! RH=10%
-                endif
-              else if (ndens(AI,EC)>0.05) then
-              ! aces_test
-                  shrmode=shrmode*1.30
-              else  ! EC < 0.05
-                if (rhi > 0.85) then
-              ! amar2_test, acont_test
-                  shrmode=shrmode*1.30
-                else if (rhi > 0.75) then
-              ! arctic_test
-                  shrmode=shrmode*1.05
-                endif
-              endif
-            endif
-
-        endif
-
-        if (m==AS) then
-
-
-            if (ndens(AS,SU)<=0.15) then
-               if (ndens(AS,EC)<0.15) then
-                 if (rhi > 0.65) then
-                 !stena_test
-                   shrmode=shrmode*1.60
-                 else if (rhi > 0.45) then
-                 !aces_test
-                   shrmode=shrmode*1.00
-                 else
-                   shrmode=shrmode*0.99
-                 endif
-               else ! EC>0.15
-               ! bktr1_test, traff1_test
-                  shrmode=shrmode*1.20
-               endif
-            endif
-
-          ! use EC in AS mode to divide between exhaust and background
-          ! BACKGROUND (high SU, low EC)
-          ! 26.11.2020 MSK use SALT>0.1 in AS mode for marine
-          !                and SULF>0.2 in AS mode for coastal
-            if ((ndens(AS,SU)>0.15).and.   &
-                (ndens(AS,EC)<0.15)   ) then
-              if (rhi > 0.92) then
-                if (ndens(AS,SA)>0.1) then
-                  shrmode=shrmode*0.72       !marine
-                else
-                  shrmode=shrmode*1.55
-                endif
-              else if (rhi > 0.89) then
-                if (ndens(AS,SA)>0.1) then
-                  !amar2_test
-                  shrmode=shrmode*0.91       ! marine
-                else
-                  if (ndens(AS,SU)>0.2) then
-                  !acont_test
-                    shrmode=shrmode*1.30     ! coastal
-                  else
-                   shrmode=shrmode*1.2
-                  endif
-                endif
-              ! init1_test
-              ! arctic_test (RH=87%)
-              else if (rhi > 0.79) then
-                shrmode=shrmode*1.00         ! RH=50%
-              else if (rhi > 0.65) then
-                shrmode=shrmode*0.98
-              else if (rhi > 0.55) then
-                shrmode=shrmode*1.05
-              else if (rhi > 0.45) then
-                shrmode=shrmode*1.00         ! RH=50%
-              else if (rhi > 0.20) then
-              ! xprs1, xprs2
-                shrmode=shrmode*0.90
-              else
-                shrmode=shrmode*1.50         ! RH=10%
-              endif
-            endif
- 
-           ! EXHAUST (high SU, high EC)
-           ! bkgr1_test, 
-            if ((ndens(AS,SU)>0.15).and.   &
-                (ndens(AS,EC)>=0.15)   ) then
-              if (rhi > 0.89) then
-                shrmode=shrmode*0.90
-              else if (rhi > 0.60) then
-                shrmode=shrmode*1.25         ! bkgr2_test
-              else if (rhi > 0.45) then
-                shrmode=shrmode*0.80
-              else
-                shrmode=shrmode*0.77
-              endif
-            endif
-
-        endif
-
-
-        if (m==CS) then
-            if (rhi > 0.75) then
-               shrmode=shrmode*1.10
-            else if (rhi > 0.60) then
-               shrmode=shrmode*1.08
-            else if (rhi > 0.40) then
-               shrmode=shrmode*1.20
-            else if (rhi > 0.15) then
-               shrmode=shrmode*1.00
-            else
-               shrmode=shrmode*1.00
-            endif
-        endif
+!*** MSK 25.04.2026 Removed all adjustments of shrmode below
 
 
         dnmax = maxval( ndata(mini:maxi,2) )
