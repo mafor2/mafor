@@ -1,0 +1,301 @@
+&DISPERS
+! Parameters for plume dispersion (dilution function)
+! mixing height at station [m]
+PLUME%hmix_st=1.10
+! distance at station [m]
+PLUME%dst_st=12.0
+! stack height above ground [m]
+PLUME%hsta_st=0.25
+! temperature at station [K]
+PLUME%ta_st=300.0
+! Type2 dilution parameter for concentration [-]
+PLUME%dil2_b=0.00
+! Type2 dilution parameter for concentration [s]
+PLUME%dil2_c=-0.40
+! Type2 dilution parameter for temperature [-] 
+PLUME%dil2_d=5.00
+! Type2 dilution parameter for temperature [s] 
+PLUME%dil2_e=0.00
+! Type2 dilution parameter for temperature [-] 
+PLUME%dil2_f=-0.80
+! Type3 dilution: final dilution ratio after PD [-]
+PLUME%DR_fin=12.0
+! Type3 dilution: final temperature after PD [-]
+PLUME%T_fin=300.0
+! Type3 dilution: dilution lifetime for concentration [s]
+PLUME%tau_c=0.03
+! Type3 dilution: dilution lifetime for temperature [s]
+PLUME%tau_d=0.12
+! Type3 dilution: background H2O concentration [molecules/cm^3]
+PLUME%BGH2O=1.0E16
+! Type4 dilution: initial exhaust gas velocity [m/s]
+PLUME%u0=0.230
+! Type4 dilution: entrainment velocity [m/s]
+PLUME%sigw=0.290
+! Type4 dilution: width of line source 1 [m]
+PLUME%tend1=7.00
+! Type4 dilution: downwind distance of line source 2 [m]
+PLUME%tbeg2=13.0
+! Type4 dilution: width of street [m]
+PLUME%tend2=22.5
+
+! Parameters for dry deposition of particles
+! friction velocity [m/s]
+DEPOP%ustar=1.17
+! surface roughness [m]
+DEPOP%znot=0.001
+! dry deposition parameter A (Schack et al.) [-]
+DEPOP%ADEP=1.70
+! dry deposition parameter B (Schack et al.) [-]
+DEPOP%BDEP=51.8
+! height of canopy [m]
+DEPOP%ZCAP=0.30
+! collector size [m]
+DEPOP%dcol=0.003
+! roughness parameter (Hussein et al., 2012) [-]
+DEPOP%Fplus=0.20
+
+! Parameters for cloud formation
+! updraft velocity, value range |0,0.5| [m/s]
+CLOUD2%vupdra=0.00
+
+! Parameters for sea salt particle emission
+! sea surface temperature [K]
+OCEAN%sst=275.0
+! salinity of seawater [g/kg]
+OCEAN%sal=31.0
+
+! Paramters for nucleation
+! ion pair production rate (cosmic rays) [ionpairs/cm^3/s]
+NUCLT%ipr=2.00
+
+
+! Parameters for organic aerosol
+! particle density of organic aerosol [kg/m^3]
+ORGANIC%DENOCin=1570.0
+! surface tension from input or function [0|1]
+ORGANIC%surfin=1
+! surface tension of organic particles [kg/s^2]
+ORGANIC%surf_org=0.050
+
+! Parameters for soot particles
+! particle density of soot [kg/m^3]
+ORGANIC%DENECI=1200.0
+! radius of primary spherules in soot [nm]
+ORGANIC%rp0=13.5
+! fractal dimension of soot [-]
+ORGANIC%Dfrac=1.7
+
+! Parameters for condensable organic vapors
+! concentration of BSOV in Free Troposphere [mlc/m^3]
+ORGANIC%BSOV_FT=0.4E+07
+
+! Properties of nine condensable organic vapors
+! BSOV
+! number of carbon atoms (nc) for BSOV
+ORGANIC%bsovp(1)=10
+! number of oxygen atoms (no) for BSOV
+ORGANIC%bsovp(2)=2.5
+! enthalpy of vaporization (hvap) for BSOV [kJ/mol]
+ORGANIC%bsovp(3)=50
+! saturation concentration (c0) for BSOV [ug/m^3]
+ORGANIC%bsovp(4)=2.1
+
+! BLOV
+! number of carbon atoms (nc) for BLOV
+ORGANIC%blovp(1)=10
+! number of oxygen atoms (no) for BLOV
+ORGANIC%blovp(2)=2.5
+! enthalpy of vaporization (hvap) for BLOV [kJ/mol]
+ORGANIC%blovp(3)=50
+! saturation concentration (c0) for BLOV [ug/m^3]
+ORGANIC%blovp(4)=0.03
+
+! BELV
+! number of carbon atoms (nc) for BELV
+ORGANIC%belvp(1)=20
+! number of oxygen atoms (no) for BELV
+ORGANIC%belvp(2)=7
+! enthalpy of vaporization (hvap) for BELV [kJ/mol]
+ORGANIC%belvp(3)=50
+! saturation concentration (c0) for BELV [ug/m^3]
+ORGANIC%belvp(4)=0.0001
+
+! ASOV
+! number of carbon atoms (nc) for ASOV
+ORGANIC%asovp(1)=7
+! number of oxygen atoms (no) for ASOV
+ORGANIC%asovp(2)=2
+! enthalpy of vaporization (hvap) for ASOV [kJ/mol]
+ORGANIC%asovp(3)=50
+! saturation concentration (c0) for ASOV [ug/m^3]
+ORGANIC%asovp(4)=1.0
+
+! ALOV
+! number of carbon atoms (nc) for ALOV
+ORGANIC%alovp(1)=7
+! number of oxygen atoms (no) for ALOV
+ORGANIC%alovp(2)=2
+! enthalpy of vaporization (hvap) for ALOV [kJ/mol]
+ORGANIC%alovp(3)=50
+! saturation concentration (c0) for ALOV [ug/m^3]
+ORGANIC%alovp(4)=0.01
+
+! AELV
+! number of carbon atoms (nc) for AELV
+ORGANIC%aelvp(1)=14
+! number of oxygen atoms (no) for AELV
+ORGANIC%aelvp(2)=8
+! enthalpy of vaporization (hvap) for AELV [kJ/mol]
+ORGANIC%aelvp(3)=50
+! saturation concentration (c0) for AELV [ug/m^3]
+ORGANIC%aelvp(4)=0.0001
+
+! PIOV
+! number of carbon atoms (nc) for PIOV
+ORGANIC%piovp(1)=21
+! number of oxygen atoms (no) for PIOV
+ORGANIC%piovp(2)=0
+! enthalpy of vaporization (hvap) for PIOV [kJ/mol]
+ORGANIC%piovp(3)=108
+! saturation concentration (c0) for PIOV [ug/m^3]
+ORGANIC%piovp(4)=100
+
+! PSOV
+! number of carbon atoms (nc) for PSOV
+ORGANIC%psovp(1)=26
+! number of oxygen atoms (no) for PSOV
+ORGANIC%psovp(2)=0
+! enthalpy of vaporization (hvap) for PSOV [kJ/mol]
+ORGANIC%psovp(3)=135
+! saturation concentration (c0) for PSOV [ug/m^3]
+ORGANIC%psovp(4)=0.6
+
+! PELV
+! number of carbon atoms (nc) for PELV
+ORGANIC%pelvp(1)=34
+! number of oxygen atoms (no) for PELV
+ORGANIC%pelvp(2)=0
+! enthalpy of vaporization (hvap) for PELV [kJ/mol]
+ORGANIC%pelvp(3)=177
+! saturation concentration (c0) for PELV [ug/m^3]
+ORGANIC%pelvp(4)=0.0002
+
+! SOA mole fractions in OC per mode
+! For each mode (NU, NA, AI, AS, CS) the values 
+! distributed over the 9 SOA-types must add up to 1
+
+! fraction of oc1 in mode NU
+ORGANIC%gamma_oc1(1)=1.00
+! fraction of oc1 in mode NA
+ORGANIC%gamma_oc1(2)=1.00
+! fraction of oc1 in mode AI
+ORGANIC%gamma_oc1(3)=1.00
+! fraction of oc1 in mode AS
+ORGANIC%gamma_oc1(4)=1.00
+! fraction of oc1 in mode CS
+ORGANIC%gamma_oc1(5)=1.00
+
+! fraction of oc2 in mode NU
+ORGANIC%gamma_oc2(1)=0.00
+! fraction of oc2 in mode NA
+ORGANIC%gamma_oc2(2)=0.00
+! fraction of oc2 in mode AI
+ORGANIC%gamma_oc2(3)=0.00
+! fraction of oc2 in mode AS
+ORGANIC%gamma_oc2(4)=0.00
+! fraction of oc2 in mode CS
+ORGANIC%gamma_oc2(5)=0.00
+
+! fraction of oc3 in mode NU
+ORGANIC%gamma_oc3(1)=0.00
+! fraction of oc3 in mode NA
+ORGANIC%gamma_oc3(2)=0.00
+! fraction of oc3 in mode AI
+ORGANIC%gamma_oc3(3)=0.00
+! fraction of oc3 in mode AS
+ORGANIC%gamma_oc3(4)=0.00
+! fraction of oc3 in mode CS
+ORGANIC%gamma_oc3(5)=0.00
+
+! fraction of oc4 in mode NU
+ORGANIC%gamma_oc4(1)=0.00
+! fraction of oc4 in mode NA
+ORGANIC%gamma_oc4(2)=0.00
+! fraction of oc4 in mode AI
+ORGANIC%gamma_oc4(3)=0.00
+! fraction of oc4 in mode AS
+ORGANIC%gamma_oc4(4)=0.00
+! fraction of oc4 in mode CS
+ORGANIC%gamma_oc4(5)=0.00
+
+! fraction of oc5 in mode NU
+ORGANIC%gamma_oc5(1)=0.00
+! fraction of oc5 in mode NA
+ORGANIC%gamma_oc5(2)=0.00
+! fraction of oc5 in mode AI
+ORGANIC%gamma_oc5(3)=0.00
+! fraction of oc5 in mode AS
+ORGANIC%gamma_oc5(4)=0.00
+! fraction of oc5 in mode CS
+ORGANIC%gamma_oc5(5)=0.00
+
+! fraction of oc6 in mode NU
+ORGANIC%gamma_oc6(1)=0.00
+! fraction of oc6 in mode NA
+ORGANIC%gamma_oc6(2)=0.00
+! fraction of oc6 in mode AI
+ORGANIC%gamma_oc6(3)=0.00
+! fraction of oc6 in mode AS
+ORGANIC%gamma_oc6(4)=0.00
+! fraction of oc6 in mode CS
+ORGANIC%gamma_oc6(5)=0.00
+
+! fraction of oc7 in mode NU
+ORGANIC%gamma_oc7(1)=0.00
+! fraction of oc7 in mode NA
+ORGANIC%gamma_oc7(2)=0.00
+! fraction of oc7 in mode AI
+ORGANIC%gamma_oc7(3)=0.00
+! fraction of oc7 in mode AS
+ORGANIC%gamma_oc7(4)=0.00
+! fraction of oc7 in mode CS
+ORGANIC%gamma_oc7(5)=0.00
+
+! fraction of oc8 in mode NU
+ORGANIC%gamma_oc8(1)=0.00
+! fraction of oc8 in mode NA
+ORGANIC%gamma_oc8(2)=0.00
+! fraction of oc8 in mode AI
+ORGANIC%gamma_oc8(3)=0.00
+! fraction of oc8 in mode AS
+ORGANIC%gamma_oc8(4)=0.00
+! fraction of oc8 in mode CS
+ORGANIC%gamma_oc8(5)=0.00
+
+! fraction of oc9 in mode NU
+ORGANIC%gamma_oc9(1)=0.00
+! fraction of oc9 in mode NA
+ORGANIC%gamma_oc9(2)=0.00
+! fraction of oc9 in mode AI
+ORGANIC%gamma_oc9(3)=0.00
+! fraction of oc9 in mode AS
+ORGANIC%gamma_oc9(4)=0.00
+! fraction of oc9 in mode CS
+ORGANIC%gamma_oc9(5)=0.00
+
+
+! Kinetic parameters
+! only change for sensitivity tests
+! scaling factor activation energy of CH3SO2 decomposition
+fch3so2=0.90
+!below factors are not active
+! scaling factor for aqueous-phase reaction MSIA + O3
+!fmsiao3=1.00
+! scaling factor for rate constant I2O + I
+!fi2oi=1.00
+! scaling factor for rate constant OIO + OH
+!foiooh=1.00
+! scaling factor for aqueous phase reduction of IO3 by H2O2
+!fio3red=1.00
+/

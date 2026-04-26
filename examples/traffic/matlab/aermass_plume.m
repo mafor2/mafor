@@ -36,8 +36,9 @@ pmamoct=aerconc(:,27)+aerconc(:,28)+aerconc(:,29)+aerconc(:,30)+aerconc(:,31);
 pmnitct=aerconc(:,32)+aerconc(:,33)+aerconc(:,34)+aerconc(:,35)+aerconc(:,36);
 pmecbct=aerconc(:,37)+aerconc(:,38)+aerconc(:,39)+aerconc(:,40)+aerconc(:,41);
 pmdusct=aerconc(:,42)+aerconc(:,43)+aerconc(:,44)+aerconc(:,45)+aerconc(:,46);
-pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51);
-pmwatct=aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51) +...
+        aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmwatct=aerconc(:,57)+aerconc(:,58)+aerconc(:,59)+aerconc(:,60)+aerconc(:,61);
 pmsulf =pmsulct*1.e-3;
 pmbpba =pmxxxct*1.e-3;
 pmorgt =pmorgct*1.e-3;
@@ -55,18 +56,20 @@ pmtotal=(pmorgct+pmecbct+pmsulct+pmxxxct+pmamoct+pmnitct)*1e-3;
 % TOTAL number conc in #/cm3
 pnctotal=1.e-6*(total_n(:,3)+total_n(:,4)+total_n(:,5)+total_n(:,6)+total_n(:,7));
 % 10-25nm
-pncnucl =1.e-6*(total_n(:,8) -total_n(:,3));
+pncnucl =1.e-6*total_n(:,14);
 % 25-100nm
-pncaitk =1.e-6*total_n(:,9);
+pncaitk =1.e-6*total_n(:,15);
 % >100nm (AS+CS)
-pncaccu =1.e-6*(total_n(:,6)+total_n(:,7))
+%pncaccu =1.e-6*(total_n(:,6)+total_n(:,7));
+% >75nm (=75-1000 nm + 1-2 um + >2um)
+pncaccu =1.e-6*(total_n(:,18)+total_n(:,19)+total_n(:,20));
 
 % GAS PHASE ORGANICS in ug/m^3
 covtot=plume(:,9)+plume(:,10);
 
 % Coagulation Sink
-coags=total_n(:,11);
-conds=total_n(:,12);
+coags=total_n(:, 9);
+conds=total_n(:,10)+total_n(:,11);
 
 fsize=12;
 
@@ -97,12 +100,12 @@ plot(time(1:tmax),pnctotal(1:tmax)/pnctotal(1),'-k','LineWidth',1.1)
 hold
 ax=gca;
 set(ax,'linewidth',1.5,'fontsize',fsize)
-plot(time(1:tmax),pncnucl(1:tmax)/pncnucl(1),'-r','LineWidth',1.1)
-plot(time(1:tmax),pncaitk(1:tmax)/pncaitk(1),'-m','LineWidth',1.1)
+plot(time(1:tmax),(pncnucl(1:tmax)/pncnucl(1)),'-r','LineWidth',1.3)
+plot(time(1:tmax),pncaitk(1:tmax)/pncaitk(1),'-g','LineWidth',1.1)
 plot(time(1:tmax),pncaccu(1:tmax)/pncaccu(1),'-b','LineWidth',1.1)
 plot(tmaap,pncsmps,'ks','MarkerSize',7.,'LineWidth',1.4)
 plot(tmaap,pncl25smps,'rs','MarkerSize',7.,'LineWidth',1.4)
-plot(tmaap,pnc25_100smps,'ms','MarkerSize',7.,'LineWidth',1.4)
+plot(tmaap,pnc25_100smps,'gs','MarkerSize',7.,'LineWidth',1.4)
 plot(tmaap,pncgt100smps,'bs','MarkerSize',7.,'LineWidth',1.4)
 %plot(time(1:tmax),pncbg(1:tmax)/pnctotal(1),'-g','LineWidth',2.1)
 %title('MAFOR: only dilution','FontSize',16)

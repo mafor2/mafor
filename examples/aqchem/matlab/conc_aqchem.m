@@ -32,6 +32,7 @@ LWCcs=1.19E-07;
 % prescribed LWC:
 LWCcst = concout(:,smax);
 
+%mafor-meccanism-2.2
 % aq. species  ind_xxx_a03
 ind_Hp_a03    = concout(:, 1237);
 ind_H2SO4_a03 = concout(:,  186);
@@ -51,15 +52,15 @@ ind_DMN_a03   = concout(:, 1110);
 
 
 %gas-phase
+dma   = concout(:,  884);
+%DMNNO2
+dnno2 = concout(:,  942);
+ndma  = concout(:,  966);
 oh    = concout(:, 1191);
 ho2   = concout(:, 1199);
 o3    = concout(:, 1238);
 h2o2  = concout(:, 1061);
 hono  = concout(:, 1094);
-dma   = concout(:,  884);
-ndma  = concout(:,  966);
-%DMNNO2
-dnno2 = concout(:,  942);
 
 
 % unit conversion

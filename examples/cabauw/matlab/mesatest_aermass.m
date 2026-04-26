@@ -28,8 +28,9 @@ pmamoct=aerconc(:,27)+aerconc(:,28)+aerconc(:,29)+aerconc(:,30)+aerconc(:,31);
 pmnitct=aerconc(:,32)+aerconc(:,33)+aerconc(:,34)+aerconc(:,35)+aerconc(:,36);
 pmecbct=aerconc(:,37)+aerconc(:,38)+aerconc(:,39)+aerconc(:,40)+aerconc(:,41);
 pmdusct=aerconc(:,42)+aerconc(:,43)+aerconc(:,44)+aerconc(:,45)+aerconc(:,46);
-pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51);
-pmwatct=aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51) +...
+        aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmwatct=aerconc(:,57)+aerconc(:,58)+aerconc(:,59)+aerconc(:,60)+aerconc(:,61);
 
 
 pmsulf =pmsulct*1.e-3;
@@ -109,8 +110,9 @@ pmamoct=aerconc(:,27)+aerconc(:,28)+aerconc(:,29)+aerconc(:,30)+aerconc(:,31);
 pmnitct=aerconc(:,32)+aerconc(:,33)+aerconc(:,34)+aerconc(:,35)+aerconc(:,36);
 pmecbct=aerconc(:,37)+aerconc(:,38)+aerconc(:,39)+aerconc(:,40)+aerconc(:,41);
 pmdusct=aerconc(:,42)+aerconc(:,43)+aerconc(:,44)+aerconc(:,45)+aerconc(:,46);
-pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51);
-pmwatct=aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmsalct=aerconc(:,47)+aerconc(:,48)+aerconc(:,49)+aerconc(:,50)+aerconc(:,51) +...
+        aerconc(:,52)+aerconc(:,53)+aerconc(:,54)+aerconc(:,55)+aerconc(:,56);
+pmwatct=aerconc(:,57)+aerconc(:,58)+aerconc(:,59)+aerconc(:,60)+aerconc(:,61);
 
 pmsulf =pmsulct*1.e-3;
 pmmsap =pmmsact*1.e-3;

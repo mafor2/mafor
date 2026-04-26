@@ -85,22 +85,32 @@ infileam='size_dism.res';
 inam=strrep(infileam,'.res','');
 yam=eval(inam);
 [row,col]=size(yam);                    %row=xxx col=61
+% at each 10s time step total and aerosol species
+% concentrations are written to size_dism.res
+nc=22; % = number of aerosol compounds (amax) +1
+a=1;   % first record = initial total mass
+%                  sec x nc + 1
+b=(10)  *nc+1;   %  12 x 22 + 1
+c=(20)  *nc+1;   %  20 x 22 + 1
+d=(40)  *nc+1;   %  40 x 22 + 1
+e=(60)  *nc+1;   %  60 x 22 + 1
+f=(80)  *nc+1;   %  80 x 22 + 1
+g=(120) *nc+1;   %  120x 22 + 1
+
 % 25m distance (t0=25m, u=5m/s)
-dmdlogdp_bin01=yam(2,2:col)   *1e12 *2.303;    % kg/m3-->ng/m3
+dmdlogdp_bin01=yam(a,2:col) *1e12 *2.303;    % kg/m3-->ng/m3
 % 500m distance
-dmdlogdp_bin02=yam(2+10,2:col) *1e12 *2.303;
+dmdlogdp_bin02=yam(b,2:col) *1e12 *2.303;
 % 1000m distance
-dmdlogdp_bin03=yam(2+20,2:col) *1e12 *2.303;
+dmdlogdp_bin03=yam(c,2:col) *1e12 *2.303;
 % 2000m distance
-dmdlogdp_bin04=yam(2+40,2:col) *1e12 *2.303;
+dmdlogdp_bin04=yam(d,2:col) *1e12 *2.303;
 % 3000m distance
-dmdlogdp_bin05=yam(2+60,2:col) *1e12 *2.303;
+dmdlogdp_bin05=yam(e,2:col) *1e12 *2.303;
 % 4000m distance
-dmdlogdp_bin06=yam(2+80,2:col) *1e12 *2.303;
-% 5000m distance
-%dmdlogdp_bin06=yam(2+100,2:col) *1e12 *2.303;
+dmdlogdp_bin06=yam(f,2:col) *1e12 *2.303;
 % 6000m distance
-dmdlogdp_bin07=yam(2+120,2:col) *1e12 *2.303;
+dmdlogdp_bin07=yam(g,2:col) *1e12 *2.303;
 
 fsize=11;
 fsizel=9;
@@ -118,6 +128,7 @@ set(ax,'linewidth',1.5,'fontsize',fsize,'tickdir','out')
 %loglog(ma0_diameter_dmps,ma16_2_dndlogdp,'rd-','MarkerSize',3.5,'LineWidth',0.9)
 loglog(bg_diameter_dmps,bga16_0_dndlogdp,'kd-','MarkerSize',3.5,'LineWidth',0.9)
 %modelled background size distribution
+%FOR TESTING BG
 %loglog(diameter_bin,dndlogdp_binbg,      '-k' ,'LineWidth',2.1)
 %modelled at 25m
 loglog(diameter_bin,dndlogdp_bin01,'Color',[.6 .6 .6],'LineStyle','-','LineWidth',2.5)

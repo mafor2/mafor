@@ -104,7 +104,10 @@ semilogx(diameter_bin,dndlogdp_bin03s,      '-b' ,'LineWidth',2.0)
 semilogx(diameter_dmps(1:30),dndlogdp_dmps_70(1:30),'rs','LineWidth',1.0)
 semilogx(diameter_bin,dndlogdp_bin04s,      '-r' ,'LineWidth',2.0)
 
-legend('209.406 DMPS','209.406 model','209.504 DMPS','209.504 model','209.601 DMPS','209.601 model','209.802 DMPS','209.802 model','Location','NorthEast')
+g=legend('209.406 DMPS','209.406 model','209.504 DMPS', ...
+         '209.504 model','209.601 DMPS','209.601 model', ...
+         '209.802 DMPS','209.802 model','Location','NorthEast')
+set(g,'fontsize',11);
 xlabel('D_p (nm)','FontSize',fsize,'FontName','Arial')
 ylabel('dN/dlog_{10}Dp (particles/cm^{3})','FontSize',fsize,'FontName','Arial')
 
