@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2025  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -43,10 +43,9 @@ module gde_coagulation
     use gde_constants,  only            : pi,N_A,k_B
     use gde_constants,  only            : dp
     use gde_constants,  only            : cp_air
+    use gde_constants,  only            : LAM,VIS
     use gde_input_data, only            : NU,NA,AI,AS,CS
     use gde_input_data, only            : MMAX,AMAX  
-    use gde_input_data, only            : LAM,VIS
-    use gde_init_gas,   only            : rp0,Dfrac
     use gde_sensitiv,   only            : ICOAG
     
     private
@@ -54,13 +53,12 @@ module gde_coagulation
     public :: coagulation
     public :: coagulation_target
     public :: coagulation_coeff
-    public :: collection_kernel
 
   contains
 
 
 
-  subroutine coagulation(temp,DTIME,ROOP,DPA,VPT,N,MASS,IMAX, &
+  subroutine coagulation(temp,DTIME,DPA,VPT,N,MASS,IMAX, &
                          IAG,B, COAGS,FLUXM,FLUX)
     !********************************************************************
     !
@@ -87,7 +85,7 @@ module gde_coagulation
     !           DTIME  time step                      [s]  
     !           VPT    particle volume in bin         [m^3]
     !           N      particle number conc. in bin   [1/m^3]
-    !           ROOP   total particle density         [kg/m^3]
+    !        --   ROOP   total particle density         [kg/m^3]
     !           MASS   component mass conc.           [ng/m^3]
     !           DPA    particle diameter in bin       [m]
     !           IAG    coagulation target class, integer matrix
@@ -120,7 +118,7 @@ module gde_coagulation
     ! input
     INTEGER, intent(in)                              :: IMAX
     REAL( dp), intent(in)                            :: temp,DTIME
-    REAL( dp), dimension(MMAX,IMAX),intent(in)       :: VPT,N,ROOP
+    REAL( dp), dimension(MMAX,IMAX),intent(in)       :: VPT,N
     REAL( dp), dimension(MMAX,IMAX,AMAX),intent(in)  :: MASS 
     REAL( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPA
     REAL( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(in) :: IAG
@@ -168,7 +166,8 @@ module gde_coagulation
     !      v_j: VPT(O,J)
     !      v_k: VPT(O,L)
     ! The size-splitting algorithm gets problematic if volume ratio
-    ! becomes > 0.5 and works best with not more than 40 bins
+    ! becomes > 0.5 and works best with not more than 40 bins.
+    ! VTOTB is always greater than v_k = VPT(O,L).
     !------------------------------------------------------------------
 
 ! Source terms are updated by the formation of new particles by coagulation.
@@ -342,11 +341,14 @@ module gde_coagulation
     ! and particles of the same mode or larger mode.
     ! The size-splitting operator for collisional loss is (1 - f_kjk)
     ! Here, f_kjk for the collisional loss is:
-    !    f_kjk = [v_k+1 - VTOTB) / (v_k+1 - vk)] * HALF 
+    !    f_kjk = [(v_k+1 - VTOTB) / (v_k+1 - vk)] * HALF 
     !    with HALF = v_k/VTOTB
     !    and VTOTB = v_k + v_j
     !      v_j: VPT(O,J)
     !      v_k: VPT(M,I)
+    ! because by definition v_j < v_k+1 - vk, f_kjk is approximately:
+    !    f_kjk = v_k/VTOTB
+    ! for v_j > v_k+1, f_kjk converges to 0.
     !------------------------------------------------------------------
           do I=1,IMAX
 
@@ -362,9 +364,10 @@ module gde_coagulation
               ELSE
                 FKJK = VPT(M,I)/VTOTB
               ENDIF
+              
               HALF =1.0 - FKJK
 
-       !   write(6,'(4I2,6ES12.4)') M,I,O,J,VPT(M,I),VPT(O,J),HALF
+        !  write(6,'(4I2,6ES12.4)') M,I,O,J,VPT(M,I),VPT(O,J),HALF
 
               ! number (collisional loss)
 
@@ -477,7 +480,7 @@ module gde_coagulation
     
     end subroutine coagulation_target 
 
-  subroutine coagulation_coeff(temp,ROOP,DPA,coag,IMAX)
+  subroutine coagulation_coeff(temp,rp0in,Dfracin,ROOP,DPA,coag,IMAX)
     !----------------------------------------------------------------------
     !
     !****
@@ -493,7 +496,9 @@ module gde_coagulation
     !      interface
     !      ---------
     !           IMAX   max. number of bins in mode 
-    !           temp   air temperature                [K] 
+    !           temp   air temperature                [K]
+    !           rp0in     primary spherule radius     [nm]
+    !           Dfracin   fractal dimension           [-]
     !           ROOP   total particle density         [kg/m^3]
     !           DPA    particle diameter in bin       [m]
     !
@@ -517,11 +522,14 @@ module gde_coagulation
     implicit none
 
     ! input
-    INTEGER, intent(in)                              :: IMAX
-    REAL( dp), intent(in)                            :: temp
-    REAL( dp), dimension(MMAX,IMAX),intent(in)       :: ROOP
-    REAL( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPA
-    REAL( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(out):: coag
+    integer, intent(in)                              :: IMAX
+    real( dp), intent(in)                            :: temp
+    real( dp), intent(in)                            :: rp0in
+    real( dp), intent(in)                            :: Dfracin
+    real( dp), dimension(MMAX,IMAX),intent(in)       :: ROOP
+    real( dp), dimension(MMAX,0:(IMAX+1)),intent(in) :: DPA
+    ! output
+    real( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(out):: coag
 
     real( dp)  :: AA, KNA, CC
     real( dp)  :: CIJ,GIJ,DIJ,DIFIJ
@@ -541,18 +549,18 @@ module gde_coagulation
 
     ! Lemmetty et al. (2008)
     !real( dp), parameter :: sootfrac = 1.00     ! soot mass fraction
-    !real( dp), parameter :: rp0      = 2.50e-9  ! radius of primary spherules [m]
-    !real( dp), parameter :: Dfrac    = 2.50     ! fractal dimension           [-]
+    !real( dp), parameter :: rp0in    = 2.50e-9  ! radius of primary spherules [m]
+    !real( dp), parameter :: Dfracin  = 2.50     ! fractal dimension           [-]
     ! Jacobson and Seinfeld (2004)
     real( dp), parameter :: sootfrac = 0.50      ! soot mass fraction
-    !real( dp), parameter :: rp0      = 13.50e-9  ! radius of primary spherules [m]
-    !real( dp), parameter :: Dfrac    = 1.70      ! fractal dimension           [-]
+    !real( dp), parameter :: rp0in    = 13.50e-9  ! radius of primary spherules [m]
+    !real( dp), parameter :: Dfracin  = 1.70      ! fractal dimension           [-]
     
     integer :: I,J,M,O
     integer :: n,ii
 
     ! convert radius of primary spherules from [nm] to [m]
-    if ( (ICOAG.eq.2).or.(ICOAG.eq.5) ) rp0m=rp0*1.e-9
+    if ( (ICOAG.eq.2).or.(ICOAG.eq.5) ) rp0m=rp0in*1.e-9
 
     ! first calculate C(M,I) and G(M,I) for all bins
     do M=1,MMAX
@@ -562,23 +570,23 @@ module gde_coagulation
        ! Collision radius becomes fractal radius rc = rf
           nspher = ( 4*pi*(DPA(M,I)*0.5)**3./3 ) /            &
                    ( 4*pi*rp0m**3./3 )
-          DPAC(M,I) = 2.* rp0m * nspher**(1./Dfrac)
+          DPAC(M,I) = 2.* rp0m * nspher**(1./Dfracin)
           DPAC(M,I) = (1.0-sootfrac)*DPA(M,I)                 &
                     + sootfrac* DPAC(M,I)
          ! write(6,*) 'dp_corr',m,i,DPA(M,I),DPAC(M,I)
        ! Mobility radius rm for Knudsen number and diffusion coeff
        ! Jacobson and Seinfeld (2004), Equation (3)
           ra1   = min( (1.0+0.67_dp*(nspher-1.0_dp) ),   &
-                       (Dfrac*nspher**(2.0_dp/Dfrac)/3) )
-          rarea = rp0m * sqrt( max( (nspher**(2.0_dp/3)),ra1 ) )
+                       (Dfracin*nspher**(2.0_dp/Dfracin)/3.0_dp) )
+          rarea = rp0m * sqrt( max( (nspher**(2.0_dp/3.0_dp)),ra1 ) )
           rmobil = max( (DPAC(M,I)*0.5/(log(DPAC(M,I)*0.5/rp0m)+1.0_dp) ), &
-                        (DPAC(M,I)*0.5*((Dfrac-1.0_dp)/2.0_dp)**0.7_dp) )
+                        (DPAC(M,I)*0.5*((Dfracin-1.0_dp)/2.0_dp)**0.7_dp) )
           DPAM(M,I) = 2.0_dp*max( rmobil,rarea )
           if ( DPA(M,I)*0.5_dp .lt. rp0m ) then
             DPAM(M,I) = DPAC(M,I)
           endif
 !MSK 2025-01-19        DPAM(M,I) =max(DPAM(M,I), DPAC(M,I))
-        !write(6,*) 'dp_mobi',m,i,rp0m,Dfrac,DPA(M,I),DPAC(M,I),DPAM(M,I)
+        !write(6,*) 'dp_mobi',m,i,rp0m,Dfracin,DPA(M,I),DPAC(M,I),DPAM(M,I)
        else
           DPAC(M,I) = DPA(M,I)
           DPAM(M,I) = DPA(M,I)
@@ -642,6 +650,14 @@ module gde_coagulation
          !write(6,*) 'incoag',M,O,I,J,coag(M,O,I,J),C(M,I),C(O,J)  
          !write(6,*) 'incoag',M,I,O,J,coag(M,O,I,J)
 
+         ! Lee and Adams (2012), Coagulation vs. Analytical Solution
+         ! Size-independent constant coagulation kernel
+         ! A Fast and Efficient Version of the TwO-Moment Aerosol Sectional 
+         ! (TOMAS) Global Aerosol Microphysics Model, Aerosol Science and
+         ! Technology, 46:6, 678-689, DOI: 10.1080/02786826.2011.643259
+         if (ICOAG.eq.6) then
+           coag(M,O,I,J)= 10.0e-15
+         endif
 
          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          ! ICOAG.eq.4 explicit correction for van-der-Waals/viscous forces
@@ -786,327 +802,6 @@ module gde_coagulation
 
 
   end subroutine coagulation_coeff
-
-
-  subroutine collection_kernel(IMAX,temp,press,DPA,vterm,    &
-                               DPcrit,KCOA,  KCOL )
-    !----------------------------------------------------------------------
-    !
-    !****  COLLECTION KERNEL
-    !
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !
-    !      purpose
-    !      -------
-    !      The collection kernel K describes the interaction
-    !      of two colliding particles. The collision partners
-    !      are assummed to fall with their terminal velocities
-    !      Vinf. The smaller collision partner (s) will be 
-    !      collected by the larger collision partner (b) as soon
-    !      as it is inside the swept volume of the collector
-    !      KCOL = Ecoa*Ecol*|Vinf_B - Vinf_s|*pi*(RB+rs)**2
-    !      Ecoa: coalescence efficieny, Table 4, Kirkweg (2003)
-    !      Ecol: collision efficiency, Table 2, Kirkweg (2003)
-    !
-    !
-    !      interface
-    !      ---------
-    !
-    !        input:
-    !           temp     air temperature                [K]
-    !           press    air pressure                   [Pa]
-    !           DPA      wet particle diameter          [m]
-    !           VPT      particle volume                [m^3]
-    !           ROOPW    particle density               [kg/m^3]
-    !           vterm    terminal velocity              [m/s]
-    !           DPcrit   critical particle diameter     [m]
-    !           KCOA     coagulation coefficient        [m^3/s]
-    !
-    !
-    !        output:
-    !           KCOL     collection kernel              [m^3/s]
-    !
-    !
-    !      method
-    !      ------
-    !      Collision/Coalescence as function of size
-    !      of the collision partners
-    !      For mode AI to CS (excluding NU mode)
-    !
-    !      reference
-    !      ---------
-    !      Ventilation coefficient:
-    !      J.M. Straka,
-    !      Cloud and Precipitation Microphysics,
-    !      Principles and Paramterizations,
-    !      Cambridge University Press, Cambridge, UK,
-    !      p.116-118, 2009.
-    !
-    !      Collision efficiency:
-    !      K. Young,
-    !      Microphysical Cloud Processes,
-    !      Oxford University Press, New York, USA, 1993.
-    !
-    !      Coalescence efficiency:
-    !      K.V. Beard and H.T. Ochs
-    !      Collection and Coalescence Efficiencies 
-    !      for Accretion,
-    !      J. Geophys. Res., 89, D5, 7165-7169, 1984.
-    !
-    !      Collection kernel:
-    !      A. Kerkweg, S. Wurzler, T. Reisin, A. Bott,
-    !      On the cloud processing of aerosol particles:
-    !      An entraining air-parcel model with two-dimensional
-    !      spectral cloud microphysics and a new formulation
-    !      of the collection kernel,
-    !      Q.J.R. Meteorolo. Soc., 129, 1-19, 2003
-    !
-    !      modifications
-    !      -------------
-    !      none
-    !
-    !------------------------------------------------------------------
-
-    implicit none
-
-    ! input
-    integer, intent(in)                                :: IMAX
-    real( dp), intent(in)                              :: temp      ! [K]
-    real( dp), intent(in)                              :: press     ! [Pa]
-    real( dp), dimension(MMAX,0:(IMAX+1)), intent(in)  :: DPA       ! [m]
-    real( dp), dimension(MMAX,IMAX)                    :: vterm     ! [m/s]
-    real( dp), intent(in)                              :: DPcrit    ! [m]
-    real( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(in)  :: KCOA  ! [m^3/s]
-
-    ! output
-    real( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(out) :: KCOL  ! [m^3/s]
-
-
-    ! local
-    ! specific gas constant for dry air [J/(kgK)]
-    real( dp), parameter                               :: R=287.058
-    real( dp),dimension(MMAX,MMAX,IMAX,IMAX)           :: ECOL
-    real( dp),dimension(MMAX,MMAX,IMAX,IMAX)           :: ECOA
-    real( dp), dimension(MMAX,IMAX)                    :: DIF
-    real( dp), dimension(MMAX,IMAX)                    :: VEN
-
-    real( dp)                                          :: rho_air
-    real( dp)                                          :: MYY
-    real( dp)                                          :: NYY
-    real( dp)                                          :: KNA
-    real( dp)                                          :: CC
-    real( dp)                                          :: DIFFCO
-    real( dp)                                          :: NRE
-    real( dp)                                          :: NSC
-
-    real( dp)                                          :: rc
-    real( dp)                                          :: rlim
-    real( dp)                                          :: rs
-    real( dp)                                          :: RB
-    real( dp)                                          :: difs
-    real( dp)                                          :: vterms
-    real( dp)                                          :: acoa
-    real( dp)                                          :: bcoa
-    real( dp)                                          :: xcoa
-    real( dp)                                          :: betacoa
-
-    integer                                            :: I,M,J,O
-    integer                                            :: MM,K
-
-
-      ! Initialisation
-      KCOL(:,:,:,:)   = 0._dp
-      ECOL(:,:,:,:)   = 0._dp
-      ECOA(:,:,:,:)   = 0._dp
-      DIF(:,:)        = 0._dp
-      VEN(:,:)        = 1._dp
-
-
-      ! Critical radius
-      rc      = DPcrit*0.5_dp
-      rlim    = 4.00e-7_dp      ! 400 nm
-      rlim    = MIN(rlim,rc)
-
-      ! Air density
-      ! [kg/m^3] 1.2928
-      rho_air = press / R / temp      
-
-      ! Dynamic viscosity of air
-      ! [kg/m/s]
-      MYY= (1.832e-5_dp*(temp**(1.5_dp))*406.4_dp)/            &
-          (5093._dp*(temp+110.4_dp))
-
-      ! Kinematic viscosity of air
-      ! [m^2/s]
-      NYY     = MYY / rho_air
-
-
-      ! First calculate in all bins
-      ! Particle diffusion coefficient
-      ! for Brownian Diffusion DIF
-      ! and Ventilation coefficient VEN
-
-      do M=1,MMAX
-        do I=1,IMAX
-
-          ! Cunnningham slip-flow correction [-]
-          ! CC = 1 + Kn_a(A + B*exp(-C/Kn_a))
-          ! with A,B,C from Rogak and Flagan 
-          ! [J. Coll. Interface Sci., 151, 1992]
-          ! LAM and VIS in gde_input_data
-          ! Kn_a is Knudsen number of air 
-          KNA = 2._dp*LAM / DPA(M,I)
-          CC  = 1._dp+KNA*(1.257_dp+0.4_dp*exp(-1.1_dp/KNA))
-
-          ! Particle Diffusion Coefficient   [m^2/s]
-          DIF(M,I) = ( k_B * temp * CC / (3.*pi*VIS*DPA(M,I)) )
-
-          ! Vapor diffusivity [m^2/s]
-          DIFFCO  = (k_B*temp*CC) /                            &
-                    (6._dp*pi*MYY*0.5_dp*DPA(M,I))
-
-          ! Reynold number [-]
-          NRE = (vterm(M,I)*DPA(M,I)) / NYY
-
-          ! Schmidt number [-]
-          NSC = NYY / DIFFCO
-
-          ! Ventilation coefficent [-]
-          ! Two conditions depending on NRE and NSC
-          if (NSC**(1./3.)*sqrt(NRE) .lt. 1.4) then
-            VEN(M,I) = 1._dp + 0.108_dp*                       &
-                       (NSC**(1./3.)*sqrt(NRE))**2.
-          else
-            VEN(M,I) = 0.78_dp + 0.308_dp*                     &
-                       NSC**(1./3.)*sqrt(NRE)
-          endif
-
-      ! print *,'DpA CASE DIF',M,I,DPA(M,I),NSC**(1./3.)*sqrt(NRE),VEN(M,I),DIF(M,I)
-
-         enddo       ! I
-      enddo         ! M
-
-
-      ! Second calculate the collection kernel KCOL
-      ! KCOL = Ecoa*Ecol*|Vinf_B - Vinf_s|*pi*(RB+rs)**2
-      !  Ecoa: coalesence efficieny, Table 4, Kirkweg (2003)
-      !  Ecol: collision efficiency, Table 2, Kirkweg (2003)
-      ! Accretion is the growth of large partner by 
-      ! sweeping the smaller partner.
-      ! Large collision partner X(O,J)
-      !  with radius RB
-      ! Small collision partner X(M,I)
-      !  with radius rs
-      ! Outer loop: small partner
-      ! Inner loop: large partner
-      ! Coalescence:
-      !   small partner rs: 1.0 - 30 um
-      !   large partner RB: >50 um
-      !   for small partner rs < 1um -> Ecoa=1
-      !   for large partner RB < 50 um -> Ecoa=1
-
-      do M=NU,CS
-        do I=1,IMAX
-
-          rs     = DPA(M,I)*0.5_dp
-          difs   = DIF(M,I)
-          vterms = vterm(M,I)
-
-          do O=AI,CS
-            do J=1,IMAX
-
-              RB      = DPA(O,J)*0.5_dp
-              betacoa = 0._dp
-              bcoa    = 0._dp
-              acoa    = 0._dp
-              xcoa    = 0._dp
-
-              IF (RB.GT.rs) THEN
-
-                ! Collision efficiency [-]
-                ! Ecol = 4*RB*DIF*VEN /
-                !        (rs+RB)**2*|Vinf_B-Vinf_s|
-
-                ECOL(M,O,I,J) = 4._dp*RB*difs*VEN(O,J)       /  &
-                      ( (RB+rs)**2.*ABS(vterm(O,J)-vterms) )
-
-                ! Coalescence efficiency [-]
-
-                ! RB >= 50 um
-                if (RB.ge.5.e-5) then
-                  if ((rs.ge.1.e-6).and.(rs.le.3.e-5)) then
-
-                    betacoa = LOG(rs*1.e6)                   +  &
-                          0.44_dp*LOG(RB*1.e6/200._dp)
-                    bcoa    = 0.0946_dp * betacoa - 0.319_dp
-                    acoa    = SQRT(bcoa**2.0 + 0.00441_dp)
-                    xcoa    = (acoa-bcoa)**(1._dp/3._dp)     -  &
-                            (acoa+bcoa)**(1._dp/3._dp)
-                    ECOA(M,O,I,J) = xcoa + 0.459_dp
-
-                  else if (rs.gt.3.e-5) then  ! rs > 30 um
-                    ECOA(M,O,I,J) = 0.6_dp
-                  else                        ! rs < 1 um 
-                    ECOA(M,O,I,J) = 1._dp
-                  endif
-
-                ! RB < 50 um
-                else
-                  if (rs.gt.3.e-5) then       ! rs > 30 um
-                    ECOA(M,O,I,J) = 0.6_dp
-                  else 
-                    ECOA(M,O,I,J) = 1._dp
-                  endif
-                endif
-
-              ! Collection kernel [m^3/s]
-
-                KCOL(M,O,I,J) = ECOA(M,O,I,J) * ECOL(M,O,I,J)  *  &
-                        ABS(vterm(O,J)-vterms) * pi * (RB+rs)**2.
-
-              ! Collection kernel for interstitial scavenging
-              ! if critcial radius is below 1 um
-              ! upper radius limit rlim (= 200 nm)
-                if ((rs.le.rlim).and.(rc.lt.1.e-6_dp)) then
-                  if (rs.lt.2.e-8_dp) then
-              ! rs < 20 nm
-                    KCOL(M,O,I,J) = KCOA(M,O,I,J)
-
-                  else  
-              ! 20 nm < rs < 400 nm
-                    !KCOL(M,O,I,J) = KCOA(M,O,I,J)*(7.25e8*rs-12.5_dp)  ! factor 60
-                    !KCOL(M,O,I,J) = KCOA(M,O,I,J)*(9.75e8*rs-17.5_dp)  ! factor 80
-                    KCOL(M,O,I,J) = KCOA(M,O,I,J)*(1.23e9*rs-22.5_dp)  ! factor 100
-                    !!!KCOL(M,O,I,J) = KCOA(M,O,I,J)*(1.48e9*rs-27.5_dp)  ! factor 120
-                  endif
-                endif
-
-              ! No collection until critcial radius is below 1 um
-                if (rc.ge.1.e-6_dp) then
-                  KCOL(M,O,I,J) = 0._dp
-                endif
-
-              ! RB < rs
-              ELSE
-                ECOL(M,O,I,J) = 0._dp
-                ECOA(M,O,I,J) = 0._dp
-                KCOL(M,O,I,J) = 0._dp
-              ENDIF
-
-           !   if ((M==AI).and.(I==10).and.(rc.lt.1.e-6_dp)) then
-           !   write(6,*) 'Kcol',O,J,rs/RB,ECOL(M,O,I,J),KCOA(M,O,I,J),KCOL(M,O,I,J)
-           !   endif
-
-            enddo   ! J
-          enddo     ! O
-
-        enddo       ! I
-      enddo         ! M          
-
-
-  end subroutine collection_kernel
 
 
 

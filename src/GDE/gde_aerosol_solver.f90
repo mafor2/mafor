@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -51,9 +51,9 @@ module gde_aerosol_solver
   use gde_constants,  only      : M_ca,M_hcl
   use gde_constants,  only      : MB,MAH,MAN,MIO
   use gde_constants,  only      : pi
+  use gde_constants,  only      : massmin,nucomin
+  use gde_constants,  only      : CONVM,DENV
 
-! for kelvin effect of n-alkanes
-  use gde_init_gas, only        : gamma_oc7,gamma_oc8
 ! for chamber studies
   use gde_init_gas, only        : V_CHAM,S_SED,S_DIF
   use gde_init_gas, only        : DILPAR
@@ -66,18 +66,18 @@ module gde_aerosol_solver
   use gde_input_data, only      : A_MSA,A_CHL,A_IO3
   use gde_input_data, only      : A_WAT
   use gde_input_data, only      : NU,AI,AS,CS
-  use gde_input_data, only      : massmin
-  use gde_input_data, only      : nucomin
+
   use gde_input_data, only      : CTNH4,CTNIT,CTSO4,CTCHL
   use gde_input_data, only      : KPEQ
   use gde_input_data, only      : DCSU,DCORG
-  use gde_input_data, only      : CONVM
-  use gde_input_data, only      : DENV
   use gde_input_data, only      : DEB_CTOTS1,DEB_CTOTS2
   use gde_input_data, only      : DEB_CTOTA1,DEB_CTOTA2
   use gde_input_data, only      : DEB_NTOT,DEB_MTOT
   use gde_input_data, only      : DEB_CTOTO11,DEB_CTOTO12
   use gde_input_data, only      : DEB_CTOTO21,DEB_CTOTO22
+
+  use gde_input_data, only      : depo_type
+  use gde_input_data, only      : organ_type
 
   use gde_toolbox,    only      : molec2ug
   use gde_toolbox,    only      : newton
@@ -123,9 +123,10 @@ contains
                            MASS,IAG,NVAP,                                              &
                            mbl,rain,hsta_st,u10,cair,RH,daytime,lat_deg,               &
                            incloud,owf,hour_timemin,                                   &
-                           jrno2,alphanit,fcoj,                                        &
-                           CAMI,KP_NIT,fnuc,INUCMEC,                                   &
-                           DENOC,surfin,surf_org,                                      &
+                           jrno2,alphanit,fcoj,CAMI,KP_NIT,                            &
+                           depop,                                                      &
+                           fnuc,ipr,INUCMEC,DENOC,                                     &
+                           organic,                                                    &
                            M_oc,nmo,foc,hvap,csat0,                                    &
                            gamma_oc1_m,gamma_oc2_m,gamma_oc3_m,gamma_oc4_m,            &
                            gamma_oc5_m,gamma_oc6_m,gamma_oc7_m,gamma_oc8_m,            &
@@ -180,6 +181,8 @@ contains
     implicit none
 
     ! input
+    type(depo_type),  intent(in)               :: depop
+    type(organ_type), intent(in)               :: organic
     integer, intent(in)                        :: IMAX
     real( dp), intent(in)                      :: DTIME
     real( dp), intent(in)                      :: temp
@@ -194,12 +197,12 @@ contains
     real( dp), intent(in)                      :: daytime
     real( dp), intent(in)                      :: lat_deg
     real( dp), intent(in)                      :: owf
-    integer, intent(in)                        :: incloud
     real( dp), intent(in)                      :: hour_timemin
-    real( dp), intent(in)                      :: CAMI,KP_NIT,fnuc
+    real( dp), intent(in)                      :: CAMI,KP_NIT
+    real( dp), intent(in)                      :: fnuc
+    real( dp), intent(in)                      :: ipr
     real( dp), intent(in)                      :: alphanit,fcoj
     real( dp), intent(in)                      :: DENOC
-    real( dp), intent(in)                      :: surf_org
     real( dp), dimension(NSOA), intent(in)     :: M_oc
     real( dp), dimension(NSOA), intent(in)     :: nmo
     real( dp), dimension(NSOA), intent(in)     :: foc
@@ -215,6 +218,8 @@ contains
     real( dp), intent(in)                      :: gamma_oc8_m(NU:CS)
     real( dp), intent(in)                      :: gamma_oc9_m(NU:CS)
     real( dp), intent(in)                      :: vvap
+    integer, intent(in)                        :: incloud
+    integer, intent(in)                        :: INUCMEC
 
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPAW
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
@@ -242,9 +247,6 @@ contains
     real( dp),intent(in)                              :: Keq_nh4no3_0
     real( dp),intent(in)                              :: Keq_nh4cl_0
 ! mesa end
-
-    integer, intent(in)                        :: INUCMEC
-    integer, intent(in)                        :: surfin
 
     ! in/out
     real( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(in out) :: IAG
@@ -278,8 +280,10 @@ contains
     real( dp)                   :: DNVAPN
     real( dp)                   :: NVAPOLDN
     real( dp)                   :: nnuc
-    real( dp)                   :: GRSU,GRMS,GROC    ! growth rate [nm/hr]
     real( dp)                   :: sumlwc
+    ! growth rate [nm/hr]
+    real( dp)                   :: GRSU,GRMS,GRIO
+    real( dp)                   :: GROC,GROC1,GROC2,GROC3
     ! iteration
     real( dp)                   :: mtol
     real( dp)                   :: xout
@@ -381,7 +385,11 @@ contains
        CSORGT         = 0._dp
        GRSU           = 0._dp
        GRMS           = 0._dp
+       GRIO           = 0._dp
        GROC           = 0._dp
+       GROC1          = 0._dp
+       GROC2          = 0._dp
+       GROC3          = 0._dp
        GRTOT          = 0._dp
 
 
@@ -391,19 +399,19 @@ contains
 ! particle deposition only when box is in contact with ground
 
        if ( (IDEPO.EQ.1).AND.(mbl.ge.2.0*hsta_st) ) then
-         CALL depositpar(press,temp,DENSPAR,DPAW,mbl,owf,depo,IMAX)
+         CALL depositpar(depop,press,temp,DENSPAR,DPAW,mbl,owf,depo,IMAX)
        endif
 
        if ( (IDEPO.EQ.2).AND.(mbl.ge.2.0*hsta_st) ) then
-         CALL depocanopy(press,temp,DENSPAR,DPAW,mbl,u10,depo,IMAX)
+         CALL depocanopy(depop,press,temp,DENSPAR,DPAW,mbl,u10,depo,IMAX)
        endif
 
        if ( (IDEPO.EQ.3).AND.(mbl.ge.2.0*hsta_st) ) then
-         CALL depofrough(press,temp,DENSPAR,DPAW,mbl,depo,IMAX)
+         CALL depofrough(depop,press,temp,DENSPAR,DPAW,mbl,depo,IMAX)
        endif
 
        if ( (IDEPO.EQ.4).AND.(mbl.ge.2.0*hsta_st) ) then
-         CALL depozhang01(temp,DENSPAR,DPAW,mbl,depo,IMAX)
+         CALL depozhang01(depop,temp,DENSPAR,DPAW,mbl,depo,IMAX)
        endif
 
 
@@ -437,10 +445,11 @@ contains
        
 ! coagulation coefficient kcoag(M,O,I,J)
 ! (also used for interstitial aerosol scavenging)
-           CALL coagulation_coeff(temp,DENSPARW,DPAW,kcoag,IMAX)
+           CALL coagulation_coeff(temp,organic%rp0,organic%Dfrac, &
+                                  DENSPARW,DPAW,kcoag,IMAX)
 
 ! coagulation by Brownian diffusion
-           CALL coagulation(temp,DTIME,DENSPARW,DPAW,VPT,N,MASS,  &
+           CALL coagulation(temp,DTIME, DPAW,VPT,N,MASS,          &
                           IMAX,IAG,kcoag,coags,fluxm,flux)
 
 ! compute updated coagulation target classes      
@@ -465,8 +474,8 @@ contains
                          NVAP(A_AMI),NVAP(A_NIT),                 &
                          NVAP(A_OR2),NVAP(A_IO3),                 &
                          temp,RH,jrno2,CAMI,                      &
-                         KPEQ,fnuc,coags,daytime,lat_deg,natot,jnuc)
-                         
+                         KPEQ,fnuc,coags,ipr,                     &
+                         daytime,lat_deg,natot,jnuc)
          if ((IDEB == 1) .and. (hour_timemin == 120.)) then
             write(12,*) 'Jnuc', jnuc       
          endif
@@ -513,30 +522,29 @@ contains
          !  Second for organic vapour
            if (ICONO .EQ. 1) then
              if (INANO.EQ.1) then
-               CALL nano_koehler(DPA,temp,surfin,surf_org,M_oc(1),DENOC, &
-                               MASS,keffectwat,keffectoc,IMAX)
+               CALL nano_koehler(DPA,temp,organic%surfin,organic%surf_org,M_oc(1), &
+                                DENOC,MASS,keffectwat,keffectoc,IMAX)
              else   
-               CALL kelvin_org(DPA,temp,surfin,surf_org,M_oc(1),DENOC,MASS,keffectoc,IMAX)
+               CALL kelvin_org(DPA,temp,organic%surfin,organic%surf_org,M_oc(1), &
+                               DENOC,MASS,keffectoc,IMAX)
              endif   
          ! primary emitted alkanes with nC=21 and nC=26
-             CALL kelvin_alkane(DPA,temp,21,gamma_oc7,keffectalk1,IMAX)             
-             CALL kelvin_alkane(DPA,temp,26,gamma_oc8,keffectalk2,IMAX) 
-         ! re-calculate molar fraction of primary emitted OC components
-         ! (gamma_oc7 and gamma_oc8)
-             do M=NU,CS
-                 sum_gamma(M) =(gamma_oc1_m(M)*M_oc(1)+gamma_oc2_m(M)*M_oc(2)  &
-                              + gamma_oc3_m(M)*M_oc(3)+gamma_oc4_m(M)*M_oc(4)  &
-                              + gamma_oc5_m(M)*M_oc(5)+gamma_oc4_m(M)*M_oc(6)  &
-                              + gamma_oc7_m(M)*M_oc(7)+gamma_oc8_m(M)*M_oc(8)  &
-                              + gamma_oc9_m(M)*M_oc(9)    )
-                 gamma_oc7_tmp = MORG7TOT(M)/(max(MORGCTOT(M),massmin))
-                 gamma_oc8_tmp = MORG8TOT(M)/(max(MORGCTOT(M),massmin))
-                 gamma_oc7(M)=(gamma_oc7_tmp/M_oc(7)) * sum_gamma(M)
-                 gamma_oc8(M)=(gamma_oc8_tmp/M_oc(8)) * sum_gamma(M)
-
-                 !print *,"aerosol_solver gamma_oc7 ",M,sum_gamma(M),gamma_oc7(M)
-                 !print *,"aerosol_solver gamma_oc8 ",M,sum_gamma(M),gamma_oc8(M)                        
-             end do
+             CALL kelvin_alkane(DPA,temp,21,organic%gamma_oc7,keffectalk1,IMAX)             
+             CALL kelvin_alkane(DPA,temp,26,organic%gamma_oc8,keffectalk2,IMAX) 
+!MSK         ! re-calculate molar fraction of primary emitted OC components
+!MSK             do M=NU,CS
+!MSK                 sum_gamma(M) =(gamma_oc1_m(M)*M_oc(1)+gamma_oc2_m(M)*M_oc(2)  &
+!MSK                              + gamma_oc3_m(M)*M_oc(3)+gamma_oc4_m(M)*M_oc(4)  &
+!MSK                              + gamma_oc5_m(M)*M_oc(5)+gamma_oc4_m(M)*M_oc(6)  &
+!MSK                              + gamma_oc7_m(M)*M_oc(7)+gamma_oc8_m(M)*M_oc(8)  &
+!MSK                              + gamma_oc9_m(M)*M_oc(9)    )
+!MSK                 gamma_oc7_tmp = MORG7TOT(M)/(max(MORGCTOT(M),massmin))
+!MSK                 gamma_oc8_tmp = MORG8TOT(M)/(max(MORGCTOT(M),massmin))
+!MSK                 gamma_oc7(M)=(gamma_oc7_tmp/M_oc(7)) * sum_gamma(M)
+!MSK                 gamma_oc8(M)=(gamma_oc8_tmp/M_oc(8)) * sum_gamma(M)
+!MSK                 !print *,"aerosol_solver gamma_oc7 ",M,sum_gamma(M),gamma_oc7(M)
+!MSK                 !print *,"aerosol_solver gamma_oc8 ",M,sum_gamma(M),gamma_oc8(M)                        
+!MSK             end do
            endif   
          !   Third for amine-nitrate          
            if (ICONA .EQ. 1) then
@@ -630,6 +638,14 @@ contains
 
 ! 3) Sum up Condensation Sink
 
+!   Condensation sink CS (1/s) is defined as:
+!   CS = 2*pi * DCSU * sum( Dp(k) * beta * N(k) )
+!   DCSU [cm^2 s^-1]
+!   Factor 4 because of radius instead of diameter
+!   cccond = 10^-4 * 4*pi*r(k)*beta*DCSU     [m^3 s^-1]
+!   CSSUL1 = 10^-4*r(k)*beta*N(k)            [10^-4 m^-2]
+!   CSSUL2 = 4*pi * DCSU * CSSUL1  [10^-4 cm^2 m^-2 s^-1] = [1/s]
+
        if (ICOND .EQ. 1) then
          if ((ICONS == 1).or.(ICONS == 2)) then
             do M=NU,CS
@@ -651,7 +667,9 @@ contains
          endif
          ! Calculate Condensation Sink of organic vapour
          if ( ICONO == 1) CSORGT=4*pi*DCORG*CSORGT
-         if ((ICONS == 1).or.(ICONS == 2))  CSORGT=CSORGT + (4*pi*DCSU*CSSULT)
+         !!!if ((ICONS == 1).or.(ICONS == 2))  CSORGT=CSORGT + (4*pi*DCSU*CSSULT)
+         ! Calculate Condensation Sink of sulfuric acid
+         if ((ICONS == 1).or.(ICONS == 2))  CSSULT=CSSULT + (4*pi*DCSU*CSSULT)
        endif
 
 ! 4) Compute condensation flux
@@ -985,20 +1003,19 @@ contains
             MASS(NU,1,A_OR2) = MASS(NU,1,A_OR2)                      +       &
                        natot*MAH*jnuc*DTIME*CONVM
          endif
+
          ! amine/nitric acid nucleation 
          if (INUCMEC .EQ. 6) then
             NVAPOLDN=nvap(A_AMI)
-            !do I=1,IMAX
-              MASS(NU,1,A_AMI) = mass(NU,1,A_AMI)                   +       &
-                       natot*MAN*jnuc*DTIME*CONVM
-              MASS(NU,1,A_NIT) = mass(NU,1,A_NIT)                   +       &
-                       natot*MAN*jnuc*DTIME*CONVM
-              N(NU,1)=N(NU,1)+jnuc*DTIME
-           
-              NVAP(A_AMI)=nvap(A_AMI)-jnuc*nnuc*natot*DTIME
-              NVAP(A_NIT)=nvap(A_NIT)-jnuc*nnuc*natot*DTIME  
-            !enddo         
+            MASS(NU,1,A_AMI) = mass(NU,1,A_AMI)                   +       &
+                      natot*MAN*jnuc*DTIME*CONVM
+            MASS(NU,1,A_NIT) = mass(NU,1,A_NIT)                   +       &
+                      natot*MAN*jnuc*DTIME*CONVM
+            N(NU,1)=N(NU,1)+jnuc*DTIME
+            NVAP(A_AMI)=nvap(A_AMI)-jnuc*nnuc*natot*DTIME
+            NVAP(A_NIT)=nvap(A_NIT)-jnuc*nnuc*natot*DTIME  
             DNVAPN=DNVAPN+(NVAPOLDN-nvap(A_AMI))
+
          ! iodic acid / sulfuric acid nucleation    
          else if (INUCMEC .EQ. 14) then
             NVAP(A_IO3)=nvap(A_IO3)-jnuc*nnuc*natot*DTIME
@@ -1088,8 +1105,7 @@ contains
                ! apply non-negative constraint because N(M,I) has already
                ! been changed by condensation flux
                N(M,I)=max(N(M,I),0.0_dp)
-
-             !  write(6,*) 'Fcoag',M,I,N(M,I),FLUX(M,I)
+               !write(6,*) 'Fcoag',M,I,N(M,I),FLUX(M,I)
             end do
            end do
 
@@ -1158,13 +1174,20 @@ contains
  ! Calculate Growth Rate of 1nm particle [nm/hr]
        ! According to Eq. 2-5 in Verheggen and Mozurkevich, ACP,6,2927-2942,2006
        ! GR=GR*(NVAP-NSVAP)*3600.*1.e9
-       ! GR[m/s]=GR[m4/(s*molec)]*(NVAP-NSVAP)[molec/m3]  
+       ! GR[m/s]=GR[m4/(s*molec)]*(NVAP-NSVAP)[molec/m3]
+       ! Vapor is approximately non-volatile, thus minimum GR is zero.
+       !                                        mass fraction = 1
+       ! Marine LVOC
        if ((ICONS == 1).or.(ICONS == 2)) then
-         GRSU=GRSU*(NVAP(A_SUL)-nsv(A_SUL))*3600.*1.e9*1.
-         GRMS=GRMS*(NVAP(A_MSA)-nsv(A_MSA))*3600.*1.e9*1.
+         GRSU=GRSU*max((NVAP(A_SUL)-nsv(A_SUL)),0.0)*3600.*1.e9*1.
+         GRMS=GRMS*max((NVAP(A_MSA)-nsv(A_MSA)),0.0)*3600.*1.e9*1.
+         GRIO=GRSU*max((NVAP(A_IO3)-nsv(A_IO3)),0.0)*3600.*1.e9*1.
        endif
-       GROC=GROC*(NVAP(A_OR1)-nsv(A_OR1))*3600.*1.e9*1.    !mass fraction = 1
-       GRTOT=GROC+GRSU+GRMS
+       ! Biogenic LVOC
+       GROC1=GROC*max((NVAP(A_OR1)-nsv(A_OR1)),0.0)*3600.*1.e9*1.
+       GROC2=GROC*max((NVAP(A_OR2)-nsv(A_OR2)),0.0)*3600.*1.e9*1.
+       GROC3=GROC*max((NVAP(A_OR3)-nsv(A_OR3)),0.0)*3600.*1.e9*1.
+       GRTOT=GROC1+GROC2+GROC3+GRSU+GRMS
 
 
 
@@ -1227,11 +1250,13 @@ contains
     !            cioncharge          per each bin
     !            kh_nh3              per each bin
     !            flag_dissolution    per each bin
-    !            HYST ???
+    !            HYST                per each bin
     ! 
     !      method
     !      ------
     !      dissolution and growth of semi-volatile inorganic compounds
+    !      HYST is the water content [kg/m^3] on the hysteresis curve
+    !           for 30%  RH it is zero.
     !
     !      
     !      external

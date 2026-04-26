@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2023 Matthias Steffen Karl
+!*    Copyright (C) 2011-2026 Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -57,9 +57,7 @@ module gde_deposition
 
     use gde_constants,  only      : pi,k_B,g,c_vKar,M_air,R_gas
     use gde_input_data, only      : MMAX
-    use gde_plume,      only      : znot,ustar
-    use gde_plume,      only      : ADEP,BDEP,ZCAP,dcol,Fplus
-
+    use gde_input_data, only      : depo_type
 
     private
    
@@ -190,7 +188,7 @@ subroutine depositwall(press,temp,DPA,DIL,VC,AS,AD,depowall,IMAX)
   end subroutine depositwall
 
 
-subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
+subroutine depositpar(depop,press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
     !----------------------------------------------------------------------
     !
     !****
@@ -214,6 +212,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
     !      ---------
     !
     !        input:
+    !           depop    type
     !           press    [Pa]
     !           temp     [K]
     !           mbh      [m]
@@ -245,11 +244,10 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
 
     implicit none
 
+    type(depo_type), intent(in)                       :: depop
     integer, intent(in)                               :: IMAX
     real( dp), intent(in)                             :: temp,press,mbh
-    real( dp), intent(in)                             :: owf
-   ! REAL( dp), intent(in)                             :: ustar,znot
-   ! REAL( dp), intent(in)                             :: ADEP,BDEP    
+    real( dp), intent(in)                             :: owf 
     real( dp), dimension(MMAX,IMAX), intent(in)       :: DENSPAR
     real( dp), dimension(MMAX,0:(IMAX+1)),intent(in)  :: DPA
     real( dp), dimension(MMAX,IMAX), intent(out)      :: depo
@@ -271,7 +269,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
       !ADEP=1.7
       !BDEP=51.8
 !      P = 1.        !atm
-      znotcm=znot
+      znotcm=depop%znot
       ! set ZNOT over water/ice (water: 0.001 m/s)
       ! value from dispers.dat is taken
       ! if 0.<= owf <= 0.3
@@ -287,10 +285,10 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
          CALL diffpar(RP(M,I),pres,temp,MYY,DIFFCO,CC)
          MYY=MYY/DENS     !m^2/s
          Sc = MYY/DIFFCO  !laaduton
-         X = 2._dp*RP(M,I)*(ustar/znotcm/MYY)**(0.5_dp)*Sc**(1/3._dp)
+         X = 2._dp*RP(M,I)*(depop%ustar/znotcm/MYY)**(0.5_dp)*Sc**(1/3._dp)
          !VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPA*g*DIFFCO/k_B/temp     !m/s
          VS = 4._dp/3._dp*pi*(RP(M,I))**3*DENSPAR(M,I)*g*DIFFCO/k_B/temp     !m/s
-         VG = DIFFCO/(2*RP(M,I))*(ADEP*X + BDEP*X**3) + VS     !m/s
+         VG = DIFFCO/(2*RP(M,I))*(depop%ADEP*X + depop%BDEP*X**3) + VS     !m/s
          !write(6,*) DPA(M,I),VG     
          depo(M,I) = VG/mbh       !1/s
        end do
@@ -300,7 +298,7 @@ subroutine depositpar(press,temp,DENSPAR,DPA,mbh,owf,depo,IMAX)
 
   end subroutine depositpar  
 
-subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
+subroutine depozhang01(depop,temp,DENSPAR,DPA,mbh,depo,IMAX)
     !----------------------------------------------------------------------
     !
     !****
@@ -321,6 +319,7 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
     !      ---------
     !
     !        input:
+    !           depop    type
     !           temp     [K]
     !           mbh      [m]
     !           DPA      [m]
@@ -351,6 +350,7 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
 
     implicit none
 
+    type(depo_type), intent(in)                       :: depop
     INTEGER, intent(in)                               :: IMAX
     REAL( dp), intent(in)                             :: temp
     REAL( dp), intent(in)                             :: mbh
@@ -407,14 +407,14 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
       ! Aerodynamic resistance
       ! evaluated at canopy top = zC (here 10 m)
       zC = 10.0_dp
-      if (mbh <= znot) then
-         zC=znot
+      if (mbh <= depop%znot) then
+         zC=depop%znot
       else if (mbh <= zC) then
          zC=mbh
       else
         zC = 10.0_dp
       endif
-      ra = LOG(zC / znot) / (0.4_dp * ustar)  !znot = z0
+      ra = LOG(zC / depop%znot) / (0.4_dp * depop%ustar)  !znot = z0
 
       do M=1,MMAX
        do I=1,IMAX
@@ -432,7 +432,7 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
          ! Stokes number
          !!! St = vc * ustar**2 / kvis  ! for surfaces with bluff roughness elements
          ! for vegetated surfaces
-         St =  vc * ustar / (g * dcol)
+         St =  vc * depop%ustar / (g * depop%dcol)
 
          ! Particle diffusivity coefficient (Eq. 15.29)
          mdiff = (k_B * temp * CC) / (3.0_dp * pi * avis * DPA(M,I) )
@@ -447,7 +447,7 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
          ! EB  = Sc**(-gamma_d)
          ! EIM = St / (alpha_d + St))**2
          ! EIN = 0.5*(DPA/dcol)**2
-         rs = MAX(EPSILON(1.0), (3.0 * ustar * EXP(-St**0.5) *                &
+         rs = MAX(EPSILON(1.0), (3.0 * depop%ustar * EXP(-St**0.5) *           &
                                   ( Sc**(-gamma_d)                         +  &  ! EB
                                     (St / (alpha_d + St))**2               +  &  ! EIM
                                     0.5 * (DPA(M,I) / dcol)**2                &  ! EIN
@@ -470,7 +470,7 @@ subroutine depozhang01(temp,DENSPAR,DPA,mbh,depo,IMAX)
 
   end subroutine depozhang01
 
-subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
+subroutine depocanopy(depop,press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
     !----------------------------------------------------------------------
     !
     !****
@@ -487,6 +487,7 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
     !      ---------
     !
     !        input:
+    !           depop    type
     !           press [Pa]
     !           temp  [K]
     !           mbh   [m]
@@ -519,6 +520,7 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
 
     implicit none
 
+    type(depo_type), intent(in)                       :: depop
     INTEGER, intent(in)                               :: IMAX
     REAL( dp), intent(in)                             :: temp,press,mbh,u10
   !  REAL( dp), intent(in)                             :: ustar,znot
@@ -543,11 +545,11 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
       DENSPA= 1400.  !kg/m^3  for all particles (1.assumption)
       !USTAR=1.17    !m/s
       !ZNOT = 0.001   !m
-      acap=(ustar/u10)*dcol
-      if (ZCAP <= znot) then
-         ztop=znot
+      acap=(depop%ustar/u10)*depop%dcol
+      if (depop%ZCAP <= depop%znot) then
+         ztop=depop%znot
       else
-         ztop=ZCAP
+         ztop=depop%ZCAP
       endif      
 !      P = 1.        !atm
       do M=1,MMAX
@@ -561,15 +563,15 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
          MYY=MYY/DENS     !m^2/s kinematic viscosity
          Sc = MYY/DIFFCO
          ! Canopy Reynolds number Re*
-         restar = ustar * acap/MYY 
+         restar = depop%ustar * acap/MYY 
          ! Collector Reynolds number
-         recol  = restar * (u10/ustar)**2.
+         recol  = restar * (u10/depop%ustar)**2.
          ! Stoke number
-         stoken = 2*taup * u10/dcol 
+         stoken = 2*taup * u10/depop%dcol 
          ! Diffusion controlled deposition vdif
-         vdif   = ustar * 2. * restar**(-0.5) * Sc**(-2./3.)
+         vdif   = depop%ustar * 2. * restar**(-0.5) * Sc**(-2./3.)
          ! Interception controlled deposition vint
-         vint   = ustar * 80. * (DPA(M,I)/acap)**2. * restar**(0.5)
+         vint   = depop%ustar * 80. * (DPA(M,I)/acap)**2. * restar**(0.5)
          ! effective Stoke number
          stockeff = stoken - recol**(-0.5)
          if (stockeff > 0.15) then
@@ -578,7 +580,8 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
            effimp = 0.0
          endif    
          ! Impaction controlled deposition vimp
-         vimp   = ustar * (2*ustar/u10) * effimp  * (stoken - ((ustar*restar**(-0.5))/u10) )
+         vimp   = depop%ustar * (2*depop%ustar/u10) * effimp  *   &
+                  (stoken - ((depop%ustar*restar**(-0.5))/u10) )
          ! Settling velocity VS       
          !VS     = 4./3.*pi*(RP(M,I))**3*DENSPA *g*DIFFCO/k_B/temp     !m/s
          VS     = 4./3.*pi*(RP(M,I))**3*DENSPAR(M,I) *g*DIFFCO/k_B/temp     !m/s
@@ -586,7 +589,7 @@ subroutine depocanopy(press,temp,DENSPAR,DPA,mbh,u10,depo,IMAX)
          vdzo   = vdif + vint + vimp + VS
          ! Aerodynamic resistance ra = int( dz/K(z) ) from z0 to z1
          ! crude assumption of a logarithmic profile
-         ra = (1/(c_vKar*ustar)) * log10(ztop/znot)
+         ra = (1/(c_vKar*depop%ustar)) * log10(ztop/depop%znot)
          ! Deposition velocity above canopy        
          depo(M,I) = (1./vdzo)*exp((-1.)*VS*ra) + (1/VS)*(1.-exp((-1.)*VS*ra))
          depo(M,I) = 1/depo(M,I)      !m/s
@@ -666,7 +669,7 @@ subroutine diffpar(RP,pres,temp,MYY,DIFFCO,CC)
   end subroutine diffpar
 
 
-subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
+subroutine depofrough(depop,press,temp,DENSPAR,DPA,mbh,depo,IMAX)
     !--------------------------------------------------------------------------
     !      author
     !      -------
@@ -720,6 +723,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
 
     implicit none
 
+    type(depo_type), intent(in)                       :: depop
     INTEGER, intent(in)                    :: IMAX
     REAL( dp), intent(in)                  :: temp,press,mbh
   !  REAL( dp), intent(in)                  :: ustar
@@ -776,7 +780,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
       
    
       !-- Creating the Y+ grid:
-      d1   = LOG10(1.e-9 * ustar / niu)
+      d1   = LOG10(1.e-9 * depop%ustar / niu)
       d2   = LOG10(Ymax)
       do n=2,npoints-1
           ylin(n) = d1 + (d2/npoints)*n - (d1/npoints)*n 
@@ -838,14 +842,14 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
       ! viscosity of air: niuT / niu   by Johansen (1991)
       niutplus = 0.4 * Ypluscbl
       ! Lagrangian time-scale of the fluid      
-      tauL     = ( niutplus * niu )/( vy2plus * ustar*ustar )
+      tauL     = ( niutplus * niu )/( vy2plus * depop%ustar*depop%ustar )
       
       ! Particle Size Dependant Parameters
       do M=1,MMAX
        do I=1,IMAX
           DRP=DPA(M,I)
           ! BC at the rough surface
-          Yplusnull = (DRP/2.) * (ustar/niu) + Fplus
+          Yplusnull = (DRP/2.) * (depop%ustar/niu) + depop%Fplus
           ! Cunningham slip correction factor
           ! for spherical particles according to Allen and Raabe (1982) for oil droplets
           ! and Allen and Raabe (1982) for solid particles. 2.1%
@@ -856,7 +860,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
           ! Particle relaxation time 
           !tauP     = CC * DENSPA * DRP**2. /(18.*miu)  !TEST
           tauP     = CC * DENSPAR(M,I) * DRP**2. /(18.*miu)
-          tauPplus = (tauP * ustar * ustar) / niu
+          tauPplus = (tauP * depop%ustar * depop%ustar) / niu
 
           !-- Settling Velocity calculation
           ! if DRP < 10 nm we neglect settling
@@ -878,7 +882,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
           ! Gravitational settling velocity [m/s]
           VG = (miu / roh / DRP) * rex
           !VGREF     = 4./3.*pi*(0.5*DRP)**3*DENSPA *g*DIFFCO/k_B/temp     !m/s  !usual vg
-          vgplus   = VG/ustar
+          vgplus   = VG/depop%ustar
           !write(6,*) 'vgplus',m,i,DRP,rex,VG,vgplus       
 
           ! Correction according to Liu and Agarwal (1974) 
@@ -905,7 +909,7 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
              else if ( (Yplus(k).ge.52.108).and.(Yplus(k).le.200.) ) then                  
                 niutplusi(k) = 0.4 * Yplus(k)
              endif 
-             tauLi(k)     =  (niutplusi(k)*niu) / (vy2plusi(k)*ustar*ustar)
+             tauLi(k)     =  (niutplusi(k)*niu) / (vy2plusi(k)*depop%ustar*depop%ustar)
           ! Turbophoresis term vtplus
           ! Eq. (3): Vt = -tauP * d(Vpy^2)/dy
           ! Vpy^2 = Particle wall normal fluctuating velocity intensity
@@ -960,10 +964,10 @@ subroutine depofrough(press,temp,DENSPAR,DPA,mbh,depo,IMAX)
           depo(M,I) = 1./  Gint                  ! [-]
           depo(M,I) = depo(M,I)
           !write(6,*) tauPplus,depo(M,I)
-          depo(M,I) = depo(M,I) * ustar         ! [m/s]
+          depo(M,I) = depo(M,I) * depop%ustar    ! [m/s]
           !write(6,*) 'depo',m,i,DRP,depo(M,I)
           !write(6,*) DRP,depo(M,I)
-          depo(M,I) = depo(M,I)/mbh             ! [1/s]
+          depo(M,I) = depo(M,I)/mbh              ! [1/s]
 
         end do
       end do !  end of M,I loop

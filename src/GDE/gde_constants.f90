@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2023  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -183,6 +183,44 @@ MODULE gde_constants
   ! MAFOR ION parameters
   real( dp), parameter :: IONMOB  = 1.2E-4_dp         ! ion mobility (m2 V^-1 s^-1)
   real( dp), parameter :: E_ELEC  = 1.6022E-19_dp     ! charge on the electron (C)
+
+  ! MAFOR Aerosol Dynamics
+  real( dp), parameter :: LAM     = 6.6E-8_dp         ! mean free path of gas [m]
+  real( dp), parameter :: VIS     = 1.81E-5_dp        ! viscosity [kg/(ms)]
+  real( dp), parameter :: MVAP    = 3.E-26_dp         ! mass of a vapor molecule [kg]
+  real( dp), parameter :: DIFV    = 2.5E-5_dp         ! diffusion coefficient of vapor [m2/s]
+  real( dp), parameter :: nucomin = 1.e-7_dp          ! numerical part. number conc. threshold [#/m^3]
+  real( dp), parameter :: massmin = 1.E-12_dp         ! numerical comp. mass conc. threshold  [ng/m^3]   
+  real( dp), parameter :: CONVM   = 1.E12_dp          ! conversion kg into ng
+
+  ! MAFOR Particle densities
+  real( dp), parameter :: pdens   = 1.8_dp            ! particle density [g/cm^3] (H2SO4 particles)
+  real( dp), parameter :: DENV    = 1770._dp          ! density sulfate aerosol  [kg/m^3], Karl et al. JGR 2007
+  real( dp), parameter :: DENAM   = 1300._dp          ! density ammonium aerosol [kg/m^3]
+  real( dp), parameter :: DENNI   = 1300._dp          ! density nitrate aerosol  [kg/m^3]
+  real( dp), parameter :: DENMS   = 1770._dp          ! density MSAp aerosol     [kg/m^3]
+  real( dp), parameter :: DENIO   = 4629._dp          ! density iodate aerosol   [kg/m^3]
+  real( dp), parameter :: DENSA   = 2240._dp          ! density sea salt aerosol [kg/m^3]
+  real( dp), parameter :: DENXX   = 1150._dp          ! density biological organic aerosol [kg/m^3]
+  real( dp), parameter :: DENEC   = 1200._dp          ! density soot aerosol [kg/m^3], Lemmetty et al. AST 2008
+  real( dp), parameter :: DENDU   = 1400._dp          ! density mineral dust [kg/m^3]
+  real( dp), parameter :: DENALK  =  900._dp          ! density C16-C30 n-alkanes [kg/m^3]
+  real( dp), parameter :: DENOC   = 1570._dp          ! density generic organics  [kg/m^3] 
+
+  ! MAFOR Cloud microphysics
+  real( dp), parameter :: lwcpart = 1.e-10_dp         ! threshold LWD for partitioning [m^3/m^3]
+  real( dp), parameter :: rhactiv = 0.99_dp           ! threshold RH for activation (99%) [-]
+  real( dp), parameter :: rhstart = 0.985_dp
+  real( dp), parameter :: Lthjump = 2.16E-7_dp        ! thermal jump length [m]
+  real( dp), parameter :: Lvpjump = 1.096E-7_dp       ! vapor jump length [m]
+  real( dp), parameter :: alphah2o     = 0.96_dp      ! thermal accomodation coefficient H2O
+  real( dp), parameter :: alphaCh2o    = 1.00_dp      ! condensation coefficient H2O
+  real( dp), parameter :: surf_h2o_std = 76.1         ! surface tension pure H2O [g/s^2] = [dyn/cm]
+  real( dp), parameter :: v2      = 2._dp             ! van't Hoff coefficient
+  real( dp), parameter :: v3      = 3._dp             ! van't Hoff coefficient
+  real( dp), parameter :: diamh2o = 3.11E-8_dp        ! collision diameter of H2O [cm]
+  real( dp), parameter :: rho_air = 0.00123_dp        ! density of air [g/cm3]
+
 
 END MODULE gde_constants
 

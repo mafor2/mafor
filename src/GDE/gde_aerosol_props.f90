@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -56,21 +56,19 @@ module gde_aerosol_props
 
    use gde_input_data, only  : SU,OC,AM,NI,MS,SA,XX,EC,DU
 
-   use gde_input_data, only  : CONVM
-   use gde_input_data, only  : DENSA,DENXX,DENDU,DENEC
-   use gde_input_data, only  : DENAM,DENNI
-   use gde_input_data, only  : massmin
-
+   use gde_constants,  only  : DENSA,DENXX,DENDU,DENEC
+   use gde_constants,  only  : DENAM,DENNI
    use gde_constants,  only  : pi,RHOH2O
+   use gde_constants,  only  : CONVM
+   use gde_constants,  only  : massmin
 
    use gde_init_aero,  only  : GMD,SIG
    use gde_init_aero,  only  : BGMD,BGSIG
    use gde_init_aero,  only  : EGMD,ESIG
 
-   use gde_init_gas,   only  : rp0,Dfrac
-   use gde_init_gas,   only  : gamma_oc1_m,gamma_oc2_m,gamma_oc3_m
-   use gde_init_gas,   only  : gamma_oc4_m,gamma_oc5_m,gamma_oc6_m
-   use gde_init_gas,   only  : gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
+   use gde_plume,      only  : gamma_oc1_m,gamma_oc2_m,gamma_oc3_m
+   use gde_plume,      only  : gamma_oc4_m,gamma_oc5_m,gamma_oc6_m
+   use gde_plume,      only  : gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
 
    use gde_toolbox,    only  : roolm
 
@@ -199,7 +197,8 @@ contains
 
 !------------------------------------------------------------------
 
-  subroutine initNumberMass(IMAX,DPA,DLINDP,VPT,DEN,                &
+  subroutine initNumberMass(IMAX,DPA,DLINDP,VPT,DEN,DPMAX,          &
+                            rp0in,Dfracin,                          &
                             MSULFTOT, MMSAPTOT, MNITRTOT, MAMMOTOT, &
                             MSALTTOT, MECBCTOT, MDUSTTOT, MXXXXTOT, & 
                             MORGCTOT,   MASS, N)
@@ -224,6 +223,8 @@ contains
     !           DLINDP  linear width of bin             [m]
     !           VPT     dry particle volume             [m^3]
     !           DEN     density of compound             [kg/m^3]
+    !           rp0in   primary spherule radius         [nm]
+    !           Dfracin fractal dimension               [-]
     !
     !        output:
     !           MASS    mass concentration              [ng/m^3]
@@ -254,6 +255,9 @@ contains
      real( dp), DIMENSION(MMAX,IMAX), intent(in)         :: DLINDP
      real( dp), DIMENSION(MMAX,IMAX), intent(in)         :: VPT
      real( dp), dimension(iamax), intent(in)             :: DEN
+     real( dp), intent(in)                               :: DPMAX
+     real( dp), intent(in)                               :: rp0in
+     real( dp), intent(in)                               :: Dfracin
 
      real( dp), dimension(MMAX),intent(in)               :: MSULFTOT
      real( dp), dimension(MMAX),intent(in)               :: MSALTTOT
@@ -307,9 +311,8 @@ contains
             LINDISM(M,I,DU)=(MDUSTTOT(M)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M)))) &
                            *EXP(-0.5_dp*(LOG(DPA(M,I)/GMD(M))/LOG(SIG(M)))**2._dp)
 
-
-! Add contribution of next lower mode
-            if ((M.gt.1).and.(M.lt.MMAX)) then           
+! Add contribution of next lower mode (if DPMAX > 1 um)
+            if ((DPMAX.gt.1.e-6_dp).and.(M.gt.1).and.(M.lt.MMAX)) then           
               LINDISM(M,I,SU)=LINDISM(M,I,SU) +                                 &
                       (MSULFTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
                       *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
@@ -320,7 +323,7 @@ contains
                       (MAMMOTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
                       *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
               LINDISM(M,I,NI)=LINDISM(M,I,NI)  +                                &
-                      (MNITRTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                     (MNITRTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
                       *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
               LINDISM(M,I,MS)=LINDISM(M,I,MS)  +                                &
                       (MMSAPTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
@@ -331,11 +334,11 @@ contains
               LINDISM(M,I,XX)=LINDISM(M,I,XX)  +                                &
                       (MXXXXTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
                       *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
-              LINDISM(M,I,EC)=LINDISM(M,I,EC)  +                                &
-                      (MECBCTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
-                      *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
+             LINDISM(M,I,EC)=LINDISM(M,I,EC)  +                                &
+                     (MECBCTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                     *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
               LINDISM(M,I,DU)=LINDISM(M,I,DU)  +                                &
-                      (MDUSTTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
+                     (MDUSTTOT(M-1)/(SQRT(2._dp*pi)*DPA(M,I)*LOG(SIG(M-1))))   &
                       *EXP(-0.5_dp*(LOG(DPA(M,I)/(0.3*GMD(M-1)))/LOG(SIG(M-1)))**2._dp)
             endif
 
@@ -366,7 +369,10 @@ contains
             MASS(M,I,A_NIT)=LINDISM(M,I,NI)*DLINDP(M,I)
             MASS(M,I,A_MSA)=LINDISM(M,I,MS)*DLINDP(M,I)
 
-! Divide SALT in chlorine and NaCl (=Na)
+! Divide SALT (=NaCl) in chlorine and sodium
+! Mole fraction Cl = 36/(23+36) = 0.61
+! Mole fraction Na = 23/(23+36) = 0.39
+! Cl = 0.54, Na = 0.46 (=0.31 Na+ + 0.15 other cations)
             MASS(M,I,A_CHL)=0.54*LINDISM(M,I,SA)*DLINDP(M,I)    ! chlorine
             MASS(M,I,A_SAL)=0.46*LINDISM(M,I,SA)*DLINDP(M,I)    ! sodium
 
@@ -396,9 +402,9 @@ contains
 ! COAG=2 Correction for fractal geometry of soot
 !           rp0     primary spherule radius         [nm]
 !           Dfrac   fractal dimension               [-]
-            Dp0=2._dp*rp0
+            Dp0=2._dp*rp0in
             if ( (ICOAG.eq.2).or.(ICOAG.eq.5) ) then
-              deffsoot = min( (DEN(EC)*(DPA(M,I)*1.e9/Dp0)**(Dfrac-2.7)), DEN(EC))    
+              deffsoot = min( (DEN(EC)*(DPA(M,I)*1.e9/Dp0)**(Dfracin-2.7)), DEN(EC))    
               deffsoot = max(deffsoot,1200.0_dp)
             else
               deffsoot = DEN(EC)
@@ -413,7 +419,7 @@ contains
                        VCONC(M,I,NI) + VCONC(M,I,MS) + VCONC(M,I,SA)  +  &
                        VCONC(M,I,XX) + VCONC(M,I,EC) + VCONC(M,I,DU)) / VPT(M,I) 
 
-            !print *,'init ',M,I,VPT(M,I),N(M,I)
+            !print *,'init ',M,I,VPT(M,I),N(M,I),VCONC(M,I,EC),deffsoot
 
            end do
         end do
@@ -427,7 +433,7 @@ contains
 
 !------------------------------------------------------------------
 
-  subroutine initBGNumberMass(IMAX,DPA,DLINDP,VPT,DEN,                &
+  subroutine initBGNumberMass(IMAX,DPA,DLINDP,VPT,DEN,DPMAX,            &
                               BGMCTOT, BGMASS, BGN)
     !----------------------------------------------------------------------
     !
@@ -481,6 +487,7 @@ contains
      real( dp), DIMENSION(MMAX,IMAX), intent(in)         :: DLINDP
      real( dp), DIMENSION(MMAX,IMAX), intent(in)         :: VPT
      real( dp), dimension(iamax), intent(in)             :: DEN
+     real( dp), intent(in)                               :: DPMAX
 
      real( dp), dimension(MMAX,iamax), intent(in)        :: BGMCTOT
 
@@ -512,7 +519,7 @@ contains
             enddo
 
 ! Add contribution of next lower mode
-            if ((M.gt.1).and.(M.lt.MMAX)) then
+            if ((DPMAX.gt.1.e-6_dp).and.(M.gt.1).and.(M.lt.MMAX)) then
               do K=1,iamax-1
                 BGLINDISM(M,I,K)=BGLINDISM(M,I,K)  +                           & 
                      ( BGMCTOT(M-1,K) /(SQRT(2.*pi)*DPA(M,I)*LOG(BGSIG(M-1)))) &
@@ -544,7 +551,10 @@ contains
             endif
             BGMASS(M,I,A_NIT)=BGLINDISM(M,I,NI)*DLINDP(M,I)
             BGMASS(M,I,A_MSA)=BGLINDISM(M,I,MS)*DLINDP(M,I)
-! Divide SALT in chlorine and NaCl (=Na)
+! Divide SALT (=NaCl) in chlorine and sodium
+! Mole fraction Cl = 36/(23+36) = 0.61
+! Mole fraction Na = 23/(23+36) = 0.39
+! Cl = 0.54, Na = 0.46 (=0.31 Na+ + 0.15 other cations)
             BGMASS(M,I,A_CHL)=0.54*BGLINDISM(M,I,SA)*DLINDP(M,I)    ! chlorine
             BGMASS(M,I,A_SAL)=0.46*BGLINDISM(M,I,SA)*DLINDP(M,I)    ! sodium
             BGMASS(M,I,A_XXX)=BGLINDISM(M,I,XX)*DLINDP(M,I)
@@ -700,7 +710,10 @@ contains
             endif
             EMASS(M,I,A_NIT)=ELINDISM(M,I,NI)*DLINDP(M,I)
             EMASS(M,I,A_MSA)=ELINDISM(M,I,MS)*DLINDP(M,I)     
-! Divide SALT in chlorine and NaCl (=Na)
+! Divide SALT (=NaCl) in chlorine and sodium
+! Mole fraction Cl = 36/(23+36) = 0.61
+! Mole fraction Na = 23/(23+36) = 0.39
+! Cl = 0.54, Na = 0.46 (=0.31 Na+ + 0.15 other cations)
             EMASS(M,I,A_CHL)=0.54*ELINDISM(M,I,SA)*DLINDP(M,I)    ! chlorine
             EMASS(M,I,A_SAL)=0.46*ELINDISM(M,I,SA)*DLINDP(M,I)    ! sodium
             EMASS(M,I,A_XXX)=ELINDISM(M,I,XX)*DLINDP(M,I)    
@@ -753,7 +766,8 @@ contains
 
 !------------------------------------------------------------------
 
-  subroutine getDensity(IMAX,temp,denecin,DPA,MASS,MPT,MPTW,ROOP,ROOPW)
+  subroutine getDensity(IMAX,temp,denecin,denocin,rp0in,Dfracin,   &
+                        DPA,MASS,MPT,MPTW,ROOP,ROOPW)
     !----------------------------------------------------------------------
     !
     !****
@@ -770,12 +784,16 @@ contains
     !      ---------
     !
     !        input
+    !           temp      air temperature                 [K]
+    !           denecin   particle dens. soot     from namelist [kg/m^3]
+    !           denocin   particle dens. organics from namelist [kg/m^3]
+    !           rp0in     primary spherule radius         [nm]
+    !           Dfracin   fractal dimension               [-]
     !           MASS      mass conc. per bin              [ng/m^3]
     !           MPT       total dry mass conc. per bin    [kg/m^3]
     !           MPTW      total wet mass conc. per bin    [kg/m^3]
     !           DPA       diameter of dry particles       [m]
-    !           temp      air temperature                 [K]
-    !           denecin   particle density of soot from organic.dat  [kg/m^3]
+    !
     !        output:
     !           ROOP      particle density of dry aerosol [kg/m^3]
     !           ROOPW     particle density of dry aerosol [kg/m^3]
@@ -806,8 +824,11 @@ contains
      real( dp), dimension(MMAX,IMAX,AMAX),intent(in) :: MASS     ! [ng/m^3]
      real( dp), dimension(MMAX,IMAX),intent(in)      :: MPT      ! [kg/m^3]
      real( dp), dimension(MMAX,IMAX),intent(in)      :: MPTW     ! [kg/m^3]
-     real( dp),intent(in)                            :: temp     ! [K]
-     real( dp),intent(in)                            :: denecin  ! [kg/m^3]
+     real( dp), intent(in)                           :: temp     ! [K]
+     real( dp), intent(in)                           :: denecin  ! [kg/m^3]
+     real( dp), intent(in)                           :: denocin  ! [kg/m^3]
+     real( dp), intent(in)                           :: rp0in    ! [nm]
+     real( dp), intent(in)                           :: Dfracin
 
 ! output
      real( dp), dimension(MMAX,IMAX),intent(out)     :: ROOP     ! [kg/m^3]
@@ -824,7 +845,7 @@ contains
 
 ! initialization
         deffpsoot(:,:)=1200._dp
-        Dp0=2._dp*rp0
+        Dp0=2._dp*rp0in
 
         do M=1,MMAX
          do I=1,IMAX
@@ -832,7 +853,7 @@ contains
 ! effective density of soot particles [kg/m^3]
 ! COAG=2 or 5: Correction for fractal geometry of soot
            if ( (ICOAG.eq.2).or.(ICOAG.eq.5) ) then
-             deffpsoot(M,I) = min( (denecin*(DPA(M,I)*1.e9/Dp0)**(Dfrac-2.7_dp)), denecin)    
+             deffpsoot(M,I) = min( (denecin*(DPA(M,I)*1.e9/Dp0)**(Dfracin-2.7_dp)), denecin)    
              deffpsoot(M,I) = max(deffpsoot(M,I),1200.0_dp)
            else
              deffpsoot(M,I) = denecin
@@ -840,9 +861,9 @@ contains
 
            !write(6,*) 'deffsoot',denecin,deffpsoot(M,I)
 
-! sum of SULF and OC components per size bin
-           massocs(M,I) = MASS(M,I,A_SUL) + MASS(M,I,A_MSA)                      &
-                         +  MASS(M,I,A_OR1) + MASS(M,I,A_OR2) + MASS(M,I,A_OR3)   &
+! sum of OC components per size bin
+              massocs(M,I) =   &
+                            MASS(M,I,A_OR1) + MASS(M,I,A_OR2) + MASS(M,I,A_OR3)   &
                          +  MASS(M,I,A_OR4) + MASS(M,I,A_OR5) + MASS(M,I,A_OR6)   &
                          +  MASS(M,I,A_OR7) + MASS(M,I,A_OR8) + MASS(M,I,A_OR9) 
          end do
@@ -860,20 +881,12 @@ contains
          
            else if ( massocs(M,I).gt.massmin )  then
 
-      !!! density of dry particles (sulf+oc)
+      !!! density of dry sulfur particles
               MF(M,I)  = 1.0_dp
               ROOP1    = roolm(MF(M,I),temp)
 
-      !!! density of wet particles (sulf+oc+wat)
-      ! roo(sa+org+wa)=ROOLM(XM,T) where XM=(Msa+Morg)/(Msa+Morg+Mwa)
-      ! ROOP=(Msa+Morg+Mwa)*roo(sa+org+wa)+Mdu*roo(du))/mass 
-      ! implicitly assumed that the densities of sa and org are the same
-
-              MF(M,I)   =  massocs(M,I) / (massocs(M,I) + MASS(M,I,A_WAT))
-
-              ROOPW1    = roolm(MF(M,I),temp)
-
-              ROOP(M,I) = ((  massocs(M,I)*ROOP1                                + &
+              ROOP(M,I) = (( (MASS(M,I,A_SUL)+MASS(M,I,A_MSA))*ROOP1            + &
+                              massocs(M,I)   *denocin                           + &
                               MASS(M,I,A_AMI)*DENAM                             + &
                               MASS(M,I,A_NH4)*DENNI                             + &
                               MASS(M,I,A_NIT)*DENNI                             + &
@@ -884,6 +897,15 @@ contains
                               MASS(M,I,A_DUS)*DENDU )    *1.e-12_dp )           / &
                               MPT(M,I)
 
+      !!! density of wet particles (sulf+oc+wat)
+      ! roo(sa+org+wa)=ROOLM(XM,T) where XM=(Msa+Morg)/(Msa+Morg+Mwa)
+      ! ROOP=(Msa+Morg+Mwa)*roo(sa+org+wa)+Mdu*roo(du))/mass 
+      ! implicitly assumed that the densities of sa and org are the same
+
+              MF(M,I)   = (massocs(M,I) + MASS(M,I,A_SUL) + MASS(M,I,A_MSA)) /   &
+                          (massocs(M,I)+MASS(M,I,A_SUL)+MASS(M,I,A_MSA)+MASS(M,I,A_WAT))
+
+              ROOPW1    = roolm(MF(M,I),temp)
 
               ROOPW(M,I)= (( (massocs(M,I) + MASS(M,I,A_WAT))*ROOPW1            + &
                               MASS(M,I,A_AMI)*DENAM                             + &
@@ -942,7 +964,8 @@ contains
   subroutine getTotalMass(IMAX,MASS,MPT,MPTW, MTOT, MTOTW,        &
                           MSULFTOT, MMSAPTOT, MIODATOT,           &
                           MNITRTOT, MAMMOTOT,                     &
-                          MSALTTOT, MECBCTOT, MDUSTTOT, MXXXXTOT, & 
+                          MSSODTOT, MSCHLTOT,                     &
+                          MECBCTOT, MDUSTTOT, MXXXXTOT,           & 
                           MORGCTOT, MORG1TOT, MORG2TOT, MORG3TOT, &
                           MORG4TOT, MORG5TOT, MORG6TOT, MORG7TOT, &
                           MORG8TOT, MORG9TOT, casoa )
@@ -999,7 +1022,9 @@ contains
      real( dp), dimension(MMAX),intent(out)          :: MTOTW    ! [ng/m^3]
 
      real( dp), dimension(MMAX),intent(out)          :: MSULFTOT ! [ng/m^3]
-     real( dp), dimension(MMAX),intent(out)          :: MSALTTOT ! [ng/m^3]
+     !real( dp), dimension(MMAX),intent(out)          :: MSALTTOT ! [ng/m^3]
+     real( dp), dimension(MMAX),intent(out)          :: MSSODTOT ! [ng/m^3]
+     real( dp), dimension(MMAX),intent(out)          :: MSCHLTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MAMMOTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MNITRTOT ! [ng/m^3]
      real( dp), dimension(MMAX),intent(out)          :: MMSAPTOT ! [ng/m^3]
@@ -1039,7 +1064,9 @@ contains
           MNITRTOT(M)=0._dp
           MMSAPTOT(M)=0._dp
           MIODATOT(M)=0._dp
-          MSALTTOT(M)=0._dp
+          !MSALTTOT(M)=0._dp
+          MSSODTOT(M)=0._dp
+          MSCHLTOT(M)=0._dp
           MXXXXTOT(M)=0._dp
           MECBCTOT(M)=0._dp
           MDUSTTOT(M)=0._dp
@@ -1063,7 +1090,9 @@ contains
             MNITRTOT(M)=MNITRTOT(M)+MASS(M,I,A_NIT)
             MMSAPTOT(M)=MMSAPTOT(M)+MASS(M,I,A_MSA)
             MIODATOT(M)=MIODATOT(M)+MASS(M,I,A_IO3)
-            MSALTTOT(M)=MSALTTOT(M)+MASS(M,I,A_SAL)+MASS(M,I,A_CHL)
+            !MSALTTOT(M)=MSALTTOT(M)+MASS(M,I,A_SAL)+MASS(M,I,A_CHL)
+            MSSODTOT(M)=MSSODTOT(M)+MASS(M,I,A_SAL)
+            MSCHLTOT(M)=MSCHLTOT(M)+MASS(M,I,A_CHL)
             MXXXXTOT(M)=MXXXXTOT(M)+MASS(M,I,A_XXX)
             MECBCTOT(M)=MECBCTOT(M)+MASS(M,I,A_EBC)
             MDUSTTOT(M)=MDUSTTOT(M)+MASS(M,I,A_DUS)
@@ -1132,7 +1161,7 @@ contains
 
   subroutine restoreCoarseMode(IMAX,DPA,DLINDP,DEN,                     &
                                MSULFTOT,MMSAPTOT,MAMMOTOT,MORGCTOT,     &
-                               MSALTTOT,MDUSTTOT,  MASS,N)
+                               MSSODTOT,MSCHLTOT,MDUSTTOT,  MASS,N)
     !----------------------------------------------------------------------
     !
     !****
@@ -1188,7 +1217,8 @@ contains
      real( dp), dimension(MMAX),intent(in)               :: MMSAPTOT
      real( dp), dimension(MMAX),intent(in)               :: MAMMOTOT
      real( dp), dimension(MMAX),intent(in)               :: MORGCTOT
-     real( dp), dimension(MMAX),intent(in)               :: MSALTTOT
+     real( dp), dimension(MMAX),intent(in)               :: MSSODTOT
+     real( dp), dimension(MMAX),intent(in)               :: MSCHLTOT
      real( dp), dimension(MMAX),intent(in)               :: MDUSTTOT
 
 !in/out
@@ -1213,7 +1243,7 @@ contains
 
             LINDISMCS(I,DU)=(MDUSTTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
-            LINDISMCS(I,SA)=(MSALTTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
+            LINDISMCS(I,SA)=( (MSSODTOT(CS)+MSCHLTOT(CS)) /(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
             LINDISMCS(I,SU)=(MSULFTOT(CS)/(SQRT(2._dp*pi)*DPA(CS,I)*LOG(SIG(CS)))) &
                            *EXP(-0.5_dp*(LOG(DPA(CS,I)/GMD(CS))/LOG(SIG(CS)))**2._dp)
@@ -1226,7 +1256,9 @@ contains
 
 ! Mass concentrations in ng/m3
             MASS(CS,I,A_DUS)=LINDISMCS(I,DU)*DLINDP(CS,I)
-            MASS(CS,I,A_SAL)=LINDISMCS(I,SA)*DLINDP(CS,I)
+! Cl = 0.54, Na = 0.46 (=0.31 Na+ + 0.15 other cations)
+            MASS(CS,I,A_SAL)=0.46*LINDISMCS(I,SA)*DLINDP(CS,I)
+            MASS(CS,I,A_CHL)=0.54*LINDISMCS(I,SA)*DLINDP(CS,I)
             MASS(CS,I,A_SUL)=LINDISMCS(I,SU)*DLINDP(CS,I)
             MASS(CS,I,A_MSA)=LINDISMCS(I,MS)*DLINDP(CS,I)
             MASS(CS,I,A_NH4)=LINDISMCS(I,AM)*DLINDP(CS,I)
@@ -1234,7 +1266,7 @@ contains
 
 ! Volume concentration in m3/m3
             VCONCCS(I,DU)=MASS(CS,I,A_DUS)/(CONVM*DEN(DU))
-            VCONCCS(I,SA)=MASS(CS,I,A_SAL)/(CONVM*DEN(SA))
+            VCONCCS(I,SA)=(MASS(CS,I,A_SAL)+MASS(CS,I,A_CHL))/(CONVM*DEN(SA))
             VCONCCS(I,SU)=MASS(CS,I,A_SUL)/(CONVM*DEN(SU))
             VCONCCS(I,MS)=MASS(CS,I,A_MSA)/(CONVM*DEN(MS))
             VCONCCS(I,AM)=MASS(CS,I,A_NH4)/(CONVM*DEN(AM))
@@ -1251,7 +1283,7 @@ contains
                         VCONCCS(I,SU)+VCONCCS(I,MS)+      &
                         VCONCCS(I,AM)+VCONCCS(I,OC) )   / VDRY
 
-          !  print *,'restore ',I,VPT(CS,I),N(CS,I)
+           ! print *,'restore V(m^3) N(cm^-3)',I,VDRY,N(CS,I)*1.e-6
 
         end do
 

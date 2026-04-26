@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -46,6 +46,10 @@ module gde_addwater
     use messy_mecca_kpp_Global, only    : APN, dp
 
     use gde_constants,  only            : M_H2O,N_A,RHOH2O,pi
+    use gde_constants,  only            : CONVM
+    use gde_constants,  only            : rhactiv
+    use gde_constants,  only            : rho_air
+    use gde_constants,  only            : surf_h2o_std
 
     use gde_toolbox,    only            : molec2ug
     use gde_sensitiv,   only            : IDEB
@@ -56,10 +60,6 @@ module gde_addwater
     use gde_input_data, only            : A_SUL,A_NH4,A_AMI,A_NIT,A_XXX
     use gde_input_data, only            : A_OR1,A_OR2,A_SAL,A_CHL
     use gde_input_data, only            : A_WAT
-    use gde_input_data, only            : CONVM
-    use gde_input_data, only            : rhactiv
-    use gde_input_data, only            : rho_air
-    use gde_input_data, only            : surf_h2o_std
 
     use gde_init_aero,  only            : GMD
 
@@ -143,24 +143,23 @@ module gde_addwater
     real( dp), dimension(MMAX,IMAX,AMAX),intent(in out) :: MASS
     real( dp), DIMENSION(MMAX,IMAX), intent(in out)     :: N
     real( dp),dimension(APN), intent(in out)            :: lwc
-    real( dp),dimension(APN), intent(in out)            :: xaer
     logical, intent(in out)                             :: wascloud1
     logical, intent(in out)                             :: wascloud2
 
     ! output
-    real( dp), intent(out)                            :: MH2OTOT(NU:CS)
-    real( dp), intent(out)                            :: cwa01
-    real( dp), intent(out)                            :: cwa02
-    real( dp), intent(out)                            :: cwa03
-    real( dp), intent(out)                            :: NTOTCS
+    real( dp),dimension(APN), intent(out)               :: xaer
+    real( dp), intent(out)                              :: MH2OTOT(NU:CS)
+    real( dp), intent(out)                              :: cwa01
+    real( dp), intent(out)                              :: cwa02
+    real( dp), intent(out)                              :: cwa03
+    real( dp), intent(out)                              :: NTOTCS
 
     ! local
-    real( dp), DIMENSION(MMAX,IMAX)                   :: MH2OA
-    real( dp)                   :: lindismwa
-    real( dp)                   :: lindisn
-    !!!real( dp)                   :: cwa01,cwa02
-    integer                     :: M,I
-    integer                     :: cmode
+    real( dp), DIMENSION(MMAX,IMAX)                     :: MH2OA
+    real( dp)                                           :: lindismwa
+    real( dp)                                           :: lindisn
+    integer                                             :: M,I
+    integer                                             :: cmode
 
 
 ! Initialize all terms
@@ -185,7 +184,7 @@ module gde_addwater
                        MASS(M,I,A_SAL)+MASS(M,I,A_CHL),MASS(M,I,A_OR1)+MASS(M,I,A_OR2),  &
                        MASS(M,I,A_WAT))
               if (RH.LT.0.05) MASS(M,I,A_WAT)=0._dp           
-              MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)    
+              MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)
             end do
           end do
 
@@ -290,7 +289,7 @@ module gde_addwater
             MH2OTOT(M) = 0._dp 
             do I=1,IMAX
 
-              !print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OA(M,I)
+            !  if (M==AS) print *,'massH2O',M,I,MASS(M,I,A_WAT),MH2OA(M,I)
               MASS(M,I,A_WAT) = max(MASS(M,I,A_WAT),MH2OA(M,I))
               MH2OTOT(M) = MH2OTOT(M) + MASS(M,I,A_WAT)
 
@@ -313,9 +312,9 @@ module gde_addwater
 
           wascloud2=.true.
 
-          !print *,'caw01',cwa01
-          !print *,'caw02',cwa02
-          !print *,'caw03',cwa03
+        !  print *,'caw01',cwa01
+        !  print *,'caw02',cwa02
+        !  print *,'caw03',cwa03
 
           if (IDEB == 1) then
              write(12,fmt='(a,e10.4,a,e10.4,a,e10.4)' ) 'incloud lwc(CS) ',lwc(3), &

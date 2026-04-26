@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -74,8 +74,8 @@ module gde_nucleation
 contains
 
  subroutine nucleation(INUCMEC,cair,ch2so4,cnh3,camin,cnit,csoa2,ciod, &
-                       temp,RH,jrno2, CA,KP,fnuc,coags,daynr,          &
-                       Lati,natot,JNUC)
+                       temp,RH,jrno2, CA,KP,fnuc,coags,ipr,            &
+                       daynr,Lati,natot,JNUC)
     !********************************************************************
     !
     !     N  U  C  L  E  A  T  I  O  N
@@ -102,7 +102,7 @@ contains
     !               neutral & ion-induced H2SO4-H2O     (INUCMEC=11)
     !               diesel-exhaust        H2SO4-ORG     (INUCMEC=12)
     !               ACDC cluster          H2SO4-H2O-NH3 (INUCMEC=13)
-    !               HIO3 kinetic/activ    HIO3          (INUCMEC=14)
+    !               OIO  kinetic/activ    OIO           (INUCMEC=14)
     !               HIO3 neutral/ion-ind  HIO3          (INUCEMEC=15)
     !
     !  INPUT
@@ -115,7 +115,7 @@ contains
     !   camin: concentration of amine         [1/m^3]
     !    cnit: concentration of nitric acid   [1/m^3]
     !   csoa2: concentration of SOA-2         [1/m^3]
-    !    ciod: concentration of HIO3          [1/m^3]
+    !    ciod: concentration of HIO3 (or OIO) [1/m^3]
     !    temp: air temperature                [K]
     !      RH: rel. humidity                  [-]
     !   jrno2: phot. freq. NO2                [s^-1]
@@ -123,6 +123,8 @@ contains
     !      KP: amine nucleation param
     !    fnuc: scal. factor of nucl. constant [-]
     !   coags: coagulation sink               [s^-1]
+    !     ipr: ion pair production rate       [cm^-3 s^-1]
+    !          (from namelist.nml)
     !   daynr: day of year                    [-]
     !    Lati: latitude                       [-] 
     ! 
@@ -133,14 +135,14 @@ contains
     !  natot: number of H2SO4 molecs in crit cluster
     !
     !********************************************************************
-    !* Lehtinen et al. (2007) to extrapolate to 1 nm clusters
-    !* for nucleation option 11 newbinapara
+    !* Lehtinen et al. (2007) to extrapolate to 1.5 nm clusters
     !*   Lehtinen, K. E., Dal Maso, M., Kulmala, M., and Kerminen, V. M., 
     !*   Journal of Aerosol Science, 38(9), 988-994, 2007
     !*   dc=0.7               ! Target size (nm)
     !*   (in geometric diameter = mobility diameter -0.3nm)
-    !*
+    !* Now in subroutine clustergrowth (gde_toolbox.f90)
     !********************************************************************
+    use gde_toolbox,      only      : clustergrowth
 
      implicit none
 
@@ -148,7 +150,8 @@ contains
         REAL( dp), intent(in)    :: ch2so4,cnh3,cair
         REAL( dp), intent(in)    :: camin,cnit,csoa2,ciod
         REAL( dp), intent(in)    :: temp,RH,jrno2,CA,KP
-        REAL( dp), intent(in)    :: fnuc,daynr,Lati,coags        
+        REAL( dp), intent(in)    :: fnuc,daynr,Lati,coags
+        REAL( dp), intent(in)    :: ipr
         REAL( dp), intent(out)   :: JNUC,natot
 
         !Local
@@ -163,11 +166,6 @@ contains
         REAL( dp)                :: jnuc_i   ! Charged nucleation rate in 1/cm3s (J>10^-7 1/cm3s)
         REAL( dp)                :: na_n     ! sulfuric acid molecules in the neutral critical cluster
         REAL( dp)                :: na_i     ! sulfuric acid molecules in the charged critical cluster
-        !LEHTINEN ET AL. (2007)
-        REAL( dp)                :: cs       ! H2SO4 condensation sink (h-1)
-        REAL( dp)                :: gr       ! Particle growth rate (nm/h) 
-        REAL( dp)                :: gammax
-        REAL( dp)                :: m,dx,d1
         REAL( dp)                :: LKK_n,LKK_i
 
 !comment
@@ -180,6 +178,10 @@ contains
 
             ! Kinetic nucleation of sulfuric acid
                CALL kinetic(ch2so4,cnh3,cair,JNUC,natot)
+            ! radius of critical cluster: assumed 0.5 nm
+               rc = 0.5_dp
+               CALL clustergrowth(rc,RH,ch2so4,coags,LKK_n)
+               JNUC = JNUC*LKK_n
                !write(6,*) NVAP,c(KPP_NH3),cair,JNUC,natot
 
             CASE (2)
@@ -187,6 +189,9 @@ contains
             ! Binary homogeneous nucleation of sulfuric acid and water
             ! based on Vehkamaeki et al.(2002 & 2003)
                CALL binhomogeneous(temp,RH,ch2so4,nwtot,natot,rc,JNUC)
+            ! radius of critical cluster: calculated rc is in (m)
+               CALL clustergrowth(rc*1.e9,RH,ch2so4,coags,LKK_n)
+               JNUC = JNUC*LKK_n
 
             CASE (3)
 
@@ -194,10 +199,12 @@ contains
             !             including stable ammonium bisulfate formation
             !             output is logarithm of nucleation rate (in cm^-3s^-1)
                CALL ternary_fit(temp,RH,ch2so4,cnh3,cair,JNUC,natot,nntot,rc)
+            ! radius of critical cluster: calculated rc is in (nm)
+               CALL clustergrowth(rc,RH,ch2so4,coags,LKK_n)
                JNUC=DEXP(JNUC)
             ! MSK 06.09.2017 must be multiplied by 10^6 
             ! to get nucleation rate J in m^-3s^-1
-               JNUC=JNUC*1.e6
+               JNUC=JNUC*1.e6 * LKK_n
                write(6,*) ' JNUC        natot'
                write(6,'(4ES12.4)') JNUC, natot
 
@@ -229,12 +236,20 @@ contains
             ! Activation nucleation, Kulmala et al., 2006
             !             activation of clusters of one molecule of H2SO4
                CALL activation(fnuc,ch2so4,JNUC,natot)
+            ! radius of critical cluster: assumed 0.5 nm
+               rc = 0.5_dp
+               CALL clustergrowth(rc,RH,ch2so4,coags,LKK_n)
+               JNUC = JNUC*LKK_n
 
             CASE (6)
 
             ! Nucleation of nitric acid/amine, photolysis-triggered
                IF (jrno2.GT.1e-5) THEN
                  CALL aminecluster(CA,KP,cnit,camin,JNUC,natot)
+            ! radius of critical cluster: assumed 0.5 nm
+                 rc = 0.5_dp
+                 CALL clustergrowth(rc,RH,cnit,coags,LKK_n)
+                 JNUC = JNUC*LKK_n
                ELSE
                  JNUC=0._dp
                  natot=1._dp
@@ -243,7 +258,9 @@ contains
             CASE (7)
 
             ! Combined nucleation mechanism
-               CALL ioncluster(ch2so4,JNUCI,natoti)
+            ! activation and ion-mediated H2SO4
+            ! They assume that diameter of nucleated particles is 1.5 nm
+               CALL ioncluster(ch2so4,ipr,JNUCI,natoti)
                CALL activation(fnuc,ch2so4,JNUCT,natott)
                natot=natott+natoti
                JNUC=JNUCI+JNUCT
@@ -270,30 +287,19 @@ contains
             CASE (11)
 
             ! New parameterization of neutral and ion-induced sulfuric acid-
-            ! water nucleation by Maattanen et al. (2018)
-               CALL newbinapara(temp,RH,ch2so4,cair, jnuc_n,jnuc_i, na_n,na_i, rc_n,rc_i)
+            ! water nucleation by Maattanen et al. (2018).
+            ! Interpolate nucleation rates to 1.5 nm using 
+            ! Lehtinen et al. (2007) expression
+               CALL newbinapara(temp,RH,ch2so4,cair,ipr,         &
+                                jnuc_n,jnuc_i, na_n,na_i, rc_n,rc_i)
 
-               ! Nucleation rates at 1.0nm using Lehtinen et al. (2007)
-               m  = -1.6
-               ! Particle growth rate (nm/h); Nieminen et al., 2010
-               gr = (ch2so4*1.E-6_dp)/(661.1*(RH*100)**2-1.129E5*(RH*100)+1.549E7)
-               ! Typical CS value in atmosphere in 1/h 
-               cs = 10
-               ! Target size (in geometric diameter = mobility diameter -0.3nm)
-               dx= 0.7       ! to get 1 nm nucleated particles
                !!! Neutral case
-               ! diameter of critical cluster
-               ! MSK 25.02.2022: rc_n is already in nm
-               d1=2.*rc_n
-               ! gamma-factor in Lehtinen et al.
-               gammax=max(0.0_dp,1.0_dp/(m+1)*( (dx/(d1))**(m+1)-1))
-               ! final scaling factor in Lehtinen et al.
-               LKK_n=exp(-gammax*d1*cs/gr)
+               ! radius of critical cluster rc_n is already in nm
+               CALL clustergrowth(rc_n,RH,ch2so4,coags,LKK_n)
+
                !!! Charged case
-               ! MSK 25.02.2022: rc_i is already in nm
-               d1=2.*rc_i
-               gammax=max(0.0_dp,1.0_dp/(m+1)*( (dx/(d1))**(m+1)-1)) 
-               LKK_i=exp(-gammax*d1*cs/gr)
+               ! radius of critical cluster rc_i is already in nm
+               CALL clustergrowth(rc_i,RH,ch2so4,coags,LKK_i)
 
             ! Nucleation rate of neutral and charged case should be added
             ! according to pers. commun. Maattanen (2020)
@@ -328,11 +334,11 @@ contains
 
             CASE (14)
 
-            ! Kinetic nucleation of iodic acid
+            ! Kinetic nucleation of iodine dioxide (OIO)
             !   CALL kinetic_iodine(ciod,JNUC,natot)
-            ! Activation of clusters of one molecule HIO3
+            ! Activation of clusters of one molecule OIO
             !   CALL activation_iodine(ciod,JNUC,natot)
-            ! Nucleation of sulfuric acid/iodic acid clusters
+            ! Nucleation of sulfuric acid/OIO clusters
             ! Vuollekoski et al. (2009), Equation (3)
             ! They assume that diameter of nucleated particles is 1.5 nm
                natot=1.
@@ -561,16 +567,17 @@ contains
     !      modifications
     !      -------------
     !      Calculate X (sink of ions) without org_bi_ch (BELV molecules)
-    !      Without sulfuric acid kinetic limit
+    !      Critical cluster diameter is set to 1.5 nm (diameter_part)
+    !      because largest size of iodine clusters is 1.5 nm
     !
     !------------------------------------------------------------------
 
      use gde_constants,    only      : pi,k_B,N_A,IONMOB,E_ELEC,M_hio3
+     use gde_constants,    only      : DENV,DENAM
      use gde_init_aero,    only      : GMD
      use gde_input_data,   only      : NTOT
      use gde_input_data,   only      : MMAX
      use gde_input_data,   only      : NU,AI,AS,CS
-     use gde_input_data,   only      : DENV,DENAM
 
      implicit none
 
@@ -1097,13 +1104,13 @@ contains
         ELSE
           jnuc=0._dp
         ENDIF
-        !write(6,*) 'ami',c2,c3,kpeqm
+        !write(6,*) 'ami',c2*c3,kpeqm,jnuc
 
 
    end subroutine aminecluster
   
 
-     subroutine ioncluster(c2,J_ion,natot)
+     subroutine ioncluster(c2,ipr,J_ion,natot)
     !----------------------------------------------------------------------
     !
     !****
@@ -1121,8 +1128,11 @@ contains
     !
     !        input:
     !           c2: concentration of h2so4 vapour [1/m^3]
+    !           ipr: ion pair production rate     [ionpairs cm^-3s^-1]
+    !        output:
     !           natot: total number of h2so4 molecules 
     !                  in the critical cluster
+    !           J_ion: ion-mediated nucleation rate [m^-3s^-1]
     !
     !
     !      method
@@ -1157,18 +1167,18 @@ contains
 
      implicit none
 
-        REAL( dp), intent(in)    :: c2
+        REAL( dp), intent(in)    :: c2,ipr
         REAL( dp), intent(out)   :: J_ion,natot
-        REAL( dp)                :: cacid,qgcr,kc_forw,kc_reco
+        REAL( dp)                :: cacid,kc_forw,kc_reco
 
         natot=3._dp
-        qgcr=2.2_dp                    ! ion pairs cm^-3s^-1
+        !ipr=2.2_dp                    ! ion pairs cm^-3s^-1
         kc_forw=6.E-10_dp              ! cm^-3s^-1
         kc_reco=1.E-6_dp               ! cm^-3s^-1 
         cacid=c2*1.e-6_dp
        
         ! units: cm^-3s^-1
-        J_ion = qgcr*(1./(1.+ (SQRT(qgcr)*SQRT(kc_reco)) /       &
+        J_ion = ipr*(1./(1.+ (SQRT(ipr)*SQRT(kc_reco)) /       &
             (kc_forw*cacid) ))**4
 
         J_ion = J_ion * 1.e6_dp      !m^-3s^-1
@@ -2418,7 +2428,8 @@ contains
 
 
 
-     subroutine newbinapara(t,satrat,ch2so4,airn, jnuc_n,jnuc_i, na_n,na_i, rc_n,rc_i)
+     subroutine newbinapara(t,satrat,ch2so4,airn,ipr,             &
+                            jnuc_n,jnuc_i, na_n,na_i, rc_n,rc_i)
     !----------------------------------------------------------------------
     !
     !****
@@ -2521,6 +2532,7 @@ contains
         real( dp),intent(in) :: satrat     ! saturatio ratio of water (between zero and 1) = RH
         real( dp),intent(in) :: ch2so4     ! sulfuric acid concentration in 1/m3
         real( dp),intent(in) :: airn       ! Air molecule concentration in (cm-3)
+        real( dp),intent(in) :: ipr        ! Ion pair production rate (cm-3 s-1)
 
         real( dp),intent(out) :: jnuc_n   ! Neutral nucleation rate in 1/cm3s (J>10^-7 1/cm3s)
         real( dp),intent(out) :: jnuc_i   ! Charged nucleation rate in 1/cm3s (J>10^-7 1/cm3s)
@@ -2544,7 +2556,6 @@ contains
         ! Local
         real( dp) :: rhoa          ! sulfuric acid concentration in 1/cm3
         real( dp) :: csi           ! Ion condensation sink (s-1)
-        real( dp) :: ipr           ! Ion pair production rate (cm-3 s-1)
         real( dp) :: x             ! mole fraction of H2SO4 in the critical cluster 
         real( dp) :: satratln      ! bounded water saturation ratio for neutral case (between 5.E-6 - 1.0)
         real( dp) :: satratli      ! bounded water saturation ratio for ion-induced case (between 1.E-7 - 0.95)
@@ -2566,7 +2577,7 @@ contains
 
         rhoa = ch2so4*1.E-6_dp      ! [H2SO4] in #/cm3
         csi  = 1.0/480.             ! Inverse lifetime of ions
-        ipr  = 2.00E+00_dp          ! ionization rate (ion-pairs cm-3 s-1)
+        !ipr  = 2.00E+00_dp          ! ionization rate (ion-pairs cm-3 s-1)
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

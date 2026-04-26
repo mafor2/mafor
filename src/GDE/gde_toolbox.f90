@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -64,6 +64,7 @@ module gde_toolbox
   public :: surten, waterps, acidps
   public :: roolq,roolqd
   public :: satps_sulf
+  public :: clustergrowth
   public :: sulfhydrates
   public :: newton,machineps
 
@@ -702,6 +703,75 @@ contains
 !------------------------------------------------------------------
 !!! NUCLEATION RELATED FUNCTIONS !!!
 !------------------------------------------------------------------
+
+  subroutine clustergrowth(rcrit,RH,ch2so4,coags,LKK)
+    !*******************************************************************
+    !  Routine for extrapolating the nucleation rate (from 1 nm size)
+    !  to 1.5 nm cluster size
+    !  dc=1.2  Target size (nm)
+    !  (in geometric diameter = mobility diameter -0.3nm).
+    !  Input:
+    !  rcrit  - radius critical cluster [nm]
+    !  RH     - rel. humidity           [-]
+    !  ch2so4 - sulfuric acid conc.     [1/m^3]
+    !  coags  - coagulation sink        [1/s]
+    !  Output:
+    !  LKK    - scaling factor for Jnuc [-]
+    ! 
+    !      author
+    !      -------
+    !      Dr. Anni Maattanen 
+    !      LATMOS (Laboratoire ATMospheres et Observations Spatiales)
+    !      Boite 102 / 4 Place Jussieu
+    !      75005 Paris, France
+    !      Phone:  +33(0) 144274970
+    !      Email:  anni.maattanen@latmos.ipsl.fr
+    !
+    !      reference
+    !      ---------
+    !      Lehtinen, K. E., Dal Maso, M., Kulmala, M., and 
+    !      Kerminen, V. M., 
+    !      Journal of Aerosol Science, 38(9), 988-994, 2007.
+    !*******************************************************************
+    implicit none
+
+        REAL( dp), intent(in)                :: RH,ch2so4,coags,rcrit
+        REAL( dp), intent(out)               :: LKK
+
+        REAL( dp)                            :: ch2so4eq
+        REAL( dp)                            :: gr, cs
+        REAL( dp)                            :: gammax
+        REAL( dp)                            :: dx, d1
+        REAL( dp)                            :: m
+
+! Nucleation rates at 1.0nm using Lehtinen et al. (2007)
+       m  = -1.6
+
+! Particle growth rate (nm/h); Nieminen et al. (2010)
+! ch2so4 from input (1/m^3) multiplied by 1e-6 -> (1/cm^3)
+! set a minimum H2SO4 concentration to avoid zero GR
+       ch2so4eq=max(ch2so4*1.E-6_dp, 1.0E6_dp)
+       gr = ch2so4eq / (661.1*(RH*100)**2-1.129E5*(RH*100)+1.549E7)
+
+! Typical CoagS value in atmosphere in 1/h (default: 10 1/h)
+! Use the actual calculated coagulation sink here
+       cs = max(coags*3600.,0.01_dp)
+
+! Target size (in geometric diameter = mobility diameter -0.3nm)
+! to get 1.5 nm nucleated particles
+       dx= 1.2
+
+! diameter of critical cluster (nm)
+       d1= 2.*rcrit
+
+! gamma-factor in Lehtinen et al. (2007)
+       gammax=max(0.0_dp,1.0_dp/(m+1)*( (dx/(d1))**(m+1)-1))
+
+! final scaling factor in Lehtinen et al.
+       LKK = exp(-gammax*d1*cs/gr)
+
+  end subroutine clustergrowth
+
 
   subroutine sulfhydrates(t,pw,hydpw,kprod,rhoh,rhohm)
     !*******************************************************************

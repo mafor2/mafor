@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -79,7 +79,7 @@ module gde_input_data
 ! Number of input aerosol components
      integer, parameter       :: iamax=10
 ! Number of aqueous aerosol species
-     integer, parameter       :: aqmax=9
+     integer, parameter       :: aqmax=10
 
 ! INDEX declaration aerosol components
 !  condensable components       
@@ -128,7 +128,8 @@ module gde_input_data
      integer, parameter       :: IOD = 6
      integer, parameter       :: OXA = 7
      integer, parameter       :: SUC = 8
-     integer, parameter       :: SSA = 9
+     integer, parameter       :: CHL = 9
+     integer, parameter       :: SSA = 10
 
 !----------------------------------------------------------------
 ! mafor static arrays
@@ -144,7 +145,8 @@ module gde_input_data
      real( dp),save           :: DPMAX
      real( dp),save           :: radiusm(NU:CS) 
      real( dp),save           :: NTOT(NU:CS),VTOT(NU:CS),ROOPWAV(NU:CS)
-     real( dp),save           :: MSULFTOT(NU:CS),MORGCTOT(NU:CS),MSALTTOT(NU:CS)
+     real( dp),save           :: MSULFTOT(NU:CS),MORGCTOT(NU:CS)
+     real( dp),save           :: MSALTTOT(NU:CS),MSSODTOT(NU:CS),MSCHLTOT(NU:CS)
      real( dp),save           :: MAMMOTOT(NU:CS),MNITRTOT(NU:CS),MMSAPTOT(NU:CS)
      real( dp),save           :: MIODATOT(NU:CS)
      real( dp),save           :: MXXXXTOT(NU:CS),MECBCTOT(NU:CS),MDUSTTOT(NU:CS)
@@ -191,7 +193,7 @@ module gde_input_data
      real( dp),save           :: u10,lon_deg
      real( dp),save           :: RH,zmbl,owf
      real( dp),save           :: supersat
-     real( dp),save           :: VEN,BSOV_FT
+     real( dp),save           :: VEN
 ! (chamber)     
      real( dp),save           :: alphanit
      real( dp),save           :: cno,cno2,cco3,jno2m,cipn
@@ -211,105 +213,70 @@ module gde_input_data
      integer,save             :: mday,month,jday,gn,zkc
      integer,save             :: incloud
 
-!----------------------------------------------------------------
-! Particle phase parameters
-
-! Numerical particle number conc. threshold [#/m^3]
-     real( dp), parameter     :: nucomin=1.e-7_dp 
-! Particle density [g cm^-3]
-!  (H2SO4 particles)
-     real( dp), parameter     :: pdens=1.8_dp
-! Conversion kg into ng
-     real( dp), parameter     :: CONVM=1.E12_dp
-! Numerical component mass conc. threshold  [ng/m^3]     
-     real( dp),PARAMETER      :: massmin=1.E-12_dp
-
-! Aerosol Dynamics
-!  mean free path of gas [m]
-     real( dp), parameter     :: LAM=6.6E-8_dp
-!  viscosity [kg/(ms)]
-     real( dp), parameter     :: VIS=1.81E-5_dp
-!  nucleation parameter
-     real( dp), parameter     :: CNUC=1.E-20_dp
-
-! Condensing Vapor
-!   mass of a vapor molecule [kg]
-     real( dp), parameter     :: MVAP=3.E-26_dp
-!
-!   vapor density [kg/m3]   H2SO4
-! densities from Karl et al. 2007, JGR
-     real( dp), parameter     :: DENV=1770._dp
-! density organic aerosol [kg/m3]
-!  from "organic.dat"
-!     REAL( dp), parameter :: DENOC=1570._dp
-!   density ammonium aerosol [kg/m3]
-! prel. data from Barbara D'Anna    
-     real( dp), parameter     :: DENAM=1300._dp
-!   density nitrate aerosol [kg/m3]
-! prel. data from Barbara D'Anna  
-     real( dp), parameter     :: DENNI=1300._dp
-!   density MSAp aerosol [kg/m3]
-     real( dp), parameter     :: DENMS=1770._dp
-!   density iodate aerosol [kg/m3]
-     real( dp), parameter     :: DENIO=4629._dp
-!   density sea salt aerosol [kg/m3]
-     real( dp), parameter     :: DENSA=2240._dp
-!   density biological organic aerosol [kg/m3]
-     real( dp), parameter     :: DENXX=1150._dp
-!   density soot aerosol [kg/m3] Lemmetty et al. AST 2008
-     real( dp), parameter     :: DENEC=1200._dp
-!   density mineral dust [kg/m3]
-!      check literature!!!
-     real( dp), parameter     :: DENDU=1400._dp     
-!   density C16-C30 n-alkanes [kg/m3]
-     real( dp), parameter     :: DENALK=900._dp
-!   density generic organics [kg/m^3] 
-     real( dp), parameter     :: DENOC=1570._dp
-!
-! diffusion coefficient of vapor [m2/s]
-     real( dp), parameter     :: DIFV=2.5E-5_dp
-
-! equilibrium concentration of vapor [1/m3]
-! is now calculated as p0sat of H2SO4 
-!     REAL( dp), parameter :: NSVAP=1.E+10_dp
-! saturation vapour pressure of VOC [1/m3]
-! Pirjola and Kulmala 2001: <= 1.0e12  
-!     REAL( dp), parameter :: NSVAPORG=1.0e12_dp     
-! is now calculated as p0sat of succinic acid
-
-!----------------------------------------------------------------
-! Cloud droplet activation
-   ! threshold LWD for partitioning [m^3/m^3]
-     real( dp), parameter     :: lwcpart=1.e-10_dp
-   ! threshold RH for activation (99%) [-]
-     real( dp), parameter     :: rhactiv=0.99_dp
-     real( dp), parameter     :: rhstart=0.98_dp
-   ! thermal jump length [m]
-     real( dp), parameter     :: Lthjump=2.16E-7_dp
-   ! vapor jump length [m]
-     real( dp), parameter     :: Lvpjump=1.096E-7_dp
-   ! thermal accomodation coefficient H2O
-     real( dp), parameter     :: alphah2o=0.96_dp
-   ! condensation coefficient H2O
-     real( dp), parameter     :: alphaCh2o=1.00_dp
-   ! surface tension pure H2O [g s^-2] = [dyn cm^-1]
-     real( dp), parameter     :: surf_h2o_std = 76.1
-   ! van't Hoff coefficients
-     real( dp), parameter     :: v2=2._dp
-     real( dp), parameter     :: v3=3._dp
-
-!----------------------------------------------------------------
-! Aqeuous phase parameters
-  ! parameters for exchange gas phase - aqueous phase
+! parameters for exchange gas phase - aqueous phase
 
     include 'amine.inc'
 
-! Water Vapor
-!   collision diameter of H2O [cm]
-     real( dp), parameter     :: diamh2o=3.11E-8_dp
-!   density of air [g/cm3]
-     real( dp), parameter     :: rho_air=0.00123_dp
+!----------------------------------------------------------------
+! mafor namelist variables
+!
+    type :: plume_type
+        real( dp)     :: hmix_st,dst_st,hsta_st,ta_st
+        real( dp)     :: dil2_b,dil2_c,dil2_d,dil2_e,dil2_f
+        real( dp)     :: DR_fin,T_fin,tau_c,tau_d,BGH2O
+        real( dp)     :: u0,sigw,tend1,tbeg2,tend2
+    end type plume_type
+    type(plume_type)  :: plume
 
+    type :: depo_type
+        real( dp)     :: ustar,znot
+        real( dp)     :: ADEP,BDEP
+        real( dp)     :: ZCAP,DCOL,Fplus
+    end type depo_type
+    type(depo_type)  :: depop
+
+    type :: cloud_type
+        real( dp)     :: vupdra
+    end type cloud_type
+    type(cloud_type)  :: cloud2
+
+    type :: ocean_type
+        real( dp)     :: sst,sal
+    end type ocean_type
+    type(ocean_type)  :: ocean
+
+    type :: nuclt_type
+        real( dp)     :: ipr
+    end type nuclt_type
+    type(nuclt_type)  :: nuclt
+
+    type :: organ_type
+        real( dp)     :: DENOCin
+        integer       :: surfin
+        real( dp)     :: surf_org
+        real( dp)     :: DENECI
+        real( dp)     :: rp0, Dfrac
+        real( dp)     :: BSOV_FT
+        real( dp)     :: bsovp(4)
+        real( dp)     :: blovp(4)
+        real( dp)     :: belvp(4)
+        real( dp)     :: asovp(4)
+        real( dp)     :: alovp(4)
+        real( dp)     :: aelvp(4)
+        real( dp)     :: piovp(4)
+        real( dp)     :: psovp(4)
+        real( dp)     :: pelvp(4)
+        real( dp)     :: gamma_oc1(MMAX)
+        real( dp)     :: gamma_oc2(MMAX)
+        real( dp)     :: gamma_oc3(MMAX)
+        real( dp)     :: gamma_oc4(MMAX)
+        real( dp)     :: gamma_oc5(MMAX)
+        real( dp)     :: gamma_oc6(MMAX)
+        real( dp)     :: gamma_oc7(MMAX)
+        real( dp)     :: gamma_oc8(MMAX)
+        real( dp)     :: gamma_oc9(MMAX)
+    end type organ_type
+    type(organ_type)  :: organic
 
 
 end module gde_input_data
