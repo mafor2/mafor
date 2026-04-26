@@ -321,7 +321,10 @@ contains
     !
     real( dp),dimension(nspec), intent(in out) :: cgas
 
+    ! local
     real( dp) :: fct
+    real( dp), parameter    :: vd_hio3 = 1.0      ! [cm/s]
+
 
     !zmbl    = 1000._dp           ! height of boundary layer [m]
     ! emissions rates [molec(g)/(cm2*s)] conv. to [molec(g)/cm3]
@@ -423,6 +426,8 @@ contains
     cgas(ind_HCl)     = (1._dp-fct*vdry(ind_HCl))     *cgas(ind_HCl)
     cgas(ind_I2)      = (1._dp-fct*vdry(ind_I2))      *cgas(ind_I2)
     cgas(ind_CH3I)    = (1._dp-fct*vdry(ind_CH3I))    *cgas(ind_CH3I)
+    ! HIO3 default deposition
+    cgas(ind_HIO3)    = (1._dp-fct*vd_hio3)           *cgas(ind_HIO3)
     cgas(ind_SO2)     = (1._dp-fct*vdry(ind_SO2))     *cgas(ind_SO2)
     cgas(ind_H2SO4)   = (1._dp-fct*vdry(ind_H2SO4))   *cgas(ind_H2SO4)
     cgas(ind_CH3SO3H) = (1._dp-fct*vdry(ind_CH3SO3H)) *cgas(ind_CH3SO3H)

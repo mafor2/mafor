@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2025  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -44,43 +44,26 @@ module gde_init_gas
 
    use messy_mecca_kpp_Global, only : ya_soan1, ya_soan2, fkoh_mea
    use messy_mecca_kpp_Global, only : wall
-   use messy_mecca_kpp_Global, only : fch3so2
-
-   use gde_input_data, only  : NU,NA,AI,AS,CS
-   use gde_input_data, only  : NSOA
+      
    use gde_input_data, only  : gspec
    use gde_input_data, only  : edms,eso2,eh2o2,cnh3
-   use gde_input_data, only  : DENOC,DENALK,DENXX
-
-   use gde_constants,  only  : MC,MO,MH
 
 implicit none
 
    public :: readchem
    public :: readchamber
    public :: readmonit
-   public :: readorganic
+
 ! chamber
    public :: IAM, IOZ
-   public :: surfin
    public :: F_HONO, KP_NIT, CAMI, K_DIL
    public :: L_MEA, L_NO2, L_HNO3, L_O3
    public :: fco, fcoj
    public :: DILPAR
    public :: V_CHAM,S_CHAM,S_SED,S_DIF
    public :: CWIN
-! organics and soot
-   public :: surf_org
-   public :: rp0,Dfrac
-   public :: gamma_oc1,gamma_oc2,gamma_oc3,gamma_oc4,gamma_oc5
-   public :: gamma_oc6,gamma_oc7,gamma_oc8,gamma_oc9
-   public :: gamma_oc1_m,gamma_oc2_m,gamma_oc3_m,gamma_oc4_m,gamma_oc5_m
-   public :: gamma_oc6_m,gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
 
    integer,save       :: IAM, IOZ
-   integer,save       :: surfin
-   real( dp),save     :: surf_org
-   real( dp),save     :: rp0, Dfrac
    real( dp),save     :: F_HONO, KP_NIT
    real( dp),save     :: K_DIL, CAMI
    real( dp),save     :: L_MEA,  L_NO2, L_HNO3, L_O3
@@ -89,25 +72,6 @@ implicit none
    real( dp),save     :: V_CHAM,S_CHAM,S_SED,S_DIF
    real( dp),save     :: CWIN
 
-! Molar and mass yield n-alkane, organics
-   real( dp),save     :: gamma_oc1(NU:CS)
-   real( dp),save     :: gamma_oc2(NU:CS)
-   real( dp),save     :: gamma_oc3(NU:CS)
-   real( dp),save     :: gamma_oc4(NU:CS)
-   real( dp),save     :: gamma_oc5(NU:CS)
-   real( dp),save     :: gamma_oc6(NU:CS)
-   real( dp),save     :: gamma_oc7(NU:CS)
-   real( dp),save     :: gamma_oc8(NU:CS)
-   real( dp),save     :: gamma_oc9(NU:CS)
-   real( dp),save     :: gamma_oc1_m(NU:CS)
-   real( dp),save     :: gamma_oc2_m(NU:CS)
-   real( dp),save     :: gamma_oc3_m(NU:CS)
-   real( dp),save     :: gamma_oc4_m(NU:CS)
-   real( dp),save     :: gamma_oc5_m(NU:CS)
-   real( dp),save     :: gamma_oc6_m(NU:CS)
-   real( dp),save     :: gamma_oc7_m(NU:CS)
-   real( dp),save     :: gamma_oc8_m(NU:CS)
-   real( dp),save     :: gamma_oc9_m(NU:CS)
 
 contains
 
@@ -567,270 +531,6 @@ contains
 
 
   end subroutine readmonit
-
-!------------------------------------------------------------------
-
-  subroutine readorganic(DENOCI,DENECI,Moc,nmo,foc,hvap,csat0)
-    !----------------------------------------------------------------------
-    !     
-    !   Read input for organic components
-    !
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !
-    !      purpose
-    !      -------
-    !      read input for organic components
-    !      SOA mole fraction specified in 5 modes
-    !
-    !      interface
-    !      ---------
-    !      organic.dat
-    !
-    !      method
-    !      ------
-    !      read ascii file with space or tab separated entries
-    !
-    !      reference
-    !      ---------
-    !      none
-    !
-    !      modifications
-    !      -------------
-    !      none
-    !
-    !------------------------------------------------------------------
-
-  implicit none
-
-! output
-     real( dp), intent(out)                     :: DENOCI
-     real( dp), intent(out)                     :: DENECI
-
-     real( dp), dimension(NSOA), intent(out)    :: Moc
-     real( dp), dimension(NSOA), intent(out)    :: nmo
-     real( dp), dimension(NSOA), intent(out)    :: foc
-     real( dp), dimension(NSOA), intent(out)    :: hvap
-     real( dp), dimension(NSOA), intent(out)    :: csat0
-
-
-! local
-     integer               :: stat3
-     integer               :: M
-
-     real( dp)             :: nc1,nc2,nc3,nc4,nc5,nc6,nc7,nc8,nc9
-     real( dp)             :: no1,no2,no3,no4,no5,no6,no7,no8,no9
-     real( dp)             :: hvap1,hvap2,hvap3,hvap4,hvap5,hvap6,hvap7,hvap8,hvap9
-     real( dp)             :: c01,c02,c03,c04,c05,c06,c07,c08,c09
-
-     real( dp)             :: DENOC
-     real( dp),save        :: sum_gamma_oc(NU:CS)  
-     real( dp),save        :: sum_gamw_oc(NU:CS)                
-
-
-! read organic.dat
-
-       open(22,file='organic.dat',status='old', iostat=stat3)
-! open error handling    
-       if (stat3.ne.0) then
-          write(6,*) 'File organic.dat cannot be opened !'
-          stop
-       end if  
-
-!--------------------------------------------------------------------------------------
-
-! density and surface tension of organic particles
-       read(22,*) DENOC,surfin,surf_org
-
-! density fractal geometry of soot particles
-       read(22,*) DENECI,rp0,Dfrac
-
-! next lines contain the properties of nine condensable organic vapors
-       read(22,*) nc1,no1,hvap1,c01      ! BSOV
-       read(22,*) nc2,no2,hvap2,c02      ! BLOV
-       read(22,*) nc3,no3,hvap3,c03      ! BELV
-       read(22,*) nc4,no4,hvap4,c04      ! ASOV
-       read(22,*) nc5,no5,hvap5,c05      ! ALOV
-       read(22,*) nc6,no6,hvap6,c06      ! AELV
-       read(22,*) nc7,no7,hvap7,c07      ! PIOV
-       read(22,*) nc8,no8,hvap8,c08      ! PSOV
-       read(22,*) nc9,no9,hvap9,c09      ! PELV
-
-! next lines contain the SOA mole fractions in OC
-       read(22,*) gamma_oc1(NU),gamma_oc1(NA),gamma_oc1(AI),gamma_oc1(AS),gamma_oc1(CS)
-       read(22,*) gamma_oc2(NU),gamma_oc2(NA),gamma_oc2(AI),gamma_oc2(AS),gamma_oc2(CS)
-       read(22,*) gamma_oc3(NU),gamma_oc3(NA),gamma_oc3(AI),gamma_oc3(AS),gamma_oc3(CS)
-       read(22,*) gamma_oc4(NU),gamma_oc4(NA),gamma_oc4(AI),gamma_oc4(AS),gamma_oc4(CS)
-       read(22,*) gamma_oc5(NU),gamma_oc5(NA),gamma_oc5(AI),gamma_oc5(AS),gamma_oc5(CS)
-       read(22,*) gamma_oc6(NU),gamma_oc6(NA),gamma_oc6(AI),gamma_oc6(AS),gamma_oc6(CS)
-       read(22,*) gamma_oc7(NU),gamma_oc7(NA),gamma_oc7(AI),gamma_oc7(AS),gamma_oc7(CS)
-       read(22,*) gamma_oc8(NU),gamma_oc8(NA),gamma_oc8(AI),gamma_oc8(AS),gamma_oc8(CS)
-       read(22,*) gamma_oc9(NU),gamma_oc9(NA),gamma_oc9(AI),gamma_oc9(AS),gamma_oc9(CS)
-
-! other stuff related to organic chemistry
-       read(22,*) fch3so2
-
-!--------------------------------------------------------------------------------------
-
-       ! calculate molecular weight (g/mol)
-       Moc(1) = nc1*MC + no1*MO + nc1*MH
-       Moc(2) = nc2*MC + no2*MO + nc2*MH
-       Moc(3) = nc3*MC + no3*MO + nc3*MH
-       Moc(4) = nc4*MC + no4*MO + nc4*MH
-       Moc(5) = nc5*MC + no5*MO + nc5*MH
-       Moc(6) = nc6*MC + no6*MO + nc6*MH
-       Moc(7) = nc7*MC + no7*MO + 2*nc7*MH +2
-       Moc(8) = nc8*MC + no8*MO + 2*nc8*MH +2
-       Moc(9) = nc9*MC + no9*MO + 2*nc9*MH +2
-
-       ! calculate O:C ratio
-       foc(1) = no1/nc1 
-       foc(2) = no2/nc2
-       foc(3) = no3/nc3
-       foc(4) = no4/nc4
-       foc(5) = no5/nc5
-       foc(6) = no6/nc6
-       foc(7) = no7/nc7
-       foc(8) = no8/nc8
-       foc(9) = no9/nc9
-
-       ! calculate nM = nC + nC (size of the solute)
-       nmo(1) = no1 + nc1
-       nmo(2) = no2 + nc2
-       nmo(3) = no3 + nc3
-       nmo(4) = no4 + nc4
-       nmo(5) = no5 + nc5
-       nmo(6) = no6 + nc6
-       nmo(7) = no7 + nc7
-       nmo(8) = no8 + nc8
-       nmo(9) = no9 + nc9
-
-
-       ! check enthalpy of vaporization (J/mol)
-       if ((hvap1.lt.10.0).OR.(hvap1.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap1 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(1) = hvap1 *1.E3_dp
-       endif
-       if ((hvap2.lt.10.0).OR.(hvap2.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap2 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(2) = hvap2 *1.E3_dp
-       endif
-       if ((hvap3.lt.10.0).OR.(hvap3.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap3 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(3) = hvap3 *1.E3_dp
-       endif
-       if ((hvap4.lt.10.0).OR.(hvap4.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap4 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(4) = hvap4 *1.E3_dp
-       endif
-       if ((hvap5.lt.10.0).OR.(hvap5.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap5 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(5) = hvap5 *1.E3_dp
-       endif
-       if ((hvap6.lt.10.0).OR.(hvap6.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap6 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(6) = hvap6 *1.E3_dp
-       endif
-       if ((hvap7.lt.10.0).OR.(hvap7.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap7 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(7) = hvap7 *1.E3_dp
-       endif       
-       if ((hvap8.lt.10.0).OR.(hvap8.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap8 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(8) = hvap8 *1.E3_dp
-       endif
-       if ((hvap9.lt.10.0).OR.(hvap9.gt.200.0)) then
-         write(6,*) 'STOP: allowed range of hvap9 in organic.dat is 10-200 kJ/mol'
-         stop
-       else
-          hvap(9) = hvap9 *1.E3_dp
-       endif
-       
-       ! define saturation concentration of individual organic vapours
-       csat0(1) = c01
-       csat0(2) = c02
-       csat0(3) = c03
-       csat0(4) = c04
-       csat0(5) = c05
-       csat0(6) = c06
-       csat0(7) = c07
-       csat0(8) = c08
-       csat0(9) = c09
-
-
-       ! check sum molar fraction
-       do M=NU,CS
-        sum_gamma_oc(M)=gamma_oc1(M)+gamma_oc2(M)+gamma_oc3(M)     &
-                       +gamma_oc4(M)+gamma_oc5(M)+gamma_oc6(M)     &
-                       +gamma_oc7(M)+gamma_oc8(M)+gamma_oc9(M)
-         IF (sum_gamma_oc(M).GT.1.00000001_dp) THEN
-           write(6,*) 'sum of OC molar fractions >1.0 in organic.dat'
-           stop
-         ENDIF       
-       end do
-
-
-       ! molar fraction to mass fraction
-       do M=NU,CS
-         sum_gamw_oc(M)=gamma_oc1(M)*Moc(1)+gamma_oc2(M)*Moc(2)   &
-                       +gamma_oc3(M)*Moc(3)+gamma_oc4(M)*Moc(4)   &
-                       +gamma_oc5(M)*Moc(5)+gamma_oc6(M)*Moc(6)   &
-                       +gamma_oc7(M)*Moc(7)+gamma_oc8(M)*Moc(8)   &
-                       +gamma_oc9(M)*Moc(9)
-
-         gamma_oc1_m(M)=(gamma_oc1(M)*Moc(1)) / sum_gamw_oc(M)
-         gamma_oc2_m(M)=(gamma_oc2(M)*Moc(2)) / sum_gamw_oc(M)
-         gamma_oc3_m(M)=(gamma_oc3(M)*Moc(3)) / sum_gamw_oc(M)
-         gamma_oc4_m(M)=(gamma_oc4(M)*Moc(4)) / sum_gamw_oc(M)
-         gamma_oc5_m(M)=(gamma_oc5(M)*Moc(5)) / sum_gamw_oc(M)
-         gamma_oc6_m(M)=(gamma_oc6(M)*Moc(6)) / sum_gamw_oc(M)
-         gamma_oc7_m(M)=(gamma_oc7(M)*Moc(7)) / sum_gamw_oc(M)
-         gamma_oc8_m(M)=(gamma_oc8(M)*Moc(8)) / sum_gamw_oc(M)
-         gamma_oc9_m(M)=(gamma_oc9(M)*Moc(9)) / sum_gamw_oc(M)
-                     
-       end do
-
-       ! density of organic particles
-       DENOCI=gamma_oc1(AI)*DENOC+gamma_oc2(AI)*DENOC   + &
-              gamma_oc3(AI)*DENXX                       + &
-              gamma_oc4(AI)*DENOC+gamma_oc5(AI)*DENOC   + &
-              gamma_oc6(AI)*DENXX                       + &
-              gamma_oc7(AI)*DENALK+gamma_oc8(AI)*DENALK + &
-              gamma_oc9(AI)*DENALK
-
-
-       !print *,"organic MW  ",Moc
-       !print *,"organic O:C ",foc
-       !print *, "Hvap J/mol  ",hvap
-       !print *, "Csat(0)     ",csat0
-       !print *, "gammaOC(AI) ",gamma_oc1_m(2),gamma_oc2_m(2),gamma_oc3_m(2), &
-       !                  gamma_oc4_m(2),gamma_oc5_m(2),gamma_oc6_m(2),gamma_oc7_m(2), &
-       !                  gamma_oc8_m(2),gamma_oc9_m(2) 
-       !print *, "density OC  ",DENOCI
-
-
-
-       close(22)
-
-
-  end subroutine readorganic
 
 !------------------------------------------------------------------
 

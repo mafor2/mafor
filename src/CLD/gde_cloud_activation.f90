@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024 Matthias Steffen Karl
+!*    Copyright (C) 2011-2026 Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -104,10 +104,14 @@ module gde_cloud_activation
   use messy_mecca_kpp_global, only : ind_hcho_a, ind_SUCCAC_a, ind_ADIPAC_a
   use messy_mecca_kpp_global, only : ind_GLUTARAC_a, ind_OXALAC_a
 
-  use gde_sensitiv,     only       : IDEPO
-  use gde_sensitiv,     only       : IWETD
-  use gde_sensitiv,     only       : ICOAG
-  use gde_sensitiv,     only       : ICOND
+  use gde_constants,    only       : nucomin,massmin
+  use gde_constants,    only       : CONVM
+  use gde_constants,    only       : DENAM,DENDU,DENXX,DENEC,DENALK
+  use gde_constants,    only       : lwcpart
+  use gde_constants,    only       : Lthjump,Lvpjump
+  use gde_constants,    only       : alphah2o,alphaCh2o
+  use gde_constants,    only       : surf_h2o_std
+  use gde_constants,    only       : v2,v3
 
   use gde_input_data,   only       : MMAX,AMAX
   use gde_input_data,   only       : NU,NA,AI,AS,CS
@@ -120,34 +124,14 @@ module gde_cloud_activation
   use gde_input_data,   only       : A_SAL,A_CHL
   use gde_input_data,   only       : A_EBC,A_DUS
   use gde_input_data,   only       : A_XXX,A_WAT
-  
-  use gde_input_data,   only       : SVI,MSA,NO3,DMA,NH4
-  use gde_input_data,   only       : IOD,OXA,SUC,SSA
 
-  use gde_input_data,   only       : DENAM,DENDU,DENXX,DENEC,DENALK
-  use gde_input_data,   only       : lwcpart
-  use gde_input_data,   only       : Lthjump,Lvpjump
-  use gde_input_data,   only       : alphah2o,alphaCh2o
-  use gde_input_data,   only       : nucomin,massmin
-  use gde_input_data,   only       : CONVM
-  use gde_input_data,   only       : surf_h2o_std,v2,v3
   use gde_toolbox,      only       : surf_succin
-
-  use gde_toolbox,      only       : molec2ug
-
-  use gde_deposition,   only       : settling
-  use gde_condensation, only       : condensation_incloud
-  use gde_coagulation,  only       : coagulation_coeff
-  use gde_coagulation,  only       : coagulation_target
-  use gde_coagulation,  only       : collection_kernel
-  use gde_coagulation,  only       : coagulation
 
 
   private
 
   public  :: cloud_driver
   public  :: ccnactivation
-  public  :: cloud_solver
 
   private :: insoluble_core
   private :: kinetic_factor
@@ -372,8 +356,8 @@ subroutine cloud_driver(vupdra,temp,press,supersat,dwldtsum,hour_time, &
       dTdt = (-1._dp)*(dir*g*vupdra)/cp_air
 
 
-      !print *,'driver dSdt', dSdt, dir, dir*alphav*vupdra, gammaw*dwldtsum
       !print *,'hour_time',hour_time
+      !print *,'driver dSdt', dSdt, dir, dir*alphav*vupdra, gammaw*dwldtsum,DTdt
 
       !!! TEST STOP
       !!! Stop after 5 min
@@ -385,465 +369,9 @@ subroutine cloud_driver(vupdra,temp,press,supersat,dwldtsum,hour_time, &
       ! Stop on plateau
       !if (hour_time.gt.30.*60) stop
       ! Stop in downdraft
-      !if (hour_time.gt.50.*60) stop
+      !if (hour_time.gt.57.*60) stop
 
   end subroutine cloud_driver
-
-
-
-subroutine cloud_solver(caq,DTIME,IMAX,press,temp,mbh,DPcrit,    &
-                        DPA,DPAW,VPT,ROOPW,M_oc,                 &
-                        lwc,caqold,                              &
-                        IAG,N,MASS )
-    !----------------------------------------------------------------------
-    !
-    !****  Solver of cloud processes
-    !
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !
-    !      purpose
-    !      -------
-    !      solver of microphysical processes during cloud/fog
-    !      activated when incloud=2 and RH>rhactive.
-    !      Assuming a non-precipitating cloud.
-    !
-    !
-    !      interface
-    !      ---------
-    !      The updraft velocity is given by the user in dispers.dat
-    !      input is DPA and DPAW, the routine computes changes in
-    !      MASS and N during cloud phases.
-    !
-    !        input:
-    !           DTIME    time step                      [s]
-    !           caq      aqueous phase concentration    [molec/cm^3]
-    !           press    air pressure                   [Pa]
-    !           temp     air temperature                [K]
-    !           mbh      mixing layer height            [m]
-    !           DPcrit   critical particle diameter     [m]
-    !           DPA      dry particle diameter          [m]
-    !           DPAW     wet particle diameter          [m]
-    !           VPT      particle volume                [m^3]
-    !           ROOPW    particle density               [kg/m^3]
-    !           lwc      liquid water content           [vol(H2O)/vol(air)]
-    !           caqold   aq. phase conc old time step   [molec/cm^3]
-    !           M_oc     molecular weight SOA species   [g/mol]
-    !
-    !        in/out:
-    !           IAG      coagulation target class, integer matrix
-    !           N        number concentration in bin    [1/m^3]
-    !           MASS     mass concentration in bin      [ng/m^3]
-    !
-    !
-    !      method
-    !      ------
-    !      In-Cloud processes:
-    !      - Settling of cloud droplets
-    !      - Interstitial aerosol scavenging by droplets
-    !      - Condensation of dissolved gases
-    !      - Collision/Coalescence
-    !
-    !      Not considered: wet scavenging of particles
-    !      by below cloud scavenging
-    !
-    !      Aqueous aerosol components
-    !      in acid-base reactions:
-    !      SVI = 1
-    !      MSA = 2
-    !      NO3 = 3
-    !      DMA = 4
-    !      NH4 = 5
-    !      IOD = 6
-    !      OXA = 7
-    !      SUC = 8
-    !      SAL = 9
-    !
-    !      reference
-    !      ---------
-    !      see header
-    !
-    !      modifications
-    !      -------------
-    !      none
-    !
-    !------------------------------------------------------------------
-    use gde_constants,    only : M_H2SO4,M_msa,M_nit,M_dma
-    use gde_constants,    only : M_nh3,MNa,MCl,M_hio3
-    use gde_constants,    only : pi
-
-    implicit none
-
-    ! input
-    integer, intent(in)                                :: IMAX
-    real( dp), dimension(nspec), intent(in)            :: caq       ! [molec/cm^3]
-    real( dp), intent(in)                              :: DTIME     ! [s]
-    real( dp), intent(in)                              :: temp      ! [K]
-    real( dp), intent(in)                              :: press     ! [Pa]
-    real( dp), intent(in)                              :: mbh       ! [m]
-    real( dp), intent(in)                              :: DPcrit    ! [m]
-    real( dp), dimension(MMAX,0:(IMAX+1)), intent(in)  :: DPA       ! [m]
-    real( dp), dimension(MMAX,0:(IMAX+1)), intent(in)  :: DPAW      ! [m]
-    real( dp), dimension(MMAX,IMAX), intent(in)        :: VPT       ! [m^3]
-    real( dp), dimension(MMAX,IMAX), intent(in)        :: ROOPW     ! [kg/m^3]
-    real( dp), dimension(aqmax,APN), intent(in)        :: caqold    ! [molec/cm^3]
-    real( dp), dimension(APN), intent(in)              :: lwc       ! [vol(H2O)/vol(air)]
-    real( dp), dimension(NSOA), intent(in)             :: M_oc      ! [g/mol]
-
-
-    ! output
-    real( dp), dimension(MMAX,MMAX,IMAX,IMAX), intent(in out) :: IAG
-    real( dp), dimension(MMAX,IMAX,AMAX),intent(inout) :: MASS      ! [ng/m^3]
-    real( dp), dimension(MMAX,IMAX),intent(inout)      :: N         ! [1/m^3]
-
-    ! local
-    ! maximum growth in aq. phase mode for volatile gases
-    real( dp),dimension(aqmax,APN)                     :: caqdiff
-    real( dp),dimension(aqmax)                         :: mwaq
-    real( dp), dimension(MMAX)                         :: sumdpcs
-    real( dp)                                          :: wsurface
-    real( dp)                                          :: coags
-    real( dp)                                          :: coagscav
-
-    integer                                            :: zkc
-    integer                                            :: L
-    integer                                            :: I,M,J,O
-    integer                                            :: MM,K
-
-    ! allocatable
-    real( dp),allocatable,dimension(:,:,:)             :: fluxm
-    real( dp),allocatable,dimension(:,:,:)             :: fluxcm
-    real( dp),allocatable,dimension(:,:)               :: flux
-    real( dp),allocatable,dimension(:,:)               :: fluxc
-    real( dp),allocatable,dimension(:,:,:,:)           :: kcoag
-    real( dp),allocatable,dimension(:,:,:,:)           :: kcoll
-    real( dp),allocatable,dimension(:,:,:)             :: massold
-    real( dp),allocatable,dimension(:,:)               :: depo
-    real( dp),allocatable,dimension(:,:)               :: vterm
-
-      !----------------------------------------------------------
-      ! Allocate aerosol terms
-
-      if (.not. allocated(fluxm))         ALLOCATE(fluxm(MMAX,IMAX,AMAX))
-      if (.not. allocated(flux))          ALLOCATE(flux(MMAX,IMAX))
-      if (.not. allocated(fluxcm))        ALLOCATE(fluxcm(MMAX,IMAX,aqmax))
-      if (.not. allocated(fluxc))         ALLOCATE(fluxc(MMAX,IMAX))
-      if (.not. allocated(kcoag))         ALLOCATE(kcoag(MMAX,MMAX,IMAX,IMAX))
-      if (.not. allocated(kcoll))         ALLOCATE(kcoll(MMAX,MMAX,IMAX,IMAX))
-      if (.not. allocated(massold))       ALLOCATE(massold(MMAX,IMAX,AMAX))
-      if (.not. allocated(depo))          ALLOCATE(depo(MMAX,IMAX))
-      if (.not. allocated(vterm))         ALLOCATE(vterm(MMAX,IMAX))
-
-
-      ! Initialisation
-      fluxm(:,:,:)    = 0._dp
-      fluxcm(:,:,:)   = 0._dp
-      flux(:,:)       = 0._dp
-      fluxc(:,:)      = 0._dp
-      caqdiff(:,:)    = 0._dp
-      kcoag(:,:,:,:)  = 0._dp
-      kcoll(:,:,:,:)  = 0._dp
-      massold(:,:,:)  = 0._dp
-      depo(:,:)       = 0._dp
-      vterm(:,:)      = 0._dp
-      caqdiff(:,:)    = 0._dp
-      coags           = 0._dp 
-      coagscav        = 0._dp
-
-
-      ! ******************************************************************
-      !     IN-CLOUD AEROSOL PROCESSES
-      ! ******************************************************************
-
-
-      ! CONDENSATIONAL GROWTH
-      ! cloud solver is called first after salts are dissolved
-      !
-      ! THE CAQ CHANGE CAN BE TRANSLATED TO MASS CHANGE -> VPNEW
-      ! TO DRIVE THE CONDENSATION FLUXES.
-      !
-      ! Calculate dCaq/dt [molec/cm^3]
-      ! dCaq can be negative if species is depleted
-      ! Partitioning of gases only if LWC is large enough
-      ! Aqueous aerosol components in acid-base reactions:
-
-      mwaq = (/ M_H2SO4,     &     ! SVI = 1
-                M_msa,       &     ! MSA = 2
-                M_nit,       &     ! NO3 = 3
-                M_dma,       &     ! DMA = 4
-                M_nh3+1.,    &     ! NH4 = 5
-                M_hio3,      &     ! IOD = 6
-                M_oc(1),     &     ! OXA = 7
-                M_oc(2),     &     ! SUC = 8
-                MNa+MCl /)         ! SAL = 9
-
-
-      do zkc=1,APN
-      !A_SUL (1)
-           caqdiff(SVI,zkc) = caq(ind_SO4mm_a(zkc))             + & 
-                              caq(ind_HSO4m_a(zkc))             - &
-                              caqold(SVI,zkc)
-
-      !A_MSA (2)
-           caqdiff(MSA,zkc) = caq(ind_CH3SO3m_a(zkc))           - &
-                              caqold(MSA,zkc)
-
-      !A_NIT (3)
-           caqdiff(NO3,zkc) = caq(ind_NO3m_a(zkc))              - &
-                              caqold(NO3,zkc)
-
-      !A_AMI (4)
-           caqdiff(DMA,zkc) = caq(ind_DMAp_a(zkc))              - &
-                              caqold(DMA,zkc)
-
-      !A_NH4 (5)
-           caqdiff(NH4,zkc) = caq(ind_NH4p_a(zkc))              - &
-                              caqold(NH4,zkc)
-
-      !A_IO3 (6)
-           caqdiff(IOD,zkc) = caq(ind_IO3m_a(zkc))              - &
-                              caqold(IOD,zkc)
-
-! Organics: 
-!   OXALAC, MGLYOAC, SUCCAC
-      !A_OR1 (7)
-           caqdiff(OXA,zkc) = caq(ind_HC2O4m_a(zkc))            + &
-                              caq(ind_C2O4mm_a(zkc))            + &
-                              caq(ind_CH3COCOOm_a(zkc))         - &
-                              caqold(OXA,zkc)
-
-      !A_OR2 (8)
-           caqdiff(SUC,zkc) = caq(ind_C2H5C2O4m_a(zkc))         + &
-                              caq(ind_C2H4C2O4mm_a(zkc))        + &
-                              caq(ind_ADIPAC_a(zkc))            + &
-                              caq(ind_GLUTARAC_a(zkc))          - &
-                              caqold(SUC,zkc)
-
-      !A_SAL (9)
-           caqdiff(SSA,zkc) = caq(ind_Clm_a(zkc))               + &
-                              caq(ind_Nap_a(zkc))               - &
-                              caqold(SSA,zkc)
-
-      ! Convert dCaq to mass change [ng/m^3]
-           do L=1,aqmax
-
-             caqdiff(L,zkc) = caqdiff(L,zkc)                    * &
-                              molec2ug( mwaq(L) )*1.e3_dp
-
-           enddo
-
-      ! Growth Limit for NO3 (HNO3g) and SSA (HClg)
-      ! ! NH4Cl(s) == NH3(g) + HCl(g)
-      ! ! NH4NO3(s) == NH3(g) + HNO3(g)
-      ! ! NaCl(s) + NO3m == NaNO3(s) + Clm
-
-           caqdiff(SSA,zkc) = min( caqdiff(SSA,zkc), 0.3_dp )   !0.2
-           caqdiff(NO3,zkc) = min( caqdiff(NO3,zkc), 0.3_dp )   !0.2
-
-      ! Set growth of oxalic acid to zero, too volatile
-           caqdiff(OXA,zkc) = 0.0
-
-          ! if (zkc==3) then
-          !   print*,'S(VI) diff [ng/m^3]',zkc,caqdiff(SVI,zkc)
-          !   print*,'ORGC  diff [ng/m^3]',zkc,caqdiff(OXA,zkc)+caqdiff(SUC,zkc)
-          !   print*,'SALT  diff [ng/m^3]',zkc,caqdiff(SSA,zkc)
-          !   print*,'NITR  diff [ng/m^3]',zkc,caqdiff(NO3,zkc)
-          !   print*,'AMMO  diff [ng/m^3]',zkc,caqdiff(NH4,zkc)
-          ! endif
-
-      enddo  ! aq. phase modes
-
-
-      ! IN-CLOUD CONDENSATION
-      ! Condensation flux must be called for aqueous aerosol
-      ! species (resulting from acid-base reactions)
-      if (ICOND.eq.1) then
-
-        call condensation_incloud(IMAX,DTIME,VPT,ROOPW,DPA,    &
-                                  N,MASS,  caqdiff, DPcrit,    &
-                                  fluxc,fluxcm)
-      endif
-
-
-
-      ! DROPLET DEPOSITION (SETTLING)
-      ! settling of large droplets according to
-      ! smog-fog-smog cycle by Pandis et al. (1990b)
-      ! vterm(M,I) [m/s]
-      ! terminal velocity is also needed for
-      ! collision/coalesence.
-      call settling(DPAW,press,temp,ROOPW,IMAX, vterm)
-
-
-      ! COLLISION / COALESENCE
-      ! the collection kernel K describes the interaction
-      ! of two colliding particles. The collision partners
-      ! are assummed to fall with their terminal velocities
-      ! Vinf. The smaller collision partner (s) will be 
-      ! collected by the larger collision partner (b) as soon
-      ! as it is inside the swept volume of the collector.
-      if (ICOAG.eq.1) then
-
-      ! coagulation coefficient for interstitial aerosol 
-      ! kcoag(M,O,I,J) [m^3/s]
-      ! removal of interstitial (non-activated) particles
-      ! by larger droplets through Brownian diffusion
-      ! according to Hoppel et al. (1990).
-         call coagulation_coeff(temp,ROOPW,DPAW,kcoag,IMAX)
-
-      ! collection kernel
-      ! Kcoll = Ecoa*Ecol*|Vinf_b - Vinf_s|*pi*(rb+rs)**2
-      !   Kcoll: collection kernel [m^3/s]
-      ! includes kcoag(M,O,I,J) for interst. scavenging
-         call collection_kernel(IMAX,temp,press,DPAW,vterm,       &
-                                DPcrit,kcoag*1._dp,   kcoll)
-
-      ! collection equation -> number and mass fluxes
-         if (DPcrit.lt.2.e-6_dp) then
-      ! droplet-particle collection
-           call coagulation(temp,DTIME,ROOPW,DPAW,VPT,N,MASS,     &
-                         IMAX,IAG,kcoll, coags,fluxm,flux)
-         else
-      ! particle coagulation
-           call coagulation(temp,DTIME,ROOPW,DPAW,VPT,N,MASS,     &
-                         IMAX,IAG,kcoag, coags,fluxm,flux)
-         endif
-
-      ! compute updated coagulation target classes
-         call coagulation_target(VPT,IMAX, IAG)
-      endif
-
-
-
-      ! ******************************************************************
-      !     CHANGE OF PARTICLE NUMBER AND MASS DUE IN-CLOUD PROCESSES
-      ! ******************************************************************
-
-
-      ! Condensational Growth
-      ! 1 distribute dm(aq) over weighted particle surface area
-      ! 2 condensation of aq. phase mass [ng/m^3]
-      ! 3 condensation flux of mass between bins [ng/m^3]
-      ! 4 lower bound of mass per bin [ng/m^3]
-
-      if (ICOND.eq.1) then
-
-       ! summation of droplet surface area
-       ! ns(Dp)dDp surface size distribution
-       sumdpcs(:)=0._dp
-        do M=AI,CS
-          do I=1,IMAX
-             sumdpcs(M) = sumdpcs(M)                           +  &
-                          pi*DPA(M,I)*DPA(M,I)*N(M,I)
-          enddo
-        enddo
-
-        do M=AI,CS
-          do I=1,IMAX
-
-          ! weight of particle surface area
-            wsurface = pi*DPA(M,I)*DPA(M,I)*N(M,I)/sumdpcs(M)
-          ! uniform distribution for AI mode
-            if (M==AI) wsurface = 1._dp/IMAX
-
-          ! mass fluxes of the aqueous phase species (1 to aqmax-1)
-          ! aqmax = MMAX-2
-            do L=1, aqmax-1
-              MASS(M,I,L)    = MASS(M,I,L) + caqdiff(L,M-2) * wsurface
-              MASS(M,I,L)    = MASS(M,I,L) + fluxcm(M,I,L)
-              MASS(M,I,L)    = max(MASS(M,I,L),massmin)
-            enddo
-
-          ! mass flux of seasalt (Chlorine)
-            MASS(M,I,A_SAL)    = MASS(M,I,A_SAL)               +  &
-                                 caqdiff(aqmax,M-2) * wsurface
-            MASS(M,I,A_SAL)    = MASS(M,I,A_SAL) + fluxcm(M,I,aqmax)
-            MASS(M,I,A_SAL)    = max(MASS(M,I,A_SAL),massmin)
-
-         ! condensation flux N [1/m^3]
-         ! only activated particles shall grow
-         ! apply non-negative constraint
-            if ( DPA(M,I).gt.DPcrit ) then
-              N(M,I)=N(M,I)+fluxc(M,I)
-              N(M,I)=max(N(M,I),0.0_dp)    
-              ! write(6,*) 'Fcond',M,I, fluxc(M,I), N(M,I)
-            endif
-
-          enddo
-        enddo
-
-      endif
-
-
-
-      ! COLLISION / COALESENCE
-      ! Number and Mass loss of 
-      ! -  non-activated particles with DPA < DPcrit
-      ! -  smaller collision partner
-      ! Mass gain (and number shift)
-      ! -  by all activated particle sizes
-      ! -  larger collision partner
-      ! Collection flux in [1/m^3/s]
-      if (ICOAG.eq.1) then
-
-        do M=NU,CS
-          do I=1,IMAX
-             IF (N(M,I) .GT. nucomin) THEN
-               do K=1,AMAX   
-                 MASS(M,I,K)=MASS(M,I,K)+FLUXM(M,I,K)*DTIME  
-                 MASS(M,I,K)=max(MASS(M,I,K),0.0_dp)             
-               end do 
-             ENDIF
-             N(M,I)=N(M,I)+FLUX(M,I)*DTIME
-             ! apply non-negative constraint because N(M,I) has already
-             ! been changed by condensation flux
-             N(M,I)=max(N(M,I),0.0_dp)
-             ! write(6,*) 'Fcoll',M,I,N(M,I),FLUX(M,I)*DTIME
-          enddo
-        enddo
-
-      endif
-
-
-      ! Droplet deposition
-      ! Only particles with diameter >100 nm are falling
-      ! Deposition rate depo [1/s]
-      ! mbh = cloud height   !  250.0 m 
-      if (IDEPO.ge.1) then
-
-        do M=AI,CS
-          do I=1,IMAX
-
-            depo(M,I) = vterm(M,I) / max(mbh, 250.0)
-
-            do K=1,AMAX
-                MASS(M,I,K)=MASS(M,I,K)                         - &
-                MASS(M,I,K)*depo(M,I)*DTIME   
-            enddo                                                       
-            N(M,I)=N(M,I)-N(M,I)*depo(M,I)*DTIME
-            !write(6,*) 'Ndepo',M,I,DPA(M,I),DPAW(M,I),vterm(M,I),depo(M,I)
-          enddo
-        enddo
-
-      endif
-
-
-
-      ! Deallocate aerosol terms
-      deallocate(fluxm)
-      deallocate(fluxcm)
-      deallocate(flux)
-      deallocate(fluxc)
-      deallocate(kcoag)
-      deallocate(kcoll)
-      deallocate(massold)
-      deallocate(depo)
-      deallocate(vterm)
-
-
-  end subroutine cloud_solver
-
 
 
 subroutine ccnactivation(caq,IMAX,temp,press,      &
@@ -1216,7 +744,7 @@ subroutine ccnactivation(caq,IMAX,temp,press,      &
         enddo
       enddo
 
-      !!! print *,'Senv',supersat+1._dp
+     ! print *,'Senv',supersat+1._dp,DPcrit
 
       !----------------------------------------------------------
       ! Equilibrium saturation ratio due to curvature and 
@@ -1330,27 +858,37 @@ subroutine ccnactivation(caq,IMAX,temp,press,      &
                dmwdt(M,I)  = 0._dp        
             endif
 
-          ! slow evaporation of AI, AS at constant T (05.11.2023)
-            if (dir.eq.0._dp) then
-               ddpwdt(AI,I) = ddpwdt(AI,I)*0.02_dp
-               ddpwdt(AS,I) = ddpwdt(AS,I)*0.02_dp
-               dmwdt(AI,I)  = dmwdt(AI,I) *0.02_dp
-               dmwdt(AS,I)  = dmwdt(AS,I) *0.02_dp
+          ! plateau: slow evaporation if DPA<400 nm (27.01.2025)
+            if ( (dir.eq.0._dp).and.(DPA(M,I).lt.4.0e-7) ) then
+               ddpwdt(M,I) = ddpwdt(M,I)*5.e-4
+               dmwdt(M,I)  = dmwdt(M,I) *5.e-4
             endif
 
-          ! no evaporation in updraft/cooling
+          ! no evaporation in updraft/cooling (dir=1)
+          ! MSK 30.01.2025: evaporation happens for droplets
+          !     with DPAW > critical diameter
             if (dir.eq.1._dp) then
-               ddpwdt(M,I) = max(ddpwdt(M,I),0._dp)
-               dmwdt(M,I)  = max(dmwdt(M,I),0._dp)
+               if ( DPAW(M,I)>Dpcrit ) then
+                  ddpwdt(M,I) = max(ddpwdt(M,I),-1.e-15/DPAW(M,I))
+                  dmwdt(M,I)  = max(dmwdt(M,I),0._dp)
+               else
+                  ddpwdt(M,I) = max(ddpwdt(M,I),0._dp)
+                  dmwdt(M,I)  = max(dmwdt(M,I),0._dp)
+               endif
             endif
 
-          ! no condensation in downdraft/warming
+          ! no condensation in downdraft/warming (dir=-1)
             if (dir.eq.-1._dp) then
                ddpwdt(M,I) = min(ddpwdt(M,I),0._dp)
                dmwdt(M,I)  = min(dmwdt(M,I),0._dp)
             endif
 
         !  write(6,'(2I3,5ES12.4)') M,I,dir,DPA(M,I),DPAW(M,I),satenv -sateq(M,I),dmwdt(M,I)
+
+        !    if ( (M==4).and.(I==1) ) then
+        !        print*,'ddpwdt',M,I,dir,DPA(M,I),DPAW(M,I), 3.5e-6*(satenv -sateq(M,I))*1.e-4,  &
+        !                        ddpwdt(M,I)*DPAW(M,I)
+        !    endif
 
         enddo
       enddo
@@ -2234,6 +1772,7 @@ subroutine solute_effect(DPA,DPU,DPAW,IMAX,lwc,massh2o,epsm,densu,  &
     real( dp),dimension(MMAX,IMAX), intent(out)      :: gassol   ! [-]
 
     real( dp), parameter                   :: hygmin = 1.e-12_dp
+    real( dp), parameter                   :: nummin = 1.e4_dp   ! [1/m^3]
 
     real( dp), dimension(MMAX)             :: sumdpcs
     real( dp), dimension(MMAX)             :: maqCL
@@ -2409,9 +1948,9 @@ subroutine solute_effect(DPA,DPU,DPAW,IMAX,lwc,massh2o,epsm,densu,  &
 
         ! Solute mol per particle
         !!!nsolbin = nsolbin  / max((ntota(M)/IMAX),nucomin)
-          nsolbin = nsolbin  / max( N(M,I), nucomin )
+          nsolbin = nsolbin  / max( N(M,I), nummin )
 
-          !print *,'Raoult B',M,I,DPAW(M,I),nsolbin,ntota(M)/IMAX
+      !  if ((M==4).and.(I==3)) print *,'Raoult B',M,I,DPAW(M,I),nsolbin,wsurface,N(M,I)
 
 
         ! Dissolved gas term: gassol
@@ -2426,7 +1965,7 @@ subroutine solute_effect(DPA,DPU,DPAW,IMAX,lwc,massh2o,epsm,densu,  &
 
         ! Avoid diameter increase of AS over CS
           if (M.eq.AI) nsolbin = nsolbin * 0.6_dp
-          if (M.eq.AS) nsolbin = nsolbin * 0.6_dp 
+          if (M.eq.AS) nsolbin = nsolbin * 0.7_dp
 
       !!! Koehler test start
           !nsolbin = 3.422E-18                    ! NaCl      bin1

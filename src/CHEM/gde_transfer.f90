@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2021  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -45,14 +45,15 @@ module gde_transfer
 
   use messy_mecca_kpp_Global
 
+  use gde_constants,    only       : pdens
+  use gde_constants,    only       : surf_h2o_std
+
   use gde_input_data,   only       : MMAX,AMAX
   use gde_input_data,   only       : A_OR1,A_OR2,A_OR3,A_OR4,A_OR5
   use gde_input_data,   only       : A_OR6,A_OR7,A_OR8,A_OR9
   use gde_input_data,   only       : A_SUL,A_NH4
   use gde_input_data,   only       : A_WAT
   use gde_input_data,   only       : xmAMIN,fcAMIN,vhAMIN,a_AMIN,b_AMIN
-  use gde_input_data,   only       : surf_h2o_std
-  use gde_input_data,   only       : pdens
 
   use gde_toolbox,      only       : surf_succin,surten
   use gde_toolbox,      only       : roolq
