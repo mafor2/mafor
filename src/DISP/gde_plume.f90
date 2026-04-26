@@ -2,7 +2,7 @@
 !                     Aerosol Dynamics Model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2022  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -52,9 +52,23 @@ module gde_plume
   use messy_mecca_kpp_parameters, only : ind_ASOV,ind_ALOV,ind_AELV
   use messy_mecca_kpp_parameters, only : ind_PIOV,ind_PSOV,ind_PELV
 
+  use messy_mecca_kpp_Global, only     : fch3so2
+  !use messy_mecca_kpp_Global, only     : fmsiao3,fi2oi,foiooh, fio3red
+
+!----------------------------------------------------------------------
+
   use gde_sensitiv,  only       : IDIL, ICHAM, IDEB
 
+  use gde_input_data, only      : MMAX
+  use gde_input_data, only      : NU,NA,AI,AS,CS
+  use gde_input_data, only      : NSOA
+  use gde_input_data, only      : plume_type, depo_type, cloud_type
+  use gde_input_data, only      : ocean_type, nuclt_type
+  use gde_input_data, only      : organ_type
+
   use gde_constants, only       : M_H2SO4,pi
+  use gde_constants, only       : DENALK,DENXX
+  use gde_constants, only       : MC,MO,MH
 
   use gde_init_aero, only       : BGNO,BGNO2,BGSO2,BGO3
   use gde_init_aero, only       : BGNH3,BGSULF,BGPIOV,BGPSOV
@@ -67,33 +81,297 @@ implicit none
 
    private
 
+   public :: read_namelist
    public :: plumedisp
-   public :: readdispers
    public :: initplume
    public :: plumearea
+   public :: gamma_oc1_m,gamma_oc2_m,gamma_oc3_m,gamma_oc4_m,gamma_oc5_m
+   public :: gamma_oc6_m,gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
 
-! deposition
-   public :: ADEP,BDEP,ZCAP,dcol,Fplus
-   public :: ustar,znot
-! dispersion
-   public :: hmix_st,dst_st,hsta_st,ta_st
-   public :: DR_fin,T_fin,tau_c,tau_d,BGH2O
-   public :: dil2_b,dil2_c,dil2_d,dil2_e,dil2_f
-   public :: u0,sigw,tend1,tbeg2,tend2
-! clouds
-   public :: vupdra,sst,sal
-
-   real( dp),save     :: ADEP,BDEP,ZCAP,DCOL,Fplus
-   real( dp),save     :: ustar,znot
-   real( dp),save     :: dil2_b,dil2_c,dil2_d,dil2_e,dil2_f
-   real( dp),save     :: hmix_st,dst_st,hsta_st,ta_st
-   real( dp),save     :: DR_fin,T_fin,tau_c,tau_d,BGH2O
-   real( dp),save     :: u0,sigw,tend1,tbeg2,tend2
-   real( dp),save     :: vupdra,sst,sal
+!Mass yields of n-alkane, organics
+   real( dp),save     :: gamma_oc1_m(NU:CS)
+   real( dp),save     :: gamma_oc2_m(NU:CS)
+   real( dp),save     :: gamma_oc3_m(NU:CS)
+   real( dp),save     :: gamma_oc4_m(NU:CS)
+   real( dp),save     :: gamma_oc5_m(NU:CS)
+   real( dp),save     :: gamma_oc6_m(NU:CS)
+   real( dp),save     :: gamma_oc7_m(NU:CS)
+   real( dp),save     :: gamma_oc8_m(NU:CS)
+   real( dp),save     :: gamma_oc9_m(NU:CS)
 
 contains
 
-  subroutine plumedisp(DT,tair,told,zplum_old,wplum_old,u10,dilut_time,  &
+  subroutine read_namelist(file_path,plume,depop,cloud2,ocean,nuclt,organic, &
+                           DENOCI,Moc,nmo,foc,hvap,csat0)
+    !----------------------------------------------------------------------
+    !     
+    !   Read namelist for plume dispersion, deposition and organic aerosol
+    !
+    !      author
+    !      -------
+    !      Dr. Matthias Karl
+    !
+    !      purpose
+    !      -------
+    !      Read input for plume dispersion, deposition,
+    !      organic aerosol and other
+    !      SOA mole fraction specified in 5 modes
+    !
+    !      interface
+    !      ---------
+    !      namelist.nml
+    !      replaces previous input file dispers.dat
+    !      replaces previous input file organic.dat
+    !      gets new file unit (was 28 for dispers.dat)
+    !
+    !      method
+    !      ------
+    !      read namelist file
+    !
+    !      reference
+    !      ---------
+    !      none
+    !
+    !      modifications
+    !      -------------
+    !      none
+    !
+    !------------------------------------------------------------------
+
+  implicit none
+
+! in
+     character(len=*), intent(in)            :: file_path
+
+! inout
+     type(plume_type), intent(inout)         :: plume
+     type(depo_type),  intent(inout)         :: depop
+     type(cloud_type), intent(inout)         :: cloud2
+     type(ocean_type), intent(inout)         :: ocean
+     type(nuclt_type), intent(inout)         :: nuclt
+     type(organ_type), intent(inout)         :: organic
+
+! output
+     real( dp), intent(out)                  :: DENOCI
+     real( dp), dimension(NSOA), intent(out) :: Moc
+     real( dp), dimension(NSOA), intent(out) :: nmo
+     real( dp), dimension(NSOA), intent(out) :: foc
+     real( dp), dimension(NSOA), intent(out) :: hvap
+     real( dp), dimension(NSOA), intent(out) :: csat0
+
+! local
+     integer                                 :: stat6
+     integer                                 :: fu    ! 28
+     integer                                 :: M
+     real( dp)                               :: sum_gamma_oc(MMAX)  
+     real( dp)                               :: sum_gamw_oc(MMAX)  
+
+
+! Namelist definition
+       namelist /DISPERS/ plume, depop, cloud2, ocean, nuclt, organic, fch3so2
+
+! initialize mass fractions in organic aerosol
+
+! check whether file exists
+       inquire(file=file_path, iostat=stat6)
+
+       if (stat6.ne.0) then
+         write(6,*) 'File namelist.nml does not exist'
+         stop
+       end if
+
+! open namelist
+       open(action='read', file=file_path, iostat=stat6, newunit=fu)
+
+! read namelist
+       read (nml=DISPERS, iostat=stat6, unit=fu)
+       if (stat6.ne.0) then
+         write (6, '("Error: invalid Namelist format")')
+         stop
+       endif
+
+! close namelist
+       close (fu)
+
+
+
+! check updraft velocity
+       if (cloud2%vupdra.gt.0.5_dp) then
+         write(6,*) 'STOP: V_updraft must be < 0.5 m/s in Namelist'
+         stop
+       endif
+
+! check ion production rate
+       if ((nuclt%ipr.lt.0.5_dp).or.(nuclt%ipr.gt.100._dp)) then
+         write(6,*) 'STOP: Ion production rate must be in range 0.5-100 in Namelist'
+         stop
+       endif
+
+! check enthalpy of vaporization (J/mol)
+       if ((ORGANIC%bsovp(3).lt.10.0).OR.(ORGANIC%bsovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap1 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(1) = ORGANIC%bsovp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%blovp(3).lt.10.0).OR.(ORGANIC%blovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap2 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(2) = ORGANIC%blovp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%belvp(3).lt.10.0).OR.(ORGANIC%belvp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap3 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(3) = ORGANIC%belvp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%asovp(3).lt.10.0).OR.(ORGANIC%asovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap4 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(4) = ORGANIC%asovp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%alovp(3).lt.10.0).OR.(ORGANIC%alovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap5 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(5) = ORGANIC%alovp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%aelvp(3).lt.10.0).OR.(ORGANIC%aelvp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap6 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(6) = ORGANIC%aelvp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%piovp(3).lt.10.0).OR.(ORGANIC%piovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap7 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(7) = ORGANIC%piovp(3) *1.E3_dp
+       endif       
+       if ((ORGANIC%psovp(3).lt.10.0).OR.(ORGANIC%psovp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap8 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(8) = ORGANIC%psovp(3) *1.E3_dp
+       endif
+       if ((ORGANIC%pelvp(3).lt.10.0).OR.(ORGANIC%pelvp(3).gt.200.0)) then
+         write(6,*) 'STOP: allowed range of hvap9 is 10-200 kJ/mol in Namelist'
+         stop
+       else
+          hvap(9) = ORGANIC%pelvp(3) *1.E3_dp
+       endif
+
+! check sum molar fraction
+       do M=NU,CS
+        sum_gamma_oc(M)=ORGANIC%gamma_oc1(M)+ORGANIC%gamma_oc2(M)+ORGANIC%gamma_oc3(M) &
+                       +ORGANIC%gamma_oc4(M)+ORGANIC%gamma_oc5(M)+ORGANIC%gamma_oc6(M) &
+                       +ORGANIC%gamma_oc7(M)+ORGANIC%gamma_oc8(M)+ORGANIC%gamma_oc9(M)
+         IF (sum_gamma_oc(M).GT.1.00000001_dp) THEN
+           write(6,*) 'sum of OC molar fractions >1.0 in Namelist'
+           stop
+         ENDIF       
+       end do
+
+
+! calculation of organic properties
+
+       ! calculate molecular weight (g/mol)
+       Moc(1) = ORGANIC%bsovp(1)*MC + ORGANIC%bsovp(2)*MO + ORGANIC%bsovp(1)*MH
+       Moc(2) = ORGANIC%blovp(1)*MC + ORGANIC%blovp(2)*MO + ORGANIC%blovp(1)*MH
+       Moc(3) = ORGANIC%belvp(1)*MC + ORGANIC%belvp(2)*MO + ORGANIC%belvp(1)*MH
+       Moc(4) = ORGANIC%asovp(1)*MC + ORGANIC%asovp(2)*MO + ORGANIC%asovp(1)*MH
+       Moc(5) = ORGANIC%alovp(1)*MC + ORGANIC%alovp(2)*MO + ORGANIC%alovp(1)*MH
+       Moc(6) = ORGANIC%aelvp(1)*MC + ORGANIC%aelvp(2)*MO + ORGANIC%aelvp(1)*MH
+       Moc(7) = ORGANIC%piovp(1)*MC + ORGANIC%piovp(2)*MO + 2*ORGANIC%piovp(1)*MH +2
+       Moc(8) = ORGANIC%psovp(1)*MC + ORGANIC%psovp(2)*MO + 2*ORGANIC%psovp(1)*MH +2
+       Moc(9) = ORGANIC%pelvp(1)*MC + ORGANIC%pelvp(2)*MO + 2*ORGANIC%pelvp(1)*MH +2
+
+       ! calculate O:C ratio
+       foc(1) = ORGANIC%bsovp(2) / ORGANIC%bsovp(1)
+       foc(2) = ORGANIC%blovp(2) / ORGANIC%blovp(1)
+       foc(3) = ORGANIC%belvp(2) / ORGANIC%belvp(1)
+       foc(4) = ORGANIC%asovp(2) / ORGANIC%asovp(1)
+       foc(5) = ORGANIC%alovp(2) / ORGANIC%alovp(1)
+       foc(6) = ORGANIC%aelvp(2) / ORGANIC%aelvp(1)
+       foc(7) = ORGANIC%piovp(2) / ORGANIC%piovp(1)
+       foc(8) = ORGANIC%psovp(2) / ORGANIC%psovp(1)
+       foc(9) = ORGANIC%pelvp(2) / ORGANIC%pelvp(1)
+
+       ! calculate nM = nC + nC (size of the solute)
+       nmo(1) = ORGANIC%bsovp(2) + ORGANIC%bsovp(1)
+       nmo(2) = ORGANIC%blovp(2) + ORGANIC%blovp(1)
+       nmo(3) = ORGANIC%belvp(2) + ORGANIC%belvp(1)
+       nmo(4) = ORGANIC%asovp(2) + ORGANIC%asovp(1)
+       nmo(5) = ORGANIC%alovp(2) + ORGANIC%alovp(1)
+       nmo(6) = ORGANIC%aelvp(2) + ORGANIC%aelvp(1)
+       nmo(7) = ORGANIC%piovp(2) + ORGANIC%piovp(1)
+       nmo(8) = ORGANIC%psovp(2) + ORGANIC%psovp(1)
+       nmo(9) = ORGANIC%pelvp(2) + ORGANIC%pelvp(1)
+
+       ! define saturation concentration of individual organic vapours
+       csat0(1) = ORGANIC%bsovp(4)
+       csat0(2) = ORGANIC%blovp(4)
+       csat0(3) = ORGANIC%belvp(4)
+       csat0(4) = ORGANIC%asovp(4)
+       csat0(5) = ORGANIC%alovp(4)
+       csat0(6) = ORGANIC%aelvp(4)
+       csat0(7) = ORGANIC%piovp(4)
+       csat0(8) = ORGANIC%psovp(4)
+       csat0(9) = ORGANIC%pelvp(4)
+
+       ! molar fraction to mass fraction
+       do M=NU,CS
+         sum_gamw_oc(M)=ORGANIC%gamma_oc1(M)*Moc(1)   &
+                       +ORGANIC%gamma_oc2(M)*Moc(2)   &
+                       +ORGANIC%gamma_oc3(M)*Moc(3)   &
+                       +ORGANIC%gamma_oc4(M)*Moc(4)   &
+                       +ORGANIC%gamma_oc5(M)*Moc(5)   &
+                       +ORGANIC%gamma_oc6(M)*Moc(6)   &
+                       +ORGANIC%gamma_oc7(M)*Moc(7)   &
+                       +ORGANIC%gamma_oc8(M)*Moc(8)   &
+                       +ORGANIC%gamma_oc9(M)*Moc(9)
+
+         gamma_oc1_m(M)=(ORGANIC%gamma_oc1(M)*Moc(1)) / sum_gamw_oc(M)
+         gamma_oc2_m(M)=(ORGANIC%gamma_oc2(M)*Moc(2)) / sum_gamw_oc(M)
+         gamma_oc3_m(M)=(ORGANIC%gamma_oc3(M)*Moc(3)) / sum_gamw_oc(M)
+         gamma_oc4_m(M)=(ORGANIC%gamma_oc4(M)*Moc(4)) / sum_gamw_oc(M)
+         gamma_oc5_m(M)=(ORGANIC%gamma_oc5(M)*Moc(5)) / sum_gamw_oc(M)
+         gamma_oc6_m(M)=(ORGANIC%gamma_oc6(M)*Moc(6)) / sum_gamw_oc(M)
+         gamma_oc7_m(M)=(ORGANIC%gamma_oc7(M)*Moc(7)) / sum_gamw_oc(M)
+         gamma_oc8_m(M)=(ORGANIC%gamma_oc8(M)*Moc(8)) / sum_gamw_oc(M)
+         gamma_oc9_m(M)=(ORGANIC%gamma_oc9(M)*Moc(9)) / sum_gamw_oc(M)
+                     
+       end do
+
+       ! density of organic particles
+       DENOCI=ORGANIC%gamma_oc1(AI)*ORGANIC%DENOCin  &
+             +ORGANIC%gamma_oc2(AI)*ORGANIC%DENOCin  &
+             +ORGANIC%gamma_oc3(AI)*DENXX            &
+             +ORGANIC%gamma_oc4(AI)*ORGANIC%DENOCin  &
+             +ORGANIC%gamma_oc5(AI)*ORGANIC%DENOCin  &
+             +ORGANIC%gamma_oc6(AI)*DENXX            &
+             +ORGANIC%gamma_oc7(AI)*DENALK           &
+             +ORGANIC%gamma_oc8(AI)*DENALK           &
+             +ORGANIC%gamma_oc9(AI)*DENALK
+
+
+       !print *,"organic MW  ",Moc
+       !print *,"organic O:C ",foc
+       !print *, "Hvap J/mol  ",hvap
+       !print *, "Csat(0)     ",csat0
+       !print *, "gammaOC(NA) ",gamma_oc1_m(2),gamma_oc2_m(2),gamma_oc3_m(2), &
+       !                  gamma_oc4_m(2),gamma_oc5_m(2),gamma_oc6_m(2),gamma_oc7_m(2), &
+       !                  gamma_oc8_m(2),gamma_oc9_m(2) 
+       !print *, "density OC  ",DENOCI
+
+
+
+  end subroutine read_namelist
+
+!------------------------------------------------------------------
+  subroutine plumedisp(plume,DT,tair,told,zplum_old,wplum_old,u10,dilut_time,  &
                        dilstore,dila,dilcoef,zplum,wplum,tnew,dilrate,   &
                        emisratp,   cgas  )
     !----------------------------------------------------------------------
@@ -113,6 +391,7 @@ contains
     !      ---------
     !
     !        input:
+    !          plume            type plume from namelist
     !          DT               model time step                 [s]
     !          firstloop        flag for initialisation
     !          tair             ambient air temperature         [K]
@@ -231,6 +510,7 @@ contains
   implicit none
 
 ! input
+     type(plume_type), intent(in)               :: plume
      real( dp), intent(in)                      :: DT           ![s]
      real( dp), intent(in)                      :: tair         ![K]
      real( dp), intent(in)                      :: told         ![K]
@@ -260,19 +540,19 @@ contains
 !----------------------------------------------------------------
 
  ! Re-calculate mixing height of traffic air parcel
-        call plumeheight(zplum_old,wplum_old,dilut_time,dila,dilcoef, &
+        call plumeheight(plume,zplum_old,wplum_old,dilut_time,dila,dilcoef, &
                          u10,zplum,wplum)
 
  ! Re-calculate plume temperature (tnew)
-        call plumetemp(DT,tair,dilut_time,told,zplum,zplum_old,tnew )
+        call plumetemp(plume,DT,tair,dilut_time,told,zplum,zplum_old,tnew )
 
  ! Re-calculate dilution rate for concentration
-        call plumedilr(dilut_time,dilstore,dilcoef,u10,DT,wplum_old,  &
+        call plumedilr(plume,dilut_time,dilstore,dilcoef,u10,DT,wplum_old,  &
                        wplum,dilrate)
 
  ! Wall-loss in diesel exhaust chamber
         if (IDIL==3) then
-          if (dilut_time.ge.tau_d) then
+          if (dilut_time.ge.plume%tau_d) then
           !write(6,*) 'before wall loss', c(ind_h2so4)
               ch2so4=cgas(ind_H2SO4)
               if (ICHAM .eq. 2)  call wall_loss_h2so4(DT,tnew,ch2so4)
@@ -291,16 +571,16 @@ contains
  ! Emission ratio source1/source2
  ! no emission accounted between tend1 and tbeg2 or after tend2
         emisratp = 1.0
-        wline1   = tend1*u10
-        wline2   = (tend2 - tbeg2)*u10
+        wline1   = plume%tend1*u10
+        wline2   = (plume%tend2 - plume%tbeg2)*u10
         if (IDIL==4) then
-           if (dilut_time.gt.tend2*u10) then
+           if (dilut_time.gt.plume%tend2*u10) then
               emisratp=0.0
-           elseif ( (dilut_time.gt.tend1*u10).and. &
-                    (dilut_time.le.tbeg2*u10) ) then
+           elseif ( (dilut_time.gt.plume%tend1*u10).and. &
+                    (dilut_time.le.plume%tbeg2*u10) ) then
               emisratp=0.0
-           elseif ( (dilut_time.gt.tbeg2*u10).and. &
-                    (dilut_time.le.tend2*u10) ) then
+           elseif ( (dilut_time.gt.plume%tbeg2*u10).and. &
+                    (dilut_time.le.plume%tend2*u10) ) then
            ! line source 2
               emisratp=(wline1/wline2)*ratio_tc
            else
@@ -378,71 +658,8 @@ contains
 
 !------------------------------------------------------------------
 
-  subroutine readdispers()
-    !----------------------------------------------------------------------
-    !     
-    !   Read input for plume dispersion and deposition
-    !
-    !      author
-    !      -------
-    !      Dr. Matthias Karl
-    !
-    !      purpose
-    !      -------
-    !      Read input for plume dispersion and deposition
-    !
-    !      interface
-    !      ---------
-    !      dispers.dat
-    !
-    !      method
-    !      ------
-    !      read ascii file with space or tab separated entries
-    !
-    !      reference
-    !      ---------
-    !      none
-    !
-    !      modifications     real( dp), intent(out)                     :: cco3
-    !      -------------
-    !      none
-    !
-    !------------------------------------------------------------------
 
-  implicit none
-
-! local
-     integer               :: stat6
-
-
-! read dispers.dat
-
-       open(28,file='dispers.dat',status='old', iostat=stat6)
-! open error handling    
-       if (stat6.ne.0) then
-          write(6,*) 'File dispers.dat cannot be opened !'
-          stop
-       end if 
-       read(28,*) hmix_st,dst_st,hsta_st,ta_st
-       read(28,*) dil2_b,dil2_c,dil2_d,dil2_e,dil2_f
-       read(28,*) DR_fin,T_fin,tau_c,tau_d,BGH2O
-       read(28,*) u0,sigw,tend1,tbeg2,tend2
-       read(28,*) ustar,znot,ADEP,BDEP
-       read(28,*) ZCAP,dcol,Fplus
-       read(28,*) vupdra,sst,sal
-
-       if (vupdra.gt.0.5_dp) then
-         write(6,*) 'STOP: V_updraft must be < 0.5 m/s in dispers.dat'
-         stop
-       endif
-
-       close(28)
-
-
-  end subroutine readdispers
-
-
-  subroutine plumeheight(zplum_old,wplum_old,dilut_time,dila,dilcoef,u10,&
+  subroutine plumeheight(plume,zplum_old,wplum_old,dilut_time,dila,dilcoef,u10,&
                          zplum,wplum)
     !----------------------------------------------------------------------
     !     
@@ -472,6 +689,7 @@ contains
     !      ---------
     !
     !        input:
+    !          plume            type plume from namelist
     !          zplum_old        plume height, old timestep      [m]
     !          wplum_old        plume width, old timestep       [m]    
     !          dilut_time       time passed in plume            [s]
@@ -511,6 +729,7 @@ contains
   implicit none
 
 ! input
+     type(plume_type), intent(in)               :: plume
      real( dp), intent(in)                      :: dilut_time    ![s]
      real( dp), intent(in)                      :: dila
      real( dp), intent(in)                      :: dilcoef
@@ -545,7 +764,7 @@ contains
                  ! a' = dila
                  ! b' = dilcoef
                  !
-                 zplum = sqrt((hmix_st)**2 +                           &
+                 zplum = sqrt((plume%hmix_st)**2 +                           &
                         (dila*(dilut_time*u10*1.e-3)**dilcoef)**2)
                  wplum = zplum
 
@@ -555,7 +774,7 @@ contains
                  ! a' = dila
                  ! b' = dilcoef
                  !
-                 zplum = sqrt((hmix_st)**2 +                           &
+                 zplum = sqrt((plume%hmix_st)**2 +                           &
                         (dila*(dilut_time*u10*1.e-3)**dilcoef)**2)
                  wplum = zplum
 
@@ -568,7 +787,7 @@ contains
 
             CASE (4)
 
-                 if (dilut_time.le.tend1*u10) then
+                 if (dilut_time.le.plume%tend1*u10) then
 
                  ! Stage 1:
                  ! S0 = pi*hmix_st**2
@@ -576,27 +795,27 @@ contains
                  ! z_pl = sqrt( S(t)/pi )
                  !
                    dilt2 = 0.0
-                   s0 = pi*hmix_st**2
-                   st = ( sqrt(s0) + dilut_time*sigw )**2  -          &
-                       ( dilut_time*alpha*u0 )**2
+                   s0 = pi*plume%hmix_st**2
+                   st = ( sqrt(s0) + dilut_time*plume%sigw )**2  -          &
+                       ( dilut_time*alpha*plume%u0 )**2
                    zplum = sqrt(st/pi)
 
-                 else if ((dilut_time.gt.tend1*u10).and.   &
-                          (dilut_time.le.tbeg2*u10)) then  
+                 else if ((dilut_time.gt.plume%tend1*u10).and.   &
+                          (dilut_time.le.plume%tbeg2*u10)) then  
                  ! no change over "tram tracks"
                    dilt2 = 0.0
                    zplum = zplum_old
 
-                 else if ((dilut_time.gt.tbeg2*u10).and.    &
-                          (dilut_time.le.tend2*u10)) then
+                 else if ((dilut_time.gt.plume%tbeg2*u10).and.    &
+                          (dilut_time.le.plume%tend2*u10)) then
 
-                   dilt2 = dilut_time - (tbeg2-tend1)*u10
-                   s0 = pi*hmix_st**2
-                   st = ( sqrt(s0) + dilt2*sigw )**2  -               &
-                       ( dilt2*alpha*u0 )**2
+                   dilt2 = dilut_time - (plume%tbeg2-plume%tend1)*u10
+                   s0 = pi*plume%hmix_st**2
+                   st = ( sqrt(s0) + dilt2*plume%sigw )**2  -               &
+                       ( dilt2*alpha*plume%u0 )**2
                    zplum = sqrt(st/pi)
 
-                 else if (dilut_time.gt.tend2*u10) then
+                 else if (dilut_time.gt.plume%tend2*u10) then
 
                  ! Stage 2:
                  ! start with hmix_st --> should be zplum at end of stage 1
@@ -605,7 +824,7 @@ contains
                  ! b' = dilcoef = 0.91 (stable)
                  ! here dilution time starts at 0 again
                  !
-                   dilt2 = dilut_time - tend2*u10
+                   dilt2 = dilut_time - plume%tend2*u10
                    zplum = sqrt((hkerb)**2 +                         &
                           ( dila*(dilt2*u10*1.e-3)**(0.91) )**2)
 
@@ -648,7 +867,7 @@ contains
   end subroutine plumeheight
 
 
-  subroutine plumedilr(dilut_time,dilstore,dilcoef,u10,DT,wplum_old,&
+  subroutine plumedilr(plume,dilut_time,dilstore,dilcoef,u10,DT,wplum_old,&
                        wplum,dilrate)
     !----------------------------------------------------------------------
     !     
@@ -667,6 +886,7 @@ contains
     !      ---------
     !
     !        input:
+    !          plume            type plume from namelist
     !          dilut_time       time passed in plume            [s]
     !          dilstore         time step of 0.5 s              [s]
     !          dilcoef          dilution coefficient B          [-]
@@ -695,6 +915,7 @@ contains
   implicit none
 
 ! input
+     type(plume_type), intent(in)               :: plume
      real( dp), intent(in)                      :: dilut_time    ![s]
      real( dp), intent(in)                      :: dilstore      ![s]
      real( dp), intent(in)                      :: dilcoef       ![-]
@@ -741,28 +962,28 @@ contains
             CASE (2)
                  ! Plume dispersion type 2
                  !
-                 if ((dil2_c > 0.).or.(dil2_c < -2.)) then
+                 if ((plume%dil2_c > 0.).or.(plume%dil2_c < -2.)) then
                     write(6,*) 'Type 2: dil2_c has to be between 0 and -2'
                     stop
                  endif
-                 dilut2_time = max(dilut_time+dil2_b,1.0_dp)
-                 dilrate     = min( ((-dil2_c)/dilut2_time),1.90_dp )     
+                 dilut2_time = max(dilut_time+plume%dil2_b,1.0_dp)
+                 dilrate     = min( ((-plume%dil2_c)/dilut2_time),1.90_dp )     
 
             CASE (3)
                  ! Plume dispersion type 3
                  ! zero dilution after tau_d is reached
                  !
-                 if ( tau_d .le. 0.0 ) then
+                 if ( plume%tau_d .le. 0.0 ) then
                     write(6,*) 'Type 3: tau_d has to be greater than 0'
                     stop
                  endif
-                 dilrate = log(DR_fin)/tau_d
-                 if (dilut_time.ge.tau_d)  dilrate = 0.0
+                 dilrate = log(plume%DR_fin)/plume%tau_d
+                 if (dilut_time.ge.plume%tau_d)  dilrate = 0.0
 
             CASE (4)
                  ! Plume dispersion type 4
                  !
-                 if (dilut_time.le.tend1*u10) then
+                 if (dilut_time.le.plume%tend1*u10) then
 
                  ! Stage 1: 
                  !   dDR/dt = ( -2a**2*u0**2*t +
@@ -771,37 +992,37 @@ contains
                  !   dilrate = dDR/dt / DR**2
                  !
                    dilt2   = 0.0
-                   s0      = pi*hmix_st**2
-                   ddrdt   = ( -2.0*alpha**2 *u0**2 *dilstore         + &
-                             2.0*sigw* (sqrt(s0)+sigw*dilstore) ) / s0
+                   s0      = pi*plume%hmix_st**2
+                   ddrdt   = ( -2.0*alpha**2 *plume%u0**2 *dilstore         + &
+                             2.0*plume%sigw* (sqrt(s0)+plume%sigw*dilstore) ) / s0
                    DR      = 1.0 + ddrdt*dilstore
                    dilrate = ddrdt / DR**2
 
-                 else if ((dilut_time.gt.tend1*u10).and.   &
-                          (dilut_time.le.tbeg2*u10)) then
+                 else if ((dilut_time.gt.plume%tend1*u10).and.   &
+                          (dilut_time.le.plume%tbeg2*u10)) then
 
                  ! no change over "tram tracks"
-                   dilt2 = tend1
-                   s0    = pi*hmix_st**2
-                   ddrdt = ( -2.0*alpha**2 *u0**2 *dilt2                + &
-                             2.0*sigw* (sqrt(s0)+sigw*dilt2) ) / s0
+                   dilt2 = plume%tend1
+                   s0    = pi*plume%hmix_st**2
+                   ddrdt = ( -2.0*alpha**2 *plume%u0**2 *dilt2                + &
+                             2.0*plume%sigw* (sqrt(s0)+plume%sigw*dilt2) ) / s0
                    DR    = 1.0 + ddrdt*dilt2
                    dilrate = ddrdt / DR**2
 
-                 else if ((dilut_time.gt.tbeg2*u10).and.    &
-                          (dilut_time.le.tend2*u10)) then
+                 else if ((dilut_time.gt.plume%tbeg2*u10).and.    &
+                          (dilut_time.le.plume%tend2*u10)) then
 
-                   dilt2 = dilstore - (tbeg2-tend1)*u10
-                   s0    = pi*hmix_st**2
-                   ddrdt = ( -2.0*alpha**2 *u0**2 *dilt2                + &
-                             2.0*sigw* (sqrt(s0)+sigw*dilt2) ) / s0
+                   dilt2 = dilstore - (plume%tbeg2-plume%tend1)*u10
+                   s0    = pi*plume%hmix_st**2
+                   ddrdt = ( -2.0*alpha**2 * plume%u0**2 *dilt2               + &
+                             2.0*plume%sigw* (sqrt(s0)+plume%sigw*dilt2) ) / s0
                    DR    = 1.0 + ddrdt*dilt2
                    dilrate = ddrdt / DR**2
 
-                 else if (dilut_time.gt.tend2*u10) then
+                 else if (dilut_time.gt.plume%tend2*u10) then
 
                    ddrdt   = 1.0
-                   dilt2   = dilstore + 1.0 - tend2*u10 -0.3
+                   dilt2   = dilstore + 1.0 - plume%tend2*u10 -0.3
                  ! Stage 2:
                  ! Plume dispersion type 1
                  !
@@ -854,7 +1075,7 @@ contains
   end subroutine plumedilr
 
 
-  subroutine plumetemp(DT,TAIR,dilut_time,t_old,zplum,zplum_old,t_new)
+  subroutine plumetemp(plume,DT,TAIR,dilut_time,t_old,zplum,zplum_old,t_new)
     !----------------------------------------------------------------------
     !     
     !  Calculate the in-plume temperature
@@ -873,6 +1094,7 @@ contains
     !      ---------
     !
     !        input:
+    !          plume            type plume from namelist
     !          DT               model time step                 [s]
     !          TAIR             ambient air temperature         [K]
     !          dilut_time       time passed in plume            [s]
@@ -900,6 +1122,7 @@ contains
   implicit none
 
 ! input
+     type(plume_type), intent(in)               :: plume
      real( dp), intent(in)                      :: DT          ![s]
      real( dp), intent(in)                      :: TAIR        ![K]
      real( dp), intent(in)                      :: dilut_time  ![s]
@@ -928,15 +1151,15 @@ contains
             CASE (2)
                  ! T_new = dil2_d*(dt + dil2_e)**dil2_f + T_air
                  !
-                 dilut2_time=max(dilut_time+dil2_e,1.0_dp)
-                 t_new = TAIR + dil2_d*(dilut2_time)**dil2_f
+                 dilut2_time=max(dilut_time+plume%dil2_e,1.0_dp)
+                 t_new = TAIR + plume%dil2_d*(dilut2_time)**plume%dil2_f
                  t_new=max(t_new,TAIR)
 
             CASE (3)
                  ! T_new = T_old-( (T_old-T_fin) * (1/tau_c) *DT )
                  !
-                 t_new = t_old - ( (t_old-T_fin)*(1/tau_c) * DT )
-                 t_new=max(t_new,T_fin)
+                 t_new = t_old - ( (t_old-plume%T_fin)*(1/plume%tau_c) * DT )
+                 t_new=max(t_new,plume%T_fin)
 
             CASE (4)
                  ! same as type 1
@@ -972,7 +1195,7 @@ contains
   end subroutine plumetemp
 
 
-  subroutine initplume( u10,t_old,wplum,zplum ) 
+  subroutine initplume( plume,u10,t_old,wplum,zplum ) 
     !----------------------------------------------------------------------
     !     
     !  Calculate the initial plume dispersion
@@ -992,6 +1215,7 @@ contains
     !      ---------
     !
     !        input:
+    !          plume            type plume from namelist
     !          u10              wind speed                      [s]
     !
     !        output:
@@ -1016,6 +1240,7 @@ contains
   implicit none
 
 ! input
+     type(plume_type), intent(in)               :: plume
      real( dp), intent(in)                      :: u10         ![m/s]
 
 ! output
@@ -1038,32 +1263,32 @@ contains
 
 
 ! Plume initial temperature from dispers.dat
-        t_old=ta_st
+        t_old=plume%ta_st
 
         SELECT CASE (IDIL)
             CASE (1)
                  ! Plume dispersion type 1
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum=zplum
 
             CASE (2)
                  ! Plume dispersion type 2
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum=zplum
 
             CASE (3)
                  ! Plume dispersion type 3
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum=zplum
 
             CASE (4)
                  ! Plume dispersion type 4
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum=zplum
 
             CASE (5)
                  ! Plume dispersion type 5
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum= 1000. * APARpld *                            &    
                        EXP(BPARpld*LOG(((DTdisp)*u10+TILL)/1000.))
 
@@ -1074,7 +1299,7 @@ contains
 
             CASE (7)
                  ! Plume dispersion type 7
-                 zplum=hmix_st
+                 zplum=plume%hmix_st
                  wplum= 1000. * APARpld *                            &    
                        EXP(BPARpld*LOG(((DTdisp)*u10+TILL)/1000.))
 

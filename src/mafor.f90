@@ -2,7 +2,7 @@
 !              Aerosol FORmation model MAFOR>
 !*****************************************************************************! 
 !* 
-!*    Copyright (C) 2011-2024  Matthias Steffen Karl
+!*    Copyright (C) 2011-2026  Matthias Steffen Karl
 !*
 !*    Contact Information:
 !*          Dr. Matthias Karl
@@ -231,7 +231,7 @@
 !            - v1.9.6: Mainz Organic Mechanism [Sander et al., 2019]
 !                      incl. iodine reactions   (Tr-(G||Aa)-I)
 !            - v1.9.7: incl. chlorine reactions (Tr-(G||Aa)-I-Cl)
-!            - v2.1.7: updated DMS chemistry and
+!            - v2.2.: updated DMS chemistry and
 !                      complete update of iodine chemistry             
 !
 !         SOA is represented by 9 SOA precursors in the gas phase:
@@ -291,102 +291,114 @@
 !         Author: Matthias Steffen Karl (MSK)
 !
 !
-!  CHANGES COMPARED TO VERSION 2.1.0
+!  CHANGES COMPARED TO VERSION 2.2.0
 !
 !       dd.mm.yyyy  name   routine and one-line description of modification
-!       -------------------------------------------------------------------
-!       25.12.2022  MSK    gde_deposition: renamed wetscav to wetscavbulk
-!       25.12.2022  MSK    gde_deposition: new routine wetscavsize
-!       25.12.2022  MSK    gde_aerosol_solver: wetdep(M,I) replaces wetdep
-!       26.12.2022  MSK    gde_coagulation: coagulation_coeff public
-!       26.12.2022  MSK    gde_aerosol_solver: kcoag(M,O,I,J)
-!       26.12.2022  MSK    gde_aerosol_solver: call coagulation_coeff
-!       26.12.2022  MSK    gde_aerosol_solver: cloud interstitial scavenging
-!       26.12.2022  MSK    restore coarse MORGCTOT after cloud
-!       01.01.2023  MSK    call to cloud_driver
-!       02.01.2023  MSK    call to ccnactivation (incloud=2, RH>rhactiv)
-!       03.01.2023  MSK    dissolve aerosol comp. (incloud=2, RH>rhactiv)
-!       07.01.2023  MSK    gde_addwater: water mass (incloud=2, RH>rhactiv)
-!       08.01.2023  MSK    min and max supersaturation
-!       14.01.2023  MSK    aqueous phase chemistry in AI, AS and CS modes
-!       14.01.2023  MSK    adjust aq. phases to APN=3 (1=AI, 2=AS, 3=CS)
-!       14.01.2023  MSK    call water_content with ind_H2O_a in 3 aq. modes
-!       16.01.2023  MSK    set RH=0.98 at beginning of cloud (incloud=2)
-!       20.01.2023  MSK    aerosol operators off when incloud=2 & RH>rhactiv
-!       20.01.2023  MSK    in call wetdiameter deleted incloud
-!       20.01.2023  MSK    gde_addwater: no incloud in wetdiameter
-!       21.01.2023  MSK    call to cloud_solver
-!       26.01.2023  MSK    lwcpart=1.e-10 limit for partitioning to droplets
-!       26.01.2023  MSK    gde_input: SVI,MSA,NO3,DMA,NH4,OXA,SUC,SSA
-!       26.01.2023  MSK    gde_condensation: new condensation_incloud
-!       27.01.2023  MSK    new c(ind_IO3m_a) in caqold
-!       28.01.2023  MSK    wascloud1 (incloud=1), wascloud2 (incloud=2)
-!       29.01.2023  MSK    gde_addwater: not set MASS to zero (incloud=1)
-!       29.01.2023  MSK    gde_aerosol_solver: KOND(CS)=0     (incloud=1)
-!       11.02.2023  MSK    gde_coagulation: new collection_kernel
-!       18.02.2023  MSK    gde_coagulation: coagulation with B as input
-!       19.02.2023  MSK    IAG in call to cloud_driver
-!       19.02.2023  MSK    gde_init_aqchem: read inaqchem.dat in 3 aq. modes
-!       26.02.2023  MSK    set dissolve true after cloud
-!       04.03.2023  MSK    fixed pH calculation
-!       04.03.2023  MSK    no LWC in AI and AS mode if incloud=1
-!       05.03.2023  MSK    set xaer=0 after chemistry_solver at cloud end
-!       05.03.2023  MSK    set pH to very acidic after cloud
-!       05.03.2023  MSK    set k_exb=1.e16 after cloud
-!       03.04.2023  MSK    gde_aerosol_solver: wet scavenging if IWETD>=1
-!       07.04.2023  MSK    gde_deposition: settling with CC of Fitzgerald'98
-!       07.04.2023  MSK    gde_aerosol_solver: owf
-!       07.04.2023  MSK    gde_deposition: owf in depositpar
-!       07.04.2023  MSK    gde_deposition: znot=0.0005 (0.3<owf<1)
-!       13.05.2023  MSK    gde_condensation: soa5tot in condensloss
-!       13.05.2023  MSK    gde_condensation: brackets on mass fluxes NU mode
-!       30.05.2023  MSK    write concout.res with fc2='(1X,e10.4)'
-!       03.06.2023  MSK    gde_chem_gas: I2 emis if owf<0.3 in emis_drydep
-!       22.09.2023  MSK    set DPMIN to 1.5 nm for iodic acid nucleation
-!       22.09.2023  MSK    add DLOGDP in call to seasaltemis
-!       22.09.2023  MSK    seasalt emission: 0.43A_CHL,0.37A_SAL,0.20A_XXX
-!       22.09.2023  MSK    gde_init_aqchem: corrected error message
-!       22.09.2023  MSK    gde_seaflux: Salter et al.(2015) parametrization
-!       31.10.2023  MSK    xaer=0 if incloud=0
-!       31.10.2023  MSK    gde_addwater: xaer=0 in AI if N(AI)<20#/cm3
-!       31.10.2023  MSK    dissolve only if lwc(3).gt.lwcpart (incloud=2)
-!       31.10.2023  MSK    new flag warning (negative N before nucleation)
-!       19.11.2023  MSK    gde_aerosol_props: SALT&DUST in restoreCoarseMode
-!       19.11.2023  MSK    gde_addwater: correct NTOTCS from lwcm (incloud=1)
-!       11.02.2024  MSK    gde_seaflux: over sea-ice U-dep of Ovadnevaite2012
-!       02.03.2024  MSK    set DTIME=1.0 during ccnactivation
-!       03.10.2024  MSK    gde_nucleation: new routine neutral_ionm_iodine
-!       22.10.2024  MSK    hour_after_fog to stop particle emission at 10 hr
-!       22.10.2024  MSK    gde_input_data: MMAX=5, new mode NA=2
-!       22.10.2024  MSK    gde_init_gas: readorganic, gamma in 5 modes
-!       22.10.2024  MSK    gde_init_aero: readinaero, new DPMMIN(NA)
-!       22.10.2024  MSK    gde_aerosol_props: getTotalMass, casoa of 5 modes
-!       22.10.2024  MSK    gde_addwater: partlwc, aerosol mode=jb+2
-!       22.10.2024  MSK    gde_seaflux: include NA mode
-!       22.10.2024  MSK    adding NA mass concentrations to output
-!       03.11.2024  MSK    call water_content without GMD
-!       03.11.2024  MSK    call wetdiameter with temp
-!       05.11.2024  MSK    gde_condensation: bugfix for EVOCs A_OR3, A_OR6,
-!                          A_OR9 in apc_update_pmass
-!       18.11.2024  MSK    gde_coagulation: FIJK not >1.1 for l=imax
-!       18.11.2024  MSK    gde_coagulation: modification of J-loop (J1)
-!       18.11.2024  MSK    gde_condensation: new VPNEW limits for i=1
-!       18.11.2024  MSK    gde_addwater: wetdiameter, NA mode and curvature
-!       18.11.2024  MSK    gde_addwater: wetdiameter, uniform SWF
-! MESA start
-!       23.11.2024  MSK    gde_thermo_data: MMAX=5, new mode NA=2, AMAX=21,
-!                          QMAX=16, A_CHL=16, A_SAL=17, A_DUS=19
-!       26.11.2024  MSK    gde_condensation: nsv(a_nh4)=psnh4*0.995 (KPNCL)
-!       29.11.2024  MSK    gde_mosaic_therm: comment write in mesa_ptc
-!       28.11.2024  MSK    gde_condensation: psmin_nh3 =2.46e9
-!       30.11.2024  MSK    gde_thermo_data:  psmin_nh3 =2.46e9
-!       30.11.2024  MSK    gde_thermo_data:  psmax_hno3=2.46e15
-!       30.11.2024  MSK    gde_thermo_data:  psmax_hcl =2.46e14
-!       30.11.2024  MSK    gde_condensation: for high-N:  ccondnit*3.e-5
-!       30.11.2024  MSK    gde_condensation: for low-NH4: ccondnit*2.e-3
-!                                                         ccondchl*40.0
-!       30.11.2024  MSK    call MESA interface every 90 seconds
-! MESA end
+!       ----------------------------------------------------------------------
+!       08.01.2025  MSK    gde_aerosol_props: add contribution of next lower 
+!                          mode in initNumberMass and initBGNumberMass
+!       11.01.2025  MSK    gde_coagulation: collection_kernel, DIF in all bins
+!       17.01.2025  MSK    gde_coagulation: coagulation loss by collision
+!                          with particles from all size bins
+!       19.01.2025  MSK    gde_coagulation: in coagulation_coeff commented
+!                          DPAM(M,I) =max(DPAM(M,I), DPAC(M,I)) and
+!                          calculate AA with DPA(M,I)
+!       20.01.2025  MSK    gde_coagulation: no upper limit of FIJK, l=imax
+!       27.01.2025  MSK    incloud=2: with DTIME=2.0
+!       30.01.2025  MSK    gde_cloud_act: ccnactivation, slow evaporation if 
+!                          DPA<400 nm (dir=0). Evaporation if DPAW > critical 
+!                          diameter (dir=1)
+!       01.02.2025  MSK    gde_input_start: rhstart=0.985
+!       01.02.2025  MSK    aerosol water is fixed species in KPP, FIX(4:6)
+!       01.02.2025  MSK    gde_cloud_act: in solute_effect min number conc
+!                          nsolbin=nsolbin/max(N(M,I),nummin)
+!                          and for AS mode:
+!                          nsolbin=nsolbin*0.7
+!       02.02.2025  MSK    gde_cloud_act: cloud_solver, reduce settling rate 
+!                          of large particles
+!       30.03.2025  MSK    gde_condensation: nsv for HCl, NH3 from MESA
+!                          nsv(a_chl) = nsv(a_chl)*20.0
+!                          nsv(a_nh4) = svmc_min_nh3(m,i) if NVAP(A_CHL)>1.e16
+!       31.03.2025  MSK    gde_condensation: ammonium sulfate condensation
+!                          with ctnh4 < ctso4, aerosol neutralized by NH3
+!                          with ctnh4 > 0.6*ctso4
+!       20.04.2025  MSK    gde_input_data: MSSODTOT (Na+) and MSCHLTOT (Cl-)
+!       20.04.2025  MSK    gde_input_data: aqmax=10, CHL=9, SSA=10
+!       20.04.2025  MSK    gde_aerosol_props: ACHL=0.54*SALT, ASAL=0.46*SALT
+!       20.04.2025  MSK    gde_aerosol_props: get mass of MSSODTOT, MSCHLTOT
+!       20.04.2025  MSK    gde_aerosol_props: restore MSSODTOT and MSCHLTOT
+!       20.04.2025  MSK    gde_cloud_act: cloud_solver, caqdiff(CHL,zkc)
+!       21.04.2025  MSK    emission over ice with hour_after_fog<3600 s
+!       27.04.2025  MSK    new module gde_cloud_microphys
+!       29.04.2025  MSK    A_SAL is now only sodium
+!       29.04.2025  MSK    separate output of sodium and chloride
+!       29.04.2025  MSK    size distribution of all species in size_dism.res
+!       30.04.2025  MSK    all acid-base reactions on (xaeq=1.0) if IAQC==1
+!       02.05.2025  MSK    gde_cloud_microphys: mass and number change due
+!                          condensation only if DPA > 60 nm
+!       02.05.2025  MSK    gde_cloud_microphys: droplet-particle collection
+!                          and condensation if DPcrit < 4 um
+!       02.05.2025  MSK    read BSOV_FT (1.0E+07 mlc/cm^3) from organic.dat
+!       10.05.2025  MSK    output CSSULT in total_n.res
+!       15.05.2025  MSK    gde_chem_gas: HIO3 dry deposition
+!       25.05.2025  MSK    gde_nucleation: kinetic limit neutral_ionm_iodine
+!       07.11.2025  MSK    gde_cloud_microphys: collection_kernel KCOL
+!                          for particle-droplet collisions
+!                          KCOL(M,O,I,J)=4*pi*difs*VEP*RB
+!                          scaling for rs>20nm: 2.50e8*rs -4.00_dp
+!       25.11.2025  MSK    keep condensation flag in memory: ICONDAQ
+!       06.12.2026  MSK    switch off aq. phase reactions (xaer=0) if IAQC=0
+!       06.12.2026  MSK    gde_addwater: xaer only output from water_content
+!       26.01.2026  MSK    gde_aerosol_solver: revised GRTOT (nm/h)
+!       30.01.2026  MSK    corrected NEU1-NEU7 diameter ranges
+!       30.01.2026  MSK    corrected PNC1-PNC6 dilution
+!       30.01.2026  MSK    NEU1,NEU2 position 16,17 in total_n.res
+!       31.01.2026  MSK    DPMIN=1.5 nm general diameter of first bin
+!       31.01.2026  MSK    for INUCMEC=14 treat NVAP(A_IO3) as ind_OIO
+!       31.01.2026  MSK    gde_toolbox: new routine clustergrowth
+!       31.01.2026  MSK    gde_nucleation: clustergrowth in opt. 1-3,5,6,11
+!       01.02.2026  MSK    gde_nucleation: input ipr in opt. 7,11
+!       07.02.2026  MSK    gde_init_gas: fmsiao3 in organic.dat
+!       07.02.2026  MSK    gde_init_gas: fi2oi and fio3red in organic.dat
+!       07.02.2026  MSK    gde_init_gas: foiooh in organic.dat
+!       07.03.2026  MSK    gde_input_data: types for namelist
+!       07.03.2026  MSK    gde_plume: read_namelist replaces readdispers
+!       07.03.2026  MSK    gde_plume: type plume
+!       07.03.2026  MSK    gde_deposition: type depop
+!       07.03.2026  MSK    gde_aerosol_solver: type depop 
+!       07.03.2026  MSK    call to read_namelist replaces readdispers
+!       07.03.2026  MSK    type plume in call to plumedisp and initplume
+!       07.03.2026  MSK    type depop in call to aerosol_solver
+!       15.03.2026  MSK    call to read_namelist replaces readorganic
+!       15.03.2026  MSK    gde_init_gas: deleted function readorganic
+!       15.03.2026  MSK    type organ in call to aerosol_solver
+!       15.03.2026  MSK    gde_toolbox: ch2so4eq in clustergrowth
+!       20.03.2026  MSK    gde_condensation: add NA mode in SOA partitioning
+!       21.03.2026  MSK    if wascloud1 do not change xaer
+!       28.03.2026  MSK    gde_aerosol_props: DEN(OC) for ROOP in getDensity
+!       28.03.2026  MSK    gde_coagulation: option 6 with coag = 10.0e-15
+!       28.03.2026  MSK    gde_coagulation: ROOP is not input
+!       06.04.2026  MSK    gde_mosaic_therm: mulitply sigma_water by 1000
+!                          in calculate_kelvin_h2o()
+!       11.04.2026  MSK    gde_mosaic_therm: divide Na by MNa and Cl by MCl    
+!       11.04.2026  MSK    gde_mosaic_therm: water_a(ibin) = HYST(m,i)
+!                          in map_mafor_species()
+!       11.04.2026  MSK    gde_thermo_data: psmax_hcl = 8.00e15 
+!       12.04.2026  MSK    fill HYST with water content before first call
+!                          interface_mosaic and replace MASS(A_WAT) by HYST
+!                          from MESA if CONW==2 (except CS mode)
+!                          Note: if A_SAL (Na) is in AI-AS then no water
+!                          is produced in these modes in MESA
+!       12.04.2026  MSK    gde_condensation: for low-NH4: ccondnit*8.0e-3
+!                                                         ccondchl*3.0e-5
+!       12.04.2026  MSK    gde_condensation: for high-N:  ccondnit*6.5e-3
+!                                                         ccondchl*2.0e-3
+!       12.04.2026  MSK    gde_condensation: for low-NO3: ccondchl*1.0e-3
+!       30.03.2026  MSK    gde_condensation: for higcl, RH=85%
+!                          ccondnit*0.2, ccondchl*1, ccondnh4*1
+!       08.01.2025  MSK    gde_aerosol_props: add contribution of next lower 
+!                          mode in initNumberMass and initBGNumberMass only
+!                          if DPMAX > 1.e-6 m
 !
 !
 !****************************************************************************
@@ -404,7 +416,7 @@
       use messy_mecca_kpp_parameters, only : ind_O3,ind_NO,ind_NO2,ind_SO2
       use messy_mecca_kpp_parameters, only : ind_OH
       use messy_mecca_kpp_parameters, only : ind_H2SO4,ind_CH3SO3H,ind_HIO3
-      use messy_mecca_kpp_parameters, only : ind_IPN,ind_N2O5
+      use messy_mecca_kpp_parameters, only : ind_OIO,ind_IPN,ind_N2O5
       use messy_mecca_kpp_parameters, only : ind_ClNO3,ind_HNO3,ind_HCl
       use messy_mecca_kpp_parameters, only : ind_MEA,ind_MMA,ind_TMA
       use messy_mecca_kpp_parameters, only : ind_CH2NCH3,ind_AMP,ind_DMA
@@ -419,8 +431,14 @@
       use gde_constants,      only    : M_nit,MB,MAN,MAH,M_H2SO4
       use gde_constants,      only    : M_nh3,MH,MC,MO,MCl,M_hio3
       use gde_constants,      only    : M_oxal,M_succ,M_adip
-      use gde_constants,      only    : rho_H2O,MNa,R_gas
+      use gde_constants,      only    : rho_H2O,MNa,R_gas,MVAP,CONVM
+      use gde_constants,      only    : nucomin,massmin
+      use gde_constants,      only    : DENV
+      use gde_constants,      only    : DENSA,DENXX,DENNI,DENMS,DENDU,DENAM
+      use gde_constants,      only    : lwcpart,rhactiv,rhstart
+
       use gde_input_data
+
       use gde_toolbox,        only    : conch2o,acidps
       use gde_toolbox,        only    : satpress_alkane,molec2ug   
       use gde_transfer,       only    : transfer_coeff,aero_init_gasaq
@@ -428,15 +446,11 @@
       use gde_init_gas,       only    : readchem
       use gde_init_gas,       only    : readchamber
       use gde_init_gas,       only    : readmonit
-      use gde_init_gas,       only    : readorganic
       use gde_init_gas,       only    : fco, fcoj
       use gde_init_gas,       only    : IAM,IOZ,F_HONO,KP_NIT,K_DIL,CAMI
       use gde_init_gas,       only    : L_MEA, L_NO2, L_HNO3, L_O3
       use gde_init_gas,       only    : V_CHAM,S_CHAM,CWIN
-      use gde_init_gas,       only    : surf_org,surfin
-      use gde_init_gas,       only    : gamma_oc1_m,gamma_oc2_m,gamma_oc3_m
-      use gde_init_gas,       only    : gamma_oc4_m,gamma_oc5_m,gamma_oc6_m
-      use gde_init_gas,       only    : gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
+
       use gde_init_aqchem,    only    : readaqphase
       use gde_init_aero,      only    : readinaero
       use gde_init_aero,      only    : reademitpar
@@ -459,12 +473,12 @@
       use gde_aerosol_props,  only    : restoreCoarseMode
 
       use gde_plume,          only    : plumeDisp
-      use gde_plume,          only    : readdispers
+      use gde_plume,          only    : read_namelist
       use gde_plume,          only    : initplume
       use gde_plume,          only    : plumearea
-      use gde_plume,          only    : hmix_st,dst_st,hsta_st,ta_st
-      use gde_plume,          only    : BGH2O
-      use gde_plume,          only    : vupdra,sst,sal
+      use gde_plume,          only    : gamma_oc1_m,gamma_oc2_m,gamma_oc3_m
+      use gde_plume,          only    : gamma_oc4_m,gamma_oc5_m,gamma_oc6_m
+      use gde_plume,          only    : gamma_oc7_m,gamma_oc8_m,gamma_oc9_m
 
       use gde_seaflux,        only    : seasaltemis
       use gde_coagulation,    only    : coagulation_target
@@ -480,7 +494,7 @@
 ! cloud activation
       use gde_cloud_activation, only  : cloud_driver
       use gde_cloud_activation, only  : ccnactivation
-      use gde_cloud_activation, only  : cloud_solver
+      use gde_cloud_microphys,  only  : cloud_solver
           
      implicit none
 
@@ -573,14 +587,15 @@
      real( dp) :: dlwc
      integer   :: jb
      integer   :: snom7nno
+     integer   :: ICONDAQ
      logical   :: wascloud1=.false.
      logical   :: wascloud2=.false.
      logical   :: dissolve=.true.
      logical   :: partemis=.false.
      logical   :: warning=.false.
 ! End aqueous phase     
-          
-    
+
+
 !*************************************************************
 
 ! Integer and Char Variables
@@ -630,7 +645,6 @@
     press    = 101300.0  ! pressure          [Pa]
     RH       = 0.50      ! relative humidty  [rh frac]
     zmbl     = 1000.     ! mixing height     [m]
-    vupdra   = 0.2       ! updraft velocity  [m/s]
     supersat = -0.02     ! supersaturation   [-]
 
 ! GENERAL
@@ -650,24 +664,25 @@
     fco      = 1.        ! nitrate condensation
     fcoj     = 1.        ! nitrate condensation
     fkoh_mea = 1.        ! k(AMIN+OH) scaling
-   
-! ORGANIC VAPOURS
-    surfin   = 1         ! surface tension organics (input/function)
-    surf_org = 0.050     ! surface tension organics [kg/s^2]
-    VEN      = 0.6       ! FT entrainment velocity  [cm/s] 
-    BSOV_FT  = 2.0E+07   ! BSOV concentration in FT [mlc/m^3] 
-
+ 
 ! PLUME DISPERSION
-!  default and input values
+!  default initial and input values
 !  Pohjola et al. Atm. Environ., 37, 339-351,2003
+!    hmix_st  = 1.50      ! mixing height @ station  [m]
+!    dst_st   = 12.0      ! distance @ station       [m]
+!    hsta_st  = 10.0      ! stack height             [m]
+!    ta_st    = 400.0     ! temperature @ station    [K]
+!    BGH2O    = 1.E16     ! [molecules cm^-3]
+    plume = plume_type( 1.50,  12.0, 10.0, 400.0,        &
+!  plume type2
+                        0.00, -0.40, 5.00,  0.00, -0.80, &
+!  plume type3
+                        12.0, 300.0, 0.03,  0.12, 1.E16, &
+!  plume type4
+                       0.230, 0.290, 7.00,  13.0, 22.5 )
     dila     = 86.49     ! dispersion parameter A   [-]
     dilcoef  = 0.92332   ! dilution coefficient     [-]
     dilrate  = 0.0       ! dilution rate            [1/s]
-    hmix_st  = 1.50      ! mixing height @ station  [m]
-    dst_st   = 12.0      ! distance @ station       [m]
-    hsta_st  = 10.0      ! stack height             [m]
-    ta_st    = 400.0     ! temperature @ station    [K]
-    BGH2O    = 1.E16     ! [molecules cm^-3]
     emisratp = 1.0       ! emission ratio line1/line2
 !  plume height, width and temperature    
     temp_old = temp
@@ -676,6 +691,43 @@
     wplm     = wplm_old
     dilut_time=0.        ! dilution time counter [s]
     dilstore = 0.
+
+!   DEPOSITION
+    depop = depo_type(1.17, 0.001, 1.70, 51.8, 0.30, 0.003, 0.20)
+
+!   CLOUD
+    cloud2 = cloud_type(0.00)   ! updraft velocity  [m/s]
+
+!   OCEAN
+    ocean = ocean_type(275.0, 31.0 )
+
+    VEN      = 0.6        ! FT entrainment velocity  [cm/s]
+
+!   ORGANIC
+! default initial and input values
+!    surfin   = 1         ! surface tension organics (input/function)
+!    surf_org = 0.050     ! surface tension organics [kg/s^2]
+!    BSOV_FT  = 1.0E+07   ! BSOV concentration in FT [mlc/cm^3]
+    organic = organ_type(1570.0 , 1  , 0.050, 1200.0,  &
+                         13.5,    1.7, 1.0E+07,        &
+                         [4.0,  4.0, 138.0,   2.1],    &  !BSOV
+                         [6.0,  4.0, 138.0,  0.03],    &  !BLOV
+                         [20.0, 7.0, 138.0,0.0001],    &  !BELV
+                         [7.0,  2.0, 77.0,    1.0],    &  !ASOV
+                         [7.0,  2.0, 77.0,   0.01],    &  !ALOV
+                         [14.0, 8.0, 100.0,0.0001],    &  !AELV
+                         [21.0, 0.0, 108.0, 100.0],    &  !PIOV
+                         [26.0, 0.0, 135.0,   0.6],    &  !PSOV
+                         [34.0, 0.0, 177.0,0.0002],    &  !PELV
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc1)
+                         [1.00,1.00,1.00,1.00,1.00],   &  !f(oc2)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc3)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc4)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc5)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc6)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc7)
+                         [0.00,0.00,0.00,0.00,0.00],   &  !f(oc8)
+                         [0.00,0.00,0.00,0.00,0.00] )     !f(oc9)
 
 !   PN parameterization
     vd1      = 0.00528    ! [m/s]
@@ -698,11 +750,12 @@
 ! NUCLEATION
     natot    = 2.        ! number of molec in crit. cluster
     fnuc     = 1.        ! scaling factor of nucleation constant
+    nuclt = nuclt_type(2.00)   ! ion pairs cm^-3s^-1
 
 !*************************************************************
 !*************************************************************
 
-      write(6,*) 'Multicomponent Aerosol FORmation model MAFOR v2.2.0'
+      write(6,*) 'Multicomponent Aerosol FORmation model MAFOR v2.3.0'
   
 ! DRIVER
    !!! Read General input for simulation
@@ -755,7 +808,9 @@
    !!!  Read sensitivities file
    !!!  Unit 9 is reserved for this
    !!!  Specify, which aerosol processes are considered
+   !!!  Keep ICOND in memory
       call readsens()
+      ICONDAQ = ICOND
 
 ! SIMULATION TIME STEP
       DTIME = 5.0_dp
@@ -820,12 +875,15 @@
 
 ! SIMULATION INPUT
 
-    ! INPUT CONDENSING ORGANIC VAPOURS
-     !!! returns density of organic and soot particles
-      call readorganic(DEN(OC),DEN(EC),M_oc,nmo,foc,hvap,csat0)
+! INPUT CONDENSING ORGANIC VAPOURS AND
+! INPUT DISPERSION AND DEPOSITION DATA FROM NAMELIST
+! gives density of organic and soot particles
+      call read_namelist('namelist.nml', plume,depop,cloud2,ocean,nuclt,organic, &
+                                         DEN(OC),M_oc,nmo,foc,hvap,csat0)
 
+
+! INPUT CHAMBER AND MONITOR DATA
       if (ICHAM==1) then
-    ! INPUT CHAMBER AND MONITOR DATA
         call readchamber()
         call readmonit(cco3,cno,cno2,cipn,temp,jno2m)
         ! convert ppb to molec cm-3
@@ -833,21 +891,9 @@
         c(ind_NO)  = cno* (cair*1.E-9)
         c(ind_NO2) = cno2*(cair*1.E-9)
         c(ind_IPN) = cipn*(cair*1.E-9)
-      else    
-    ! INPUT DISPERSION AND DEPOSITION DATA
-        call readdispers()
-!PLUME
-        if (IDIL>0) then
-        ! initial plume height, width and temperature
-          call initplume(u10,temp_old,wplm,zmbl)
-        ! call calculate plume area (for output in plume.res)
-          call plumearea(wplm,zmbl,areapl) 
-          wplm_old=wplm
-          zmbl_old=zmbl
-        endif
-! PLUME
-    ! INPUT PRESCRIBED CONCENTRATIONS
-        ! from ingeod.dat
+      else
+! INPUT PRESCRIBED CONCENTRATIONS
+! from ingeod.dat
         if (IORG==1) then
           c(ind_BSOV)=camidoh   ! prescribe "COV"
         endif
@@ -856,6 +902,16 @@
           c(ind_NH3)=cnh3
         endif
         if (IOZO .EQ. 1) c(ind_O3)=co3
+      endif
+
+!PLUME
+      if (IDIL>0) then
+        ! initial plume height, width and temperature
+          call initplume(plume,u10,temp_old,wplm,zmbl)
+        ! call calculate plume area (for output in plume.res)
+          call plumearea(wplm,zmbl,areapl) 
+          wplm_old=wplm
+          zmbl_old=zmbl
       endif
 
   
@@ -946,13 +1002,13 @@
 
     ! particle density [kg/m3]; later calculate for mixture
     DEN(SU)=DENV
-    !DEN(OC) from readorganic
+    !DEN(OC) from namelist
     DEN(AM)=DENAM
     DEN(NI)=DENNI
     DEN(MS)=DENMS
     DEN(SA)=DENSA
     DEN(XX)=DENXX   !PBA
-    !DEN(EC) from readorganic
+    DEN(EC)=organic%DENECI
     DEN(DU)=DENDU
     DEN(WA)=RHOH2O
 
@@ -962,7 +1018,8 @@
     N(NU:CS,1:IMAX)   = 0._dp      ! number conc. in bin     [partic/m^3]
     VPT(NU:CS,1:IMAX) = 0._dp      ! particle volume in bin  [m^3]
     MH2OTOT(NU:CS)    = 0._dp      ! H2O particle conc       [ng/m^3]
-    DPMIN = 1.00E-9_dp             ! min. diam. of the size distribution [m]
+    !DPMIN = 1.00E-9_dp            ! min. diam. of the size distribution [m]
+    DPMIN = 1.50E-9_dp             ! first bin for nucleated particles
     VVAP=MVAP/DENV                 ! vapor molecule volume [m^3]
     GRTOT=0._dp                    ! growth rate
     CSORGT=0._dp                   ! condensation sink organic [1/s]
@@ -1000,10 +1057,6 @@
                 ((1._dp/298._dp)-(1._dp/temp)))
     enddo
 
-! Set lower DP to 1.5 nm for dilution type 3
-! and iodic acid nucleation
-    if (IDIL==3)     DPMIN = 1.50E-9_dp
-    if ((INUC==1).and.((INUCMEC==14).or.(INUCMEC==15))) DPMIN = 1.50E-9_dp
 
 ! total mass conc. in each mode      
     do M=NU,CS
@@ -1032,7 +1085,8 @@
    !!! from log-normal mass distribution
    !!! thus GMD is geometric-mean mass diameter!!!
 
-    CALL initNumberMass(IMAX,DPA,DLINDP,VPT,DEN,                    &
+    CALL initNumberMass(IMAX,DPA,DLINDP,VPT,DEN,DPMAX,              &
+                            organic%rp0,organic%Dfrac,              &
                             MSULFTOT, MMSAPTOT, MNITRTOT, MAMMOTOT, &
                             MSALTTOT, MECBCTOT, MDUSTTOT, MXXXXTOT, & 
                             MORGCTOT, MASS, N)
@@ -1059,7 +1113,7 @@
 ! Background aerosol
     IF (IDIL>0) THEN
 
-          call initBGNumberMass(IMAX,DPA,DLINDP,VPT,DEN,            &
+          call initBGNumberMass(IMAX,DPA,DLINDP,VPT,DEN,DPMAX,     &
                                 BGMCTOT, BGMASS, BGN)
 
           do M=NU,CS
@@ -1133,7 +1187,6 @@
     lwc(:)=0._dp
     dmwdt(:,:)=0._dp
 
-
     CALL water_content(incloud,firstloop,IMAX,RH,lwcm,MASS,N,     &
              dmwdt,DPA,SIG,DLINDP,VPT,DPAW,MH2OTOT,NTOT(CS),  &
              lwc,c(ind_H2O_a(1)),c(ind_H2O_a(2)),c(ind_H2O_a(3)), &
@@ -1145,7 +1198,8 @@
 ! Total mode masses in ng/m^3
     CALL getTotalMass(IMAX,MASS,MPT,MPTW,                         &
                       MTOT,MTOTW,MSULFTOT,MMSAPTOT,MIODATOT,      &
-                      MNITRTOT,MAMMOTOT,MSALTTOT,MECBCTOT,        &
+                      MNITRTOT,MAMMOTOT,MSSODTOT,MSCHLTOT,        &
+                      MECBCTOT,                                   &
                       MDUSTTOT,MXXXXTOT,MORGCTOT,MORG1TOT,        &
                       MORG2TOT,MORG3TOT,MORG4TOT,MORG5TOT,        &
                       MORG6TOT,MORG7TOT,MORG8TOT,MORG9TOT,        &
@@ -1179,7 +1233,8 @@
 ! AVERAGE DENSITY
 ! density in kg/m^3
 
-      call getDensity(IMAX,temp,DEN(EC),DPA,MASS,MPT,MPTW,ROOP,ROOPW)
+      call getDensity(IMAX,temp,DEN(EC),DEN(OC),organic%rp0,organic%Dfrac, &
+                      DPA,MASS,MPT,MPTW,ROOP,ROOPW)
 
 ! COAGULATION COEFFICIENTS
       if (ICOAG .ge. 1) then
@@ -1190,9 +1245,11 @@
 ! NUCLEATION
     IF (INUC .EQ. 1) CALL nucleationratio(DPA(NU,1),VVAP,NNUC)
     JNUC=0._dp
+
+    ! NEU1: 10-25 nm, NEU2: 25-100 nm, NEU3: 25-50 nm, NEU4: 50-75 nm
+    ! NEU5: 75 nm - 1 um, NEU6: 1-2 um, NEU7: > 2 um
     N3=0._dp
-    NEU1=NTOT(NU)
-    ! NEU2: 25-100m particles
+    NEU1=0._dp
     NEU2=0._dp
     NEU3=0._dp
     NEU4=0._dp
@@ -1200,33 +1257,33 @@
     NEU6=0._dp
     NEU7=0._dp    
     do I=1,IMAX
-      if (DPA(NU,I).GT.3.E-9_dp) N3=N3+N(NU,I)
-      if (DPA(NA,I).LT.25.E-9_dp) NEU1=NEU1+N(NA,I)
+      if (DPA(NU,I).GE.3.E-9_dp) N3=N3+N(NU,I)
+      if (DPA(NU,I).GE.10.E-9_dp) NEU1=NEU1+N(NU,I)
+      if ((DPA(NA,I).GE.10.E-9_dp).and.(DPA(NA,I).LT.25.E-9_dp)) NEU1=NEU1+N(NA,I)
       if (DPA(AI,I).LT.25.E-9_dp) NEU1=NEU1+N(AI,I)
       if (DPA(NA,I).GE.25.E-9_dp) NEU2=NEU2+N(NA,I)
       if (DPA(AI,I).GE.25.E-9_dp) NEU2=NEU2+N(AI,I)
       if (DPA(AS,I).LT.1.E-7_dp)  NEU2=NEU2+N(AS,I)
-      if ((DPA(NA,I).GE.24.E-9_dp).and.(DPA(NA,I).LT.50.E-9_dp)) NEU3=NEU3+N(NA,I)
-      if ((DPA(AI,I).GE.24.E-9_dp).and.(DPA(AI,I).LT.50.E-9_dp)) NEU3=NEU3+N(AI,I)
-      if ((DPA(AS,I).GE.45.E-9_dp).and.(DPA(AS,I).LT.50.E-9_dp)) NEU3=NEU3+N(AS,I)
+      if ((DPA(NA,I).GE.25.E-9_dp).and.(DPA(NA,I).LT.50.E-9_dp)) NEU3=NEU3+N(NA,I)
+      if ((DPA(AI,I).GE.25.E-9_dp).and.(DPA(AI,I).LT.50.E-9_dp)) NEU3=NEU3+N(AI,I)
+      if ((DPA(AS,I).GE.25.E-9_dp).and.(DPA(AS,I).LT.50.E-9_dp)) NEU3=NEU3+N(AS,I)
       if ((DPA(AI,I).GE.50.E-9_dp).and.(DPA(AI,I).LT.75.E-9_dp)) NEU4=NEU4+N(AI,I)
       if ((DPA(AS,I).GE.50.E-9_dp).and.(DPA(AS,I).LT.75.E-9_dp)) NEU4=NEU4+N(AS,I)
       if (DPA(AI,I).GE.75.E-9_dp) NEU5=NEU5+N(AI,I)
       if (DPA(AS,I).GE.75.E-9_dp) NEU5=NEU5+N(AS,I)
-      if (DPA(CS,I).LT.2.E-7_dp)  NEU6=NEU6+N(CS,I)
-      if (DPA(CS,I).GE.2.E-7_dp)  NEU7=NEU7+N(CS,I)
+      if (DPA(CS,I).LT.1.E-6_dp)  NEU5=NEU5+N(CS,I)
+      if ((DPA(CS,I).GE.1.0E-6_dp).and.(DPA(CS,I).LT.2.0E-6_dp)) NEU6=NEU6+N(CS,I)
+      if (DPA(CS,I).GE.2.E-6_dp)  NEU7=NEU7+N(CS,I)
     end do
 
 ! PN PARAMETERIZATION
     PNC1 = NEU1 - NTOT(NU)
-    !PNC2 = NEU2             !PNC1:3
-    !PNC3 = NTOT(CS)         !PNC1:3
     PNC2 = NEU3
     PNC3 = NEU4
     PNC4 = NEU5
     PNC5 = NEU6
     PNC6 = NEU7            
-    zmblm=sqrt((hmix_st)**2+(dila*(1800.*u10*1.e-3)**dilcoef)**2)
+    zmblm=sqrt((plume%hmix_st)**2+(dila*(1800.*u10*1.e-3)**dilcoef)**2)
 
 !*************************************************************
 !*************************************************************
@@ -1248,7 +1305,7 @@
 
     !!! default: no aqueous phase reactions
     xaer(:)=0.0
-    
+
     !!! default: no partitioning gas/aq
     !!! switch 1/0 for H2SO4 and MSA gas/aq equilibrium
     !!! switch 1/0 for SO2, DMS and DMSO heterogeneous uptake
@@ -1277,7 +1334,9 @@
 
     !!! aqueous phase chemistry on
     IF (IAQC.EQ.1) THEN
-      xaer(:)  = 1.0
+      xaer(:)  = 1.0  ! all reactions on
+    !!! acid-base equilibria MSA, MSIA, amines 
+      xaeq(:)  = 1.0
       ya_soan1 = 0.0
       ya_soan2 = 0.0 
       ya_soan5 = 0.0
@@ -1335,8 +1394,8 @@
 
     !!! aerosol water is a fixed species in KPP
     FIX(4) = c(ind_H2O_a(1))
-    !FIX(5) = c(ind_H2O_a(2))
-    !FIX(6) = c(ind_H2O_a(3))
+    FIX(5) = c(ind_H2O_a(2))
+    FIX(6) = c(ind_H2O_a(3))
 
     !!! initialize c(:) for aqueous phase
     !!! read Initial aqueous phase concentrations
@@ -1360,12 +1419,29 @@
     NVAP(A_NH4)=c(ind_NH3) *1.e6_dp
     NVAP(A_NIT)=c(ind_HNO3)*1.e6_dp
     NVAP(A_CHL)=c(ind_HCl) *1.e6_dp
+! fill HYST with water content
+    do M=NU,CS
+       do I=1,IMAX
+         HYST(M,I)=MASS(M,I,A_WAT)/CONVM
+       end do
+    end do
     call interface_mosaic( IMAX,temp,press,RH, alphanit,  &
                 fcoj,mass,nvap,mpt,dpaw,n,hyst,              &    
                 henry_eff_hno3,henry_eff_hcl,henry_eff_nh3,  &
                 svmc_min_hno3,svmc_min_hcl,svmc_min_nh3,     &
                 cioncharge,kh_nh3,flag_dissolution,          &
                 Keq_nh4no3_0,Keq_nh4cl_0)
+    if (ICONW.eq.2) then
+! keep a_wat of CS mode
+      do M=NU,AS
+        MH2OTOT(M) = 0._dp 
+        do I=1,IMAX
+          MASS(M,I,A_WAT) = HYST(m,i) * CONVM
+          MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)
+         ! print *,'wat',M,I,MASS(M,I,A_WAT)
+        end do
+      end do
+    endif
 !MESA end
 
 !CCN start
@@ -1397,8 +1473,9 @@
     !fa="("//trim(adjustl(fc1))//fc3//")"
         
     ! write first time step (t=0)
-    write(13,'(30e17.6)') model_time,N3,NTOT(NU),NTOT(NA),NTOT(AI),NTOT(AS),NTOT(CS), &
-            NEU1,NEU2,DNVAPC,COAGS,CSORGT,GRTOT,JNUC,NEU3,NEU4,NEU5,NEU6,NEU7,  &
+    write(13,'(31e17.6)') model_time,N3,NTOT(NU),NTOT(NA),NTOT(AI),NTOT(AS),NTOT(CS), &
+            DNVAPC,COAGS,CSSULT,CSORGT,GRTOT,JNUC,                              &
+            NEU1,NEU2,NEU3,NEU4,NEU5,NEU6,NEU7,                                 &
             PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,                                      &
             supersat,Nfa,Mfa,DPcrit,temp
     !write(16,fa) 'time',(chem_name(jl),jl=1,nspec),'lwc1','lwc2','lwc3','lwc4','jr_no2'        
@@ -1415,7 +1492,6 @@
                  (LOGDIS(AI,I), I=1,IMAX),(LOGDIS(AS,I), I=1,IMAX),(LOGDIS(CS,I), I=1,IMAX)
     write(15,fb) model_time,(MLOGDIS(NU,I),I=1,IMAX),(MLOGDIS(NA,I), I=1,IMAX), &
                  (MLOGDIS(AI,I), I=1,IMAX),(MLOGDIS(AS,I), I=1,IMAX),(MLOGDIS(CS,I), I=1,IMAX)
-    if ((IDIL==3).or.(IDIL==4)) then
         do K=1,AMAX        
             write(15,fb) model_time,((MASS(NU,I,K)/DLOGDP(NU,I)),I=1,IMAX),   &
                 ((MASS(NA,I,K)/DLOGDP(NA,I)),I=1,IMAX),                       &
@@ -1423,10 +1499,9 @@
                 ((MASS(AS,I,K)/DLOGDP(AS,I)),I=1,IMAX),                       &
                 ((MASS(CS,I,K)/DLOGDP(CS,I)),I=1,IMAX) 
         end do              
-    endif        
     write(18,fb) model_time, (DPAW(NU,I), I=1,IMAX),(DPAW(NA,I), I=1,IMAX), &
                  (DPAW(AI,I), I=1,IMAX),(DPAW(AS,I), I=1,IMAX),(DPAW(CS,I), I=1,IMAX)
-    write(17,'(56e12.4)') model_time,                                 &
+    write(17,'(61e12.4)') model_time,                                 &
                MSULFTOT(NU),MSULFTOT(NA),MSULFTOT(AI),MSULFTOT(AS),MSULFTOT(CS), &
                MMSAPTOT(NU),MMSAPTOT(NA),MMSAPTOT(AI),MMSAPTOT(AS),MMSAPTOT(CS), &
                MIODATOT(NU),MIODATOT(NA),MIODATOT(AI),MIODATOT(AS),MIODATOT(CS), &
@@ -1436,7 +1511,8 @@
                MNITRTOT(NU),MNITRTOT(NA),MNITRTOT(AI),MNITRTOT(AS),MNITRTOT(CS), &
                MECBCTOT(NU),MECBCTOT(NA),MECBCTOT(AI),MECBCTOT(AS),MECBCTOT(CS), &
                MDUSTTOT(NU),MDUSTTOT(NA),MDUSTTOT(AI),MDUSTTOT(AS),MDUSTTOT(CS), &
-               MSALTTOT(NU),MSALTTOT(NA),MSALTTOT(AI),MSALTTOT(AS),MSALTTOT(CS), &
+               MSSODTOT(NU),MSSODTOT(NA),MSSODTOT(AI),MSSODTOT(AS),MSSODTOT(CS), &
+               MSCHLTOT(NU),MSCHLTOT(NA),MSCHLTOT(AI),MSCHLTOT(AS),MSCHLTOT(CS), &               
                MH2OTOT(NU), MH2OTOT(NA), MH2OTOT(AI), MH2OTOT(AS), MH2OTOT(CS)
 ! soa component output
     write(11,'(28e17.6)') model_time , (csate(S), S=1,NSOA),          &
@@ -1464,7 +1540,7 @@
     ! dilution time [s] between emission point and station
     ! dilution calculation starts 1s after emission point
     if (IDIL>0) then
-      dilut_time=max((dst_st/u10),1.0_dp)
+      dilut_time=max((plume%dst_st/u10),1.0_dp)
       if ((IDIL==3).or.(IDIL==4))  dilut_time=0.0+DTIME
     else
       dilut_time=0.0
@@ -1503,19 +1579,6 @@
        CTSO4    = 0._dp
        GRTOT    = 0._dp
 
-!MESA start
-    if (ICONW.eq.2) then
-      do M=NU,CS
-       do I=1,IMAX
-         HYST(m,i)      = 0._dp
-         do q=1,qmax
-           CCOND(m,i,q) = 0._dp
-         end do
-       end do
-      end do
-    endif
-!MESA end
-       
 ! New meteo input every hour
 ! use: lat_deg,lon_deg,temp,press,RH,zmbl
       IF (hour_time .GT. 3600.1) THEN
@@ -1549,8 +1612,8 @@
           dilstore = dilut_time
         endif
 
-        call plumeDisp(DTIME,TAIR,temp_old,zmbl_old,wplm_old,     & 
-                       u10,dilut_time,dilstore,dila,dilcoef,      &
+        call plumeDisp(plume,DTIME,TAIR,temp_old,zmbl_old,wplm_old,  & 
+                       u10,dilut_time,dilstore,dila,dilcoef,         &
                        zmbl,wplm,temp,dilrate,emisratp,  c    )
 
  ! Plume height not > BL height
@@ -1600,7 +1663,8 @@
 ! Particle emission from sea surface
 ! emissions rates [particles/(m2*s)]
       if ((IPEMI.EQ.2).or.(IPEMI.EQ.3)) then
-        CALL seasaltemis(IMAX,DPA,DLOGDP,u10,sst,sal,owf,saltemis)
+        CALL seasaltemis(IMAX,DPA,DLOGDP,u10,ocean%sst,         &
+                         ocean%sal,owf,saltemis)
       endif
 
 
@@ -1629,7 +1693,7 @@
        cair    = (N_A/1.E6_dp) * press / (R_gas*temp)
        ! H2O
        if (IDIL==3) then  
-         c(ind_H2O) = c(ind_H2O) - ( dilrate*((c(ind_H2O)-BGH2O) *DTIME) )
+         c(ind_H2O) = c(ind_H2O) - ( dilrate*((c(ind_H2O)-plume%BGH2O)*DTIME) )
        else
          c(ind_H2O) = conch2o(temp,RH,press,cair)
        endif
@@ -1651,7 +1715,7 @@
         ! FT Entrainment velocity: 0.6 cm/s, Bretheron et al., 1995
         IF (IORG.EQ.2) THEN
           c(ind_BSOV)=c(ind_BSOV) + (VEN*DTIME/(100._dp*zmbl)) *    &
-                       (BSOV_FT - c(ind_BSOV))
+                       (organic%BSOV_FT - c(ind_BSOV))
         ENDIF
 
 ! Write concentration to debugging info
@@ -1688,10 +1752,10 @@
        if (incloud .ge. 1) then
 
           if (incloud .eq. 2) then
-             DTIME = 1.0_dp
+             DTIME = 2.0_dp
           ! The cloud_driver returns the tendency of
           ! temperature and supersaturation
-             CALL cloud_driver(vupdra,temp,press,supersat,   &
+             CALL cloud_driver(cloud2%vupdra,temp,press,supersat,   &
                            dwlsum,hour_time,dir,dtedt,dsupdt)
              ! Update temp by cooling rate
              ! Saturation partial pressure of H2O (in Pa)
@@ -1732,10 +1796,12 @@
                DPcrit=DPA(MMAX,IMAX+1)
 
                if (.not. dissolve) then
-                 call ccnactivation(c,IMAX,temp,press,DPA,      &
-                               DPAW,lwc,ROOP,MASS,surf_org,     &
-                               surfin,M_oc,vupdra,supersat,     &
-                               dir,NTOT,N,ddpwdt,dmwdt,dwlsum,  &
+                 call ccnactivation(c,IMAX,temp,press,DPA,        &
+                               DPAW,lwc,ROOP,MASS,                &
+                               organic%surf_org,                  &
+                               organic%surfin,M_oc,cloud2%vupdra, &
+                               supersat,                          &
+                               dir,NTOT,N,ddpwdt,dmwdt,dwlsum,    &
                                Nfa,Mfa,DPcrit )
 
                endif
@@ -1805,9 +1871,10 @@
                   c(ind_CH3COCOOm_a(zkc)) = 0.5*MORG1TOT(zkc+2)*1.e-15_dp*N_A/M_oc(1)
                   c(ind_C2H5C2O4m_a(zkc)) = 0._dp
                   c(ind_C2H4C2O4mm_a(zkc))= MORG2TOT(zkc+2)*1.e-15_dp*N_A/M_oc(2)
-                  c(ind_Clm_a(zkc))    = 0.5*MSALTTOT(zkc+2)*1.e-15_dp*N_A/(MNa+MCl)
-                  c(ind_Nap_a(zkc))    = 0.5*MSALTTOT(zkc+2)*1.e-15_dp*N_A/(MNa+MCl)
+                  c(ind_Clm_a(zkc))       = MSCHLTOT(zkc+2)*1.e-15_dp*N_A/(MCl)
+                  c(ind_Nap_a(zkc))       = MSSODTOT(zkc+2)*1.e-15_dp*N_A/(MNa)
                 enddo
+                !print *,'salts dissolved'
                 dissolve=.false.
               endif
 
@@ -1832,46 +1899,45 @@
                                   c(ind_C2H4C2O4mm_a(zkc)) + &
                                   c(ind_ADIPAC_a(zkc))     + &
                                   c(ind_GLUTARAC_a(zkc))
-                  caqold(SSA,zkc)=c(ind_Clm_a(zkc))+c(ind_Nap_a(zkc))
+                  caqold(CHL,zkc)=c(ind_Clm_a(zkc))
+                  caqold(SSA,zkc)=c(ind_Nap_a(zkc))
                 enddo
               endif
 
             endif    ! RH>rhactive
 
 
-         ! set water content and pH
+
+         ! Set water content and pH
             do zkc=1,APN
+
          ! prescribe pH from ingeod.dat
               c(ind_Hp_a(zkc))=10**((-1)*phm)   ![mol/dm^3]
               c(ind_Hp_a(zkc))=c(ind_Hp_a(zkc))*N_A*lwc(zkc)/1000.
               c(ind_OHm_a(zkc))=10**((-1)*(14.0-phm))   ![mol/dm^3]
               c(ind_OHm_a(zkc))=c(ind_OHm_a(zkc))*N_A*lwc(zkc)/1000.
          ! partitioning of gases only if LWC is large enough
+         ! if xaer is set to 1 then the k_exf and k_exb is calculated for mode zkc
               if (lwc(zkc).gt.lwcpart) then
                  xaer(zkc)   = 1.0
-                 !print *,'partitioning of gases to droplets'
+                 !print *,'partitioning of gases to droplets in mode',zkc
               else
                  xaer(zkc)   = 0.0
               endif
               !print *,'lwc',zkc,lwc(zkc),xaer(zkc)
+
             enddo
 
 
-            xnom7nno  = snom7nno
-         ! amine acid-base reactions in CS mode
-            xaeq(1)   = 0.0
-            xaeq(2)   = 0.0
-            xaeq(3)   = 1.0
-            !xaeq(1)   = 1.0 ! only CS mode
-
          ! Henry partitioning
+         ! only calculated in mode zkc if xaer is 1
             CALL transfer_coeff(radius,temp,press,xaer,lwc,Henry_T0,  &
                  Henry_Tdep,alpha_T0,alpha_Tdep,molar_mass,k_exf,k_exb)
 
 
+         ! Heterogeneous chemistry (not included) and update cvfac
             do zkc=1,APN
 
-            ! heterogeneous chemistry (not included)
               if ((ind_H2O_a(zkc)/=0).AND.(loghet(zkc))) then
                 zhetT = c(ind_H2O_a(zkc))
                 ! Cl and Br not included in chemistry
@@ -1891,10 +1957,22 @@
 
             ! update cvfac with new LWC
               cvfac(zkc) = 1.E3 / ( N_A * lwc(zkc) )
-           end do  
-           !do jl=1,nspec
-           !    write(6,*) 'kext',jl,k_exf(CS,jl),k_exb(CS,jl)
-           !end do
+            end do
+
+            ! print k_exf and k_exb before they go to chemistry solver
+            !do jl=1,nspec
+            !    write(6,*) 'kext',jl,k_exf(APN,jl),k_exb(APN,jl)
+            !end do
+
+         ! Switch for nitrosamines
+            xnom7nno  = snom7nno
+
+         ! Acid-base reactions (amines, DMS)
+            if (IAQC.eq.1)  xaeq(:) = 1.0
+         ! Switch off aq. phase reactions if IAQC=0
+         ! must be placed after k_exf and k_exb are calculated
+            if (IAQC.eq.0)  xaer(:) = 0._dp
+
          endif
 
    !AQ partitioning end
@@ -1943,9 +2021,10 @@
          if (wascloud1) then
 !AQ partitioning start 
            ! Drive gases out after evaporation of cloud
+           ! Do not change xaer() here!
            if (IAQP.eq.1) then
              xnom7nno     = 1                 !allow partitioning nitrosamines
-             xaeq(:)      = 0._dp             !amine acid-base off
+             xaeq(:)      = 0.0               !amine acid-base off
              N(cs,:)      = 0._dp             !set CS mode numbers to zero
              dissolve     = .true.            !dissolv for next cloud
            ! Make solution very acidic to drive HNO3 and HCl out
@@ -1993,8 +2072,8 @@
              k_exb(:,:)   = 1.e15_dp
            ! Restore the coarse mode (SULF, MSA, NH4, ORG)
              CALL restoreCoarseMode(IMAX,DPA,DLINDP,DEN,               &
-                         MSULFTOT,MMSAPTOT,MAMMOTOT,MORGCTOT,MSALTTOT, &
-                         MDUSTTOT,  MASS, N)
+                         MSULFTOT,MMSAPTOT,MAMMOTOT,MORGCTOT,          &
+                         MSSODTOT,MSCHLTOT,MDUSTTOT,  MASS, N)
            endif
 !AQ partitioning end
            caqold(:,:)=0._dp
@@ -2008,8 +2087,8 @@
            ! Drive gases out after evaporation of cloud
            if (IAQP.eq.1) then
              xnom7nno     = 1                 !allow partitioning nitrosamines
-             xaeq(:)      = 0._dp             !amine acid-base off
-             xaer(:)      = 1._dp             !allow partitioning for degasing
+             xaeq(:)      = 0.0               !amine acid-base off
+             xaer(:)      = 1.0               !allow partitioning for degasing
              dissolve     = .true.            !dissolv for next cloud
            ! Make solution very acidic to drive HNO3 and HCl out
              do zkc=1,APN
@@ -2056,7 +2135,6 @@
            !    write(6,*) 'c',jl,chem_name(jl),c(jl),k_exf(3,jl),k_exb(3,jl)
            !end do
 
-
           call chemistry_solver(c,DTIME,firstloop,model_time,daytime,lat_deg, &
                  temp,press,cair,jno2m,RH,F_HONO,fco,lwc,cvfac,xaer,k_exf,    &
                  k_exb,k_exf_N2O5,k_exf_ClNO3,k_exf_BrNO3,   fcoj,jx)
@@ -2101,7 +2179,11 @@
 ! Condensable vapours 
        NVAP(A_SUL)=c(ind_H2SO4)*1.e6_dp   ! [molec/m3]
        NVAP(A_MSA)=c(ind_CH3SO3H)*1.e6_dp
-       NVAP(A_IO3)=c(ind_HIO3)*1.e6_dp
+       if (INUCMEC .EQ. 14) then          ! treat as OIO
+         NVAP(A_IO3)=c(ind_OIO)*1.e6_dp
+       else
+         NVAP(A_IO3)=c(ind_HIO3)*1.e6_dp
+       endif
        NVAP(A_OR1)=c(ind_BSOV)*1.e6_dp 
        NVAP(A_OR2)=c(ind_BLOV)*1.e6_dp 
        NVAP(A_OR3)=c(ind_BELV)*1.e6_dp
@@ -2127,25 +2209,34 @@
 ! and the incloud flag is set to 2 by the user and 
 ! Once the computed LWC of coarse mode is > 10^(-10) m^3/m^3
 ! the cloud exists and aerosol operators are shut off.
+! ICONDAQ=1 for mass transfer to particles.
 
        if ( (incloud.EQ.2) .and. (RH.ge.rhactiv)    &
             .and. ((lwc(3).gt.lwcpart)) ) then 
 
+         ICOND = ICONDAQ
          call cloud_solver(c,DTIME,IMAX,press,temp,zmbl,DPcrit,DPA,DPAW,      &
-                  VPT,ROOPW,M_oc,lwc,caqold,                                  &
+                  VPT,ROOPW,M_oc,organic%rp0,organic%Dfrac,lwc,caqold,        &
                   IAG,N,MASS)
-
 
        else
 
+! No gas condensation in cloud type 2
+         if ( (incloud.EQ.2) .and. (ICONDAQ.EQ.1) ) then
+            ICOND = 0
+         else
+            ICOND = ICONDAQ
+         endif
 ! Compute aerosol processes
          call aerosol_solver(DTIME,IMAX,press,temp,ROOP,ROOPW,DPA,DPAW,VPT,N, &
                   MASS,IAG,NVAP,                                              &
-                  zmbl,rain,hsta_st,u10,cair,RH,daytime,lat_deg,              &
+                  zmbl,rain,plume%hsta_st,u10,cair,RH,daytime,lat_deg,        &
                   incloud,owf,hour_timemin,                                   &
-                  jx(ip_NO2),alphanit,fcoj,                                   &
-                  CAMI,KP_NIT,fnuc,INUCMEC,                                   &
-                  DEN(OC),surfin,surf_org,M_oc,nmo,foc,hvap,csat0,            &
+                  jx(ip_NO2),alphanit,fcoj,CAMI,KP_NIT,                       &
+                  depop,                                                      &
+                  fnuc,nuclt%ipr,INUCMEC,DEN(OC),                             &
+                  organic,                                                    &
+                  M_oc,nmo,foc,hvap,csat0,                                    &
                   gamma_oc1_m,gamma_oc2_m,gamma_oc3_m,gamma_oc4_m,            &
                   gamma_oc5_m,gamma_oc6_m,gamma_oc7_m,gamma_oc8_m,            &
                   gamma_oc9_m,                                                &
@@ -2202,10 +2293,10 @@
          do M=NU,CS
           do I=1,IMAX
             MASS(M,I,A_CHL)=MASS(M,I,A_CHL)        +     &
-                 0.43*(saltemis(M,I)/zmbl) *CONVM  *     &  !0.54
+                 0.44*(saltemis(M,I)/zmbl) *CONVM  *     &  !0.56*0.8
                  DEN(SA)*VPT(M,I)*DTIME
             MASS(M,I,A_SAL)=MASS(M,I,A_SAL)        +     &
-                 0.37*(saltemis(M,I)/zmbl) *CONVM  *     &  !0.46
+                 0.36*(saltemis(M,I)/zmbl) *CONVM  *     &  !0.45*0.8
                  DEN(SA)*VPT(M,I)*DTIME
             MASS(M,I,A_XXX)=MASS(M,I,A_XXX)        +     &
                  0.20*(saltemis(M,I)/zmbl) *CONVM  *     &
@@ -2228,9 +2319,9 @@
          end do
        ENDIF
 
-! EMISSION (continuous EN and EMASS) OVER ICE (10 HOURS)
+! EMISSION (continuous EN and EMASS) OVER ICE (1 HOUR)
        IF ((IPEMI.EQ.3).and.(partemis).and.              &
-           (hour_after_fog.le.36000.)) THEN
+           (hour_after_fog.le.3600.)) THEN
          do M=NU,CS
           do I=1,IMAX
             do K=1,AMAX
@@ -2264,12 +2355,12 @@
        endif
 
 ! PN PARAMETERIZATION
-       PNC1 = PNC1 - dilrate* (PNC1- BGNTOT(AI)) *DTIME
-       PNC2 = PNC2 - dilrate* (PNC2- 0.6*BGNTOT(AS)) *DTIME
-       PNC3 = PNC3 - dilrate* (PNC3- 0.2*BGNTOT(AS)) *DTIME
-       PNC4 = PNC4 - dilrate* (PNC4- 0.2*BGNTOT(AS)) *DTIME
-       PNC5 = PNC5 - dilrate* (PNC5- 0.5*BGNTOT(CS)) *DTIME
-       PNC6 = PNC6 - dilrate* (PNC6- 0.5*BGNTOT(CS)) *DTIME
+       PNC1 = PNC1 - dilrate* max((PNC1- BGNTOT(NA)),0.0)     *DTIME
+       PNC2 = PNC2 - dilrate* max((PNC2- 0.5*BGNTOT(AI)),0.0) *DTIME
+       PNC3 = PNC3 - dilrate* max((PNC3- 0.5*BGNTOT(AI)),0.0) *DTIME
+       PNC4 = PNC4 - dilrate* max((PNC4- BGNTOT(AS)),0.0)     *DTIME
+       PNC5 = PNC5 - dilrate* max((PNC5- 0.5*BGNTOT(CS)),0.0) *DTIME
+       PNC6 = PNC6 - dilrate* max((PNC6- 0.5*BGNTOT(CS)),0.0) *DTIME
        PNC1 = PNC1 - PNC1* PNC1*kcoa1 *DTIME  - (vd1/zmblm)* PNC1 *DTIME
        PNC2 = PNC2 - PNC2* PNC2*kcoa2 *DTIME  - (vd2/zmblm)* PNC2 *DTIME
        PNC3 = PNC3 - PNC3* PNC3*kcoa3 *DTIME  - (vd3/zmblm)* PNC3 *DTIME
@@ -2286,7 +2377,11 @@
 ! New gas phase concentration after condensation/nucleation
        c(ind_H2SO4)  = NVAP(A_SUL)*1.e-6_dp   ! [molec/cm3]
        c(ind_CH3SO3H)= NVAP(A_MSA)*1.e-6_dp
-       c(ind_HIO3)   = NVAP(A_IO3)*1.e-6_dp 
+       if (INUCMEC .EQ. 14) then   ! treat as OIO
+         c(ind_OIO)  = NVAP(A_IO3)*1.e-6_dp
+       else
+         c(ind_HIO3) = NVAP(A_IO3)*1.e-6_dp
+       endif
        c(ind_BSOV)   = NVAP(A_OR1)*1.e-6_dp
        c(ind_BLOV)   = NVAP(A_OR2)*1.e-6_dp
        c(ind_BELV)   = NVAP(A_OR3)*1.e-6_dp
@@ -2347,25 +2442,40 @@
              lwc,c(ind_H2O_a(1)),c(ind_H2O_a(2)),c(ind_H2O_a(3)), &
              xaer,wascloud1,wascloud2  )
 
+!MESA start
+! Replace with aerosol water content from MOSAIC, keep CS mode
+       if (ICONW.eq.2) then
+         do M=NU,AS
+          MH2OTOT(M) = 0._dp 
+          do I=1,IMAX
+            MASS(M,I,A_WAT) = HYST(m,i) * CONVM
+            MH2OTOT(M)=MH2OTOT(M)+MASS(M,I,A_WAT)
+          !print *,'wat',M,I,MASS(M,I,A_WAT)
+          end do
+         end do
+       endif
+!MESA end
+
 
 ! Calculate aerosol evolution parameters
 
 ! TOTAL MASS
 ! Total dry mass and wet mass in kg/m^3
 ! Total mode masses in ng/m^3
-       CALL getTotalMass(IMAX,MASS,MPT,MPTW,                      &
+    CALL getTotalMass(IMAX,MASS,MPT,MPTW,                         &
                       MTOT,MTOTW,MSULFTOT,MMSAPTOT,MIODATOT,      &
-                      MNITRTOT,MAMMOTOT,MSALTTOT,MECBCTOT,        &
+                      MNITRTOT,MAMMOTOT,MSSODTOT,MSCHLTOT,        &
+                      MECBCTOT,                                   &
                       MDUSTTOT,MXXXXTOT,MORGCTOT,MORG1TOT,        &
                       MORG2TOT,MORG3TOT,MORG4TOT,MORG5TOT,        &
-                      MORG6TOT,MORG7TOT,MORG8TOT,MORG9TOT, casoa   )
-
+                      MORG6TOT,MORG7TOT,MORG8TOT,MORG9TOT,        &
+                      casoa   )
 
 ! AVERAGE DENSITY
 ! Density in kg/m^3
 
-       call getDensity(IMAX,temp,DEN(EC),DPA,MASS,MPT,MPTW,ROOP,ROOPW)
-
+      call getDensity(IMAX,temp,DEN(EC),DEN(OC),organic%rp0,organic%Dfrac, &
+                      DPA,MASS,MPT,MPTW,ROOP,ROOPW)
 
 ! DIAMETER OF WET PARTICLE
 ! Wet diameter/volume is used to calculate aerosol processes
@@ -2377,7 +2487,7 @@
               DPAW(M,I) = DPAW(M,I) + ddpwdt(M,I)*DTIME
               ! lower limit DPA*1.1
               DPAW(M,I) = max(DPAW(M,I),1.1*DPA(M,I))
-              !print *,'DPAW',M,I,DPA(M,I),DPAW(M,I),ddpwdt(M,I)*DTIME
+            !  if ((M==4).and.(I==1)) print *,'DPAW',M,I,DPA(M,I),DPAW(M,I),ddpwdt(M,I)*DTIME
             enddo
           enddo
          else
@@ -2405,9 +2515,10 @@
          end do
        end do
 
+       ! NEU1: 10-25 nm, NEU2: 25-100 nm, NEU3: 25-50 nm, NEU4: 50-75 nm
+       ! NEU5: 75 nm - 1 um, NEU6: 1-2 um, NEU7: > 2 um
        N3=0._dp
-       NEU1=NTOT(NU)
-       ! NEU2: 25-100m particles
+       NEU1=0._dp
        NEU2=0._dp
        NEU3=0._dp
        NEU4=0._dp
@@ -2415,23 +2526,24 @@
        NEU6=0._dp
        NEU7=0._dp    
        do I=1,IMAX
-         if (DPA(NU,I).GT.3.E-9_dp) N3=N3+N(NU,I)
-         if (DPA(NA,I).LT.25.E-9_dp) NEU1=NEU1+N(NA,I)
+         if (DPA(NU,I).GE.3.E-9_dp) N3=N3+N(NU,I)
+         if (DPA(NU,I).GE.10.E-9_dp) NEU1=NEU1+N(NU,I)
+         if ((DPA(NA,I).GE.10.E-9_dp).and.(DPA(NA,I).LT.25.E-9_dp)) NEU1=NEU1+N(NA,I)
          if (DPA(AI,I).LT.25.E-9_dp) NEU1=NEU1+N(AI,I)
          if (DPA(NA,I).GE.25.E-9_dp) NEU2=NEU2+N(NA,I)
          if (DPA(AI,I).GE.25.E-9_dp) NEU2=NEU2+N(AI,I)
          if (DPA(AS,I).LT.1.E-7_dp)  NEU2=NEU2+N(AS,I)
-         if ((DPA(NA,I).GE.24.E-9_dp).and.(DPA(NA,I).LT.50.E-9_dp)) NEU3=NEU3+N(NA,I)
-         if ((DPA(AI,I).GE.24.E-9_dp).and.(DPA(AI,I).LT.50.E-9_dp)) NEU3=NEU3+N(AI,I)
-         if ((DPA(AS,I).GE.45.E-9_dp).and.(DPA(AS,I).LT.50.E-9_dp)) NEU3=NEU3+N(AS,I)
+         if ((DPA(NA,I).GE.25.E-9_dp).and.(DPA(NA,I).LT.50.E-9_dp)) NEU3=NEU3+N(NA,I)
+         if ((DPA(AI,I).GE.25.E-9_dp).and.(DPA(AI,I).LT.50.E-9_dp)) NEU3=NEU3+N(AI,I)
+         if ((DPA(AS,I).GE.25.E-9_dp).and.(DPA(AS,I).LT.50.E-9_dp)) NEU3=NEU3+N(AS,I)
          if ((DPA(AI,I).GE.50.E-9_dp).and.(DPA(AI,I).LT.75.E-9_dp)) NEU4=NEU4+N(AI,I)
          if ((DPA(AS,I).GE.50.E-9_dp).and.(DPA(AS,I).LT.75.E-9_dp)) NEU4=NEU4+N(AS,I)
          if (DPA(AI,I).GE.75.E-9_dp) NEU5=NEU5+N(AI,I)
          if (DPA(AS,I).GE.75.E-9_dp) NEU5=NEU5+N(AS,I)
-         if (DPA(CS,I).LT.2.E-7_dp)  NEU6=NEU6+N(CS,I)
-         if (DPA(CS,I).GE.2.E-7_dp)  NEU7=NEU7+N(CS,I)
-      end do
-
+         if (DPA(CS,I).LT.1.E-6_dp)  NEU5=NEU5+N(CS,I)
+         if ((DPA(CS,I).GE.1.0E-6_dp).and.(DPA(CS,I).LT.2.0E-6_dp)) NEU6=NEU6+N(CS,I)
+         if (DPA(CS,I).GE.2.E-6_dp)  NEU7=NEU7+N(CS,I)
+       end do
 
 
 ! OUTPUT EVERY 0.1 SEC!
@@ -2442,10 +2554,11 @@
                  (LOGDIS(AI,I), I=1,IMAX),(LOGDIS(AS,I), I=1,IMAX),(LOGDIS(CS,I), I=1,IMAX)
           write(18,fb) model_time, (DPAW(NU,I), I=1,IMAX),(DPAW(NA,I), I=1,IMAX),   &
                  (DPAW(AI,I), I=1,IMAX),(DPAW(AS,I), I=1,IMAX),(DPAW(CS,I), I=1,IMAX)
-          write(13,'(30e17.6)') model_time,N3,                               &
+          write(13,'(31e17.6)') model_time,N3,                        &
                  NTOT(NU),NTOT(NA),NTOT(AI),NTOT(AS),NTOT(CS),               &
-                 NEU1,NEU2,DNVAPC,COAGS,CSORGT,GRTOT,JNUC,                   &
-                 NEU3,NEU4,NEU5,NEU6,NEU7,PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,     &
+                 DNVAPC,COAGS,CSSULT,CSORGT,GRTOT,JNUC,                      &
+                 NEU1,NEU2,NEU3,NEU4,NEU5,NEU6,NEU7,                         &
+                 PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,                              &
                  supersat,Nfa,Mfa,DPcrit,temp
           write(15,fb) model_time,(MLOGDIS(NU,I),I=1,IMAX),(MLOGDIS(NA,I),I=1,IMAX), &
                  (MLOGDIS(AI,I),I=1,IMAX),(MLOGDIS(AS,I), I=1,IMAX),(MLOGDIS(CS,I), I=1,IMAX)
@@ -2456,7 +2569,7 @@
                ((MASS(AS,I,K)/DLOGDP(AS,I)),I=1,IMAX),                       &
                ((MASS(CS,I,K)/DLOGDP(CS,I)),I=1,IMAX) 
           end do
-          write(17,'(56e12.4)') model_time,                             &
+          write(17,'(61e12.4)') model_time,                                  &
                MSULFTOT(NU),MSULFTOT(NA),MSULFTOT(AI),MSULFTOT(AS),MSULFTOT(CS), &
                MMSAPTOT(NU),MMSAPTOT(NA),MMSAPTOT(AI),MMSAPTOT(AS),MMSAPTOT(CS), &
                MIODATOT(NU),MIODATOT(NA),MIODATOT(AI),MIODATOT(AS),MIODATOT(CS), &
@@ -2466,7 +2579,8 @@
                MNITRTOT(NU),MNITRTOT(NA),MNITRTOT(AI),MNITRTOT(AS),MNITRTOT(CS), &
                MECBCTOT(NU),MECBCTOT(NA),MECBCTOT(AI),MECBCTOT(AS),MECBCTOT(CS), &
                MDUSTTOT(NU),MDUSTTOT(NA),MDUSTTOT(AI),MDUSTTOT(AS),MDUSTTOT(CS), &
-               MSALTTOT(NU),MSALTTOT(NA),MSALTTOT(AI),MSALTTOT(AS),MSALTTOT(CS), &
+               MSSODTOT(NU),MSSODTOT(NA),MSSODTOT(AI),MSSODTOT(AS),MSSODTOT(CS), &
+               MSCHLTOT(NU),MSCHLTOT(NA),MSCHLTOT(AI),MSCHLTOT(AS),MSCHLTOT(CS), &               
                MH2OTOT(NU), MH2OTOT(NA), MH2OTOT(AI), MH2OTOT(AS), MH2OTOT(CS)
           write(19,'(12e12.4)') model_time,dilut_time,temp_old,       & 
                zmbl_old,wplm_old,areapl,dilrate,                      &
@@ -2481,16 +2595,17 @@
 
 ! OUTPUT EVERY 1 SEC!
        if ((IDIL==1).or.(IDIL==2).or.(IDIL>4)) then
-        if ((hour_timeo.GT.0.999).and.(hsta_st>30.0) ) then
+        if ((hour_timeo.GT.0.999).and.(plume%hsta_st>30.0) ) then
           write(16,fc) model_time,(c(jq),jq=1,nspec),(lwc(zkc),zkc=1,APN),jx(ip_NO2)
           write(14,fb) model_time,(LOGDIS(NU,I),I=1,IMAX),(LOGDIS(NA,I), I=1,IMAX), &
                   (LOGDIS(AI,I), I=1,IMAX), (LOGDIS(AS,I), I=1,IMAX),(LOGDIS(CS,I), I=1,IMAX)
           write(18,fb) model_time, (DPAW(NU,I), I=1,IMAX),(DPAW(NA,I), I=1,IMAX),   &
                   (DPAW(AI,I), I=1,IMAX),(DPAW(AS,I), I=1,IMAX),(DPAW(CS,I), I=1,IMAX)
-          write(13,'(30e17.6)') model_time,N3,                                      &
+          write(13,'(31e17.6)') model_time,N3,                        &
                   NTOT(NU),NTOT(NA),NTOT(AI),NTOT(AS),NTOT(CS),                     &
-                  NEU1,NEU2,DNVAPC,COAGS,CSORGT,GRTOT,JNUC,                         &
-                  NEU3,NEU4,NEU5,NEU6,NEU7,PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,           &
+                  DNVAPC,COAGS,CSSULT,CSORGT,GRTOT,JNUC,                            &
+                  NEU1,NEU2,NEU3,NEU4,NEU5,NEU6,NEU7,                               &
+                  PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,                                    &
                   supersat,Nfa,Mfa,DPcrit,temp
           write(15,fb) model_time,(MLOGDIS(NU,I),I=1,IMAX),(MLOGDIS(NA,I),I=1,IMAX),&
                   (MLOGDIS(AI,I),I=1,IMAX),(MLOGDIS(AS,I), I=1,IMAX),(MLOGDIS(CS,I), I=1,IMAX)
@@ -2508,7 +2623,7 @@
                (ENTOT(NU)+ENTOT(NA)+ENTOT(AI)+ENTOT(AS)+ENTOT(CS))*emisratp
           write(11,'(28e17.6)') model_time , (csate(S), S=1,NSOA),    &
                        (csoagas(S), S=1,NSOA), (casoa(S), S=1,NSOA)
-          write(17,'(56e12.4)') model_time,                              &
+          write(17,'(61e12.4)') model_time,                           &
                MSULFTOT(NU),MSULFTOT(NA),MSULFTOT(AI),MSULFTOT(AS),MSULFTOT(CS), &
                MMSAPTOT(NU),MMSAPTOT(NA),MMSAPTOT(AI),MMSAPTOT(AS),MMSAPTOT(CS), &
                MIODATOT(NU),MIODATOT(NA),MIODATOT(AI),MIODATOT(AS),MIODATOT(CS), &
@@ -2518,7 +2633,8 @@
                MNITRTOT(NU),MNITRTOT(NA),MNITRTOT(AI),MNITRTOT(AS),MNITRTOT(CS), &
                MECBCTOT(NU),MECBCTOT(NA),MECBCTOT(AI),MECBCTOT(AS),MECBCTOT(CS), &
                MDUSTTOT(NU),MDUSTTOT(NA),MDUSTTOT(AI),MDUSTTOT(AS),MDUSTTOT(CS), &
-               MSALTTOT(NU),MSALTTOT(NA),MSALTTOT(AI),MSALTTOT(AS),MSALTTOT(CS), &
+               MSSODTOT(NU),MSSODTOT(NA),MSSODTOT(AI),MSSODTOT(AS),MSSODTOT(CS), &
+               MSCHLTOT(NU),MSCHLTOT(NA),MSCHLTOT(AI),MSCHLTOT(AS),MSCHLTOT(CS), &               
                MH2OTOT(NU), MH2OTOT(NA), MH2OTOT(AI), MH2OTOT(AS), MH2OTOT(CS)
           hour_timeo=0.
         endif
@@ -2531,10 +2647,11 @@
 
 
 ! write total number conc. and volume-mean-diameter current time step
-         write(13,'(30e17.6)') model_time,N3,                                      &
+         write(13,'(31e17.6)') model_time,N3,                         &
                NTOT(NU),NTOT(NA),NTOT(AI),NTOT(AS),NTOT(CS),                       &
-               NEU1,NEU2,DNVAPC,COAGS,CSORGT,GRTOT,JNUC,                           &                 
-               NEU3,NEU4,NEU5,NEU6,NEU7,PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,             &
+               DNVAPC,COAGS,CSSULT,CSORGT,GRTOT,JNUC,                              &                 
+               NEU1,NEU2,NEU3,NEU4,NEU5,NEU6,NEU7,                                 &
+               PNC1,PNC2,PNC3,PNC4,PNC5,PNC6,                                      &
                supersat,Nfa,Mfa,DPcrit,temp
 ! write size distribution current time step
          write(14,fb) model_time,(LOGDIS(NU,I),I=1,IMAX),(LOGDIS(NA,I), I=1,IMAX), &
@@ -2542,13 +2659,20 @@
 ! write mass conc. size distribution current time step (kg/m^3)
          write(15,fb) model_time,(MLOGDIS(NU,I),I=1,IMAX),(MLOGDIS(NA,I), I=1,IMAX),&
                  (MLOGDIS(AI,I), I=1,IMAX),(MLOGDIS(AS,I), I=1,IMAX),(MLOGDIS(CS,I), I=1,IMAX)
+             do K=1,AMAX        
+                  write(15,fb) model_time,((MASS(NU,I,K)/DLOGDP(NU,I)),I=1,IMAX),   &
+                      ((MASS(NA,I,K)/DLOGDP(NA,I)),I=1,IMAX),                       &
+                      ((MASS(AI,I,K)/DLOGDP(AI,I)),I=1,IMAX),                       &
+                      ((MASS(AS,I,K)/DLOGDP(AS,I)),I=1,IMAX),                       &
+                      ((MASS(CS,I,K)/DLOGDP(CS,I)),I=1,IMAX) 
+             end do
 ! write wet diameter of particles                 
          write(18,fb) model_time, (DPAW(NU,I), I=1,IMAX),(DPAW(NA,I), I=1,IMAX),    &
                  (DPAW(AI,I), I=1,IMAX),(DPAW(AS,I), I=1,IMAX),(DPAW(CS,I), I=1,IMAX)                 
 ! write concentrations current time step
          write(16,fc) model_time,(c(jq),jq=1,nspec),(lwc(zkc),zkc=1,APN),jx(ip_NO2)
 ! write aerosol concentrations current time step
-         write(17,'(56e12.4)') model_time,                              &
+         write(17,'(61e12.4)') model_time,                                 &
                MSULFTOT(NU),MSULFTOT(NA),MSULFTOT(AI),MSULFTOT(AS),MSULFTOT(CS), &
                MMSAPTOT(NU),MMSAPTOT(NA),MMSAPTOT(AI),MMSAPTOT(AS),MMSAPTOT(CS), &
                MIODATOT(NU),MIODATOT(NA),MIODATOT(AI),MIODATOT(AS),MIODATOT(CS), &
@@ -2558,7 +2682,8 @@
                MNITRTOT(NU),MNITRTOT(NA),MNITRTOT(AI),MNITRTOT(AS),MNITRTOT(CS), &
                MECBCTOT(NU),MECBCTOT(NA),MECBCTOT(AI),MECBCTOT(AS),MECBCTOT(CS), &
                MDUSTTOT(NU),MDUSTTOT(NA),MDUSTTOT(AI),MDUSTTOT(AS),MDUSTTOT(CS), &
-               MSALTTOT(NU),MSALTTOT(NA),MSALTTOT(AI),MSALTTOT(AS),MSALTTOT(CS), &
+               MSSODTOT(NU),MSSODTOT(NA),MSSODTOT(AI),MSSODTOT(AS),MSSODTOT(CS), &
+               MSCHLTOT(NU),MSCHLTOT(NA),MSCHLTOT(AI),MSCHLTOT(AS),MSCHLTOT(CS), &               
                MH2OTOT(NU), MH2OTOT(NA), MH2OTOT(AI), MH2OTOT(AS), MH2OTOT(CS)
 ! write plume dispersion parameters
           write(19,'(12e12.4)') model_time,dilut_time,temp_old,       & 
