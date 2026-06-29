@@ -364,10 +364,10 @@ module gde_condensation
              ! non-volatile SOC = 0.0 (BELV,AELV,PELV)
              cmnon1 = MORG3TOT(NU)+MORG3TOT(NA)+MORG3TOT(AI)+MORG3TOT(AS)+MORG3TOT(CS)
              cmnon2 = MORG6TOT(NU)+MORG6TOT(NA)+MORG6TOT(AI)+MORG6TOT(AS)+MORG6TOT(CS)
-             cmnon3 = MORG9TOT(NU)+MORG9TOT(NU)+MORG9TOT(AI)+MORG9TOT(AS)+MORG9TOT(CS)
+             cmnon3 = MORG9TOT(NU)+MORG9TOT(NA)+MORG9TOT(AI)+MORG9TOT(AS)+MORG9TOT(CS)
              ! fraction of absorptive material (organics) in total PM
-             pmtot= max( (MTOT(NU)+MTOT(AI)+MTOT(AS)+MTOT(CS)),massmin )
-             fom  = (MORGCTOT(NU)+MORGCTOT(NU)+MORGCTOT(AI)+MORGCTOT(AS)+MORGCTOT(CS)) / pmtot
+             pmtot= max( (MTOT(NU)+MTOT(NA)+MTOT(AI)+MTOT(AS)+MTOT(CS)),massmin )
+             fom  = (MORGCTOT(NU)+MORGCTOT(NA)+MORGCTOT(AI)+MORGCTOT(AS)+MORGCTOT(CS)) / pmtot
              fom  = max(fom,0.3_dp)  ! at least 30% OM
              fom  = min(fom,1.0_dp)
              ! total SOA aerosol concentration
@@ -883,30 +883,30 @@ module gde_condensation
               IF (ICONO .EQ. 1) THEN  !not including ELVOCs
                 IF ((JCOND(A_OR1).LT.0.0).AND.(MASS(M,I,A_OR1).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR1)*VVAPC(A_OR1)*DTIME
-                ENDIF   
+                ENDIF
                 IF ((JCOND(A_OR2).LT.0.0).AND.(MASS(M,I,A_OR2).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR2)*VVAPC(A_OR2)*DTIME
-                ENDIF   
+                ENDIF
                 IF ((JCOND(A_OR4).LT.0.0).AND.(MASS(M,I,A_OR4).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR4)*VVAPC(A_OR4)*DTIME
-                ENDIF   
+                ENDIF
                 IF ((JCOND(A_OR5).LT.0.0).AND.(MASS(M,I,A_OR5).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR5)*VVAPC(A_OR5)*DTIME
                 ENDIF
                 IF ((JCOND(A_OR7).LT.0.0).AND.(MASS(M,I,A_OR7).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR7)*VVAPC(A_OR7)*DTIME
-                ENDIF   
+                ENDIF
                 IF ((JCOND(A_OR8).LT.0.0).AND.(MASS(M,I,A_OR8).GT.massmin)) THEN
                    VPNEW=VPNEW-JCOND(A_OR8)*VVAPC(A_OR8)*DTIME
-                ENDIF 
+                ENDIF
               ENDIF
-              IF (ICONA .EQ. 1) THEN 
+              IF (ICONA .EQ. 1) THEN
                 IF (JCOND(A_AMI).LT.0.0) VPNEW=VPNEW-JCOND(A_AMI)*VVAPC(A_AMI)*DTIME
                 IF (JCOND(A_NIT).LT.0.0) VPNEW=VPNEW-JCOND(A_NIT)*VVAPC(A_NIT)*DTIME
               ENDIF
             ENDIF
             !
-            ! CHECK: VPT(M,I+1) must be greater than VPT(M,I)            
+            ! CHECK: VPT(M,I+1) must be greater than VPT(M,I)
             ! VPNEW is bound between VPT(M,I-1) and VPT(M,I+1)
             !
             IF (I.EQ.1) THEN
@@ -915,7 +915,7 @@ module gde_condensation
                 stop 
               ENDIF
 ! MSK 18.11.2024 start new limits for i==1
-              IF (M.NE.NU) THEN
+              IF (M.EQ.NU) THEN
                 vpnew=max(vpnew,vpt(m,1)*0.50)
                 vpnew=min(vpnew,vpt(m,i+1)*0.90)
               ELSE
@@ -959,7 +959,7 @@ module gde_condensation
                    FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
                  ! mass fluxes                
                  ! MSK 13.05.2023 Fixed brackets around volume ratio term
-                   do Q=1,QMAX                              
+                   do Q=1,QMAX
                      FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                      FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                      FLUXCM(M,I+1,Q)=FLUXCM(M,I+1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
@@ -967,26 +967,26 @@ module gde_condensation
                    FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                    FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                    FLUXCMC(M,I+1)=FLUXCMC(M,I+1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
-                 ELSE  ! VPNEW LT VPT(M,I)                 
+                 ELSE  ! VPNEW LT VPT(M,I)
                  ! number fluxes
                     FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                     FLUXC(M,I)=FLUXC(M,I)+N(M,I)*(VPNEW/VPT(M,I))
-                 ! mass fluxes                
-                    do Q=1,QMAX 
+                 ! mass fluxes
+                    do Q=1,QMAX
                       FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                       FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*(VPNEW/VPT(M,I))
                     end do
                     FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
-                    FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*(VPNEW/VPT(M,I))    
-                 ENDIF           
+                    FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*(VPNEW/VPT(M,I))
+                 ENDIF
                ELSE   ! AI,AS,CS modes
                  IF (VPNEW.GE.VPT(M,I)) THEN
                  ! number fluxes
                     FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                     FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                     FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
-                 ! mass fluxes                
-                    do Q=1,QMAX                              
+                 ! mass fluxes
+                    do Q=1,QMAX
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                        FLUXCM(M,I+1,Q)=FLUXCM(M,I+1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
@@ -999,20 +999,20 @@ module gde_condensation
                     FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                     FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPNEW-VPT(M-1,IMAX))/(VPT(M,I)-VPT(M-1,IMAX)) )
                     FLUXC(M-1,IMAX)=FLUXC(M-1,IMAX)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M-1,IMAX)-VPT(M,I)) )
-                 ! mass fluxes                
+                 ! mass fluxes
                     do Q=1,QMAX 
                       FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                       !BUG FIX 16.05.2013
                       fluxcm(m,i,q)=fluxcm(m,i,q)+mass(m,i,q)*( (vpnew-vpt(m-1,imax))/(vpt(m,i)-vpt(m-1,imax)) )
-                      ! END BUG FIX                     
+                      ! END BUG FIX
                       FLUXCM(M-1,IMAX,Q)=FLUXCM(M-1,IMAX,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I)) &
                                         /(VPT(M-1,IMAX)-VPT(M,I)) )
                     end do
                     FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                     FLUXCMC(m,i)=FLUXCMC(m,i)+mass(m,i,a_xxx)*( (vpnew-vpt(m-1,imax))/(vpt(m,i)-vpt(m-1,imax)) )
                     FLUXCMC(M-1,IMAX)=FLUXCMC(M-1,IMAX)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I)) &
-                                        /(VPT(M-1,IMAX)-VPT(M,I)) )         
-                 ENDIF            
+                                        /(VPT(M-1,IMAX)-VPT(M,I)) )
+                 ENDIF
                ENDIF
             ENDIF
 
@@ -1022,34 +1022,34 @@ module gde_condensation
                  FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                  FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                  FLUXC(M,I+1)=FLUXC(M,I+1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
-               ! mass fluxes                
-                 do Q=1,QMAX                              
+               ! mass fluxes
+                 do Q=1,QMAX
                    FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                    FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
                    FLUXCM(M,I+1,Q)=FLUXCM(M,I+1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
                  end do
                  FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                  FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPT(M,I+1)-VPNEW)/(VPT(M,I+1)-VPT(M,I)) )
-                 FLUXCMC(M,I+1)=FLUXCMC(M,I+1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )           
+                 FLUXCMC(M,I+1)=FLUXCMC(M,I+1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I+1)-VPT(M,I)) )
                ELSE  ! VPNEW LT VPT(M,I)
                ! number fluxes
                  FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                  FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                  FLUXC(M,I-1)=FLUXC(M,I-1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
-               ! mass fluxes                
-                 do Q=1,QMAX 
+               ! mass fluxes
+                 do Q=1,QMAX
                    FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                    FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                    FLUXCM(M,I-1,Q)=FLUXCM(M,I-1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
                  end do
                  FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                  FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
-                 FLUXCMC(M,I-1)=FLUXCMC(M,I-1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )             
+                 FLUXCMC(M,I-1)=FLUXCMC(M,I-1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
                ENDIF
             ENDIF
             
             IF (I.EQ.IMAX) THEN
-               IF (M.EQ.CS) THEN    !special: [CS,IMAX]   
+               IF (M.EQ.CS) THEN    !special: [CS,IMAX]
                   IF (VPNEW.GE.VPT(M,I)) THEN
                   ! number fluxes
                      FLUXC(M,I)=FLUXC(M,I)-N(M,I)
@@ -1066,7 +1066,7 @@ module gde_condensation
                      FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                      FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                      FLUXC(M,I-1)=FLUXC(M,I-1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
-                  ! mass fluxes                
+                  ! mass fluxes
                      do Q=1,QMAX 
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
@@ -1075,7 +1075,7 @@ module gde_condensation
                      FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                      FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                      FLUXCMC(M,I-1)=FLUXCMC(M,I-1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
-                  ENDIF         
+                  ENDIF
                ELSE   ! NU,AI,AS modes
                   IF (VPNEW.GE.VPT(M,I)) THEN
                   ! number fluxes
@@ -1090,14 +1090,14 @@ module gde_condensation
                      end do
                      FLUXCMC(M,I)=FLUXCMC(M,I)-MASS(M,I,A_XXX)
                      FLUXCMC(M,I)=FLUXCMC(M,I)+MASS(M,I,A_XXX)*( (VPT(M+1,1)-VPNEW)/(VPT(M+1,1)-VPT(M,I)) )
-                     FLUXCMC(M+1,1)=FLUXCMC(M+1,1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M+1,1)-VPT(M,I)) )  
+                     FLUXCMC(M+1,1)=FLUXCMC(M+1,1)+MASS(M,I,A_XXX)*( (VPNEW-VPT(M,I))/(VPT(M+1,1)-VPT(M,I)) )
                   ELSE  ! VPNEW LT VPT(M,I)
                   ! number fluxes
                       FLUXC(M,I)=FLUXC(M,I)-N(M,I)
                       FLUXC(M,I)=FLUXC(M,I)+N(M,I)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                       FLUXC(M,I-1)=FLUXC(M,I-1)+N(M,I)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
-                  ! mass fluxes                
-                      do Q=1,QMAX 
+                  ! mass fluxes
+                      do Q=1,QMAX
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)-MASS(M,I,Q)
                        FLUXCM(M,I,Q)=FLUXCM(M,I,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I-1))/(VPT(M,I)-VPT(M,I-1)) )
                        FLUXCM(M,I-1,Q)=FLUXCM(M,I-1,Q)+MASS(M,I,Q)*( (VPNEW-VPT(M,I))/(VPT(M,I-1)-VPT(M,I)) )
